@@ -1,0 +1,32 @@
+security:
+    providers:
+        extranet_webservice:
+            id: fianet_sceau.extranet.user_provider
+
+    encoders:
+        FIANET\SceauBundle\Entity\Extranet\Utilisateur: plaintext
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        extranet_login:
+            pattern: ^/extranet/[a-z]+/login$
+            anonymous: ~
+
+        extranet_login_mdp_oublie:
+            pattern: ^/extranet/[a-z]+/mdp_oublie
+            anonymous: ~
+
+        extranet:
+            provider: extranet_webservice
+            pattern: ^/extranet
+            form_login:
+                login_path: extranet_utilisateur_login
+                check_path: extranet_utilisateur_login_check
+                default_target_path: extranet_accueil
+            logout:
+                path: extranet_utilisateur_logout
+                target: extranet_utilisateur_login
+

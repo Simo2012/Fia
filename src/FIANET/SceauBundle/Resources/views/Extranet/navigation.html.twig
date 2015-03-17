@@ -1,0 +1,15 @@
+<nav>
+    <ul>
+        {{ knp_menu_render('extranet.menu', {'template': 'FIANETSceauBundle:Extranet:menu.html.twig', 'currentClass': 'active'}) }}
+
+        {% spaceless %}
+        <li class="search">
+            <input type="text" name="recherche" title="Recherche" value="Rechercher par e-mail, pseudo ou n° de litige">
+
+            <button>{% image '@FIANETSceauBundle/Resources/public/images/extranet/loupe.png' %}<img src="{{ asset_url }}" width="18" height="16" alt="Loupe"/>{% endimage %}</button>
+        </li>
+        {% endspaceless %}
+
+        <li class="end"><a href="#" id="mail">&nbsp;</a><a href="#" id="help">&nbsp;</a></li>
+    </ul>
+</nav>

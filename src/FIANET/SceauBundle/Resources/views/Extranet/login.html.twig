@@ -1,0 +1,39 @@
+{% extends '::base.html.twig' %}
+
+{% trans_default_domain 'extranet_login' %}
+
+{% block icon %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/fianetsceau/images/extranet/ico_puce_rouge.ico') }}"/>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {% stylesheets
+    'bundles/fianetsceau/css/extranet/login.css'
+    'bundles/fianetsceau/css/extranet/main.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="login">
+        <img src="{{ asset('bundles/fianetsceau/images/extranet/fianet-head.png') }}" alt="FIA-NET" title="FIA-NET"
+             width="92" height="24" />
+
+        <h1>Extranet FIA-NET</h1>
+
+        {% block extranet_login %}
+
+        {% endblock %}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

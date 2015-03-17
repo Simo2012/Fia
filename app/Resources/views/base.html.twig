@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+
+        {% block description %}
+        {% endblock %}
+
+        <title>{% block title %}{% endblock %}</title>
+
+        {% block stylesheets %}{% endblock %}
+
+        {% block icon %}{% endblock %}
+
+        {% block javascripts_head %}
+            <!--[if lt IE 9]>
+            {% javascripts
+            'components/html5shiv/dist/html5shiv.js' %}
+                <script src="{{ asset_url }}" type="text/javascript"></script>
+            {% endjavascripts %}
+            <![endif]-->
+        {% endblock %}
+
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

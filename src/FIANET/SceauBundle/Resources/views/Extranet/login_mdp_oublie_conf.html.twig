@@ -1,0 +1,23 @@
+{% extends 'FIANETSceauBundle:Extranet:login.html.twig' %}
+
+{% trans_default_domain 'extranet_login' %}
+
+{% block title %}
+    Extranet : prise en compte de votre demande
+{% endblock %}
+
+{% block extranet_login %}
+
+    <div id="confirmation">
+        <img src="{{ asset('bundles/fianetsceau/images/extranet/confirmation.png') }}" width="31" height="30"
+             alt="{% trans from "commun" %}commun_confirmation{% endtrans %}"
+             title="{% trans from "commun" %}commun_confirmation{% endtrans %}" />
+
+        <p>{{ 'confirmation_mdp_oublie'|trans }}</p>
+    </div>
+
+    <form action="{{ path('extranet_utilisateur_login') }}" method="get">
+        <button type="submit">{{ 'se_connecter'|trans }}</button>
+    </form>
+
+{% endblock %}

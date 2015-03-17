@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="fianet_sceau.extranet.menu_builder" class="FIANET\SceauBundle\Service\Extranet\MenuBuilder">            
+            <argument type="service" id="knp_menu.factory"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="security.context"/>
+            <argument type="service" id="fianet_sceau.extranet.menu_acces"/>            
+        </service>
+
+        <service id="fianet_sceau.extranet.menu_acces" class="FIANET\SceauBundle\Service\Extranet\MenuAcces">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="security.context"/>
+        </service>
+
+        <service id="fianet_sceau.extranet.menu" class="Knp\Menu\MenuItem" scope="request">
+            <factory service="fianet_sceau.extranet.menu_builder" method="creerMenu"/>
+            <argument type="service" id="request"/>
+            <tag name="knp_menu.menu" alias="extranet.menu"/>
+        </service>
+
+        <service id="fianet_sceau.extranet.user_provider" class="FIANET\SceauBundle\Security\Extranet\User\WebserviceUserProvider">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+
+        <service id="fianet_sceau.validator.site_id" class="FIANET\SceauBundle\Validator\SiteIdValidator">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <tag name="validator.constraint_validator" alias="validator.site_id" />
+        </service>
+
+        <service id="fianet_sceau.kernel.listener.exception" class="FIANET\SceauBundle\Listener\ExceptionListener">
+            <argument type="service" id="templating" />
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
+        </service>
+        
+    </services>
+
+</container>

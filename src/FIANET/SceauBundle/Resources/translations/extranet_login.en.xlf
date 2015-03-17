@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>login</source>
+                <target>Login</target>
+            </trans-unit>
+             <trans-unit id="2">
+                <source>mot_de_passe</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>identifiant_incorrect</source>
+                <target>Incorrect login or password</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>valider</source>
+                <target>Validate</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>mot_de_passe_oublie</source>
+                <target>Forgotten password ?</target>
+            </trans-unit>
+             <trans-unit id="6">
+                <source>description_mdp_oublie</source>
+                <target>So that we can send you your login, please give your website ID. We will send you the login information by email.</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>site_id</source>
+                <target>Website ID : </target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>constraints.site_id_incorrect</source>
+                <target>Website ID indicated is incorrect</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>confirmation_mdp_oublie</source>
+                <target>Your request has been taken into account, our teams will contact you as soon as possible.</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>se_connecter</source>
+                <target>Sign in</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

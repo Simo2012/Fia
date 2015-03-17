@@ -1,0 +1,64 @@
+{% extends "::base.html.twig" %}
+
+{% block icon %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/fianetsceau/images/extranet/ico_puce_rouge.ico') }}" />
+{% endblock %}
+
+{% block title %}
+    Extranet
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {% stylesheets
+    'bundles/fianetsceau/css/extranet/main.css'
+    'bundles/fianetsceau/css/extranet/navigation.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+    {% block extranet_stylesheets %}
+    {% endblock %}
+
+{% endblock %}
+
+{% block javascripts_head %}
+    {{ parent() }}
+
+    {% block extranet_javascripts_head %}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+
+    {% include 'FIANETSceauBundle:Extranet:header.html.twig' %}
+
+    <section>
+        {% include 'FIANETSceauBundle:Extranet:navigation.html.twig' %}
+
+        <div class="content">
+            {% block extranet_body %}
+
+            {% endblock %}
+        </div>
+    </section>
+
+    {% include 'FIANETSceauBundle:Extranet:footer.html.twig' %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '../vendor/components/jquery/jquery.js'
+    'bundles/fianetsceau/js/extranet/main.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
+    {% block extranet_javascripts %}
+    {% endblock %}
+{% endblock %}
+
+

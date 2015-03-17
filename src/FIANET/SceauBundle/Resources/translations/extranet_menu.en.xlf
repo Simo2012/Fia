@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>accueil</source>
+                <target>Homepage</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>statistiques</source>
+                <target>Statistics</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>statistiques.dashboard</source>
+                <target>Dashboard</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>statistiques.avant_livraison</source>
+                <target>Before delivery</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>statistiques.apres_livraison</source>
+                <target>After delivery</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>statistiques.vos_acheteurs</source>
+                <target>Your buyers</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>statistiques.questions_personnalisees</source>
+                <target>Your personalized questions</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>statistiques.vos_donnees</source>
+                <target>Your data</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>questionnaires</source>
+                <target>Questionnaires</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>questionnaires.dashboard</source>
+                <target>Dashboard</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>questionnaires.questionnaires</source>
+                <target>Questionnaires</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>questionnaires.questions_personnalisees</source>
+                <target>Creation of personalized questions</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>questionnaires.relance_questionnaires</source>
+                <target>Relaunching questionnaires</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

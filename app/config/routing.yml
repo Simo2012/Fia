@@ -1,0 +1,7 @@
+fianet_sceau_extranet:
+    resource: "@FIANETSceauBundle/Controller/Extranet"
+    type:     annotation
+    prefix:   /extranet/{_locale}/
+    requirements:
+        _locale: fr|en
+        _scheme: "%extranet_protocole%"
