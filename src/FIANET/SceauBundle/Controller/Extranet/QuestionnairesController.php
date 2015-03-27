@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class QuestionnairesController extends Controller
 {
@@ -15,14 +14,13 @@ class QuestionnairesController extends Controller
      *
      * @Route("/questionnaires", name="extranet_questionnaires")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Questionnaires:index.html.twig")
      */
     public function indexAction()
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.dashboard')->setCurrent(true);
 
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
     }
 
     /*** TODO : c'est juste pour faire fonctionner le menu, à faire correctement par la suite ***/
@@ -31,21 +29,19 @@ class QuestionnairesController extends Controller
      *
      * @Route("/questionnaires/questionnaires", name="extranet_questionnaires_questionnaires")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Questionnaires:index.html.twig")
      */
     public function x1Action()
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
 
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
     }
 
     /**
      *
      * @Route("/questionnaires/questions-personnalisées", name="extranet_questionnaires_questions_personnalisees")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Questionnaires:index.html.twig")
      */
     public function x2Action()
     {
@@ -67,15 +63,14 @@ class QuestionnairesController extends Controller
             
             return new Response($content);
         }
-        
-        return array();
+
+        return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
     }
 
     /**
      *
      * @Route("/questionnaires/relance-questionnaires", name="extranet_questionnaires_relance_questionnaires")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Questionnaires:index.html.twig")
      */
     public function x3Action()
     {
@@ -99,7 +94,7 @@ class QuestionnairesController extends Controller
             return new Response($content);
         }
 
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
     }
 }
 

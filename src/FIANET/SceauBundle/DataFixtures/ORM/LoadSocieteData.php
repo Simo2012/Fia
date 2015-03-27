@@ -14,10 +14,17 @@ class LoadSocieteData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        /* Cdiscount */
         $societe = new Societe();
         $societe->setLibelle('Cdiscount SA');
         $manager->persist($societe);
         $this->addReference('Societe-1', $societe);
+
+        /* Maty */
+        $societe = new Societe();
+        $societe->setLibelle('MATY');
+        $manager->persist($societe);
+        $this->addReference('Societe-2', $societe);
 
         $manager->flush();
     }

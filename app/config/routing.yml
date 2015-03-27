@@ -5,3 +5,8 @@ fianet_sceau_extranet:
     requirements:
         _locale: fr|en
         _scheme: "%extranet_protocole%"
+
+fianet_sceau_webservice:
+    resource: "@FIANETSceauBundle/Controller/Webservice"
+    type:     annotation
+    prefix:   /webservice/

@@ -6,6 +6,23 @@
 
     <services>
 
+        <!-- Général -->
+        <service id="fianet_sceau.validator.site_id" class="FIANET\SceauBundle\Validator\Constraints\SiteIdValidator">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <tag name="validator.constraint_validator" alias="validator.site_id" />
+        </service>
+
+        <service id="fianet_sceau.kernel.listener.exception" class="FIANET\SceauBundle\Listener\ExceptionListener">
+            <argument type="service" id="templating" />
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
+        </service>
+
+        <service id="fianet_sceau.flux" class="FIANET\SceauBundle\Service\GestionFlux">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <argument type="service" id="validator" />
+        </service>
+
+        <!-- Extranet -->
         <service id="fianet_sceau.extranet.menu_builder" class="FIANET\SceauBundle\Service\Extranet\MenuBuilder">            
             <argument type="service" id="knp_menu.factory"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
@@ -29,16 +46,6 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
 
-        <service id="fianet_sceau.validator.site_id" class="FIANET\SceauBundle\Validator\SiteIdValidator">
-            <argument type="service" id="doctrine.orm.default_entity_manager" />
-            <tag name="validator.constraint_validator" alias="validator.site_id" />
-        </service>
-
-        <service id="fianet_sceau.kernel.listener.exception" class="FIANET\SceauBundle\Listener\ExceptionListener">
-            <argument type="service" id="templating" />
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
-        </service>
-        
     </services>
 
 </container>

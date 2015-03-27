@@ -1,6 +1,6 @@
 <?php
 
-namespace FIANET\SceauBundle\Validator;
+namespace FIANET\SceauBundle\Validator\Constraints;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Validator\Constraint;

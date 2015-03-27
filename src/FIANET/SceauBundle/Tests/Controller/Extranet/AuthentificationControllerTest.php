@@ -24,7 +24,7 @@ class AuthentificationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/extranet/fr/login');
-        $form = $crawler->selectButton('valider')->form();
+        $form = $crawler->selectButton('Valider')->form();
         $client->submit($form);
         $crawler = $client->followRedirect();
 
@@ -39,7 +39,7 @@ class AuthentificationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/extranet/fr/login');
-        $form = $crawler->selectButton('valider')->form();
+        $form = $crawler->selectButton('Valider')->form();
         $form['_username'] = '';
         $form['_password'] = 'admin';
         $client->submit($form);
@@ -56,7 +56,7 @@ class AuthentificationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/extranet/fr/login');
-        $form = $crawler->selectButton('valider')->form();
+        $form = $crawler->selectButton('Valider')->form();
         $form['_username'] = 'admin';
         $form['_password'] = '';
         $client->submit($form);
@@ -74,7 +74,7 @@ class AuthentificationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/extranet/fr/login');
-        $form = $crawler->selectButton('valider')->form();
+        $form = $crawler->selectButton('Valider')->form();
         $form['_username'] = 'admin';
         $form['_password'] = 'admin';
         $client->submit($form);
@@ -95,7 +95,7 @@ class AuthentificationControllerTest extends WebTestCase
         /* 1 */
         $client = static::createClient();
         $crawler = $client->request('GET', '/extranet/fr/login');
-        $link = $crawler->selectLink('mot_de_passe_oublie')->link();
+        $link = $crawler->selectLink('Mot de passe oublié ?')->link();
         $crawler = $client->click($link);
 
         $this->assertTrue($client->getResponse()->isSuccessful());
@@ -116,7 +116,7 @@ class AuthentificationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/extranet/fr/mdp_oublie');
-        $form = $crawler->selectButton('valider')->form();
+        $form = $crawler->selectButton('Valider')->form();
         $crawler = $client->submit($form);
 
         $this->assertTrue($client->getResponse()->isSuccessful());
@@ -135,7 +135,7 @@ class AuthentificationControllerTest extends WebTestCase
         /* 1 */
         $client = static::createClient();
         $crawler = $client->request('GET', '/extranet/fr/mdp_oublie');
-        $form = $crawler->selectButton('valider')->form();
+        $form = $crawler->selectButton('Valider')->form();
         $form['site_id[site_id]'] = 99999999;
         $crawler = $client->submit($form);
 
@@ -143,7 +143,7 @@ class AuthentificationControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('#erreur'));
 
         /* 2 */
-        $form = $crawler->selectButton('valider')->form();
+        $form = $crawler->selectButton('Valider')->form();
         $form['site_id[site_id]'] = 'abcd';
         $crawler = $client->submit($form);
 
@@ -162,7 +162,7 @@ class AuthentificationControllerTest extends WebTestCase
         /* 1 */
         $client = static::createClient();
         $crawler = $client->request('GET', '/extranet/fr/mdp_oublie');
-        $form = $crawler->selectButton('valider')->form();
+        $form = $crawler->selectButton('Valider')->form();
         $site = $client->getContainer()->get('doctrine.orm.entity_manager')
             ->getRepository('FIANETSceauBundle:Site')->findOneByNom('Cdiscount');
         $form['site_id[site_id]'] = $site->getId();
@@ -173,7 +173,7 @@ class AuthentificationControllerTest extends WebTestCase
         $this->assertEquals('/extranet/fr/mdp_oublie_confirmation', $client->getRequest()->getRequestUri());
 
         /* 2 */
-        $form = $crawler->selectButton('se_connecter')->form();
+        $form = $crawler->selectButton('Se connecter')->form();
         $client->submit($form);
 
         $this->assertTrue($client->getResponse()->isSuccessful());

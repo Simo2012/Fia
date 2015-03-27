@@ -17,6 +17,8 @@ class LoadSiteData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        /*** Site via Certissim ***/
+        /* CDiscount */
         $questionnairePersonnalisation = new QuestionnairePersonnalisation();
         $questionnairePersonnalisation->setQuestionnaireType($this->getReference('QuestionnaireType-1'));
         $questionnairePersonnalisation->setDateDebut(new DateTime());
@@ -29,12 +31,53 @@ class LoadSiteData extends AbstractFixture implements OrderedFixtureInterface
         $site->setUrl('http://www.cdiscount.com');
         $site->setPackage($this->getReference('Package-1'));
         $site->setSiteType($this->getReference('SiteType-1'));
-        $site->setAdministrationType($this->getReference('AdministrationType-1'));
+        $site->setAdministrationType($this->getReference('AdministrationType-2'));
         $site->setSociete($this->getReference('Societe-1'));
         $site->addQuestionnairePersonnalisation($questionnairePersonnalisation);
 
         $manager->persist($site);
         $this->addReference('Site-1', $site);
+
+        /* Site mirroir de Cdiscount */
+        $questionnairePersonnalisation = new QuestionnairePersonnalisation();
+        $questionnairePersonnalisation->setQuestionnaireType($this->getReference('QuestionnaireType-1'));
+        $questionnairePersonnalisation->setDateDebut(new DateTime());
+        $questionnairePersonnalisation->setPrincipal(true);
+
+        $manager->persist($questionnairePersonnalisation);
+
+        $site = new Site();
+        $site->setNom('GO SPORT');
+        $site->setUrl('http://www.go-sport.com');
+        $site->setPackage($this->getReference('Package-1'));
+        $site->setSiteType($this->getReference('SiteType-1'));
+        $site->setAdministrationType($this->getReference('AdministrationType-2'));
+        $site->setSociete($this->getReference('Societe-1'));
+        $site->addQuestionnairePersonnalisation($questionnairePersonnalisation);
+        $site->setSitePrincipal($this->getReference('Site-1'));
+
+        $manager->persist($site);
+        $this->addReference('Site-2', $site);
+
+        /*** Site via flux XML***/
+        $questionnairePersonnalisation = new QuestionnairePersonnalisation();
+        $questionnairePersonnalisation->setQuestionnaireType($this->getReference('QuestionnaireType-1'));
+        $questionnairePersonnalisation->setDateDebut(new DateTime());
+        $questionnairePersonnalisation->setPrincipal(true);
+
+        $manager->persist($questionnairePersonnalisation);
+
+        $site = new Site();
+        $site->setNom('Maty');
+        $site->setUrl('http://www.maty.com');
+        $site->setPackage($this->getReference('Package-3'));
+        $site->setSiteType($this->getReference('SiteType-1'));
+        $site->setAdministrationType($this->getReference('AdministrationType-1'));
+        $site->setSociete($this->getReference('Societe-2'));
+        $site->addQuestionnairePersonnalisation($questionnairePersonnalisation);
+
+        $manager->persist($site);
+        $this->addReference('Site-3', $site);
 
         $manager->flush();
     }

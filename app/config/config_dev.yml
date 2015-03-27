@@ -58,3 +58,6 @@ doctrine:
 # Surcharge des paramètres
 parameters:
     extranet_protocole: http
+
+    # Pour les lignes de commandes
+    router.request_context.base_url: /Sceau/app_dev.php

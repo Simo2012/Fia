@@ -3,15 +3,12 @@
 namespace FIANET\SceauBundle\Controller\Extranet;
 
 use FIANET\SceauBundle\Form\Type\SiteIdType;
-use FIANET\SceauBundle\Validator\Constraints\SiteId;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AuthentificationController extends Controller
 {
@@ -20,9 +17,9 @@ class AuthentificationController extends Controller
      *
      * @Route("/login", name="extranet_utilisateur_login")
      *
-     * @param Request $request
+     * @param Request $request Instance de Request
      *
-     * @return Response
+     * @return Response Instance de Response
      */
     public function loginAction(Request $request)
     {
@@ -64,11 +61,10 @@ class AuthentificationController extends Controller
      *
      * @Route("/mdp_oublie", name="extranet_utilisateur_mdp_oublie")
      * @Method({"GET", "POST"})
-     * @Template("FIANETSceauBundle:Extranet:login_mdp_oublie.html.twig")
      *
-     * @param Request $request
+     * @param Request $request Instance de Request
      *
-     * @return array
+     * @return Response Instance de Response
      */
     public function motDePasseOublieAction(Request $request)
     {
@@ -80,9 +76,9 @@ class AuthentificationController extends Controller
             return $this->redirect($this->generateUrl('extranet_utilisateur_mdp_oublie_conf'));
         }
 
-        return array(
+        return $this->render('FIANETSceauBundle:Extranet:login_mdp_oublie.html.twig', array(
             'form' => $form->createView()
-        );
+        ));
     }
 
     /**
@@ -90,12 +86,11 @@ class AuthentificationController extends Controller
      *
      * @Route("/mdp_oublie_confirmation", name="extranet_utilisateur_mdp_oublie_conf")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet:login_mdp_oublie_conf.html.twig")
      *
-     * @return array
+     * @return Response Instance de Response
      */
     public function confMotDePasseOublieAction()
     {
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet:login_mdp_oublie_conf.html.twig');
     }
 }

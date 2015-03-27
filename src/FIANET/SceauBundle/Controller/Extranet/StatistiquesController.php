@@ -16,14 +16,13 @@ class StatistiquesController extends Controller
      *
      * @Route("/statistiques", name="extranet_statistiques")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Statistiques:index.html.twig")
      */
     public function indexAction()
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('statistiques')->getChild('statistiques.dashboard')->setCurrent(true);
 
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Statistiques:index.html.twig');
     }
 
     /*** TODO : c'est juste pour faire fonctionner le menu, à faire correctement par la suite ***/
@@ -31,46 +30,42 @@ class StatistiquesController extends Controller
     /**
      * @Route("/statistiques/avant-livraison", name="extranet_statistiques_avant_livraison")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Statistiques:index.html.twig")
      */
     public function x1Action()
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('statistiques')->getChild('statistiques.avant_livraison')->setCurrent(true);
 
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Statistiques:index.html.twig');
     }
 
     /**
      * @Route("/statistiques/après-livraison", name="extranet_statistiques_apres_livraison")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Statistiques:index.html.twig")
      */
     public function x2Action()
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('statistiques')->getChild('statistiques.apres_livraison')->setCurrent(true);
 
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Statistiques:index.html.twig');
     }
 
     /**
      * @Route("/statistiques/vos-acheteurs", name="extranet_statistiques_vos_acheteurs")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Statistiques:index.html.twig")
      */
     public function x3Action()
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('statistiques')->getChild('statistiques.vos_acheteurs')->setCurrent(true);
 
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Statistiques:index.html.twig');
     }
 
     /**
      * @Route("/statistiques/questions-personnalisées", name="extranet_statistiques_questions_personnalisees")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Statistiques:index.html.twig")
      */
     public function x4Action()
     {
@@ -95,19 +90,18 @@ class StatistiquesController extends Controller
             throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
         }
         
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Statistiques:index.html.twig');
     }
 
     /**
      * @Route("/statistiques/vos-données", name="extranet_statistiques_vos_donnees")
      * @Method("GET")
-     * @Template("FIANETSceauBundle:Extranet/Statistiques:index.html.twig")
      */
     public function x5Action()
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('statistiques')->getChild('statistiques.vos_donnees')->setCurrent(true);
 
-        return array();
+        return $this->render('FIANETSceauBundle:Extranet/Statistiques:index.html.twig');
     }
 }

@@ -1,0 +1,27 @@
+FIANET\SceauBundle\Entity\Flux:
+    properties:
+        xml:
+            - NotNull:
+                message: "Le paramètre XMLInfo est obligatoire."
+                groups: [reception]
+            - NotBlank:
+                message: "Le paramètre XMLInfo ne doit pas être vide."
+                groups: [reception]
+        checksum:
+            - NotNull:
+                message: "Le paramètre CheckSum est obligatoire."
+                groups: [reception]
+            - NotBlank:
+                message: "Le paramètre CheckSum ne doit pas être vide."
+                groups: [reception]
+        ip:
+            - Ip:
+                message: "L'IP est invalide."
+                groups: [reception]
+    constraints:
+        - FIANET\SceauBundle\Validator\Constraints\FluxChecksum:
+            groups: [reception]
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: checksum
+            message: "Le flux a déjà été reçu."
+            groups: [reception]
