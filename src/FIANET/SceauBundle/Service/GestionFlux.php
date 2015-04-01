@@ -53,7 +53,7 @@ class GestionFlux
         $flux->setFluxStatut($this->em->getRepository('FIANETSceauBundle:FluxStatut')->find(1));
         $flux->setSite($site);
 
-        $listeErreurs = $this->validator->validate($flux, array('reception'));
+        $listeErreurs = $this->validator->validate($flux, array(), array('reception, reception2'));
 
         if (count($listeErreurs) == 0) {
             return $flux;

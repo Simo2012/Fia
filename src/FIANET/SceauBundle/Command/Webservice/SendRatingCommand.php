@@ -67,10 +67,12 @@ EOT
         if (!curl_errno($ch)) {
             $output->writeln("<info>$response</info>");
 
+            return 0;
+
         } else {
             $output->writeln('<error>' . curl_error($ch) . '</error>');
-        }
 
-        return 0;
+            return 2;
+        }
     }
 }

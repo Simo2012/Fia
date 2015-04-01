@@ -7,16 +7,24 @@
     <services>
 
         <!-- Général -->
+        <!-- Validator -->
         <service id="fianet_sceau.validator.site_id" class="FIANET\SceauBundle\Validator\Constraints\SiteIdValidator">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <tag name="validator.constraint_validator" alias="validator.site_id" />
         </service>
+        <service id="fianet_sceau.validator.site_id" class="FIANET\SceauBundle\Validator\Constraints\FluxXmlValidator">
+            <argument type="service" id="router" />
+            <argument type="service" id="templating" />
+            <tag name="validator.constraint_validator" alias="validator.flux_xml" />
+        </service>
 
+        <!-- Listener -->
         <service id="fianet_sceau.kernel.listener.exception" class="FIANET\SceauBundle\Listener\ExceptionListener">
             <argument type="service" id="templating" />
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
         </service>
 
+        <!-- Métier -->
         <service id="fianet_sceau.flux" class="FIANET\SceauBundle\Service\GestionFlux">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument type="service" id="validator" />

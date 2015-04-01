@@ -1,2 +1,2 @@
 parameters:
-    extranet_protocole: http
+    extranet_protocole: https

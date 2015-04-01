@@ -14,9 +14,7 @@ class GestionFluxTest extends WebTestCase
     public function __construct()
     {
         $this->client = static::createClient();
-
-        $this->url = $this->client->getContainer()->get('router')
-            ->generate('ws_send_rating', array(), Router::RELATIVE_PATH);
+        $this->url = '/webservice/send_rating';
     }
 
     /**
@@ -146,14 +144,87 @@ class GestionFluxTest extends WebTestCase
     }
 
     /**
+     * On appelle le webservice avec un flux bien formé mais dont la date de commande est incorrecte :
+     * XML avec message KO
+     */
+    public function testDateIncorecte()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
+            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
+            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
+            <email><![CDATA[missy_girl56@hotmail.fr]]></email></utilisateur>
+            <infocommande><refid><![CDATA[' . uniqid('xml') . ']]></refid>
+            <siteid><![CDATA[14533]]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
+            <ip timestamp="2014-07-15T12:10:37"><![CDATA[82.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
+            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
+            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
+            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
+            <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
+            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
+
+        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+
+        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+    }
+
+    /**
+     * On appelle le webservice avec un flux bien formé mais dont l'email est incorrecte : XML avec message KO
+     */
+    public function testEmailIncorect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
+            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
+            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
+            <email><![CDATA[missy_girl56hotmail.fr]]></email></utilisateur><infocommande>
+            <refid><![CDATA[' . uniqid('xml') . ']]></refid>
+            <siteid><![CDATA[14533]]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
+            <ip timestamp="2014-07-15 12:10:37"><![CDATA[82.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
+            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
+            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
+            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
+            <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
+            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
+
+        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+
+        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+    }
+
+    /**
      * On appelle le webservice correctement : XML avec message OK
      */
     public function testCorrect()
     {
-        $xmlInfo = '<control>' . uniqid('xml') . '</control>';
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
+            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
+            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
+            <email><![CDATA[missy_girl56@hotmail.fr]]></email></utilisateur>
+            <infocommande><refid><![CDATA[' . uniqid('xml') . ']]></refid>
+            <siteid><![CDATA[14533]]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
+            <ip timestamp="2014-07-15 12:10:37"><![CDATA[82.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
+            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
+            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
+            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
+            <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
+            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
 
-        $xml = $this->client->request('POST', $this->url, array(
-            'SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo)));
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
 
         $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
 

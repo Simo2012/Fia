@@ -6,6 +6,38 @@
                 <source>constraints.flux_checksum_incorrect</source>
                 <target>Checksum is invalid.</target>
             </trans-unit>
+            <trans-unit id="2">
+                <source>constraints.flux_xml_invalide</source>
+                <target>Invalid XML format.</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>constraints.flux_xml_doublon</source>
+                <target>The flow has already been received.</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>constraints.flux_xml_not_null</source>
+                <target>Parameter XMLInfo is mandatory.</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>constraints.flux_xml_not_blank</source>
+                <target>Parameter XMLInfo cannot be null.</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>constraints.flux_checksum_not_null</source>
+                <target>Parameter CheckSum is mandatory.</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>constraints.flux_checksum_not_blank</source>
+                <target>Parameter CheckSum cannot be null.</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>constraints.flux_ip</source>
+                <target>IP is invalid.</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>constraints.erreur_interne</source>
+                <target>Internal error has occurred.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

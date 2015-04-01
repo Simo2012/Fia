@@ -50,4 +50,24 @@ class WebserviceController extends Controller
             $reponse
         );
     }
+
+    /**
+     * Affiche le schéma XML pour le webservice ws_send_rating.
+     *
+     * @Route("/send_rating/schema", name="ws_send_rating_schema")
+     * @Method("GET")
+     *
+     * @return Response Instance de Response
+     */
+    public function sendRatingSchemaAction()
+    {
+        $reponse = new Response();
+        $reponse->headers->set('Content-Type', 'application/xml');
+
+        return $this->render(
+            'FIANETSceauBundle:Webservice:send_rating_schema.xsd.twig',
+            array(),
+            $reponse
+        );
+    }
 }

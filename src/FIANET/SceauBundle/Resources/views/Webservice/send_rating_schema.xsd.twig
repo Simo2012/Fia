@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="control">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="utilisateur">
+                    <xsd:complexType>
+                        <xsd:all>
+                            <xsd:element name="nom">
+                                <xsd:complexType>
+                                    <xsd:simpleContent>
+                                        <xsd:extension base="xsd:normalizedString">
+                                            <xsd:attribute type="xsd:byte" name="titre"/>
+                                        </xsd:extension>
+                                    </xsd:simpleContent>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element type="xsd:normalizedString" name="prenom" minOccurs="0"/>
+                            <xsd:element name="email">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:normalizedString">
+                                        <xsd:pattern value="[a-zA-Z0-9_-]{1}[a-zA-Z0-9._!#$%'&amp;*+/=?^`{|}~-]*@([a-zA-Z0-9_]+[.-]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,6}" />
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                        </xsd:all>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="infocommande">
+                    <xsd:complexType>
+                        <xsd:all>
+                            <xsd:element type="xsd:normalizedString" name="refid"/>
+                            <xsd:element type="xsd:int" name="siteid"/>
+                            <xsd:element name="montant">
+                                <xsd:complexType>
+                                    <xsd:simpleContent>
+                                        <xsd:extension base="xsd:float">
+                                            <xsd:attribute type="xsd:normalizedString" name="devise" fixed="EUR"/>
+                                        </xsd:extension>
+                                    </xsd:simpleContent>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="ip">
+                                <xsd:complexType>
+                                    <xsd:simpleContent>
+                                        <xsd:extension base="xsd:normalizedString">
+                                            <xsd:attribute name="timestamp">
+                                                <xsd:simpleType>
+                                                    <xsd:restriction base="xsd:normalizedString">
+                                                        <xsd:pattern value="[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}(:[0-9]{1,2})?" />
+                                                    </xsd:restriction>
+                                                </xsd:simpleType>
+                                            </xsd:attribute>
+                                        </xsd:extension>
+                                    </xsd:simpleContent>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element type="xsd:language" name="langue" minOccurs="0"/>
+                            <xsd:element name="produits" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:all>
+                                        <xsd:element type="xsd:anyURI" name="urlwebservice"/>
+                                        <xsd:element name="produit">
+                                            <xsd:complexType>
+                                                <xsd:all>
+                                                    <xsd:element type="xsd:long" name="codeean"/>
+                                                    <xsd:element type="xsd:int" name="id"/>
+                                                    <xsd:element type="xsd:short" name="categorie"/>
+                                                    <xsd:element type="xsd:normalizedString" name="libelle"/>
+                                                    <xsd:element type="xsd:float" name="montant"/>
+                                                </xsd:all>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:all>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:all>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="paiement" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:all>
+                            <xsd:element type="xsd:byte" name="type"/>
+                        </xsd:all>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element type="xsd:token" name="crypt"/>
+
+            </xsd:all>
+            <xsd:attribute type="xsd:normalizedString" name="fianetmodule"/>
+            <xsd:attribute type="xsd:float" name="version"/>
+            <xsd:attribute type="xsd:float" name="sceaumodule"/>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

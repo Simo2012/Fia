@@ -1,27 +1,33 @@
 FIANET\SceauBundle\Entity\Flux:
+    group_sequence:
+        - Flux
+        - reception
+        - reception2
     properties:
         xml:
             - NotNull:
-                message: "Le paramètre XMLInfo est obligatoire."
+                message: "constraints.flux_xml_not_null"
                 groups: [reception]
             - NotBlank:
-                message: "Le paramètre XMLInfo ne doit pas être vide."
+                message: "constraints.flux_xml_not_blank"
                 groups: [reception]
         checksum:
             - NotNull:
-                message: "Le paramètre CheckSum est obligatoire."
+                message: "constraints.flux_checksum_not_null"
                 groups: [reception]
             - NotBlank:
-                message: "Le paramètre CheckSum ne doit pas être vide."
+                message: "constraints.flux_checksum_not_blank"
                 groups: [reception]
         ip:
             - Ip:
-                message: "L'IP est invalide."
+                message: "constraints.flux_ip"
                 groups: [reception]
     constraints:
         - FIANET\SceauBundle\Validator\Constraints\FluxChecksum:
             groups: [reception]
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: checksum
-            message: "Le flux a déjà été reçu."
+            message: "constraints.flux_xml_doublon"
             groups: [reception]
+        - FIANET\SceauBundle\Validator\Constraints\FluxXml:
+            groups: [reception2]
