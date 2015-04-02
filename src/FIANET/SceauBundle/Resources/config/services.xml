@@ -12,7 +12,7 @@
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <tag name="validator.constraint_validator" alias="validator.site_id" />
         </service>
-        <service id="fianet_sceau.validator.site_id" class="FIANET\SceauBundle\Validator\Constraints\FluxXmlValidator">
+        <service id="fianet_sceau.validator.flux_xml" class="FIANET\SceauBundle\Validator\Constraints\FluxXmlValidator">
             <argument type="service" id="router" />
             <argument type="service" id="templating" />
             <tag name="validator.constraint_validator" alias="validator.flux_xml" />
