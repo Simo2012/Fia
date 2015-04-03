@@ -70,6 +70,7 @@ class LoadSiteData extends AbstractFixture implements OrderedFixtureInterface
         $site = new Site();
         $site->setNom('Maty');
         $site->setUrl('http://www.maty.com');
+        $site->setClePrivee('_s5dgbmhivakutu39opt');
         $site->setPackage($this->getReference('Package-3'));
         $site->setSiteType($this->getReference('SiteType-1'));
         $site->setAdministrationType($this->getReference('AdministrationType-1'));

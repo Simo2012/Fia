@@ -17,7 +17,7 @@ class GestionFlux
     }
 
     /**
-     * Méthode qui valide un flux lors de sa réception (validation légère).
+     * Valide le format d'un flux lors de sa réception.
      *
      * @param integer $site_id Identifiant du site (provenant du paramètre POST SiteID)
      * @param string $xmlInfo XML de la commande (provenant du paramètre POST XMLInfo)
@@ -63,7 +63,7 @@ class GestionFlux
     }
 
     /**
-     * Méthode qui valide un flux et qui l'insére en base s'il est valide.
+     * Valide le format d'un flux lors de sa réception et l'insére en base s'il est valide.
      *
      * @param integer $site_id Identifiant du site (provenant du paramètre POST SiteID)
      * @param string $xmlInfo XML de la commande (provenant du paramètre POST XMLInfo)
@@ -82,5 +82,36 @@ class GestionFlux
         $this->em->flush();
 
         return $flux;
+    }
+
+    /**
+     * Valide le contenu d'un flux XML. Lance une exception s'il est invalide.
+     *
+     * @param Flux $flux Instance de flux
+     *
+     * @throws Exception En cas de flux invalide
+     */
+    public function validerContenu(Flux $flux)
+    {
+        $listeErreurs = $this->validator->validate($flux, array(), array('validation'));
+
+        if (count($listeErreurs) != 0) {
+            throw new Exception($listeErreurs->get(0)->getMessage());
+        }
+    }
+
+    /**
+     * Permet de récupérer la valeur que doit avoir la balise <crypt> pour un flux.
+     *
+     * @param string $clePriveeSceau Clé privée Sceau du site
+     * @param string $refid Valeur de la balise <refid>
+     * @param string $timestamp Valeur de l'attibut timestamp de la balise <ip>
+     * @param string $email Valeur de la balise <email>
+     *
+     * @return string La valeur attendue pour la balise crypt
+     */
+    public function getCrypt($clePriveeSceau, $refid, $timestamp, $email)
+    {
+        return md5($clePriveeSceau . '_' . $refid . '+' . $timestamp . '=' . $email);
     }
 }

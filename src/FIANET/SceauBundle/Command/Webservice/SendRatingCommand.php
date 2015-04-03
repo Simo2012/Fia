@@ -20,7 +20,7 @@ class SendRatingCommand extends ContainerAwareCommand
             ->setHelp(<<<EOT
 <info>fianet:webservice:send-rating:test</info> permet de simuler l'envoi d'un flux XML par un site.
 
-Il est obligatoire de preciser l'identifiant du site et le flux XML. Optionnelement, il est possible de donner directement le checksum. S'il est absent, la commande le genere automatiquement.
+Il est obligatoire de preciser l'identifiant du site et le flux XML. Optionnellement, il est possible de donner directement le checksum. S'il est absent, la commande le genere automatiquement.
 
 Exemple d'utilisation :
 

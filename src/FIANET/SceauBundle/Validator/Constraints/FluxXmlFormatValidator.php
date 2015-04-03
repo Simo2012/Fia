@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Router;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class FluxXmlValidator extends ConstraintValidator
+class FluxXmlFormatValidator extends ConstraintValidator
 {
     private $router;
     private $templating;
@@ -25,7 +25,7 @@ class FluxXmlValidator extends ConstraintValidator
      * Méthode qui récupère le premier message d'erreur d'une invalidation d'un flux XML.
      * Ce message est formaté puis retourné.
      *
-     * @param Constraint $constraint Instance de FluxXml
+     * @param Constraint $constraint Instance de FluxXmlFormat
      *
      * @return string Le premier message d'erreur
      */
@@ -49,7 +49,7 @@ class FluxXmlValidator extends ConstraintValidator
      *
      * @param Flux $flux Instance de Flux
      *
-     * @param Constraint $constraint Instance de FluxXml
+     * @param Constraint $constraint Instance de FluxXmlFormat
      */
     public function validate($flux, Constraint $constraint)
     {

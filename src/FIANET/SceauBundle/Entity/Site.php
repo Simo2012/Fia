@@ -45,6 +45,13 @@ class Site
      */
     private $slug;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="clePrivee", type="string", length=20, nullable=true)
+     */
+    private $clePrivee;
+
 
     /**
      * @var ArrayCollection
@@ -57,7 +64,7 @@ class Site
      *      )})
      */
     private $questionnairePersonnalisations;
-    
+
     /**
      * @var Package
      *
@@ -65,7 +72,7 @@ class Site
      * @ORM\JoinColumn(name="package_id", referencedColumnName="id", nullable=false)
      **/
     private $package;
-    
+
     /**
      * @var ArrayCollection
      *
@@ -230,7 +237,7 @@ class Site
     {
         return $this->nom;
     }
-    
+
     /**
      * Set package
      *
@@ -460,7 +467,7 @@ class Site
     {
         return $this->commandes;
     }
-    
+
     /**
      * Add flux
      *
@@ -792,5 +799,40 @@ class Site
     public function getCommandeCSVParametrage()
     {
         return $this->commandeCSVParametrage;
+    }
+
+    /**
+     * Set clePrivee
+     *
+     * @param string $clePrivee
+     *
+     * @return Site
+     */
+    public function setClePrivee($clePrivee)
+    {
+        $this->clePrivee = $clePrivee;
+
+        return $this;
+    }
+
+    /**
+     * Get clePrivee
+     *
+     * @return string
+     */
+    public function getClePrivee()
+    {
+        return $this->clePrivee;
+    }
+
+
+    /**
+     * Permet de récupérer la clé privée "Sceau". Elle sert par exemple à authentifier un site qui envoie des flux XML.
+     *
+     * @return string
+     */
+    public function getClePriveeSceau()
+    {
+        return md5($this->id . '_sceau_' . $this->clePrivee);
     }
 }

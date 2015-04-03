@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\GroupSequenceProviderInterface;
 
 /**
  * Flux
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="Flux")
  * @ORM\Entity(repositoryClass="FIANET\SceauBundle\Entity\FluxRepository")
  */
-class Flux
+class Flux implements GroupSequenceProviderInterface
 {
     /**
      * @var integer
@@ -248,5 +249,27 @@ class Flux
     public function getSite()
     {
         return $this->site;
+    }
+
+    /**
+     * Retourne la séquence des groupes de validations à respecter en fonction de l'état du flux :
+     * 1) Vérification du format à la réception.
+     * 2) Vérification du contenu à la validation.
+     *
+     * @return array Tableau ordonné avec les groupes de validation
+     */
+    public function getGroupSequence()
+    {
+        $groupSequence = array();
+
+        if ($this->fluxStatut->getId() == 1) {
+            $groupSequence[] = 'reception';
+            $groupSequence[] = 'reception2';
+
+        } else {
+            $groupSequence[] = 'validation';
+        }
+
+        return $groupSequence;
     }
 }

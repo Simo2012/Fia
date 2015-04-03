@@ -154,7 +154,7 @@ class GestionFluxTest extends WebTestCase
             <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
             <email><![CDATA[missy_girl56@hotmail.fr]]></email></utilisateur>
             <infocommande><refid><![CDATA[' . uniqid('xml') . ']]></refid>
-            <siteid><![CDATA[14533]]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
+            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
             <ip timestamp="2014-07-15T12:10:37"><![CDATA[82.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
             <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
             </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
@@ -183,7 +183,7 @@ class GestionFluxTest extends WebTestCase
             <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
             <email><![CDATA[missy_girl56hotmail.fr]]></email></utilisateur><infocommande>
             <refid><![CDATA[' . uniqid('xml') . ']]></refid>
-            <siteid><![CDATA[14533]]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
+            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
             <ip timestamp="2014-07-15 12:10:37"><![CDATA[82.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
             <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
             </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
@@ -207,24 +207,34 @@ class GestionFluxTest extends WebTestCase
      */
     public function testCorrect()
     {
-        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
-            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
-            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
-            <email><![CDATA[missy_girl56@hotmail.fr]]></email></utilisateur>
-            <infocommande><refid><![CDATA[' . uniqid('xml') . ']]></refid>
-            <siteid><![CDATA[14533]]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
-            <ip timestamp="2014-07-15 12:10:37"><![CDATA[82.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
-            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
-            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
-            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
-            <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
-            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+        $this->client->request('GET', '/'); // GET pour initialiser le container
 
+        $container = $this->client->getContainer();
+        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
+            ->find($this->siteIDFluxXML);
+
+        $refid = uniqid('xml');
+        $timestamp = '2015-04-02 23:43';
+        $email = 'cricri.martini@wanadoo.fr';
+
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $email . '</email></utilisateur>
+            <infocommande><siteid>' . $site->getId() . '</siteid><refid><![CDATA[' . $refid . ']]></refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip><produits>
+            <produit><codeean></codeean><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant>
+            <image>http://photos.maty.com/0335991/V1/400/bracelet-or-750-topaze-bleue-traitee.jpeg</image></produit>
+            </produits></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email) . '
+            </crypt></control>';
         $xml = $this->client->request(
             'POST',
             $this->url,
             array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
         );
+
+var_dump($this->client->getResponse()->getContent());
 
         $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
 

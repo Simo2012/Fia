@@ -4,7 +4,7 @@ namespace FIANET\SceauBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
-class FluxXml extends Constraint
+class FluxXmlContenu extends Constraint
 {
     public $message = 'constraints.flux_xml_invalide';
 
@@ -13,7 +13,7 @@ class FluxXml extends Constraint
      */
     public function validatedBy()
     {
-        return 'validator.flux_xml';
+        return 'validator.flux_xml_contenu';
     }
 
     /**

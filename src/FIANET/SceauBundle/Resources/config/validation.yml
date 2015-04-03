@@ -1,8 +1,5 @@
 FIANET\SceauBundle\Entity\Flux:
-    group_sequence:
-        - Flux
-        - reception
-        - reception2
+    group_sequence_provider: true
     properties:
         xml:
             - NotNull:
@@ -29,5 +26,7 @@ FIANET\SceauBundle\Entity\Flux:
             fields: checksum
             message: "constraints.flux_xml_doublon"
             groups: [reception]
-        - FIANET\SceauBundle\Validator\Constraints\FluxXml:
+        - FIANET\SceauBundle\Validator\Constraints\FluxXmlFormat:
             groups: [reception2]
+        - FIANET\SceauBundle\Validator\Constraints\FluxXmlContenu:
+            groups: [validation]
