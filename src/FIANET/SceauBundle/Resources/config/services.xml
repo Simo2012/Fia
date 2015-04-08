@@ -20,6 +20,8 @@
         <service id="fianet_sceau.validator.flux_xml_contenu" class="FIANET\SceauBundle\Validator\Constraints\FluxXmlContenuValidator">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument type="service" id="fianet_sceau.flux" />
+            <argument type="service" id="fianet_sceau.questionnaire" />
+            <argument>%flux_delai_max_commande%</argument>
             <tag name="validator.constraint_validator" alias="validator.flux_xml_contenu" />
         </service>
 
@@ -33,6 +35,10 @@
         <service id="fianet_sceau.flux" class="FIANET\SceauBundle\Service\GestionFlux">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument type="service" id="validator" />
+        </service>
+        <service id="fianet_sceau.questionnaire" class="FIANET\SceauBundle\Service\GestionQuestionnaire">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <argument>%langue_par_defaut%</argument>
         </service>
 
         <!-- Extranet -->

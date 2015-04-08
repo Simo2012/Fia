@@ -58,9 +58,9 @@ class Commande
     private $reference;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="montant", type="integer", nullable=true)
+     * @ORM\Column(name="montant", type="float", nullable=true)
      */
     private $montant;
 
@@ -163,11 +163,12 @@ class Commande
      * Set email
      *
      * @param string $email
+     *
      * @return Commande
      */
     public function setEmail($email)
     {
-        $this->email = $email;
+        $this->email = strtolower($email);
 
         return $this;
     }
@@ -186,6 +187,7 @@ class Commande
      * Set prenom
      *
      * @param string $prenom
+     *
      * @return Commande
      */
     public function setPrenom($prenom)
@@ -209,6 +211,7 @@ class Commande
      * Set nom
      *
      * @param string $nom
+     *
      * @return Commande
      */
     public function setNom($nom)
@@ -232,6 +235,7 @@ class Commande
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return Commande
      */
     public function setDate($date)
@@ -278,7 +282,8 @@ class Commande
     /**
      * Set montant
      *
-     * @param integer $montant
+     * @param float $montant
+     *
      * @return Commande
      */
     public function setMontant($montant)
@@ -291,7 +296,7 @@ class Commande
     /**
      * Get montant
      *
-     * @return integer
+     * @return float
      */
     public function getMontant()
     {
@@ -302,6 +307,7 @@ class Commande
      * Set dateUtilisation
      *
      * @param \DateTime $dateUtilisation
+     *
      * @return Commande
      */
     public function setDateUtilisation($dateUtilisation)
@@ -325,6 +331,7 @@ class Commande
      * Set donnees
      *
      * @param array $donnees
+     *
      * @return Commande
      */
     public function setDonnees($donnees)

@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:simpleType name="ip">
+        <xsd:restriction base="xsd:normalizedString">
+            <xsd:pattern value="([0-2]?[0-9]{1,2}\.){3}[0-2]?[0-9]{1,2}" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="montant">
+        <xsd:restriction base="xsd:float">
+            <xsd:minExclusive value="0" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="typeLivraison">
+        <xsd:restriction base="xsd:normalizedString">
+            <xsd:pattern value="[1-5]|([1-5]-)+[1-5]" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
     <xsd:element name="control">
         <xsd:complexType>
             <xsd:all>
@@ -34,7 +53,7 @@
                             <xsd:element name="montant">
                                 <xsd:complexType>
                                     <xsd:simpleContent>
-                                        <xsd:extension base="xsd:float">
+                                        <xsd:extension base="montant">
                                             <xsd:attribute type="xsd:normalizedString" name="devise" fixed="EUR"/>
                                         </xsd:extension>
                                     </xsd:simpleContent>
@@ -43,7 +62,7 @@
                             <xsd:element name="ip">
                                 <xsd:complexType>
                                     <xsd:simpleContent>
-                                        <xsd:extension base="xsd:normalizedString">
+                                        <xsd:extension base="ip">
                                             <xsd:attribute name="timestamp">
                                                 <xsd:simpleType>
                                                     <xsd:restriction base="xsd:normalizedString">
@@ -67,7 +86,7 @@
                                                     <xsd:element type="xsd:int" name="id"/>
                                                     <xsd:element type="xsd:short" name="categorie"/>
                                                     <xsd:element type="xsd:normalizedString" name="libelle"/>
-                                                    <xsd:element type="xsd:float" name="montant"/>
+                                                    <xsd:element type="montant" name="montant"/>
                                                     <xsd:element type="xsd:anyURI" name="image" minOccurs="0"/>
                                                 </xsd:all>
                                             </xsd:complexType>
@@ -75,6 +94,7 @@
                                     </xsd:all>
                                 </xsd:complexType>
                             </xsd:element>
+                            <xsd:element type="typeLivraison" name="typeLivraison" minOccurs="0"/>
                         </xsd:all>
                     </xsd:complexType>
                 </xsd:element>

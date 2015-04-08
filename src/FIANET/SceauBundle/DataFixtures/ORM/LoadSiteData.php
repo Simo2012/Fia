@@ -64,8 +64,14 @@ class LoadSiteData extends AbstractFixture implements OrderedFixtureInterface
         $questionnairePersonnalisation->setQuestionnaireType($this->getReference('QuestionnaireType-1'));
         $questionnairePersonnalisation->setDateDebut(new DateTime());
         $questionnairePersonnalisation->setPrincipal(true);
-
         $manager->persist($questionnairePersonnalisation);
+
+        $questionnairePersonnalisation2 = new QuestionnairePersonnalisation();
+        $questionnairePersonnalisation2->setQuestionnaireType($this->getReference('QuestionnaireType-2'));
+        $questionnairePersonnalisation2->setDateDebut(new DateTime('2015-01-01'));
+        $questionnairePersonnalisation2->setDateFin(new DateTime('2015-02-15'));
+        $questionnairePersonnalisation2->setPrincipal(false);
+        $manager->persist($questionnairePersonnalisation2);
 
         $site = new Site();
         $site->setNom('Maty');
@@ -76,6 +82,7 @@ class LoadSiteData extends AbstractFixture implements OrderedFixtureInterface
         $site->setAdministrationType($this->getReference('AdministrationType-1'));
         $site->setSociete($this->getReference('Societe-2'));
         $site->addQuestionnairePersonnalisation($questionnairePersonnalisation);
+        $site->addQuestionnairePersonnalisation($questionnairePersonnalisation2);
 
         $manager->persist($site);
         $this->addReference('Site-3', $site);

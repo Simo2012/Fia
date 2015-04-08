@@ -38,6 +38,26 @@
                 <source>constraints.erreur_interne</source>
                 <target>Une erreur interne est survenue.</target>
             </trans-unit>
+            <trans-unit id="10">
+                <source>constraints.flux_crypt_incorrect</source>
+                <target>La valeur de la balise crypt est incorrect.</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>constraints.flux_siteid_incorrect</source>
+                <target>La valeur de la balise siteid est incorrect.</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>constraints.flux_timestamp_incorrect</source>
+                <target>La valeur de l'attribut timestamp est incorrect.</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>constraints.flux_timestamp_futuriste</source>
+                <target>La valeur de l'attribut timestamp est supérieure à la date du jour.</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>constraints.flux_timestamp_trop_ancien</source>
+                <target>La valeur de l'attribut timestamp est trop ancienne.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

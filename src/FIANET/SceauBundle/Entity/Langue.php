@@ -24,7 +24,7 @@ class Langue
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=3)
+     * @ORM\Column(name="code", type="string", length=3, unique=true)
      */
     private $code;
 

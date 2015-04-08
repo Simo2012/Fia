@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Validator\RecursiveValidator;
 class GestionFlux
 {
     private $em;
+    private $validator;
 
     public function __construct(EntityManager $em, RecursiveValidator $validator)
     {

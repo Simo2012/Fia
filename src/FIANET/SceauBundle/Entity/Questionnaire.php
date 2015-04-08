@@ -89,7 +89,7 @@ class Questionnaire
     /**
      * @var QuestionnaireType
      *
-     * @ORM\OneToOne(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireType")
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireType")
      * @ORM\JoinColumn(name="questionnaireType_id", referencedColumnName="id", nullable=false)
      */
     private $questionnaireType;
@@ -113,7 +113,7 @@ class Questionnaire
     /**
      * @var Commande
      *
-     * @ORM\OneToOne(targetEntity="FIANET\SceauBundle\Entity\Questionnaire")
+     * @ORM\OneToOne(targetEntity="FIANET\SceauBundle\Entity\Commande", cascade={"persist"})
      * @ORM\JoinColumn(name="commande_id", referencedColumnName="id", nullable=true)
      */
     private $commande;
@@ -130,7 +130,7 @@ class Questionnaire
     /**
      * @var Langue
      *
-     * @ORM\OneToOne(targetEntity="FIANET\SceauBundle\Entity\Langue")
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Langue")
      * @ORM\JoinColumn(name="langue_id", referencedColumnName="id", nullable=false)
      */
     private $langue;
@@ -389,11 +389,11 @@ class Questionnaire
     /**
      * Set commande
      *
-     * @param Questionnaire $commande
+     * @param Commande $commande
      *
      * @return Questionnaire
      */
-    public function setCommande(Questionnaire $commande = null)
+    public function setCommande(Commande $commande = null)
     {
         $this->commande = $commande;
 
@@ -403,7 +403,7 @@ class Questionnaire
     /**
      * Get commande
      *
-     * @return Questionnaire
+     * @return Commande
      */
     public function getCommande()
     {

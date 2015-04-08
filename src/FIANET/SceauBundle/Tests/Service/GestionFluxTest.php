@@ -147,7 +147,7 @@ class GestionFluxTest extends WebTestCase
      * On appelle le webservice avec un flux bien formé mais dont la date de commande est incorrecte :
      * XML avec message KO
      */
-    public function testDateIncorecte()
+    public function testDateIncorrecte()
     {
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
             <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
@@ -174,9 +174,9 @@ class GestionFluxTest extends WebTestCase
     }
 
     /**
-     * On appelle le webservice avec un flux bien formé mais dont l'email est incorrecte : XML avec message KO
+     * On appelle le webservice avec un flux bien formé mais dont l'email est incorrect : XML avec message KO
      */
-    public function testEmailIncorect()
+    public function testEmailIncorrect()
     {
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
             <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
@@ -189,6 +189,64 @@ class GestionFluxTest extends WebTestCase
             </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
             <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
             <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
+            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
+
+        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+
+        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+    }
+
+    /**
+     * On appelle le webservice avec un flux bien formé mais dont ip est incorrecte : XML avec message KO
+     */
+    public function testIPIncorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
+            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
+            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
+            <email><![CDATA[cricri.martini@wanadoo.fr]]></email></utilisateur><infocommande>
+            <refid><![CDATA[' . uniqid('xml') . ']]></refid>
+            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
+            <ip timestamp="2014-07-15 12:10:37"><![CDATA[.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
+            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
+            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
+            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
+            <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
+            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
+
+        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+
+        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+    }
+
+    /**
+     * On appelle le webservice avec un flux bien formé mais dont le montant est incorrect : XML avec message KO
+     */
+    public function testMontantIncorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
+            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
+            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
+            <email><![CDATA[cricri.martini@wanadoo.fr]]></email></utilisateur><infocommande>
+            <refid><![CDATA[' . uniqid('xml') . ']]></refid>
+            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[0]]></montant>
+            <ip timestamp="2014-07-15 12:10:37"><![CDATA[185.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
+            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
+            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
+            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
+            <montant><![CDATA[25.50]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
             </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
 
         $xml = $this->client->request(
@@ -216,25 +274,24 @@ class GestionFluxTest extends WebTestCase
         $refid = uniqid('xml');
         $timestamp = '2015-04-02 23:43';
         $email = 'cricri.martini@wanadoo.fr';
+        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
 
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
             <email>' . $email . '</email></utilisateur>
-            <infocommande><siteid>' . $site->getId() . '</siteid><refid><![CDATA[' . $refid . ']]></refid>
+            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
             <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip><produits>
             <produit><codeean></codeean><id>0335991</id><categorie>70</categorie>
             <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant>
             <image>http://photos.maty.com/0335991/V1/400/bracelet-or-750-topaze-bleue-traitee.jpeg</image></produit>
-            </produits></infocommande><paiement><type>5</type></paiement>
-            <crypt>' . $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email) . '
-            </crypt></control>';
+            </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $crypt . '</crypt></control>';
+
         $xml = $this->client->request(
             'POST',
             $this->url,
             array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
         );
-
-var_dump($this->client->getResponse()->getContent());
 
         $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
 

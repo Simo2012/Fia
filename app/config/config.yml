@@ -1,7 +1,8 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: extranet.yml }
     - { resource: security.yml }
+    - { resource: extranet.yml }
+    - { resource: moteur.yml }
 
 framework:
     #esi:             ~
