@@ -39,7 +39,7 @@ class FluxXmlContenuValidator extends ConstraintValidator
      *
      * @return bool Si valide retourne true sinon false
      */
-    private function verifierValiditeDate($date)
+    private function verifierValiditeDateCommande($date)
     {
         try {
             $dateCommande = new DateTime($date);
@@ -66,6 +66,35 @@ class FluxXmlContenuValidator extends ConstraintValidator
         } catch (Exception $e) {
             /* Date invalide */
             $this->buildViolation('constraints.flux_timestamp_incorrect')->addViolation();
+            return false;
+        }
+    }
+
+    /**
+     * Vérifie si la date d'utilisation envoyée dans le flux est valide.
+     *
+     * @param string $date La date de commande contenue dans le flux au format "YYYY-MM-DD"
+     *
+     * @return bool Si valide retourne true sinon false
+     */
+    private function verifierValiditeDateUtilisation($date)
+    {
+        try {
+            $dateUtilisation = new DateTime($date);
+            $dateActuelle = new DateTime();
+            $dateActuelle->setTime(0, 0, 0);
+
+            if ($dateUtilisation < $dateActuelle) {
+                /* Date dans le passé */
+                $this->buildViolation('constraints.flux_dateutilisation_passe')->addViolation();
+                return false;
+
+            } else {
+                return true;
+            }
+        } catch (Exception $e) {
+            /* Date invalide */
+            $this->buildViolation('constraints.flux_dateutilisation_incorrect')->addViolation();
             return false;
         }
     }
@@ -106,10 +135,26 @@ class FluxXmlContenuValidator extends ConstraintValidator
         if ($xml->crypt == $cryptAttendu) {
             $site = $flux->getSite();
 
-            /* Cohérence entre l'identifiant du site fourni en POST et celui contenu dans le XML */
             if ($xml->infocommande->siteid == $site->getId()) {
-                if ($this->verifierValiditeDate($xml->infocommande->ip['timestamp'])) {
-                    $this->gestionQuestionnaire->genererQuestionnaireViaFlux($flux, $xml);
+                /* L'identifiant du site fourni en POST et celui contenu dans le XML sont cohérents */
+
+                if ($this->verifierValiditeDateCommande($xml->infocommande->ip['timestamp'])) {
+                    /* La date de commande est valide */
+
+                    if ($xml->infocommande->dateutilisation) {
+                        if ($this->verifierValiditeDateUtilisation($xml->infocommande->dateutilisation->__toString())) {
+                            /* Présence d'une date d'utilisation valide */
+
+                            $this->gestionQuestionnaire->genererQuestionnaireViaFlux($flux, $xml);
+                        } else {
+                            return false;
+                        }
+
+                    } else {
+                        $this->gestionQuestionnaire->genererQuestionnaireViaFlux($flux, $xml);
+                    }
+                } else {
+                    return false;
                 }
             } else {
                 $this->buildViolation('constraints.flux_siteid_incorrect')->addViolation();

@@ -32,7 +32,7 @@ class Commande
     /**
      * @var string
      *
-     * @ORM\Column(name="prenom", type="string", length=50)
+     * @ORM\Column(name="prenom", type="string", length=50, nullable=true)
      */
     private $prenom;
 
@@ -53,7 +53,7 @@ class Commande
     /**
      * @var string
      *
-     * @ORM\Column(name="reference", type="string", length=50, nullable=true)
+     * @ORM\Column(name="reference", type="string", length=50)
      */
     private $reference;
 

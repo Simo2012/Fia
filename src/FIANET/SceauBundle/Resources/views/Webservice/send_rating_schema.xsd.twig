@@ -13,6 +13,18 @@
         </xsd:restriction>
     </xsd:simpleType>
 
+    <xsd:simpleType name="date">
+        <xsd:restriction base="xsd:normalizedString">
+            <xsd:pattern value="[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="dateTime">
+        <xsd:restriction base="xsd:normalizedString">
+            <xsd:pattern value="[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}(:[0-9]{1,2})?" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
     <xsd:simpleType name="typeLivraison">
         <xsd:restriction base="xsd:normalizedString">
             <xsd:pattern value="[1-5]|([1-5]-)+[1-5]" />
@@ -29,7 +41,7 @@
                                 <xsd:complexType>
                                     <xsd:simpleContent>
                                         <xsd:extension base="xsd:normalizedString">
-                                            <xsd:attribute type="xsd:byte" name="titre"/>
+                                            <xsd:attribute type="xsd:byte" name="titre" default="1"/>
                                         </xsd:extension>
                                     </xsd:simpleContent>
                                 </xsd:complexType>
@@ -63,13 +75,7 @@
                                 <xsd:complexType>
                                     <xsd:simpleContent>
                                         <xsd:extension base="ip">
-                                            <xsd:attribute name="timestamp">
-                                                <xsd:simpleType>
-                                                    <xsd:restriction base="xsd:normalizedString">
-                                                        <xsd:pattern value="[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}(:[0-9]{1,2})?" />
-                                                    </xsd:restriction>
-                                                </xsd:simpleType>
-                                            </xsd:attribute>
+                                            <xsd:attribute name="timestamp" type="dateTime"/>
                                         </xsd:extension>
                                     </xsd:simpleContent>
                                 </xsd:complexType>
@@ -95,6 +101,7 @@
                                 </xsd:complexType>
                             </xsd:element>
                             <xsd:element type="typeLivraison" name="typeLivraison" minOccurs="0"/>
+                            <xsd:element name="dateutilisation" type="date" minOccurs="0"/>
                         </xsd:all>
                     </xsd:complexType>
                 </xsd:element>

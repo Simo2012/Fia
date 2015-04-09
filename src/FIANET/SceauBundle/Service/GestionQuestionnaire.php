@@ -30,22 +30,30 @@ class GestionQuestionnaire
     {
         $commande = new Commande();
         $commande->setEmail($xml->utilisateur->email->__toString());
-        $commande->setPrenom($xml->utilisateur->prenom->__toString());
+        if (!empty($xml->utilisateur->prenom->__toString())) {
+            $commande->setPrenom($xml->utilisateur->prenom->__toString());
+        }
         $commande->setNom($xml->utilisateur->nom->__toString());
         $commande->setDate(new DateTime($xml->infocommande->ip['timestamp']));
         $commande->setReference($xml->infocommande->refid->__toString());
         $commande->setMontant((float)$xml->infocommande->montant->__toString());
 
-        // TODO
+        // TODO : Vérifie que le type de questionnaire autorise à utiliser cette balise
         if ($xml->infocommande->dateutilisation) {
             $commande->setDateUtilisation(new DateTime($xml->infocommande->dateutilisation));
         }
 
         $langue = null;
-        // TODO
         if (!$xml->infocommande->langue) {
             $langue = $this->em->getRepository('FIANETSceauBundle:Langue')
                 ->getLangueParDefaut($this->codeLangueParDefaut);
+        } else {
+            $langue = $this->em->getRepository('FIANETSceauBundle:Langue')
+                ->findOneByCode($xml->infocommande->langue->__toString());
+            if (!$langue) {
+                $langue = $this->em->getRepository('FIANETSceauBundle:Langue')
+                    ->getLangueParDefaut($this->codeLangueParDefaut);
+            }
         }
         $commande->setLangue($langue);
 

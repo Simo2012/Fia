@@ -58,6 +58,14 @@
                 <source>constraints.flux_timestamp_trop_ancien</source>
                 <target>Value of attribute timestamp is too old.</target>
             </trans-unit>
+            <trans-unit id="15">
+                <source>constraints.flux_dateutilisation_passe</source>
+                <target>Value of tag dateutilisation is less than current date.</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>constraints.flux_dateutilisation_incorrect</source>
+                <target>Value of tag dateutilisation is incorrect.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -261,6 +261,138 @@ class GestionFluxTest extends WebTestCase
     }
 
     /**
+     * On appelle le webservice avec un flux bien formé mais dont la date d'utilisation est incorrecte :
+     * XML avec message KO
+     */
+    public function testDateUtilisationIncorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
+            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
+            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
+            <email><![CDATA[cricri.martini@wanadoo.fr]]></email></utilisateur><infocommande>
+            <refid><![CDATA[' . uniqid('xml') . ']]></refid>
+            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[20.50]]></montant>
+            <ip timestamp="2014-07-15 12:10:37"><![CDATA[185.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
+            <dateutilisation>2014-45</dateutilisation></infocommande>
+            <paiement><type><![CDATA[2]]></type></paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
+
+        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+
+        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+    }
+
+    /**
+     * On appelle le webservice correctement avec un flux minimal : XML avec message OK
+     */
+    public function testBaseCorrect()
+    {
+        $this->client->request('GET', '/'); // GET pour initialiser le container
+
+        $container = $this->client->getContainer();
+        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
+            ->find($this->siteIDFluxXML);
+
+        $refid = uniqid('xml');
+        $timestamp = '2015-04-02 23:43';
+        $email = 'cricri.martini@wanadoo.fr';
+        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
+
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CRISTIANE</prenom>
+            <email>' . $email . '</email></utilisateur>
+            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip>
+            </infocommande><crypt>' . $crypt . '</crypt></control>';
+
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
+
+        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+
+        $this->assertEquals('OK', $xml->filterXPath('//result')->attr('type'));
+    }
+
+    /**
+     * On appelle le webservice correctement avec une date d'utilisation : XML avec message OK
+     */
+    public function testDateUtilisationCorrect()
+    {
+        $this->client->request('GET', '/'); // GET pour initialiser le container
+
+        $container = $this->client->getContainer();
+        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
+            ->find($this->siteIDFluxXML);
+
+        $refid = uniqid('xml');
+        $timestamp = '2015-04-02 23:43';
+        $email = 'cricri.martini@wanadoo.fr';
+        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
+
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CRISTIANE</prenom>
+            <email>' . $email . '</email></utilisateur>
+            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip>
+            <dateutilisation>2015-04-10</dateutilisation>
+            </infocommande><crypt>' . $crypt . '</crypt></control>';
+
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
+
+        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+
+        $this->assertEquals('OK', $xml->filterXPath('//result')->attr('type'));
+    }
+
+
+    /**
+     * On appelle le webservice correctement avec une langue : XML avec message OK
+     */
+    public function testLangueCorrect()
+    {
+        $this->client->request('GET', '/'); // GET pour initialiser le container
+
+        $container = $this->client->getContainer();
+        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
+            ->find($this->siteIDFluxXML);
+
+        $refid = uniqid('xml');
+        $timestamp = '2015-04-02 23:43';
+        $email = 'cricri.martini@wanadoo.fr';
+        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
+
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CRISTIANE</prenom>
+            <email>' . $email . '</email></utilisateur>
+            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip>
+            <langue>es</langue>
+            </infocommande><crypt>' . $crypt . '</crypt></control>';
+
+        $xml = $this->client->request(
+            'POST',
+            $this->url,
+            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
+        );
+
+        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+
+        $this->assertEquals('OK', $xml->filterXPath('//result')->attr('type'));
+    }
+
+    /**
      * On appelle le webservice correctement : XML avec message OK
      */
     public function testCorrect()
