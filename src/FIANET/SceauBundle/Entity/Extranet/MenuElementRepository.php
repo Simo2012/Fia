@@ -32,7 +32,7 @@ class MenuElementRepository extends EntityRepository
             ->andWhere($qb->expr()->eq('mep.actif', 'true'))
             ->andWhere(
                 $qb->expr()->orX(
-                    $qb->expr()->isNull('mef'),
+                    $qb->expr()->isNull('mef.id'),
                     $qb->expr()->eq('mef.actif', 'true')
                 )
             )
