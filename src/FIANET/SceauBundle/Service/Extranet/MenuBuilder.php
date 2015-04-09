@@ -78,12 +78,10 @@ class MenuBuilder
                     $this->translator->trans($menuElement->getLibelle(), array(), 'extranet_menu')
                 );
 
-                // TODO : appeler le nouveau service
-                $menuElementFils->setExtra('accesAutorise',$this->menuAcces->donnerAcces($menuElement->getNom()));             
+                $menuElementFils->setExtra('accesAutorise',$this->menuAcces->donnerAcces($site, $menuElement->getOption()));
 
-                // TODO : le HTML ici ce n'est pas top, il faudrait qu'on réfléchisse à ça
                 $descriptifAcces = $this->translator->trans($menuElement->getLibelle(), array(), 'extranet_menu_descriptif');
-                $descriptifAcces .= "<br />".$this->translator->trans('texte_generique', array(), 'extranet_menu_descriptif');
+
                 $menuElementFils->setExtra('accesDescriptif',$descriptifAcces);
 
                 $menuElementFils->setCurrent(false);

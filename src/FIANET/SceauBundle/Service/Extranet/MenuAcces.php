@@ -27,44 +27,40 @@ class MenuAcces {
      *  si l'élément n'est lié à aucune option, on retourne true;
      *  si l'élément n'est lié ni à une option de base ni à une option souscrite, on retourne false sinon on retourne true.
      * 
-     * @param String $name Nom de l'élément du menu
+     * @param Site $site
+     * @param Option $option
      * 
      * @return boolean
      */
-    public function donnerAcces($name)
+    public function donnerAcces($site, $option)
     {
-        $optionIdElementActif = '';
+        // TODO après confirmation de la MOA/CRM, il faudra revoir entièrement cette méthode ainsi que les entités liées aux packages/options Sceau dans le lot2 ou lot3 (check des attributs 'actif' à effectuer également)
         
-        $elementActif = $this->em->getRepository('FIANETSceauBundle:Extranet\MenuElement')
-                ->findOneByNom($name);
-        
-        if($elementActif) {
-            if($elementActif->getOption()) {
-                
-                $optionIdElementActif = $elementActif->getOption();
-                
-                $site = $this->securityContext->getToken()->getUser()->getSite();
-                
-                $packageOptions = $this->em->getRepository('FIANETSceauBundle:PackageOption');
-                
-                if ($packageOptions->optionDeBase($site, $optionIdElementActif)) {
-                    return true;
-                } else if ($packageOptions->optionSouscriptible($site, $optionIdElementActif)) {
-                    $siteOptions = $this->em->getRepository('FIANETSceauBundle:SiteOption');
-                    
-                    if ($siteOptions->optionSouscrite($site, $optionIdElementActif)) {
-                        return true;
-                    } else {
-                        return false;
+        if($option) {
+            $oPO = $site->getPackage()->getPackageOptions();
+            $optionId = $option->getId();
+            $dateDuJour = new \DateTime;
+            // TODO : format de date à revoir (avec tz)
+            
+            for ($numPO = 0; $numPO < count($oPO); $numPO++) { 
+                if ($oPO[$numPO]->getOption()->getId() === $optionId) {
+                    if ($oPO[$numPO]->getOptionType()->getId() === 1) { 
+                        // TODO après confirmation de la MOA/CRM, on n'aura plus à regarder l'OptionType, on se basera sur un attribut booléen nommé "base" de l'entité PackageOption
+                        return true; // Option de base
+                    } else { // Option souscriptible
+                        $oSO = $oPO[$numPO]->getOption()->getSiteOptions();
+                        for ($numSO = 0; $numSO < count($oSO); $numSO++) {
+                            if ($oSO[$numSO]->getOption()->getId() === $optionId && $oSO[$numSO]->getActif() === true 
+                                    && $oSO[$numSO]->getDateDebut() <= $dateDuJour && ($oSO[$numSO]->getDateFin() > $dateDuJour || !$oSO[$numSO]->getDateFin() )) {
+                                return true; // Option souscrite
+                            }
+                        }
                     }
-                } else { // Option non souscriptible ou non souscrite
-                    return false;
                 }
-            } else { // Elément non lié à une option
-                return true;
             }
-        } else { // N'est pas un élément de menu
-            throw new \Exception("Elément de menu non trouvé");
+            return false; // Option non souscriptible ou non souscrite ou option inactive
+        } else {
+            return true; // Elément non lié à une option
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace FIANET\SceauBundle\Controller\Extranet;
 
+use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -34,7 +35,7 @@ class QuestionnairesController extends Controller
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
-
+        
         return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
     }
 
@@ -50,18 +51,8 @@ class QuestionnairesController extends Controller
         $elementMenu = $menu->getChild('questionnaires')->getChild('questionnaires.questions_personnalisees');
         $elementMenu->setCurrent(true);
         
-        //$accesElementMenu = $this->get('fianet_sceau.extranet.menu_acces');
-        //if (!$accesElementMenu->donnerAcces($elementMenu->getName())) {
-        if(!$elementMenu->getExtra('accesAutorise')) { // inconvénient : va exécuter trop de requêtes
-            
-            $content = $this->renderView(
-                'FIANETSceauBundle:Extranet:acces_refuse.html.twig',
-                array('elementMenuTitre' => $elementMenu->getLabel(),
-                    'elementMenuDescriptif' => $elementMenu->getExtra('accesDescriptif')
-                    )
-            );
-            
-            return new Response($content);
+        if(!$elementMenu->getExtra('accesAutorise')) {
+            throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
         }
 
         return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
@@ -79,19 +70,8 @@ class QuestionnairesController extends Controller
         $elementMenu = $menu->getChild('questionnaires')->getChild('questionnaires.relance_questionnaires');
         $elementMenu->setCurrent(true);
         
-        //$accesElementMenu = $this->get('fianet_sceau.extranet.menu_acces');
-        //if (!$accesElementMenu->donnerAcces($elementMenu->getName())) {
-        if(!$elementMenu->getExtra('accesAutorise')) { // inconvénient : va exécuter trop de requêtes
-            
-            
-            $content = $this->renderView(
-                'FIANETSceauBundle:Extranet:acces_refuse.html.twig',
-                array('elementMenuTitre' => $elementMenu->getLabel(),
-                    'elementMenuDescriptif' => $elementMenu->getExtra('accesDescriptif')
-                    )
-            );
-            
-            return new Response($content);
+        if(!$elementMenu->getExtra('accesAutorise')) {
+            throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
         }
 
         return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
