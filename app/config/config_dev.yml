@@ -55,6 +55,91 @@ doctrine:
         user: sceau
         password: sceau
 
+bazinga_faker:
+    orm: doctrine
+    locale: fr_FR
+    entities:
+        FIANET\SceauBundle\Entity\Package:
+            number: 5
+            custom_formatters:
+                libelle: {method: sentence, parameters: [2] }
+                actif: {method: boolean, parameters: [100]}
+        FIANET\SceauBundle\Entity\Societe:
+            number: 1000
+            custom_formatters:
+                libelle: {method: word }
+        FIANET\SceauBundle\Entity\SiteType:
+            number: 5
+            custom_formatters:
+                libelle: {method: word }
+        FIANET\SceauBundle\Entity\AdministrationType:
+            number: 5
+            custom_formatters:
+                libelle: {method: word }
+        FIANET\SceauBundle\Entity\Site:
+            number: 1000
+            custom_formatters:
+                nom: {method: word }
+                url: {method: url }
+                slug: {method: slug }
+                clePrivee: {method: numerify, parameters: ['##############'] }
+        FIANET\SceauBundle\Entity\FluxStatut:
+            number: 4
+            custom_formatters:
+                libelle: {method: randomElement, parameters: [ [ 'A traiter', 'En cours de traitement', 'Traité et valide', 'Traité et invalide' ] ], unique: true}
+        FIANET\SceauBundle\Entity\Flux:
+            number: 10000
+            custom_formatters:
+                checksum: {method: md5 }
+                ip:  {method: ipv4 }
+                dateInsertion: {method: dateTimeThisYear }
+                libelleErreur:  {method: null }
+        FIANET\SceauBundle\Entity\DelaiEnvoi:
+            number: 10
+            custom_formatters:
+                nbJours: {method: numberBetween, parameters: [1,45] }
+        FIANET\SceauBundle\Entity\DelaiReception:
+            number: 10
+            custom_formatters:
+                nbJours: {method: numberBetween, parameters: [1,45] }
+        FIANET\SceauBundle\Entity\QuestionnaireType:
+            number: 10
+            custom_formatters:
+                libelle: {method: word}
+                questionnaireType: {method: null}
+                parametrage: {method: lexify, parameters: ['{???}'] }
+                nbJoursPourRepondre: {method: numberBetween, parameters: [30,90] }
+        FIANET\SceauBundle\Entity\Langue:
+            number: 4
+            custom_formatters:
+                code: {method: lexify, parameters: ['???'] }
+                libelle: {method: word}
+        FIANET\SceauBundle\Entity\Commande:
+            number: 10000
+            custom_formatters:
+                email: {method: email }
+                prenom: {method: firstName }
+                nom: {method: lastName }
+                date: {method: dateTimeThisYear }
+                reference: {method: numerify, parameters: ['##########'] }
+                montant: {method: randomFloat, parameters: [2] }
+                dateutilisation : {method: null }
+                donnees : {method: null }
+        FIANET\SceauBundle\Entity\Questionnaire:
+            number: 10000
+            custom_formatters:
+                membre: {method: null }
+                email: {method: email }
+                dateInsertion: {method: dateTimeThisYear }
+                datePrevEnvoi: {method: dateTimeThisYear }
+                dateEnvoi: {method: dateTimeThisYear }
+                dateOuverture: {method: dateTimeThisYear }
+                dateReponse: {method: dateTimeThisYear }
+                datePrevRelance: {method: null }
+                dateRelance: {method: null }
+                actif: {method: boolean, parameters: [100]}
+                sousSite: {method: null }
+
 # Surcharge des paramètres
 parameters:
     extranet_protocole: http
