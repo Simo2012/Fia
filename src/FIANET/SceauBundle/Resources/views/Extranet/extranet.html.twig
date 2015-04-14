@@ -52,10 +52,14 @@
     {{ parent() }}
 
     {% javascripts
-    '../vendor/components/jquery/jquery.js'
+    'components/jquery/jquery.min.js'
+    'components/jquery-ui/jquery-ui.min.js'
+    'bundles/fosjsrouting/js/router.js'
     'bundles/fianetsceau/js/extranet/main.js' %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
+
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
 
     {% block extranet_javascripts %}
     {% endblock %}

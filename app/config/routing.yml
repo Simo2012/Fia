@@ -2,6 +2,7 @@ fianet_sceau_extranet:
     resource: "@FIANETSceauBundle/Controller/Extranet"
     type:     annotation
     prefix:   /extranet/{_locale}/
+    defaults: { _locale: fr }
     requirements:
         _locale: fr|en
         _scheme: "%extranet_protocole%"
@@ -10,3 +11,6 @@ fianet_sceau_webservice:
     resource: "@FIANETSceauBundle/Controller/Webservice"
     type:     annotation
     prefix:   /webservice/
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

@@ -1,2 +1,3 @@
 parameters:
     extranet_protocole: https
+    nb_questionnaires_max: 15

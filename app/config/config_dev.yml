@@ -62,8 +62,17 @@ bazinga_faker:
         FIANET\SceauBundle\Entity\Package:
             number: 5
             custom_formatters:
+                libelle: {method: sentence, parameters: [2]}
+                actif: {method: boolean, parameters: [100]}
+        FIANET\SceauBundle\Entity\OptionType:
+            number: 5
+        FIANET\SceauBundle\Entity\Option:
+            number: 5
+            custom_formatters:
                 libelle: {method: sentence, parameters: [2] }
                 actif: {method: boolean, parameters: [100]}
+        FIANET\SceauBundle\Entity\PackageOption:
+            number: 5
         FIANET\SceauBundle\Entity\Societe:
             number: 1000
             custom_formatters:
@@ -83,17 +92,18 @@ bazinga_faker:
                 url: {method: url }
                 slug: {method: slug }
                 clePrivee: {method: numerify, parameters: ['##############'] }
+                sitePrincipal: {method: null}
         FIANET\SceauBundle\Entity\FluxStatut:
             number: 4
             custom_formatters:
                 libelle: {method: randomElement, parameters: [ [ 'A traiter', 'En cours de traitement', 'Traité et valide', 'Traité et invalide' ] ], unique: true}
         FIANET\SceauBundle\Entity\Flux:
-            number: 10000
+            number: 2000
             custom_formatters:
-                checksum: {method: md5 }
-                ip:  {method: ipv4 }
-                dateInsertion: {method: dateTimeThisYear }
-                libelleErreur:  {method: null }
+                checksum: {method: md5, unique: true}
+                ip:  {method: ipv4}
+                dateInsertion: {method: dateTimeThisYear}
+                libelleErreur:  {method: null}
         FIANET\SceauBundle\Entity\DelaiEnvoi:
             number: 10
             custom_formatters:
@@ -109,13 +119,44 @@ bazinga_faker:
                 questionnaireType: {method: null}
                 parametrage: {method: lexify, parameters: ['{???}'] }
                 nbJoursPourRepondre: {method: numberBetween, parameters: [30,90] }
+        FIANET\SceauBundle\Entity\QuestionnairePersonnalisation:
+            number: 1000
+            custom_formatters:
+                dateDebut: {method: dateTimeThisYear}
+                dateFin:  {method: null}
         FIANET\SceauBundle\Entity\Langue:
             number: 4
             custom_formatters:
                 code: {method: lexify, parameters: ['???'] }
                 libelle: {method: word}
+        FIANET\SceauBundle\Entity\QuestionType:
+            number: 5
+            custom_formatters:
+                libelle: {method: sentence, parameters: [2] }
+        FIANET\SceauBundle\Entity\Question:
+            number: 200
+            custom_formatters:
+                libelle: {method: sentence, parameters: [2]}
+                libelleCourt: {method: sentence, parameters: [1]}
+                texteSupp: {method: null}
+                ordre: {method: numberBetween, parameters: [0,200]}
+                dateDebut: {method: null}
+                dateFin: {method: null}
+                page: {method: numberBetween, parameters: [1,10]}
+                actif: {method: boolean, parameters: [100]}
+                cache: {method: boolean, parameters: [0]}
+                visible: {method: null}
+                obligatoire: {method: boolean, parameters: [0]}
+        FIANET\SceauBundle\Entity\Reponse:
+            number: 500
+            custom_formatters:
+                libelle: {method: sentence, parameters: [2]}
+                libelleCourt: {method: sentence, parameters: [1]}
+                ordre: {method: numberBetween, parameters: [0,200]}
+                precision: {method: boolean, parameters: [0]}
+                actif: {method: boolean, parameters: [100]}
         FIANET\SceauBundle\Entity\Commande:
-            number: 10000
+            number: 2000
             custom_formatters:
                 email: {method: email }
                 prenom: {method: firstName }
@@ -126,7 +167,7 @@ bazinga_faker:
                 dateutilisation : {method: null }
                 donnees : {method: null }
         FIANET\SceauBundle\Entity\Questionnaire:
-            number: 10000
+            number: 2000
             custom_formatters:
                 membre: {method: null }
                 email: {method: email }
@@ -139,6 +180,11 @@ bazinga_faker:
                 dateRelance: {method: null }
                 actif: {method: boolean, parameters: [100]}
                 sousSite: {method: null }
+        FIANET\SceauBundle\Entity\QuestionnaireReponse:
+            number: 5000
+            custom_formatters:
+                commentaire: {method: text, parameters: [500]}
+                note: {method: numberBetween, parameters: [1,10]}
 
 # Surcharge des paramètres
 parameters:

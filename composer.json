@@ -21,9 +21,11 @@
         "knplabs/knp-menu-bundle": "~2.0",
         "stof/doctrine-extensions-bundle": "~1.1",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
-        "afarkas/html5shiv": "3.7.*",
-        "components/jquery": "1.11.*",
-        "willdurand/faker-bundle": "@stable"
+        "afarkas/html5shiv": "~3.7",
+        "components/jquery": "~1.11",
+        "components/jqueryui": "~1.11",
+        "willdurand/faker-bundle": "@stable",
+        "friendsofsymfony/jsrouting-bundle": "~1.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

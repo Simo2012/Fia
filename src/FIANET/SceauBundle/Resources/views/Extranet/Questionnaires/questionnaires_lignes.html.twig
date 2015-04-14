@@ -1,0 +1,17 @@
+{% for questionnaire in questionnaires %}
+    <tr class="{% if alternatif %}{{ cycle(['', 'alt'], loop.index0) }}{% else %}{{ cycle(['alt', ''], loop.index0) }}{% endif %}">
+        <td></td>
+        <td></td>
+        <td>{{ questionnaire.date|date("d/m/Y") }}</td>
+        <td>{{ questionnaire.dateReponse|date("d/m/Y") }}</td>
+        <td>
+            {% if questionnaire.nom is not empty %}
+                {{ questionnaire.prenom }} {{ questionnaire.nom }}<br />
+            {% endif %}
+            {{ questionnaire.email }}
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+{% endfor %}

@@ -39,7 +39,7 @@ class Question
     /**
      * @var string
      *
-     * @ORM\Column(name="texteSupp", type="string", length=255)
+     * @ORM\Column(name="texteSupp", type="string", length=255, nullable=true)
      */
     private $texteSupp;
 
@@ -53,14 +53,14 @@ class Question
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateDebut", type="datetimetz")
+     * @ORM\Column(name="dateDebut", type="datetimetz", nullable=true)
      */
     private $dateDebut;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateFin", type="datetimetz")
+     * @ORM\Column(name="dateFin", type="datetimetz", nullable=true)
      */
     private $dateFin;
 
