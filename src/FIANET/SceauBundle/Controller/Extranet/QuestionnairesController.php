@@ -2,9 +2,10 @@
 
 namespace FIANET\SceauBundle\Controller\Extranet;
 
+use DateTime;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
+use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -45,20 +46,42 @@ class QuestionnairesController extends Controller
             $menu = $this->get('fianet_sceau.extranet.menu');
             $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
 
-            $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                ->getNbTotalQuestionnaires(
-                    $this->getUser()->getSite()
-                );
+            // TODO à revoir: doit retourner un tableau de sites liés à la société
+            $form = $this->createForm(
+                new QuestionnairesListeType(),
+                null,
+                array('sites' => array($this->getUser()->getSite()))
+            );
+            $form->handleRequest($request);
 
-            $tri = is_numeric($request->request->get('tri')) ? $request->request->get('tri') : 2;
+            $donneesForm = $form->getData();
+            $tri = is_numeric($donneesForm['tri']) ? $donneesForm['tri'] : 2;
+            $dateDebut = (isset($donneesForm['dateDebut'])) ? $donneesForm['dateDebut'] : '';
+            $dateFin = (isset($donneesForm['dateFin'])) ? $donneesForm['dateFin'] : '';
 
-            $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                ->getListeQuestionnaires(
-                    $this->getUser()->getSite(),
-                    0,
-                    $nbQuestionnairesMax,
-                    $tri
-                );
+            /* Formulaire non soumis (1er chargement de la page) ou formulaire soumis et valide */
+            if (!$form->isSubmitted() || ($form->isSubmitted() && $form->isValid())) {
+                $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->nbTotalQuestionnaires(
+                        $this->getUser()->getSite(),
+                        $dateDebut,
+                        $dateFin
+                    );
+
+                $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->listeQuestionnaires(
+                        $this->getUser()->getSite(),
+                        $dateDebut,
+                        $dateFin,
+                        0,
+                        $nbQuestionnairesMax,
+                        $tri
+                    );
+            } else {
+                /* Formulaire soumis et non valide */
+                $nbTotalQuestionnaires = 0;
+                $questionnaires = array();
+            }
 
             return $this->render(
                 'FIANETSceauBundle:Extranet/Questionnaires:questionnaires.html.twig',
@@ -66,15 +89,20 @@ class QuestionnairesController extends Controller
                     'nbTotalQuestionnaires' => $nbTotalQuestionnaires,
                     'questionnaires' => $questionnaires,
                     'nbQuestionnairesMax' => $nbQuestionnairesMax,
+                    'form' => $form->createView(),
                     'alternatif' => false,
+                    'dateDebut' => $dateDebut,
+                    'dateFin' => $dateFin,
                     'tri' => $tri
                 )
             );
 
         } else {
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                ->getListeQuestionnaires(
+                ->listeQuestionnaires(
                     $this->getUser()->getSite(),
+                    $request->request->get('dateDebut'),
+                    $request->request->get('dateFin'),
                     $request->request->get('offset', 0),
                     $this->container->getParameter('nb_questionnaires_max'),
                     $request->request->get('tri')

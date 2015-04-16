@@ -2,6 +2,7 @@
 
 namespace FIANET\SceauBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 
 class QuestionnaireRepository extends EntityRepository
@@ -10,10 +11,12 @@ class QuestionnaireRepository extends EntityRepository
      * Retourne le nombre total de questionnaires répondus en fonction des filtres demandés.
      *
      * @param Site $site Instance de Site
+     * @param string $dateDebut Date de début de la période (peut être vide)
+     * @param string $dateFin Date de fin de la période (peut être vide)
      *
      * @return int Le nombre de questionnaire
      */
-    public function getNbTotalQuestionnaires(Site $site)
+    public function nbTotalQuestionnaires(Site $site, $dateDebut, $dateFin)
     {
         $qb = $this->createQueryBuilder('q');
 
@@ -22,6 +25,16 @@ class QuestionnaireRepository extends EntityRepository
                 ->setParameter('id', $site->getId())
             ->andWhere('q.dateReponse IS NOT NULL');
 
+        if ($dateDebut!= '') {
+            $qb->andWhere('q.dateReponse >= :dateDebut')
+                ->setParameter('dateDebut', $dateDebut);
+        }
+
+        if ($dateFin != '') {
+            $qb->andWhere('q.dateReponse <= :dateFin')
+                ->setParameter('dateFin', $dateFin);
+        }
+
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
     }
 
@@ -29,16 +42,16 @@ class QuestionnaireRepository extends EntityRepository
      * Retourne "un paquet" de questionnaires répondus en fonction des filtres et tris demandés.
      *
      * @param Site $site Instance de Site
+     * @param string $dateDebut Date de début de la période (peut être vide)
+     * @param string $dateFin Date de fin de la période (peut être vide)
      * @param int $premierQuestionnaire Numéro du premier questionnaire retourné
      * @param int $nbQuestionnaires Nombre maximum de questionnaire retourné
      * @param int $tri Numéro du tri à appliquer
      *
      * @return array Tableau de string
      */
-    public function getListeQuestionnaires(Site $site, $premierQuestionnaire, $nbQuestionnaires, $tri)
+    public function listeQuestionnaires(Site $site, $dateDebut, $dateFin, $premierQuestionnaire, $nbQuestionnaires, $tri)
     {
-        echo $tri;
-
         $qb = $this->createQueryBuilder('q');
 
         $qb->select('q.email', 'q.dateReponse', 'c.date', 'm.nom', 'm.prenom')
@@ -49,6 +62,16 @@ class QuestionnaireRepository extends EntityRepository
             ->andWhere('q.dateReponse IS NOT NULL')
             ->setFirstResult($premierQuestionnaire)
             ->setMaxResults($nbQuestionnaires);
+
+        if ($dateDebut!= '') {
+            $qb->andWhere('q.dateReponse >= :dateDebut')
+                ->setParameter('dateDebut', $dateDebut);
+        }
+
+        if ($dateFin != '') {
+            $qb->andWhere('q.dateReponse <= :dateFin')
+                ->setParameter('dateFin', $dateFin);
+        }
 
         if ($tri == 0) {
             $qb->orderBy('c.date', 'DESC');

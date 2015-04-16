@@ -1,3 +1,4 @@
 parameters:
     flux_delai_max_commande: P3W
     langue_par_defaut: fr
+    periode_notation_max: 6

@@ -9,37 +9,38 @@
     <h1>Recherche</h1>
 
     <div class="block-total">
-        <form action="{{ path('extranet_questionnaires_questionnaires') }}" method="post">
+        {{ form_start(form, {'action' : path('extranet_questionnaires_questionnaires')}) }}
             <div class="block-total-part1">
                 <h2>Recherche par date de réponse au questionnaire</h2>
-                du <input type="text"/> au <input type="text"/>
+                du {{ form_widget(form.dateDebut) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span> au {{ form_widget(form.dateFin) }} <span class="erreur">{{ form_errors(form.dateFin) }}</span><button type="submit">GO</button>
+
 
                 <h2>Recherche avancée</h2>
-                Indicateur de satisfaction : BV BJ BR BG <button type="submit">GO</button><br />
-                Mode de livraison : <div class="select"><select><option>Retrait magasin</option><option>Livraison domicile</option></select></div><button type="submit">GO</button>
+                Indicateur de satisfaction : {{ form_widget(form.indicateur) }} <button type="submit">GO</button><br />
+                Mode de livraison : <div class="select">{{ form_widget(form.livraison) }}</div><button type="submit">GO</button>
             </div>
             <div class="block-total-part2">
                 <h2>Recherche par contenu</h2>
-                <input type="text" value="Email, pseudonyme, nom, mot clé, numéro de commande" /><button type="submit">GO</button><br />
-                Litige en cours : <input type="checkbox"/><button type="submit">GO</button>
-                Retenir ces paramètres de recherche :<input type="checkbox"/><button type="submit">GO</button>
+                {{ form_widget(form.recherche) }}<button type="submit">GO</button><br />
+                Litige en cours : {{ form_widget(form.litige) }}<button type="submit">GO</button>
+                Retenir ces paramètres de recherche :{{ form_widget(form.retenir) }}<button type="submit">GO</button>
             </div>
             <div class="block-total-part3">
-                Site concerné : <div class="select"><select><option>Site 1</option><option>Site 2</option></select></div><button type="submit">GO</button>
+                Site concerné : <div class="select">{{ form_widget(form.sites) }}</div><button type="submit">GO</button>
             </div>
-            <input type="hidden" name="tri" value="{{ tri }}" />
-        </form>
+            {{ form_widget(form.tri) }}
+        {{ form_end(form) }}
     </div>
 
     <h1>{{ nbTotalQuestionnaires }} questionnaires trouvés</h1>
 
     {% if nbTotalQuestionnaires != 0 %}
-        <table id="listeQuestionnaires" width="100%" cellspacing="0" cellpadding="0" border="0">
+        <table id="listeQuestionnaires" width="100%" cellspacing="0" cellpadding="0" border="0" class="gen">
             <tr>
                 <th>Indicateur</th>
                 <th>Site</th>
-                <th>Date de commande {% if tri == 1 %}<a onclick="selectTri(0);" style="cursor: pointer">v</a>{% else %}<a onclick="selectTri(1);" style="cursor: pointer">^</a>{% endif %}</th>
-                <th>Date de réponse au questionnaire {% if tri == 2 %}<a onclick="selectTri(3);" style="cursor: pointer">v</a>{% else %}<a onclick="selectTri(2);" style="cursor: pointer">^</a>{% endif %}</th>
+                <th>Date de commande {% if tri == 1 %}<a onclick="selectTriQuestionnaires(0);" style="cursor: pointer">^</a>{% else %}<a onclick="selectTriQuestionnaires(1);" style="cursor: pointer">V</a>{% endif %}</th>
+                <th>Date de réponse au questionnaire {% if tri == 2 %}<a onclick="selectTriQuestionnaires(3);" style="cursor: pointer">v</a>{% else %}<a onclick="selectTriQuestionnaires(2);" style="cursor: pointer">^</a>{% endif %}</th>
                 <th>Adresse e-mail</th>
                 <th>Verbatim</th>
                 <th>Indice de recommendation</th>
@@ -48,54 +49,29 @@
             {{ include('FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig', {'questionnaires': questionnaires}) }}
         </table>
 
-        <div id="chargement"></div>
+        <div id="chargement"><img src="{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}" alt="Chargement en cours" /></div>
     {% endif %}
 {% endblock %}
 
 {% block extranet_javascripts %}
+    {% javascripts
+    'components/jquery-ui/ui/datepicker.js'
+    'bundles/fianetsceau/js/calendrier.js'
+    'bundles/fianetsceau/js/extranet/questionnaires.js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
+    {% if app.request.locale != 'en' %}
+        <script src="{{  asset('bundles/fianetsceau/js/calendrier-'~ app.request.locale ~'.js') }}" type="text/javascript"></script>
+    {% endif  %}
+
     <script type="text/javascript">
-        $(document).ready(function () {
+        afficherCalendrier('questionnaires_liste_dateDebut');
+        afficherCalendrier('questionnaires_liste_dateFin');
 
-            var offset = {{ nbQuestionnairesMax }};
-
-            $(window).data('ajaxready', true);
-
-            var imgURL = "{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}";
-            $('#chargement').append('<img src="'+ imgURL +'" alt="Chargement en cours" />');
-
-            $(window).scroll(function () {
-                if ($(window).data('ajaxready') == false) return;
-
-                if (($(window).scrollTop() + $(window).height()) == $(document).height()) {
-                    $(window).data('ajaxready', false);
-
-                    $('#chargement').fadeIn(400);
-
-                    $.post(Routing.generate('extranet_questionnaires_questionnaires', null , true),
-                        {offset: offset, tri: {{ tri }}},
-                        function (data) {
-                            if (data != '') {
-                                $('#listeQuestionnaires').find('tr:last').after(data);
-
-                                offset += {{ nbQuestionnairesMax }};
-
-                                $(window).data('ajaxready', true);
-                                $('#chargement').fadeOut(400);
-
-                            } else {
-                                $('#chargement').hide().after('<p>Il n\'y a plus de questionnaire.</p>');
-                            }
-                        }
-                    );
-                }
-            });
-        });
-
-        function selectTri(numTri)
-        {
-            $('input[name=tri]').val(numTri);
-            $('form').submit();
-        }
+        {% if nbTotalQuestionnaires != 0 %}
+            paquetQuestionnairesSuivants('<p>Il n\'y a plus de questionnaire.</p>', {{ nbQuestionnairesMax  }}, '{{ dateDebut }}', '{{ dateFin }}', {{ tri }})
+        {% endif %}
     </script>
 {% endblock %}
 

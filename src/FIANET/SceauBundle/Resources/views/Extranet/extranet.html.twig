@@ -12,6 +12,8 @@
     {{ parent() }}
 
     {% stylesheets
+    'components/jquery-ui/themes/dark-hive/jquery-ui.min.css'
+    'components/jquery-ui/themes/dark-hive/theme.css'
     'bundles/fianetsceau/css/extranet/main.css'
     'bundles/fianetsceau/css/extranet/navigation.css'
     filter='cssrewrite' %}
@@ -59,7 +61,7 @@
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
 
-    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}" type="text/javascript"></script>
 
     {% block extranet_javascripts %}
     {% endblock %}
