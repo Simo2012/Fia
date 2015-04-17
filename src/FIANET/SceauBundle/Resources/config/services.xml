@@ -46,7 +46,7 @@
             <argument type="service" id="knp_menu.factory"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="translator"/>
-            <argument type="service" id="security.context"/>
+            <argument type="service" id="session"/>
             <argument type="service" id="fianet_sceau.extranet.menu_acces"/>            
         </service>
 
@@ -63,6 +63,7 @@
 
         <service id="fianet_sceau.extranet.user_provider" class="FIANET\SceauBundle\Security\Extranet\User\WebserviceUserProvider">
             <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="session"/>
         </service>
 
     </services>

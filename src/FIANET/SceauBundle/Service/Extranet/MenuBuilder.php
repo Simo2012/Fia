@@ -5,7 +5,7 @@ namespace FIANET\SceauBundle\Service\Extranet;
 use Doctrine\ORM\EntityManager;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\MenuItem;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class MenuBuilder
@@ -13,20 +13,20 @@ class MenuBuilder
     private $factory;
     private $em;
     private $translator;
-    private $securityContext;
+    private $session;
     private $menuAcces;
 
     public function __construct(
         FactoryInterface $factory,
         EntityManager $em,
         TranslatorInterface $translator,
-        SecurityContext $securityContext,
+        Session $session,
         MenuAcces $menuAcces
     ) {
         $this->factory = $factory;
         $this->em = $em;
         $this->translator = $translator;
-        $this->securityContext = $securityContext;
+        $this->session = $session;
         $this->menuAcces = $menuAcces;
     }
 
@@ -39,7 +39,7 @@ class MenuBuilder
      */
     public function creerMenu()
     {
-        $site = $this->securityContext->getToken()->getUser()->getSite();
+        $site = $this->em->merge($this->session->get('siteSelectionne'));
 
         $menuElements = $this->em->getRepository('FIANETSceauBundle:Extranet\MenuElement')
             ->menuExtranetCompletPourUnSite($site);

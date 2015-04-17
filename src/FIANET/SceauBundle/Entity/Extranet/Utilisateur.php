@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Entity\Extranet;
 
 use Doctrine\ORM\Mapping as ORM;
 use FIANET\SceauBundle\Entity\Site;
+use FIANET\SceauBundle\Entity\Societe;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -44,6 +45,11 @@ class Utilisateur implements UserInterface
      * @var Site
      */
     private $site;
+
+    /**
+     * @var Societe
+     */
+    private $societe;
 
 
     public function __construct($login, $motDePasse, $sel, $groupes, $nom, $prenom)
@@ -192,6 +198,26 @@ class Utilisateur implements UserInterface
     public function setSite($site)
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * @return Societe
+     */
+    public function getSociete()
+    {
+        return $this->societe;
+    }
+
+    /**
+     * @param Societe $societe
+     *
+     * @return Utilisateur
+     */
+    public function setSociete($societe)
+    {
+        $this->societe = $societe;
 
         return $this;
     }

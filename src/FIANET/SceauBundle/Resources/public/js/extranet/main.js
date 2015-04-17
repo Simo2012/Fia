@@ -10,3 +10,15 @@ function recupDate() {
     document.getElementById('DIVdate').innerHTML = recupDate;
 }
 window.onload = recupDate;
+
+function changerSite(id)
+{
+    $('#masque').show();
+
+    $.get(Routing.generate('extranet_commun_site_selectionne', {id: id}, true),
+        null,
+        function (data) {
+            location.reload(true);
+        }
+    );
+}

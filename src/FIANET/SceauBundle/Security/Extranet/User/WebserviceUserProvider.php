@@ -2,7 +2,9 @@
 
 namespace FIANET\SceauBundle\Security\Extranet\User;
 
+use Doctrine\ORM\EntityManager;
 use FIANET\SceauBundle\Entity\Extranet\Utilisateur;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,10 +13,12 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class WebserviceUserProvider implements UserProviderInterface
 {
     private $em;
+    private $session;
 
-    public function __construct($em)
+    public function __construct(EntityManager $em, Session $session)
     {
         $this->em = $em;
+        $this->session = $session;
     }
 
     /**
@@ -45,11 +49,21 @@ class WebserviceUserProvider implements UserProviderInterface
 
             $utilisateur = new Utilisateur($login, $motDePasse, null, $groupes, $nom, $prenom);
 
-            //$site = $this->em->getRepository('FIANETSceauBundle:Site')->findOneByNom('Cdiscount');
-            $site = $this->em->getRepository('FIANETSceauBundle:Site')
-                ->chargerSiteAvecPackageEtOptionsSouscrites('Cdiscount');
+            // TODO : c'est temporaire -> mettre son ID en fonction de ses données de test
+            //$site = $this->em->getRepository('FIANETSceauBundle:Site')->findOneById(21016);
+            $societe = $this->em->getRepository('FIANETSceauBundle:Societe')->findOneById(23332);
+            $sites = $societe->getSites();
 
-            $utilisateur->setSite($site);
+            /*$site = $this->em->getRepository('FIANETSceauBundle:Site')
+                ->chargerSiteAvecPackageEtOptionsSouscrites('Cdiscount');*/
+
+            //$utilisateur->setSite($site);
+
+            $utilisateur->setSociete($societe);
+
+            if (empty($this->session->get('siteSelectionne'))) {
+                $this->session->set('siteSelectionne', $sites[0]);
+            }
 
             return $utilisateur;
         }

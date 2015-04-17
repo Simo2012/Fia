@@ -14,7 +14,6 @@
                 <h2>Recherche par date de réponse au questionnaire</h2>
                 du {{ form_widget(form.dateDebut) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span> au {{ form_widget(form.dateFin) }} <span class="erreur">{{ form_errors(form.dateFin) }}</span><button type="submit">GO</button>
 
-
                 <h2>Recherche avancée</h2>
                 Indicateur de satisfaction : {{ form_widget(form.indicateur) }} <button type="submit">GO</button><br />
                 Mode de livraison : <div class="select">{{ form_widget(form.livraison) }}</div><button type="submit">GO</button>
@@ -24,9 +23,6 @@
                 {{ form_widget(form.recherche) }}<button type="submit">GO</button><br />
                 Litige en cours : {{ form_widget(form.litige) }}<button type="submit">GO</button>
                 Retenir ces paramètres de recherche :{{ form_widget(form.retenir) }}<button type="submit">GO</button>
-            </div>
-            <div class="block-total-part3">
-                Site concerné : <div class="select">{{ form_widget(form.sites) }}</div><button type="submit">GO</button>
             </div>
             {{ form_widget(form.tri) }}
         {{ form_end(form) }}

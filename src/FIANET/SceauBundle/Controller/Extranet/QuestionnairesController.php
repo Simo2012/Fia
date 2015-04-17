@@ -41,16 +41,16 @@ class QuestionnairesController extends Controller
     public function questionnairesAction(Request $request)
     {
         $nbQuestionnairesMax = $this->container->getParameter('nb_questionnaires_max');
+        $site = $request->getSession()->get('siteSelectionne');
 
         if (!$request->isXmlHttpRequest()) {
             $menu = $this->get('fianet_sceau.extranet.menu');
             $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
 
-            // TODO à revoir: doit retourner un tableau de sites liés à la société
             $form = $this->createForm(
                 new QuestionnairesListeType(),
-                null,
-                array('sites' => array($this->getUser()->getSite()))
+                null/*,
+                array('sites' => array($this->getUser()->getSite()))*/
             );
             $form->handleRequest($request);
 
@@ -63,14 +63,14 @@ class QuestionnairesController extends Controller
             if (!$form->isSubmitted() || ($form->isSubmitted() && $form->isValid())) {
                 $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                     ->nbTotalQuestionnaires(
-                        $this->getUser()->getSite(),
+                        $site,
                         $dateDebut,
                         $dateFin
                     );
 
                 $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                     ->listeQuestionnaires(
-                        $this->getUser()->getSite(),
+                        $site,
                         $dateDebut,
                         $dateFin,
                         0,
@@ -90,7 +90,7 @@ class QuestionnairesController extends Controller
                     'questionnaires' => $questionnaires,
                     'nbQuestionnairesMax' => $nbQuestionnairesMax,
                     'form' => $form->createView(),
-                    'alternatif' => false,
+                    'offset' => 0,
                     'dateDebut' => $dateDebut,
                     'dateFin' => $dateFin,
                     'tri' => $tri
@@ -100,7 +100,7 @@ class QuestionnairesController extends Controller
         } else {
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->listeQuestionnaires(
-                    $this->getUser()->getSite(),
+                    $site,
                     $request->request->get('dateDebut'),
                     $request->request->get('dateFin'),
                     $request->request->get('offset', 0),
@@ -112,7 +112,7 @@ class QuestionnairesController extends Controller
                 'FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig',
                 array(
                     'questionnaires' => $questionnaires,
-                    'alternatif' => true
+                    'offset' => $request->request->get('offset', 0)
                 )
             );
         }

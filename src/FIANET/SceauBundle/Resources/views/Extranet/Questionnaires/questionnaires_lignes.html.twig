@@ -1,5 +1,5 @@
 {% for questionnaire in questionnaires %}
-    <tr class="{% if alternatif %}{{ cycle(['', 'alt'], loop.index0) }}{% else %}{{ cycle(['alt', ''], loop.index0) }}{% endif %}">
+    <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
         <td></td>
         <td></td>
         <td>{{ questionnaire.date|date("d/m/Y") }}</td>

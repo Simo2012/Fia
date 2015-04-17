@@ -14,10 +14,10 @@ class QuestionnairesListeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $listeSites = array();
+        /*$listeSites = array();
         foreach ($options['sites'] as $site) {
             $listeSites[$site->getId()] = $site->getNom();
-        }
+        }*/
 
         $builder
             ->add(
@@ -79,7 +79,7 @@ class QuestionnairesListeType extends AbstractType
                 'checkbox',
                 array('required' => false)
             )
-            ->add(
+            /*->add(
                 'sites',
                 'choice',
                 array(
@@ -88,7 +88,7 @@ class QuestionnairesListeType extends AbstractType
                     'multiple'  => false,
                     'required' => false
                 )
-            )
+            )*/
             ->add(
                 'tri',
                 'hidden',
