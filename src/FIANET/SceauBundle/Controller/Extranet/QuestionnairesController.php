@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Controller\Extranet;
 
 use DateTime;
+use FIANET\SceauBundle\Entity\DroitDeReponse;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -155,5 +156,112 @@ class QuestionnairesController extends Controller
 
         return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
     }
+    
+    /**
+     * Affiche la page avec le formulaire de droit de réponse pour ajout
+     * 
+     * @Route("/questionnaires/droit-de-reponse/ajout", name="extranet_questionnaires_droit_de_reponse_ajout")
+     * @Method({"GET", "POST"})
+     * 
+     * @param Request $request Instance de Request
+     *
+     * @return Response
+     */
+    public function droitDeReponseAjoutAction(Request $request) {
+        
+        $menu = $this->get('fianet_sceau.extranet.menu');
+        $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
+
+        $em = $this->getDoctrine()->getManager();
+
+        // NOUVEAU : Le droit de réponse peut être exercé sur n'importe quel champ de type commentaire d'un questionnaire
+        // ToDo: on récupèrera l'entité QuestionnaireReponse et non l'id (conversion du paramètre via @ParamConverter)
+        $questionnaireReponse_id = is_numeric($request->request->get('questreponse')) ? $request->request->get('questreponse') : 0;
+        $questionnaireReponse_id = 1; // pour test     
+        if ($questionnaireReponse_id == 0) {
+            throw $this->createNotFoundException("Le commentaire n'existe pas.");
+        }
+        
+        $questionnaireReponse = $em
+                ->getRepository('FIANETSceauBundle:QuestionnaireReponse')
+                ->find($questionnaireReponse_id);        
+        
+        // ToDo: on récupèrera l'entité Questionnaire et non l'id (conversion du paramètre via @ParamConverter)        
+        $questionnaire_id = is_numeric($request->request->get('questionnaire')) ? $request->request->get('questionnaire') : 0;
+        $questionnaire_id = 1; // pour test        
+        if ($questionnaire_id == 0) {
+            throw $this->createNotFoundException("Le questionnaire n'existe pas.");
+        }
+
+        $questionnaire = $em
+                ->getRepository('FIANETSceauBundle:Questionnaire')
+                ->find($questionnaire_id);
+        
+        // On vérifie que le questionnaire est bien actif
+        // ToDo : renvoyer sur une page avec un message explicite pour le marchand
+        if ($questionnaire->getActif() !== true) {
+            throw $this->createNotFoundException("Le questionnaire n'existe pas ou plus.");
+        }
+        
+        // On vérifie qu'on a le bon QuestionnaireReponse lié au questionnaire
+        if (!$questionnaire->getQuestionnaireReponses()->contains($questionnaireReponse)) {
+            throw $this->createNotFoundException("Pas de correspondance entre le commentaire et le questionnaire.");
+        }
+        
+        // On récupère les informations sur la commande, le membre, le site, le questionnaire répondu
+        $infosGeneralesQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->infosGeneralesQuestionnaire($questionnaire);
+        
+        // ToDo : on doit récupérer les informations de satisfaction pour le picto (vert, rouge, jaune, gris) et les transmettre au template
+        
+        // Construction du formulaire pour le droit de réponse
+        $droitDeReponse = new DroitDeReponse();
+        $formBuilder = $this->get('form.factory')->createBuilder('form', $droitDeReponse);
+
+        $formBuilder
+                ->add('commentaire', 'textarea', array(
+                    'trim' => true))
+                ->add('valider', 'submit')      
+        ; // 'allow_extra_fields' => true
+
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        // ToDo : il faudra effectuer des checks complets de saisie par la suite (trim, nombre de caractères minimum, mots interdits, mots longs, caractères répétés, etc.)
+        if ($form->isValid()) {
+            
+            // On vérifie la saisie
+            $validator = $this->get('validator');
+            $errorList = $validator->validate($droitDeReponse);
+
+            if (count($errorList) > 0) {
+                return new Response(print_r($errorList, true));
+            } else {
+                $droitDeReponse->setQuestionnaireReponse($questionnaireReponse);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($droitDeReponse);
+                $em->flush();
+
+                // ToDo : gérer l'affichage du message flash dans le template
+                $request->getSession()->getFlashBag()->add('notice', 'Droit de réponse bien enregistré.');
+
+                // On redirige vers la page de visualisation de listing des questionnaires une fois le message flash affiché
+                // ToDo : mettre la condition avant redirection
+                return $this->redirect($this->generateUrl('extranet_questionnaires_questionnaires'));
+            }
+
+        }
+        
+        return $this->render(
+            'FIANETSceauBundle:Extranet/Questionnaires:droit_de_reponse.html.twig', array(
+                'nbCaracteresMax' => $this->container->getParameter('nb_caracteres_max_droit_de_reponse'),
+                'form' => $form->createView(),
+                'infosGeneralesQuestionnaire' => $infosGeneralesQuestionnaire,
+                'questionnaireReponse' => $questionnaireReponse
+            )
+        );
+    }
+
 }
 

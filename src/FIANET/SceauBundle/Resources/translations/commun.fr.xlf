@@ -10,6 +10,58 @@
                 <source>commun_confirmation</source>
                 <target>Confirmation</target>
             </trans-unit>
+            <trans-unit id="3">
+                <source>commun_droit_de_reponse</source>
+                <target>Droit de réponse</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>commun_commande_informations</source>
+                <target>Informations sur la commande</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>commun_commande_montant</source>
+                <target>Montant de la commande</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>commun_commande_date</source>
+                <target>Date de commande</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>commun_commande_site</source>
+                <target>Site de la commande</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>commun_questionnaire_commentaire</source>
+                <target>Commentaire</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>commun_nb_caracteres_max</source>
+                <target>caractères maximum</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>commun_droit_de_reponse_charte_1</source>
+                <target>Le droit de réponse doit être exercé dans le respect de</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>commun_droit_de_reponse_charte_2</source>
+                <target>la Charte</target>
+            </trans-unit>            
+            <trans-unit id="12">
+                <source>commun_nb_caracteres_restants</source>
+                <target>Nombre de caractères restants</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>commun_droit_de_reponse_informations</source>
+                <target>Merci de ne pas publier les noms et prénoms des internautes depuis notre interface. Le droit de réponse n'est pas destiné à remercier vos clients d'avoir participé aux questionnaires de satisfaction FIA-NET. Nous vous conseillons d'utiliser le droit de réponse comme une explication à un avis posté et non comme un remerciement global de participation. Si vous souhaitez remercier vos clients de leur participation, nous vous invitons à leur envoyer un e-mail.</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>commun_valider</source>
+                <target>Valider</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>commun_charte_commercant</source>
+                <target>Bienvenue sur la Charte Sceau de Confiance FIA-NET !Cette charte a pour objectif de présenter les bonnes pratiques pour la gestion des questionnaires de vos clients. Les demandes de modération de commentaire ou de suppression de questionnaires erronés sont adressées à FIA-NET via l'extranet du partenaire. La suppression des questionnaires et des commentaires erronés de vos clients sont traités par FIA-NET, qui décide seule de la réponse à apporter à la demande. La suppression du commentaire est une mesure exceptionnelle. Il est vivement conseillé au partenaire de recourir à l'usage de son droit de réponse pour apporter des éclaircissements ou des précisions spécifiques sur la situation remontée par l'internaute. Le partenaire doit toujours avoir à l'esprit que ses explications sont d'abord destinées aux internautes. 1 - Le partenaire s'engage à ne pas faire répondre aux questionnaires de satisfaction FIA-NET les associés, mandataires sociaux de la société, les membres de sa famille proche (conjoints, ascendants directs et descendants directs), le personnel de la société et le cas échéant de la société mère ou de ses filiales ;2 - Le partenaire est invité à utiliser le Droit de Réponse avec courtoisie et précision pour répondre aux commentaires des acheteurs ; 3 - Le partenaire ne doit jamais inclure de données personnelles (par ex : nom, prénom de son client, etc.) dans sa réponse ;4 - Le partenaire s'engage à respecter la charte graphique du Sceau de Confiance notamment par l'affichage du bon logo FIA-NET et du widget sur son site internet. Le partenaire sera informé au préalable de toute modification qui surviendrait à la présente charte. </target>
+            </trans-unit>          
         </body>
     </file>
 </xliff>

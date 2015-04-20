@@ -43,7 +43,18 @@ class QuestionnaireReponse
      * @ORM\JoinColumn(name="reponse_id", referencedColumnName="id", nullable=false)
      **/
     private $reponse;
-
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\Questionnaire", mappedBy="questionnaireReponses")
+     **/
+    private $questionnaires;
+    
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\DroitDeReponse", mappedBy="questionnaireReponse")
+     */
+    private $droitDeReponses;    
 
     /**
      * Get id
@@ -125,5 +136,81 @@ class QuestionnaireReponse
     public function getReponse()
     {
         return $this->reponse;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->droitDeReponses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionnaires = new ArrayCollection();
+    }
+    
+    /**
+     * Add droitDeReponse
+     *
+     * @param \FIANET\SceauBundle\Entity\DroitDeReponse $droitDeReponse
+     *
+     * @return QuestionnaireReponse
+     */
+    public function addDroitDeReponse(\FIANET\SceauBundle\Entity\DroitDeReponse $droitDeReponse)
+    {
+        $this->droitDeReponses[] = $droitDeReponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove droitDeReponse
+     *
+     * @param \FIANET\SceauBundle\Entity\DroitDeReponse $droitDeReponse
+     */
+    public function removeDroitDeReponse(\FIANET\SceauBundle\Entity\DroitDeReponse $droitDeReponse)
+    {
+        $this->droitDeReponses->removeElement($droitDeReponse);
+    }
+
+    /**
+     * Get droitDeReponses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDroitDeReponses()
+    {
+        return $this->droitDeReponses;
+    }
+
+    /**
+     * Add questionnaire
+     *
+     * @param \FIANET\SceauBundle\Entity\Questionnaire $questionnaire
+     *
+     * @return QuestionnaireReponse
+     */
+    public function addQuestionnaire(\FIANET\SceauBundle\Entity\Questionnaire $questionnaire)
+    {
+        $this->questionnaires[] = $questionnaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionnaire
+     *
+     * @param \FIANET\SceauBundle\Entity\Questionnaire $questionnaire
+     */
+    public function removeQuestionnaire(\FIANET\SceauBundle\Entity\Questionnaire $questionnaire)
+    {
+        $this->questionnaires->removeElement($questionnaire);
+    }
+
+    /**
+     * Get questionnaires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionnaires()
+    {
+        return $this->questionnaires;
     }
 }

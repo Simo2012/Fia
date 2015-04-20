@@ -66,6 +66,10 @@
                 <source>constraints.flux_dateutilisation_incorrect</source>
                 <target>La valeur de la balise dateutilisation est incorrecte.</target>
             </trans-unit>
+            <trans-unit id="17">
+                <source>constraints.droit_de_reponse_not_blank</source>
+                <target>Le droit de réponse ne doit pas être vide.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

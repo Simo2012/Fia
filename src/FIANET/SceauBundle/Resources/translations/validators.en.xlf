@@ -66,6 +66,10 @@
                 <source>constraints.flux_dateutilisation_incorrect</source>
                 <target>Value of tag dateutilisation is incorrect.</target>
             </trans-unit>
+            <trans-unit id="17">
+                <source>constraints.droit_de_reponse_not_blank</source>
+                <target>The right of reply cannot be null.</target>
+            </trans-unit>          
         </body>
     </file>
 </xliff>

@@ -138,7 +138,7 @@ class Questionnaire
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireReponse")
+     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireReponse", inversedBy="questionnaires")
      * @ORM\JoinTable(name="Questionnaire_QuestionnaireReponse",
      *      joinColumns={@ORM\JoinColumn(name="questionnaire_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="questionnaireReponse_id", referencedColumnName="id", unique=true)}

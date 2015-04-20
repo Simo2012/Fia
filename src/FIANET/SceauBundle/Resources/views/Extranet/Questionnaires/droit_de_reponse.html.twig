@@ -1,0 +1,104 @@
+{% extends "FIANETSceauBundle:Extranet:extranet.html.twig" %}
+
+{% trans_default_domain 'commun' %}
+
+{% block title %}
+    {{ parent() }} : {{ 'commun_droit_de_reponse'|trans }}
+{% endblock %}
+
+{% block extranet_body %}
+
+    <h1>{{ 'commun_droit_de_reponse'|trans }}</h1>
+
+    {% if questionnaireReponse is not null %} 
+        {% if questionnaireReponse.commentaire is not empty %}    
+    
+            {% for infoQuestionnaire in infosGeneralesQuestionnaire %}
+                {% if infoQuestionnaire.commande is not null %}
+                <h2>{{ 'commun_commande_informations'|trans }} {% if infoQuestionnaire.commande.reference is not empty %}{{ infoQuestionnaire.commande.reference }}{% endif %}</h2>
+
+                <br />{% if infoQuestionnaire.commande.prenom is not empty %}{% if infoQuestionnaire.commande.prenom is not empty %}{{ infoQuestionnaire.commande.prenom |capitalize }}{% endif %} {% if infoQuestionnaire.commande.nom is not empty %}{{ infoQuestionnaire.commande.nom |upper }}{% endif %}{% endif %}
+                <br />{% if infoQuestionnaire.commande.email is not empty %}{{ infoQuestionnaire.commande.email }}{% endif %} {% if infoQuestionnaire.commande.montant is not empty %}{{ 'commun_commande_montant'|trans }} : {{ infoQuestionnaire.commande.montant }} &euro;  {% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
+                <br />{% if infoQuestionnaire.commande.date is not empty %}{{ 'commun_commande_date'|trans }} : {{ infoQuestionnaire.commande.date |date('d/m/Y \\à H\\hi') }}{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
+                    {% if infoQuestionnaire.site is not null %}
+                        {% if infoQuestionnaire.site.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infoQuestionnaire.site.nom }} {% endif %}
+                    {% endif %}
+                    {% if infoQuestionnaire.sousSite is not null %}
+                        - {% if infoQuestionnaire.sousSite.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infoQuestionnaire.sousSite.nom }} {% endif %}
+                    {% endif %}            
+                {% endif %}
+
+                <h2>{{ 'commun_questionnaire_commentaire'|trans }}</h2>
+                <p>ToDo_v__picto_satisfaction {% if infoQuestionnaire.membre.pseudo is not empty %}{{ infoQuestionnaire.membre.pseudo }}{% endif %} - {{ infoQuestionnaire.dateReponse|date("\\L\\e d/m/Y \\à H\\hi") }}</p>
+                <p>{{ questionnaireReponse.commentaire }}</p>         
+            {% endfor %}
+
+            <h2>{{ 'commun_droit_de_reponse'|trans }} ({{ nbCaracteresMax }} {{ 'commun_nb_caracteres_max'|trans }})</h2>
+            <p>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span></p>
+            <p id="laCharte">{{ 'commun_charte_commercant'|trans }}</p>
+
+            {# ToDo : il faudra gérer les divers affichages de formulaire pour lot de modération de contenu abusif #}
+            {# ToDo : on doit gérer le contenu du textarea selon la présence ou pas d'un droit de réponse actif pour une question de type commentaire #}    
+
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+            {{ form_errors(form) }}
+
+            {{ form_errors(form.commentaire) }}
+            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder': 'commun_droit_de_reponse_informations'|trans }}) }}
+            <br />
+            {{ 'commun_nb_caracteres_restants'|trans }} : <span id="compteurCaracteres">0</span>    
+            <br />
+
+            {# <button id="form_valider" class="btn btn-primary" name="form[valider]" type="submit">{{ 'commun_valider'|trans }}</button> #}
+            {{ form_widget(form.valider, {'attr': {'class': 'btn btn-primary', 'value' : 'commun_valider'|trans }}) }} 
+            {# ToDo : bouton de validation à revoir pour pouvoir utiliser le form_widget mais avec texte traductible #}
+
+
+            {# Génération automatique des champs pas encore écrits.
+            Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
+            et tous les champs cachés (type « hidden »). #}
+            {{ form_rest(form) }}
+
+            {# Fermeture de la balise <form> du formulaire HTML #}
+            {{ form_end(form) }}
+            
+        {% else %}
+            Aucun droit de réponse ne peut être exercé pour cette réponse au questionnaire.
+        {% endif %} 
+    {% else %}
+        Aucune réponse correspondante trouvée.
+    {% endif %}    
+    
+{% endblock %}
+
+{% block extranet_javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#laCharte").hide();
+            $("#lienLaCharte").click(function () {
+                $("#laCharte").slideToggle();
+            });
+            
+            function donnerNbCaracteres() {
+                var nbCaracteres = $('#form_commentaire').val().length;
+                var nbCaracteresRestants = parseInt({{ nbCaracteresMax }}) - nbCaracteres;
+                var msg = nbCaracteresRestants;
+                $('#compteurCaracteres').text(msg);
+
+                if (nbCaracteresRestants < 0) {
+                    $('#compteurCaracteres').addClass("msgRouge");
+                } else {
+                    $('#compteurCaracteres').removeClass("msgRouge");
+                }
+            }
+
+            donnerNbCaracteres();
+
+            $('#form_commentaire').keyup(function () {
+                donnerNbCaracteres();
+            });
+
+        });
+    </script>
+{% endblock %}

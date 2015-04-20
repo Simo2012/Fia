@@ -85,4 +85,44 @@ class QuestionnaireRepository extends EntityRepository
 
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
     }
+    
+    
+    /**
+     * Retourne les informations liées au questionnaire répondu (informations sur la commande, le membre, le site, le questionnaire répondu)
+     *
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     *
+     * @return Questionnaire[] 
+     */
+    public function infosGeneralesQuestionnaire(Questionnaire $questionnaire)
+    {
+        $qb = $this->createQueryBuilder('q');
+        
+        // ToDo : est-il préférable de sélectionner des attributs précis plutôt que l'ensemble ? à confirmer
+        //$qb->select('c.reference', 'm.prenom', 'm.nom','m.pseudo', 'c.email', 'c.montant', 'c.date', 'ss.nom', 's.nom', 'q.dateReponse' )
+        $qb->leftJoin('q.commande', 'c')
+            ->leftJoin('q.membre', 'm')
+            ->leftJoin('q.sousSite', 'ss')
+            ->leftJoin('q.site', 's')
+            ->addSelect('c')
+            ->addSelect('m')
+            ->addSelect('ss')
+            ->addSelect('s')
+            ->where('q.id=:id')
+                ->setParameter('id', $questionnaire->getId())
+            ->andWhere('q.dateReponse IS NOT NULL')
+            ;
+        
+        // ->innerJoin('q.questionnaireType', 'qt')
+        // ->leftJoin('q.questionnaireReponse', 'qr') 
+        // ->leftJoin('q.questionnairePersonnalisation', 'qp')
+        // ->leftJoin('qp.version', 'v')
+        // ->leftJoin('qt.delaiEnvoi', 'de')
+        // ->leftJoin('qp.delaiEnvoi', 'de')
+        // ->leftJoin('qt.delaiReception', 'dr')
+        // ->leftJoin('qp.delaiReception', 'dr')
+        
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
+    }
+    
 }

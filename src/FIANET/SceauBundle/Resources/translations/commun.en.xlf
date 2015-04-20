@@ -10,6 +10,58 @@
                 <source>commun_confirmation</source>
                 <target>Confirmation</target>
             </trans-unit>
+            <trans-unit id="3">
+                <source>commun_droit_de_reponse</source>
+                <target>Right of reply</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>commun_commande_informations</source>
+                <target>Ordering Information</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>commun_commande_montant</source>
+                <target>Amount of the order</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>commun_commande_date</source>
+                <target>Date of order</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>commun_commande_site</source>
+                <target>Site of order</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>commun_questionnaire_commentaire</source>
+                <target>Comment</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>commun_nb_caracteres_max</source>
+                <target>characters maximum</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>commun_droit_de_reponse_charte_1</source>
+                <target>The right of reply should be exercised in accordance with</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>commun_droit_de_reponse_charte_2</source>
+                <target>the Charter</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>commun_nb_caracteres_restants</source>
+                <target>Number of remaining characters</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>commun_droit_de_reponse_informations</source>
+                <target>Please, do not publish the names of users on our interface. The right of reply is not intended to thank your customers for participating in FIA-NET satisfaction surveys. We recommend that you use the right of reply as an explanation to a notice posted and not as an overall appreciation of participation. If you want to thank your customers for their participation, please send them an e-mail.</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>commun_valider</source>
+                <target>Validate</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>commun_charte_commercant</source>
+                <target>Welcome to Seal Charter FIA-NET Confidence! This Charter aims to present good practices for managing your clients questionnaires. The comment moderation requests or delete erroneous questionnaires are sent to FIA-NET via the extranet partner. The removal of questionnaires and your customers erroneous comments are processed by FIA-NET, which decides how to respond to the request. Comment deletion is an exceptional measure. It is highly recommended to partner resort to the use of his right of reply for clarification or specific details on the situation ascent by the user. The partner must always bear in mind that his explanations are primarily intended for users.  1 - The partner agrees not to meet the satisfaction questionnaires FIA-NET partners, officers of the company, members of the immediate family (spouse, ascendants and direct descendants), the company's staff and if any of the parent company or its subsidiaries;2 - The partner is invited to use the courtesy and accuracy Response Law to meet the buyers' comments; 3 - The partner must never include any personal data (eg name, last name of his client, etc.) in its response; 4 - The partner agrees to respect the graphic charter of Trust Logo namely to post good FIA-NET logo and the widget on their website. The partner will be informed in advance of any changes that occur in this Charter.</target>
+            </trans-unit>                            
         </body>
     </file>
 </xliff>

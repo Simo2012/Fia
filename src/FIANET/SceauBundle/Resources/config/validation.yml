@@ -18,7 +18,7 @@ FIANET\SceauBundle\Entity\Flux:
         ip:
             - Ip:
                 message: "constraints.flux_ip"
-                groups: [reception]
+                groups: [reception]              
     constraints:
         - FIANET\SceauBundle\Validator\Constraints\FluxChecksum:
             groups: [reception]
@@ -30,3 +30,17 @@ FIANET\SceauBundle\Entity\Flux:
             groups: [reception2]
         - FIANET\SceauBundle\Validator\Constraints\FluxXmlContenu:
             groups: [validation]
+            
+FIANET\SceauBundle\Entity\DroitDeReponse:
+    group_sequence_provider: true
+    properties:
+        commentaire:
+            - NotBlank:
+                message: "constraints.droit_de_reponse_not_blank"
+                groups: [validation]               
+            - Length:
+                min: 4
+                max: 700
+                minMessage: "Votre message doit faire au moins {{ limit }} caractères"
+                maxMessage: "Votre message ne peut pas être plus long que {{ limit }} caractères"
+                groups: [validation]                
