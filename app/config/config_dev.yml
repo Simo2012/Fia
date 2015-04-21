@@ -74,7 +74,7 @@ bazinga_faker:
         FIANET\SceauBundle\Entity\PackageOption:
             number: 5
         FIANET\SceauBundle\Entity\Societe:
-            number: 1000
+            number: 500
             custom_formatters:
                 libelle: {method: word }
         FIANET\SceauBundle\Entity\SiteType:
@@ -86,7 +86,7 @@ bazinga_faker:
             custom_formatters:
                 libelle: {method: word }
         FIANET\SceauBundle\Entity\Site:
-            number: 1000
+            number: 500
             custom_formatters:
                 nom: {method: word }
                 url: {method: url }
@@ -98,7 +98,7 @@ bazinga_faker:
             custom_formatters:
                 libelle: {method: randomElement, parameters: [ [ 'A traiter', 'En cours de traitement', 'Traité et valide', 'Traité et invalide' ] ], unique: true}
         FIANET\SceauBundle\Entity\Flux:
-            number: 2000
+            number: 1000
             custom_formatters:
                 checksum: {method: md5, unique: true}
                 ip:  {method: ipv4}
@@ -120,7 +120,7 @@ bazinga_faker:
                 parametrage: {method: lexify, parameters: ['{???}'] }
                 nbJoursPourRepondre: {method: numberBetween, parameters: [30,90] }
         FIANET\SceauBundle\Entity\QuestionnairePersonnalisation:
-            number: 1000
+            number: 500
             custom_formatters:
                 dateDebut: {method: dateTimeThisYear}
                 dateFin:  {method: null}
@@ -134,7 +134,7 @@ bazinga_faker:
             custom_formatters:
                 libelle: {method: sentence, parameters: [2] }
         FIANET\SceauBundle\Entity\Question:
-            number: 200
+            number: 100
             custom_formatters:
                 libelle: {method: sentence, parameters: [2]}
                 libelleCourt: {method: sentence, parameters: [1]}
@@ -148,7 +148,7 @@ bazinga_faker:
                 visible: {method: null}
                 obligatoire: {method: boolean, parameters: [0]}
         FIANET\SceauBundle\Entity\Reponse:
-            number: 500
+            number: 250
             custom_formatters:
                 libelle: {method: sentence, parameters: [2]}
                 libelleCourt: {method: sentence, parameters: [1]}
@@ -156,7 +156,7 @@ bazinga_faker:
                 precision: {method: boolean, parameters: [0]}
                 actif: {method: boolean, parameters: [100]}
         FIANET\SceauBundle\Entity\Commande:
-            number: 2000
+            number: 1000
             custom_formatters:
                 email: {method: email }
                 prenom: {method: firstName }
@@ -166,10 +166,42 @@ bazinga_faker:
                 montant: {method: randomFloat, parameters: [2] }
                 dateutilisation : {method: null }
                 donnees : {method: null }
-        FIANET\SceauBundle\Entity\Questionnaire:
-            number: 2000
+        FIANET\SceauBundle\Entity\Pays:
+            number: 200
             custom_formatters:
-                membre: {method: null }
+                libelle: {method: word }
+        FIANET\SceauBundle\Entity\Coordonnee:
+            number: 100
+            custom_formatters:
+                adresse: {method: sentence, parameters: [2]}
+                codePostal: {method: numberBetween, parameters: [1,100000]}
+                ville: {method: word }
+        FIANET\SceauBundle\Entity\Civilite:
+            number: 3
+            custom_formatters:
+                libelle: {method: lexify, parameters: ['???'] }         
+        FIANET\SceauBundle\Entity\Avatar:
+            number: 100
+        FIANET\SceauBundle\Entity\Email:
+            number: 100            
+            custom_formatters:
+                email: {method: email }
+                principal: {method: boolean, parameters: [100]}
+                dateConfirmation: {method: dateTimeThisYear }                
+        FIANET\SceauBundle\Entity\MembreStatut:
+            number: 5
+            custom_formatters:
+                libelle: {method: word }                
+        FIANET\SceauBundle\Entity\Membre:
+            number: 100
+            custom_formatters:
+                nom: {method: lastName }
+                prenom: {method: firstName }
+                pseudo: {method: word, unique: true }
+                dateCreation: {method: dateTimeThisYear }
+        FIANET\SceauBundle\Entity\Questionnaire:
+            number: 1000
+            custom_formatters:
                 email: {method: email }
                 dateInsertion: {method: dateTimeThisYear }
                 datePrevEnvoi: {method: dateTimeThisYear }
@@ -181,11 +213,18 @@ bazinga_faker:
                 actif: {method: boolean, parameters: [100]}
                 sousSite: {method: null }
         FIANET\SceauBundle\Entity\QuestionnaireReponse:
-            number: 5000
+            number: 2500
             custom_formatters:
                 commentaire: {method: text, parameters: [500]}
                 note: {method: numberBetween, parameters: [1,10]}
-
+        FIANET\SceauBundle\Entity\DroitDeReponse:
+            number: 50
+            custom_formatters:
+                commentaire: {method: text, parameters: [700]}
+                dateInsertion: {method: dateTimeThisYear }
+                dateSuppression: {method: null }
+                actif: {method: boolean, parameters: [100]}                
+                
 # Surcharge des paramètres
 parameters:
     extranet_protocole: http
