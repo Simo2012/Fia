@@ -41,6 +41,6 @@ FIANET\SceauBundle\Entity\DroitDeReponse:
             - Length:
                 min: 4
                 max: 700
-                minMessage: "Votre message doit faire au moins {{ limit }} caractères"
-                maxMessage: "Votre message ne peut pas être plus long que {{ limit }} caractères"
-                groups: [validation]                
+                minMessage: "constraints.droit_de_reponse_nb_car_min_nok"
+                maxMessage: "constraints.droit_de_reponse_nb_car_max_nok"
+                groups: [validation]
