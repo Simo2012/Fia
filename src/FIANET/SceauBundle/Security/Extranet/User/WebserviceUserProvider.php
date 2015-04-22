@@ -50,19 +50,21 @@ class WebserviceUserProvider implements UserProviderInterface
             $utilisateur = new Utilisateur($login, $motDePasse, null, $groupes, $nom, $prenom);
 
             // TODO : c'est temporaire -> mettre son ID en fonction de ses données de test
-            //$site = $this->em->getRepository('FIANETSceauBundle:Site')->findOneById(21016);
-            $societe = $this->em->getRepository('FIANETSceauBundle:Societe')->findOneById(23332);
-            $sites = $societe->getSites();
-
-            /*$site = $this->em->getRepository('FIANETSceauBundle:Site')
-                ->chargerSiteAvecPackageEtOptionsSouscrites('Cdiscount');*/
-
-            //$utilisateur->setSite($site);
-
+            $societe = $this->em->getRepository('FIANETSceauBundle:Societe')->infosSocieteEtSitesLies(1);
             $utilisateur->setSociete($societe);
 
-            if (empty($this->session->get('siteSelectionne'))) {
+            $sites = $societe->getSites();
+
+            /* Initialisation des listes déroulantes dans le header */
+            if (!$this->session->get('siteSelectionne')) {
                 $this->session->set('siteSelectionne', $sites[0]);
+            }
+
+            if (!$this->session->get('questionnaireTypeSelectionne')) {
+                $this->session->set(
+                    'questionnaireTypeSelectionne',
+                    $sites[0]->getQuestionnairePersonnalisations()[0]->getQuestionnaireType()
+                );
             }
 
             return $utilisateur;

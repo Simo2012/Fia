@@ -30,7 +30,7 @@ class GestionQuestionnaire
     {
         $commande = new Commande();
         $commande->setEmail($xml->utilisateur->email->__toString());
-        if (!empty($xml->utilisateur->prenom->__toString())) {
+        if ($xml->utilisateur->prenom->__toString() != '') {
             $commande->setPrenom($xml->utilisateur->prenom->__toString());
         }
         $commande->setNom($xml->utilisateur->nom->__toString());

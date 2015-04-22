@@ -39,6 +39,6 @@ class MenuElementRepository extends EntityRepository
             ->orderBy('mep.ordre', 'ASC')
             ->addOrderBy('mef.ordre', 'ASC');
 
-        return $qb->getQuery()->useResultCache(true)->getResult();
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
 }

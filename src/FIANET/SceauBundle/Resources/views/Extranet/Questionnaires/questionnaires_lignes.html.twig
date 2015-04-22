@@ -1,7 +1,6 @@
 {% for questionnaire in questionnaires %}
     <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
         <td></td>
-        <td></td>
         <td>{{ questionnaire.date|date("d/m/Y") }}</td>
         <td>{{ questionnaire.dateReponse|date("d/m/Y") }}</td>
         <td>
@@ -10,7 +9,13 @@
             {% endif %}
             {{ questionnaire.email }}
         </td>
-        <td></td>
+        <td>
+            {% if questionnaire.commentaire is not empty %}
+                {{ questionnaire.commentaire | truncate(100, true, '') }} {% if  questionnaire.commentaire|length > 100 %}<a href="{{ path('extranet_questionnaires_questionnaires') }}">[...]</a>{% endif %}
+            {% else %}
+                -
+            {% endif %}
+        </td>
         <td></td>
         <td></td>
     </tr>

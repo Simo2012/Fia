@@ -2,7 +2,6 @@
 
 namespace FIANET\SceauBundle\Controller\Extranet;
 
-use DateTime;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
@@ -15,20 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class QuestionnairesController extends Controller
 {
     /**
-     * Affiche le tableau de bord des questionnaires.
-     *
-     * @Route("/questionnaires", name="extranet_questionnaires")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $menu = $this->get('fianet_sceau.extranet.menu');
-        $menu->getChild('questionnaires')->getChild('questionnaires.dashboard')->setCurrent(true);
-
-        return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
-    }
-
-    /**
      * Affiche la page de listing des questionnaires. Si l'action est appelée via AJAX, elle retourne les questionnaires
      * par paquet de lignes de tableau (utilisé pour "l'infinite scroll").
      *
@@ -37,12 +22,13 @@ class QuestionnairesController extends Controller
      *
      * @param Request $request Instance de Request
      *
-     * @return Response
+     * @return Response Instance de Response
      */
     public function questionnairesAction(Request $request)
     {
         $nbQuestionnairesMax = $this->container->getParameter('nb_questionnaires_max');
-        $site = $request->getSession()->get('siteSelectionne');
+        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+        $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
 
         if (!$request->isXmlHttpRequest()) {
             $menu = $this->get('fianet_sceau.extranet.menu');
@@ -50,8 +36,7 @@ class QuestionnairesController extends Controller
 
             $form = $this->createForm(
                 new QuestionnairesListeType(),
-                null/*,
-                array('sites' => array($this->getUser()->getSite()))*/
+                null
             );
             $form->handleRequest($request);
 
@@ -72,6 +57,7 @@ class QuestionnairesController extends Controller
                 $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                     ->listeQuestionnaires(
                         $site,
+                        $questionnaireType,
                         $dateDebut,
                         $dateFin,
                         0,
@@ -102,6 +88,7 @@ class QuestionnairesController extends Controller
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->listeQuestionnaires(
                     $site,
+                    $questionnaireType,
                     $request->request->get('dateDebut'),
                     $request->request->get('dateFin'),
                     $request->request->get('offset', 0),
@@ -262,4 +249,5 @@ class QuestionnairesController extends Controller
     }
 
 }
+
 

@@ -22,10 +22,11 @@ class QuestionnaireRepository extends EntityRepository
 
         $qb->select('COUNT(q.id)')
             ->where('q.site=:id')
-                ->setParameter('id', $site->getId())
-            ->andWhere('q.dateReponse IS NOT NULL');
+            ->setParameter('id', $site->getId())
+            ->andWhere('q.dateReponse IS NOT NULL')
+            ->andWhere('q.actif=true');
 
-        if ($dateDebut!= '') {
+        if ($dateDebut != '') {
             $qb->andWhere('q.dateReponse >= :dateDebut')
                 ->setParameter('dateDebut', $dateDebut);
         }
@@ -42,6 +43,7 @@ class QuestionnaireRepository extends EntityRepository
      * Retourne "un paquet" de questionnaires répondus en fonction des filtres et tris demandés.
      *
      * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      * @param string $dateDebut Date de début de la période (peut être vide)
      * @param string $dateFin Date de fin de la période (peut être vide)
      * @param int $premierQuestionnaire Numéro du premier questionnaire retourné
@@ -50,20 +52,31 @@ class QuestionnaireRepository extends EntityRepository
      *
      * @return array Tableau de string
      */
-    public function listeQuestionnaires(Site $site, $dateDebut, $dateFin, $premierQuestionnaire, $nbQuestionnaires, $tri)
-    {
+    public function listeQuestionnaires(
+        Site $site,
+        QuestionnaireType $questionnaireType,
+        $dateDebut,
+        $dateFin,
+        $premierQuestionnaire,
+        $nbQuestionnaires,
+        $tri
+    ) {
         $qb = $this->createQueryBuilder('q');
 
-        $qb->select('q.email', 'q.dateReponse', 'c.date', 'm.nom', 'm.prenom')
+        $qb->select('q.email', 'q.dateReponse', 'c.date', 'm.nom', 'm.prenom', 'qr.commentaire')
             ->leftJoin('q.commande', 'c')
             ->leftJoin('q.membre', 'm')
+            ->leftJoin('q.questionnaireReponses', 'qr')
+            ->leftJoin('qr.reponse', 'r', 'WITH', 'r.question IS NULL OR r.question = :qid')
+            ->setParameter('qid', $questionnaireType->getParametrage()['commentairePrincipal'])
             ->where('q.site=:id')
-                ->setParameter('id', $site->getId())
+            ->setParameter('id', $site->getId())
             ->andWhere('q.dateReponse IS NOT NULL')
+            ->andWhere('q.actif=true')
             ->setFirstResult($premierQuestionnaire)
             ->setMaxResults($nbQuestionnaires);
 
-        if ($dateDebut!= '') {
+        if ($dateDebut != '') {
             $qb->andWhere('q.dateReponse >= :dateDebut')
                 ->setParameter('dateDebut', $dateDebut);
         }
