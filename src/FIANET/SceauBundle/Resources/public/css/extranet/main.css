@@ -40,10 +40,14 @@ body {
     background-color: #e7e4e4;
 }
 
-a {
+a, .lien {
     color: #1d8bdf;
     text-decoration: underline;
     font-weight: bold;
+}
+
+.lien {
+    cursor: pointer;
 }
 
 button, .button {
@@ -106,6 +110,15 @@ button:hover, button:active, .button:hover, .button:active {
 .erreur ul li {
     display: inline;
     list-style: none;
+    color: #C00000;
+}
+
+.erreur img {
+    vertical-align: middle;
+}
+
+.libelle_erreur {
+    font-weight: bold;
 }
 
 #masque {
@@ -118,6 +131,10 @@ button:hover, button:active, .button:hover, .button:active {
     opacity: 0.8;
     z-index: 9999;
     background: url(../../images/ajax-loader-blanc.gif) no-repeat center #000000;
+}
+
+.msgRouge {
+  color:#cc0000;
 }
 
 /**************************************** STRUCTURE ****************************************/

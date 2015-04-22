@@ -122,7 +122,7 @@ class QuestionnaireRepository extends EntityRepository
         // ->leftJoin('qt.delaiReception', 'dr')
         // ->leftJoin('qp.delaiReception', 'dr')
         
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
     
 }

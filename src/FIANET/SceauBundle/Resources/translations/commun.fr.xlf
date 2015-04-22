@@ -44,7 +44,7 @@
             </trans-unit>
             <trans-unit id="11">
                 <source>commun_droit_de_reponse_charte_2</source>
-                <target>la Charte</target>
+                <target>la charte</target>
             </trans-unit>            
             <trans-unit id="12">
                 <source>commun_nb_caracteres_restants</source>
@@ -61,7 +61,19 @@
             <trans-unit id="15">
                 <source>commun_charte_commercant</source>
                 <target>Bienvenue sur la Charte Sceau de Confiance FIA-NET !Cette charte a pour objectif de présenter les bonnes pratiques pour la gestion des questionnaires de vos clients. Les demandes de modération de commentaire ou de suppression de questionnaires erronés sont adressées à FIA-NET via l'extranet du partenaire. La suppression des questionnaires et des commentaires erronés de vos clients sont traités par FIA-NET, qui décide seule de la réponse à apporter à la demande. La suppression du commentaire est une mesure exceptionnelle. Il est vivement conseillé au partenaire de recourir à l'usage de son droit de réponse pour apporter des éclaircissements ou des précisions spécifiques sur la situation remontée par l'internaute. Le partenaire doit toujours avoir à l'esprit que ses explications sont d'abord destinées aux internautes. 1 - Le partenaire s'engage à ne pas faire répondre aux questionnaires de satisfaction FIA-NET les associés, mandataires sociaux de la société, les membres de sa famille proche (conjoints, ascendants directs et descendants directs), le personnel de la société et le cas échéant de la société mère ou de ses filiales ;2 - Le partenaire est invité à utiliser le Droit de Réponse avec courtoisie et précision pour répondre aux commentaires des acheteurs ; 3 - Le partenaire ne doit jamais inclure de données personnelles (par ex : nom, prénom de son client, etc.) dans sa réponse ;4 - Le partenaire s'engage à respecter la charte graphique du Sceau de Confiance notamment par l'affichage du bon logo FIA-NET et du widget sur son site internet. Le partenaire sera informé au préalable de toute modification qui surviendrait à la présente charte. </target>
-            </trans-unit>          
+            </trans-unit>
+            <trans-unit id="16">
+                <source>commun_formulaire_invalide</source>
+                <target>Le formulaire ne peut être soumis</target>
+            </trans-unit> 
+            <trans-unit id="17">
+                <source>commun_formulaire_commentaire_obligatoire</source>
+                <target>Le commentaire est obligatoire</target>
+            </trans-unit>             
+            <trans-unit id="18">
+                <source>commun_droit_de_reponse_confirm_envoi</source>
+                <target>Votre message va être envoyé. Votre client va recevoir un e-mail le prévenant de votre réponse. Celle-ci sera visible sur le site www.fia-net.com.</target>
+            </trans-unit>                  
         </body>
     </file>
 </xliff>

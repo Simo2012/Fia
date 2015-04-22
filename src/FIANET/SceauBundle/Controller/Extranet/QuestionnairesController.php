@@ -208,6 +208,14 @@ class QuestionnairesController extends Controller
             throw $this->createNotFoundException("Pas de correspondance entre le commentaire et le questionnaire.");
         }
         
+        // On vérifie s'il existe déjà un droit de réponse actif pour le commentaire
+        // ToDo : revoir la méthode
+        $nb_DroitDeReponse_Actif = $this->getDoctrine()->getRepository('FIANETSceauBundle:QuestionnaireReponse')
+                ->nbDroitDeReponseActif($questionnaireReponse);
+        if ($nb_DroitDeReponse_Actif > 0) {
+            throw $this->createNotFoundException("Un droit de réponse existe déjà pour ce commentaire.");
+        }
+        
         // On récupère les informations sur la commande, le membre, le site, le questionnaire répondu
         $infosGeneralesQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                     ->infosGeneralesQuestionnaire($questionnaire);
@@ -229,28 +237,18 @@ class QuestionnairesController extends Controller
 
         // ToDo : il faudra effectuer des checks complets de saisie par la suite (trim, nombre de caractères minimum, mots interdits, mots longs, caractères répétés, etc.)
         if ($form->isValid()) {
-            
-            // On vérifie la saisie
-            $validator = $this->get('validator');
-            $errorList = $validator->validate($droitDeReponse);
+            $droitDeReponse->setQuestionnaireReponse($questionnaireReponse);
 
-            if (count($errorList) > 0) {
-                return new Response(print_r($errorList, true));
-            } else {
-                $droitDeReponse->setQuestionnaireReponse($questionnaireReponse);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($droitDeReponse);
+            $em->flush();
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($droitDeReponse);
-                $em->flush();
+            // ToDo : gérer l'affichage du message flash dans le template
+            $request->getSession()->getFlashBag()->add('notice', 'Droit de réponse bien enregistré.');
 
-                // ToDo : gérer l'affichage du message flash dans le template
-                $request->getSession()->getFlashBag()->add('notice', 'Droit de réponse bien enregistré.');
-
-                // On redirige vers la page de visualisation de listing des questionnaires une fois le message flash affiché
-                // ToDo : mettre la condition avant redirection
-                return $this->redirect($this->generateUrl('extranet_questionnaires_questionnaires'));
-            }
-
+            // On redirige vers la page de visualisation de listing des questionnaires une fois le message flash affiché
+            // ToDo : mettre la condition avant redirection
+            return $this->redirect($this->generateUrl('extranet_questionnaires_questionnaires'));
         }
         
         return $this->render(

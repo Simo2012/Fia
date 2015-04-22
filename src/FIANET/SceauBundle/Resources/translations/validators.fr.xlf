@@ -70,6 +70,14 @@
                 <source>constraints.droit_de_reponse_not_blank</source>
                 <target>Le droit de réponse ne doit pas être vide.</target>
             </trans-unit>
+            <trans-unit id="18">
+                <source>constraints.droit_de_reponse_nb_car_min_nok</source>
+                <target>Malheureusement, votre message est trop court ou le contenu n'est pas compréhensible. Nous vous invitons à modifier votre commentaire.</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>constraints.droit_de_reponse_nb_car_max_nok</source>
+                <target>Malheureusement, votre message est trop long. Nous vous invitons à modifier votre commentaire.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

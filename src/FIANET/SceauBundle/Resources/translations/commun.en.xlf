@@ -44,7 +44,7 @@
             </trans-unit>
             <trans-unit id="11">
                 <source>commun_droit_de_reponse_charte_2</source>
-                <target>the Charter</target>
+                <target>the charter</target>
             </trans-unit>
             <trans-unit id="12">
                 <source>commun_nb_caracteres_restants</source>
@@ -61,7 +61,20 @@
             <trans-unit id="15">
                 <source>commun_charte_commercant</source>
                 <target>Welcome to Seal Charter FIA-NET Confidence! This Charter aims to present good practices for managing your clients questionnaires. The comment moderation requests or delete erroneous questionnaires are sent to FIA-NET via the extranet partner. The removal of questionnaires and your customers erroneous comments are processed by FIA-NET, which decides how to respond to the request. Comment deletion is an exceptional measure. It is highly recommended to partner resort to the use of his right of reply for clarification or specific details on the situation ascent by the user. The partner must always bear in mind that his explanations are primarily intended for users.  1 - The partner agrees not to meet the satisfaction questionnaires FIA-NET partners, officers of the company, members of the immediate family (spouse, ascendants and direct descendants), the company's staff and if any of the parent company or its subsidiaries;2 - The partner is invited to use the courtesy and accuracy Response Law to meet the buyers' comments; 3 - The partner must never include any personal data (eg name, last name of his client, etc.) in its response; 4 - The partner agrees to respect the graphic charter of Trust Logo namely to post good FIA-NET logo and the widget on their website. The partner will be informed in advance of any changes that occur in this Charter.</target>
-            </trans-unit>                            
+            </trans-unit>  
+            <trans-unit id="16">
+                <source>commun_formulaire_invalide</source>
+                <target>The form can not be submitted</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>commun_formulaire_commentaire_obligatoire</source>
+                <target>The comment is required</target>
+            </trans-unit>             
+            <trans-unit id="18">
+                <source>commun_droit_de_reponse_confirm_envoi</source>
+                <target>Your message will be sent. Your customer will receive an e-mail. Your comment will be visible on www.fia-net.com.</target>
+            </trans-unit>               
+                                                                                                          
         </body>
     </file>
 </xliff>

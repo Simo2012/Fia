@@ -1,6 +1,24 @@
 {% extends "FIANETSceauBundle:Extranet:extranet.html.twig" %}
 
 {% trans_default_domain 'commun' %}
+{% form_theme form _self %}
+
+{% block form_errors %}
+    {% if errors|length > 0 %}
+    <p class="erreur libelle_erreur">
+        <img src="{{ asset('bundles/fianetsceau/images/extranet/warning.png') }}" width="19" height="16"
+             alt="{% trans from "commun" %}commun_attention{% endtrans %}"
+             title="{% trans from "commun" %}commun_attention{% endtrans %}" /> {{ 'commun_formulaire_invalide'|trans }}&nbsp;:
+    </p>
+    <div class="erreur">
+        <ul class="error_list">
+            {% for error in errors %}
+                <li >{{error.message }}</li>
+            {% endfor %}  
+        </u>
+    </div>
+    {% endif %}
+{% endblock %}
 
 {% block title %}
     {{ parent() }} : {{ 'commun_droit_de_reponse'|trans }}
@@ -19,7 +37,7 @@
 
                 <br />{% if infoQuestionnaire.commande.prenom is not empty %}{% if infoQuestionnaire.commande.prenom is not empty %}{{ infoQuestionnaire.commande.prenom |capitalize }}{% endif %} {% if infoQuestionnaire.commande.nom is not empty %}{{ infoQuestionnaire.commande.nom |upper }}{% endif %}{% endif %}
                 <br />{% if infoQuestionnaire.commande.email is not empty %}{{ infoQuestionnaire.commande.email }}{% endif %} {% if infoQuestionnaire.commande.montant is not empty %}{{ 'commun_commande_montant'|trans }} : {{ infoQuestionnaire.commande.montant }} &euro;  {% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
-                <br />{% if infoQuestionnaire.commande.date is not empty %}{{ 'commun_commande_date'|trans }} : {{ infoQuestionnaire.commande.date |date('d/m/Y \\à H\\hi') }}{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
+                <br />{% if infoQuestionnaire.commande.date is not empty %}{{ 'commun_commande_date'|trans }} : {{ infoQuestionnaire.commande.date|date('d/m/Y \\à H\\hi') }}{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
                     {% if infoQuestionnaire.site is not null %}
                         {% if infoQuestionnaire.site.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infoQuestionnaire.site.nom }} {% endif %}
                     {% endif %}
@@ -34,26 +52,26 @@
             {% endfor %}
 
             <h2>{{ 'commun_droit_de_reponse'|trans }} ({{ nbCaracteresMax }} {{ 'commun_nb_caracteres_max'|trans }})</h2>
-            <p>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span></p>
+            <p>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</p>
             <p id="laCharte">{{ 'commun_charte_commercant'|trans }}</p>
 
             {# ToDo : il faudra gérer les divers affichages de formulaire pour lot de modération de contenu abusif #}
             {# ToDo : on doit gérer le contenu du textarea selon la présence ou pas d'un droit de réponse actif pour une question de type commentaire #}    
 
             {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-
-            {{ form_errors(form) }}
-
-            {{ form_errors(form.commentaire) }}
-            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder': 'commun_droit_de_reponse_informations'|trans }}) }}
+            
+            {# {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder': 'commun_droit_de_reponse_informations'|trans }}) }} #}
+            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control'}}) }}
             <br />
             {{ 'commun_nb_caracteres_restants'|trans }} : <span id="compteurCaracteres">0</span>    
             <br />
-
+            
+            {{ form_errors(form) }}
+            {{ form_errors(form.commentaire) }}
+            <br />
             {# <button id="form_valider" class="btn btn-primary" name="form[valider]" type="submit">{{ 'commun_valider'|trans }}</button> #}
             {{ form_widget(form.valider, {'attr': {'class': 'btn btn-primary', 'value' : 'commun_valider'|trans }}) }} 
             {# ToDo : bouton de validation à revoir pour pouvoir utiliser le form_widget mais avec texte traductible #}
-
 
             {# Génération automatique des champs pas encore écrits.
             Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
@@ -80,6 +98,44 @@
                 $("#laCharte").slideToggle();
             });
             
+            gestion_commentaire();            
+            
+            $('#form_commentaire').focus(function() {
+                gestion_commentaire()
+            });
+            
+            $('#form_commentaire').focusout(function() {
+                gestion_commentaire()
+            });      
+            
+            $('form[name="form"]').submit(function() {
+                var txtDroitDeReponse = "{{ 'commun_droit_de_reponse_informations'|trans|raw }}";
+                if($('#form_commentaire').val() == txtDroitDeReponse) {
+                    $('#form_commentaire').val('');
+                    alert("{{ 'commun_formulaire_commentaire_obligatoire'|trans }}");
+                    $('#form_commentaire').val(txtDroitDeReponse);
+                    return false;
+                } else {
+                    confirm("{{ 'commun_droit_de_reponse_confirm_envoi'|trans }}");
+                }
+            });
+            
+            function gestion_commentaire() {
+                var txtDroitDeReponse = "{{ 'commun_droit_de_reponse_informations'|trans|raw }}";
+                if($('#form_commentaire').val() == txtDroitDeReponse || ($('#form_commentaire').is(":focus") && $('#form_commentaire').val() == '')) {
+                    $('#form_commentaire').val('');
+                    $('#form_commentaire').removeClass('msgRouge');
+                    donnerNbCaracteres();
+                } else if ($('#form_commentaire').val() == '') {
+                    $('#form_commentaire').val(txtDroitDeReponse);
+                    $('#form_commentaire').addClass('msgRouge');
+                    $('#compteurCaracteres').text('{{ nbCaracteresMax }}');
+                } else {
+                    $('#form_commentaire').removeClass('msgRouge');
+                    donnerNbCaracteres();
+                }
+            }
+            
             function donnerNbCaracteres() {
                 var nbCaracteres = $('#form_commentaire').val().length;
                 var nbCaracteresRestants = parseInt({{ nbCaracteresMax }}) - nbCaracteres;
@@ -92,8 +148,6 @@
                     $('#compteurCaracteres').removeClass("msgRouge");
                 }
             }
-
-            donnerNbCaracteres();
 
             $('#form_commentaire').keyup(function () {
                 donnerNbCaracteres();

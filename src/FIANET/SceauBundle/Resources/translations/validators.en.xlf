@@ -69,7 +69,15 @@
             <trans-unit id="17">
                 <source>constraints.droit_de_reponse_not_blank</source>
                 <target>The right of reply cannot be null.</target>
-            </trans-unit>          
+            </trans-unit>  
+            <trans-unit id="18">
+                <source>constraints.droit_de_reponse_nb_car_min_nok</source>
+                <target>Unfortunately, your message is too short or the content is not understandable. Please edit your comment.</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>constraints.droit_de_reponse_nb_car_max_nok</source>
+                <target>Unfortunately, your message is too long. Please edit your comment.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
