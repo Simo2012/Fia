@@ -113,7 +113,7 @@ class Questionnaire
     /**
      * @var Commande
      *
-     * @ORM\OneToOne(targetEntity="FIANET\SceauBundle\Entity\Commande", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Commande", cascade={"persist"})
      * @ORM\JoinColumn(name="commande_id", referencedColumnName="id", nullable=true)
      */
     private $commande;
@@ -138,11 +138,7 @@ class Questionnaire
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireReponse", inversedBy="questionnaires")
-     * @ORM\JoinTable(name="Questionnaire_QuestionnaireReponse",
-     *      joinColumns={@ORM\JoinColumn(name="questionnaire_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="questionnaireReponse_id", referencedColumnName="id", unique=true)}
-     *      )
+     * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireReponse", mappedBy="questionnaire")
      */
     private $questionnaireReponses;
 

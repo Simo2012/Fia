@@ -44,14 +44,17 @@ class QuestionnairesController extends Controller
             $tri = is_numeric($donneesForm['tri']) ? $donneesForm['tri'] : 2;
             $dateDebut = (isset($donneesForm['dateDebut'])) ? $donneesForm['dateDebut'] : '';
             $dateFin = (isset($donneesForm['dateFin'])) ? $donneesForm['dateFin'] : '';
+            $recherche = (isset($donneesForm['recherche'])) ? $donneesForm['recherche'] : '';
 
             /* Formulaire non soumis (1er chargement de la page) ou formulaire soumis et valide */
             if (!$form->isSubmitted() || ($form->isSubmitted() && $form->isValid())) {
                 $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                     ->nbTotalQuestionnaires(
                         $site,
+                        $questionnaireType,
                         $dateDebut,
-                        $dateFin
+                        $dateFin,
+                        $recherche
                     );
 
                 $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
@@ -60,6 +63,7 @@ class QuestionnairesController extends Controller
                         $questionnaireType,
                         $dateDebut,
                         $dateFin,
+                        $recherche,
                         0,
                         $nbQuestionnairesMax,
                         $tri
@@ -80,7 +84,9 @@ class QuestionnairesController extends Controller
                     'offset' => 0,
                     'dateDebut' => $dateDebut,
                     'dateFin' => $dateFin,
-                    'tri' => $tri
+                    'tri' => $tri,
+                    'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
+                    'parametrageRecommendation' => $questionnaireType->getParametrage()['recommendation']
                 )
             );
 
@@ -91,6 +97,7 @@ class QuestionnairesController extends Controller
                     $questionnaireType,
                     $request->request->get('dateDebut'),
                     $request->request->get('dateFin'),
+                    $request->request->get('recherche'),
                     $request->request->get('offset', 0),
                     $this->container->getParameter('nb_questionnaires_max'),
                     $request->request->get('tri')

@@ -49,6 +49,21 @@ class Reponse
      */
     private $precision;
 
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valeurMin", type="float", nullable=true)
+     */
+    private $valeurMin;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valeurMax", type="float", nullable=true)
+     */
+    private $valeurMax;
+
     /**
      * @var boolean
      *
@@ -217,5 +232,53 @@ class Reponse
     public function getQuestion()
     {
         return $this->question;
+    }
+
+    /**
+     * Set valeurMin
+     *
+     * @param float $valeurMin
+     *
+     * @return Reponse
+     */
+    public function setValeurMin($valeurMin)
+    {
+        $this->valeurMin = $valeurMin;
+
+        return $this;
+    }
+
+    /**
+     * Get valeurMin
+     *
+     * @return float
+     */
+    public function getValeurMin()
+    {
+        return $this->valeurMin;
+    }
+
+    /**
+     * Set valeurMax
+     *
+     * @param float $valeurMax
+     *
+     * @return Reponse
+     */
+    public function setValeurMax($valeurMax)
+    {
+        $this->valeurMax = $valeurMax;
+
+        return $this;
+    }
+
+    /**
+     * Get valeurMax
+     *
+     * @return float
+     */
+    public function getValeurMax()
+    {
+        return $this->valeurMax;
     }
 }

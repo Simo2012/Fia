@@ -2,6 +2,7 @@
 
 namespace FIANET\SceauBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,17 +25,25 @@ class QuestionnaireReponse
     /**
      * @var string
      *
-     * @ORM\Column(name="commentaire", type="string", length=500)
+     * @ORM\Column(name="commentaire", type="string", length=500, nullable=true)
      */
     private $commentaire;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="note", type="float")
+     * @ORM\Column(name="note", type="float", nullable=true)
      */
     private $note;
 
+
+    /**
+     * @var Question
+     *
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Question")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="id", nullable=false)
+     **/
+    private $question;
 
     /**
      * @var Reponse
@@ -45,16 +54,29 @@ class QuestionnaireReponse
     private $reponse;
     
     /**
-     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\Questionnaire", mappedBy="questionnaireReponses")
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Questionnaire", inversedBy="questionnaireReponses")
+     * @ORM\JoinColumn(name="questionnaire_id", referencedColumnName="id", nullable=false)
      **/
-    private $questionnaires;
+    private $questionnaire;
     
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\DroitDeReponse", mappedBy="questionnaireReponse")
      */
-    private $droitDeReponses;    
+    private $droitDeReponses;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->droitDeReponses = new ArrayCollection();
+    }
+
 
     /**
      * Get id
@@ -137,23 +159,15 @@ class QuestionnaireReponse
     {
         return $this->reponse;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->droitDeReponses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->questionnaires = new ArrayCollection();
-    }
-    
+
     /**
      * Add droitDeReponse
      *
-     * @param \FIANET\SceauBundle\Entity\DroitDeReponse $droitDeReponse
+     * @param DroitDeReponse $droitDeReponse
      *
      * @return QuestionnaireReponse
      */
-    public function addDroitDeReponse(\FIANET\SceauBundle\Entity\DroitDeReponse $droitDeReponse)
+    public function addDroitDeReponse(DroitDeReponse $droitDeReponse)
     {
         $this->droitDeReponses[] = $droitDeReponse;
 
@@ -163,9 +177,9 @@ class QuestionnaireReponse
     /**
      * Remove droitDeReponse
      *
-     * @param \FIANET\SceauBundle\Entity\DroitDeReponse $droitDeReponse
+     * @param DroitDeReponse $droitDeReponse
      */
-    public function removeDroitDeReponse(\FIANET\SceauBundle\Entity\DroitDeReponse $droitDeReponse)
+    public function removeDroitDeReponse(DroitDeReponse $droitDeReponse)
     {
         $this->droitDeReponses->removeElement($droitDeReponse);
     }
@@ -181,36 +195,50 @@ class QuestionnaireReponse
     }
 
     /**
-     * Add questionnaire
+     * Set questionnaire
      *
-     * @param \FIANET\SceauBundle\Entity\Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      *
      * @return QuestionnaireReponse
      */
-    public function addQuestionnaire(\FIANET\SceauBundle\Entity\Questionnaire $questionnaire)
+    public function setQuestionnaire(Questionnaire $questionnaire)
     {
-        $this->questionnaires[] = $questionnaire;
+        $this->questionnaire = $questionnaire;
 
         return $this;
     }
 
     /**
-     * Remove questionnaire
+     * Get questionnaire
      *
-     * @param \FIANET\SceauBundle\Entity\Questionnaire $questionnaire
+     * @return Questionnaire
      */
-    public function removeQuestionnaire(\FIANET\SceauBundle\Entity\Questionnaire $questionnaire)
+    public function getQuestionnaire()
     {
-        $this->questionnaires->removeElement($questionnaire);
+        return $this->questionnaire;
     }
 
     /**
-     * Get questionnaires
+     * Set question
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param Question $question
+     *
+     * @return QuestionnaireReponse
      */
-    public function getQuestionnaires()
+    public function setQuestion(Question $question)
     {
-        return $this->questionnaires;
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get question
+     *
+     * @return Question
+     */
+    public function getQuestion()
+    {
+        return $this->question;
     }
 }

@@ -38,10 +38,10 @@
                 <th>Date de réponse au questionnaire {% if tri == 2 %}<a onclick="selectTriQuestionnaires(3);" style="cursor: pointer">v</a>{% else %}<a onclick="selectTriQuestionnaires(2);" style="cursor: pointer">^</a>{% endif %}</th>
                 <th>Adresse e-mail</th>
                 <th>Verbatim</th>
-                <th>Indice de recommendation</th>
+                {% if parametrageRecommendation.question_id is not null %}<th>Indice de recommendation</th>{% endif %}
                 <th>Détails</th>
             </tr>
-            {{ include('FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig', {'questionnaires': questionnaires}) }}
+            {{ include('FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig', {'questionnaires': questionnaires, 'parametrageIndicateur': parametrageIndicateur, 'parametrageRecommendation': parametrageRecommendation}) }}
         </table>
 
         <div id="chargement"><img src="{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}" alt="Chargement en cours" /></div>

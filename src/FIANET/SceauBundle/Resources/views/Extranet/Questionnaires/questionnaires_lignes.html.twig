@@ -1,7 +1,9 @@
 {% for questionnaire in questionnaires %}
     <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
-        <td></td>
-        <td>{{ questionnaire.date|date("d/m/Y") }}</td>
+        <td>
+            {{ include('FIANETSceauBundle:Extranet/Commun:indicateur.html.twig', {'indicateurReponseID': questionnaire.indicateurReponseID, 'indicateurNote': questionnaire.indicateurNote}) }}
+        </td>
+        <td>{{ questionnaire.dateCommande|date("d/m/Y") }}</td>
         <td>{{ questionnaire.dateReponse|date("d/m/Y") }}</td>
         <td>
             {% if questionnaire.nom is not empty %}
@@ -16,7 +18,7 @@
                 -
             {% endif %}
         </td>
-        <td></td>
+        {% if parametrageRecommendation.question_id is not null %}<td>{{ questionnaire.recommendation }} / {{ questionnaire.recommendationValeurMax }}</td>{% endif %}
         <td></td>
     </tr>
 {% endfor %}
