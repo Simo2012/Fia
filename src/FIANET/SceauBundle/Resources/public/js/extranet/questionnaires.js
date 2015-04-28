@@ -15,7 +15,14 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, 
                 $('#chargement').fadeIn(400);
 
                 $.post(Routing.generate('extranet_questionnaires_questionnaires', null, true),
-                    {offset: offset, dateDebut : dateDebut, dateFin : dateFin, tri: tri, recherche: recherche, indicateurs: indicateurs.split('-')},
+                    {
+                        offset: offset,
+                        dateDebut: dateDebut,
+                        dateFin: dateFin,
+                        tri: tri,
+                        recherche: recherche,
+                        indicateurs: indicateurs.split('-')
+                    },
                     function (data) {
                         if (data != '') {
                             $('#listeQuestionnaires').find('tr:last').after(data);
@@ -26,7 +33,7 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, 
                             $('#chargement').fadeOut(400);
                         }
                         else {
-                            $('#chargement').hide().after('<p>'+ texteFin + '</p>');
+                            $('#chargement').hide().after('<p>' + texteFin + '</p>');
                         }
                     }
                 );
@@ -35,8 +42,19 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, 
     });
 }
 
-function selectTriQuestionnaires(numTri)
-{
+function selectTriQuestionnaires(numTri) {
     $('#questionnaires_liste_tri').val(numTri);
     $('form').submit();
+}
+
+function selectIndicateur(numIndicateur, imageIndicateur) {
+    var checkbox = document.getElementById('questionnaires_liste_indicateurs_' + numIndicateur);
+
+    if (checkbox.checked) {
+        imageIndicateur.className = '';
+        checkbox.checked = false;
+    } else {
+        imageIndicateur.className = 'indicateur-selectionne';
+        checkbox.checked = true;
+    }
 }

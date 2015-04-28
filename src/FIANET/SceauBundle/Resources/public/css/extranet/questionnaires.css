@@ -1,0 +1,15 @@
+@charset "utf-8";
+/* CSS Document */
+
+#indicateurs input {
+    position: absolute;
+    left: -100px;
+}
+
+#indicateurs img {
+    margin-left: 10px;
+}
+
+.indicateur-selectionne {
+    border: solid 3px #00cc00;
+}
