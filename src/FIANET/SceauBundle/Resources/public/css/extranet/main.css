@@ -138,6 +138,10 @@ button:hover, button:active, .button:hover, .button:active {
   color:#cc0000;
 }
 
+.pointeur {
+    cursor: pointer;
+}
+
 /**************************************** STRUCTURE ****************************************/
 header {
     display: block;

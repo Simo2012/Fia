@@ -45,6 +45,10 @@ class QuestionnairesController extends Controller
             $dateDebut = (isset($donneesForm['dateDebut'])) ? $donneesForm['dateDebut'] : '';
             $dateFin = (isset($donneesForm['dateFin'])) ? $donneesForm['dateFin'] : '';
             $recherche = (isset($donneesForm['recherche'])) ? $donneesForm['recherche'] : '';
+            $indicateurs = (isset($donneesForm['indicateurs'])) ? $donneesForm['indicateurs'] : array();
+
+            $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
+                ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
 
             /* Formulaire non soumis (1er chargement de la page) ou formulaire soumis et valide */
             if (!$form->isSubmitted() || ($form->isSubmitted() && $form->isValid())) {
@@ -54,7 +58,8 @@ class QuestionnairesController extends Controller
                         $questionnaireType,
                         $dateDebut,
                         $dateFin,
-                        $recherche
+                        $recherche,
+                        $listeReponsesIndicateurs
                     );
 
                 $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
@@ -64,6 +69,7 @@ class QuestionnairesController extends Controller
                         $dateDebut,
                         $dateFin,
                         $recherche,
+                        $listeReponsesIndicateurs,
                         0,
                         $nbQuestionnairesMax,
                         $tri
@@ -85,12 +91,19 @@ class QuestionnairesController extends Controller
                     'dateDebut' => $dateDebut,
                     'dateFin' => $dateFin,
                     'tri' => $tri,
+                    'recherche' => $recherche,
+                    'indicateurs' => implode('-', $indicateurs),
                     'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
-                    'parametrageRecommendation' => $questionnaireType->getParametrage()['recommendation']
+                    'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation']
                 )
             );
 
         } else {
+            $indicateurs = ($request->request->get('indicateurs')) ? $request->request->get('indicateurs') : array();
+
+            $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
+                ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
+
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->listeQuestionnaires(
                     $site,
@@ -98,6 +111,7 @@ class QuestionnairesController extends Controller
                     $request->request->get('dateDebut'),
                     $request->request->get('dateFin'),
                     $request->request->get('recherche'),
+                    $listeReponsesIndicateurs,
                     $request->request->get('offset', 0),
                     $this->container->getParameter('nb_questionnaires_max'),
                     $request->request->get('tri')
@@ -107,7 +121,9 @@ class QuestionnairesController extends Controller
                 'FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig',
                 array(
                     'questionnaires' => $questionnaires,
-                    'offset' => $request->request->get('offset', 0)
+                    'offset' => $request->request->get('offset', 0),
+                    'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
+                    'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation']
                 )
             );
         }

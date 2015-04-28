@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>titre_page</source>
+                <target>liste des questionnaires</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>recherche_placeholder</source>
+                <target>Email, pseudonyme, nom, numéro de commande</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>label_recherche_date</source>
+                <target>Recherche par date de réponse au questionnaire</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>recherche_date_du</source>
+                <target>du</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>recherche_date_au</source>
+                <target>au</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>titre</source>
+                <target>Recherche</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>libelle_bouton</source>
+                <target>GO</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>recherche_avancee</source>
+                <target>Recherche avancée</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>indicateur</source>
+                <target>Indicateur de satisfaction</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>mode_de_livraison</source>
+                <target>Mode de livraison</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>recherche_contenu</source>
+                <target>Recherche par contenu</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>litige_en_cours</source>
+                <target>Litige en cours</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>retenir_parametre</source>
+                <target>Retenir ces paramètres de recherche</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>questionnaires_trouves</source>
+                <target>{0,1}%nbr% questionnaire trouvé|]1,Inf]%nbr% questionnaires trouvés</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>plus_de_questionnaire</source>
+                <target>Il n'y a plus de questionnaire.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

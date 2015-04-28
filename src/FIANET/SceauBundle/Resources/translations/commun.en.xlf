@@ -73,8 +73,23 @@
             <trans-unit id="18">
                 <source>commun_droit_de_reponse_confirm_envoi</source>
                 <target>Your message will be sent. Your customer will receive an e-mail. Your comment will be visible on www.fia-net.com.</target>
-            </trans-unit>               
-                                                                                                          
+            </trans-unit>
+            <trans-unit id="19">
+                <source>commun_date_reponse_questionnaire</source>
+                <target>Date questionnaire response</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>commun_adresse_email</source>
+                <target>E-mail adress</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>commun_verbatim</source>
+                <target>Comment</target>
+            </trans-unit>
+           <trans-unit id="22">
+                <source>commun_details</source>
+                <target>Details</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

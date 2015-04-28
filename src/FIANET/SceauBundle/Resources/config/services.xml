@@ -40,6 +40,8 @@
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument>%langue_par_defaut%</argument>
         </service>
+        <service id="fianet_sceau.notes" class="FIANET\SceauBundle\Service\Notes">
+        </service>
 
         <!-- Extranet -->
         <service id="fianet_sceau.extranet.menu_builder" class="FIANET\SceauBundle\Service\Extranet\MenuBuilder">            

@@ -14,11 +14,6 @@ class QuestionnairesListeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /*$listeSites = array();
-        foreach ($options['sites'] as $site) {
-            $listeSites[$site->getId()] = $site->getNom();
-        }*/
-
         $builder
             ->add(
                 'dateDebut',
@@ -43,10 +38,10 @@ class QuestionnairesListeType extends AbstractType
                 )
             )
             ->add(
-                'indicateur',
+                'indicateurs',
                 'choice',
                 array(
-                    'choices' => array('vert' => 'V', 'jaune' => 'J', 'rouge' => 'R', 'gris' => 'G'),
+                    'choices' => array('vert' => ' ', 'jaune' => ' ', 'rouge' => ' ', 'gris' => ' '),
                     'multiple' => true,
                     'expanded' => true
                 )
@@ -65,8 +60,7 @@ class QuestionnairesListeType extends AbstractType
                 'recherche',
                 'text',
                 array(
-                    'required' => false,
-                    'data' => 'Email, pseudonyme, nom, mot clé, numéro de commande'
+                    'required' => false
                 )
             )
             ->add(
@@ -79,16 +73,6 @@ class QuestionnairesListeType extends AbstractType
                 'checkbox',
                 array('required' => false)
             )
-            /*->add(
-                'sites',
-                'choice',
-                array(
-                    'choices' => $listeSites,
-                    'empty_value' => 'Tous',
-                    'multiple'  => false,
-                    'required' => false
-                )
-            )*/
             ->add(
                 'tri',
                 'hidden',

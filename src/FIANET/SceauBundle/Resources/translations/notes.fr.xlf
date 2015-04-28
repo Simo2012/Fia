@@ -18,6 +18,14 @@
                 <source>notes_indicateur_gris</source>
                 <target>Client n'ayant pas donné son avis concernant sa satisfaction suite à son achat</target>
             </trans-unit>
+            <trans-unit id="4">
+                <source>notes_indicateur</source>
+                <target>Indicateur</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>notes_indice_recommandation</source>
+                <target>Indice de recommandation</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -1,4 +1,4 @@
-function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, dateFin, tri) {
+function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, dateFin, tri, recherche, indicateurs) {
 
     $(document).ready(function () {
 
@@ -15,7 +15,7 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, 
                 $('#chargement').fadeIn(400);
 
                 $.post(Routing.generate('extranet_questionnaires_questionnaires', null, true),
-                    {offset: offset, dateDebut : dateDebut, dateFin : dateFin, tri: tri},
+                    {offset: offset, dateDebut : dateDebut, dateFin : dateFin, tri: tri, recherche: recherche, indicateurs: indicateurs.split('-')},
                     function (data) {
                         if (data != '') {
                             $('#listeQuestionnaires').find('tr:last').after(data);
@@ -26,7 +26,7 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, 
                             $('#chargement').fadeOut(400);
                         }
                         else {
-                            $('#chargement').hide().after(texteFin);
+                            $('#chargement').hide().after('<p>'+ texteFin + '</p>');
                         }
                     }
                 );

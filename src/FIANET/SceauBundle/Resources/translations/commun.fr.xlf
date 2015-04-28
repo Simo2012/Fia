@@ -73,7 +73,23 @@
             <trans-unit id="18">
                 <source>commun_droit_de_reponse_confirm_envoi</source>
                 <target>Votre message va être envoyé. Votre client va recevoir un e-mail le prévenant de votre réponse. Celle-ci sera visible sur le site www.fia-net.com.</target>
-            </trans-unit>                  
+            </trans-unit>
+            <trans-unit id="19">
+                <source>commun_date_reponse_questionnaire</source>
+                <target>Date de réponse au questionnaire</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>commun_adresse_email</source>
+                <target>Adresse e-mail</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>commun_verbatim</source>
+                <target>Verbatim</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>commun_details</source>
+                <target>Détails</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

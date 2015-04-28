@@ -1,45 +1,61 @@
-{% extends "FIANETSceauBundle:Extranet:extranet.html.twig" %}
+{% extends 'FIANETSceauBundle:Extranet:extranet.html.twig' %}
+
+{% trans_default_domain 'extranet_questionnaires_questionnaires' %}
 
 {% block title %}
-    {{ parent() }} : liste des questionnaires
+    {{ parent() }} : {% trans %}titre_page{% endtrans %}
 {% endblock %}
 
 {% block extranet_body %}
 
-    <h1>Recherche</h1>
+    <h1>{% trans %}titre{% endtrans %}</h1>
 
     <div class="block-total">
         {{ form_start(form, {'action' : path('extranet_questionnaires_questionnaires')}) }}
             <div class="block-total-part1">
-                <h2>Recherche par date de réponse au questionnaire</h2>
-                du {{ form_widget(form.dateDebut) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span> au {{ form_widget(form.dateFin) }} <span class="erreur">{{ form_errors(form.dateFin) }}</span><button type="submit">GO</button>
+                <h2>{% trans %}label_recherche_date{% endtrans %}</h2>
+                {% trans %}recherche_date_du{% endtrans %} {{ form_widget(form.dateDebut) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span> {% trans %}recherche_date_au{% endtrans %} {{ form_widget(form.dateFin) }} <span class="erreur">{{ form_errors(form.dateFin) }}</span><button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
 
-                <h2>Recherche avancée</h2>
-                Indicateur de satisfaction : {{ form_widget(form.indicateur) }} <button type="submit">GO</button><br />
-                Mode de livraison : <div class="select">{{ form_widget(form.livraison) }}</div><button type="submit">GO</button>
+                <h2>{% trans %}recherche_avancee{% endtrans %}</h2>
+                {% trans %}indicateur{% endtrans %} :
+                {% for indicateur in form.indicateurs %}
+                    {% if indicateur.vars.value == 'vert' %}
+                        <img src="{{ asset('bundles/fianetsceau/images/indicateur-vert.png') }}" width="15" height="19" alt="{% trans from 'notes'%}notes_indicateur_vert{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_vert{% endtrans %}" />
+                    {% elseif indicateur.vars.value == 'jaune' %}
+                        <img src="{{ asset('bundles/fianetsceau/images/indicateur-jaune.png') }}" width="15" height="17" alt="{% trans from 'notes' %}notes_indicateur_jaune{% endtrans %}"  title="{% trans from 'notes' %}notes_indicateur_jaune{% endtrans %}" />
+                    {% elseif indicateur.vars.value == 'rouge' %}
+                        <img src="{{ asset('bundles/fianetsceau/images/indicateur-rouge.png') }}" width="14" height="19" alt="{% trans from 'notes' %}notes_indicateur_rouge{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_rouge{% endtrans %}" />
+                    {% else %}
+                        <img src="{{ asset('bundles/fianetsceau/images/indicateur-gris.png') }}" width="15" height="17" alt="{% trans from 'notes' %}notes_indicateur_gris{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_gris{% endtrans %}" />
+                    {% endif %}
+                    {{ form_widget(indicateur) }}
+                {% endfor %}<button type="submit">{% trans %}libelle_bouton{% endtrans %}</button><br />
+                {% trans %}mode_de_livraison{% endtrans %}: <div class="select">{{ form_widget(form.livraison) }}</div><button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
             </div>
             <div class="block-total-part2">
-                <h2>Recherche par contenu</h2>
-                {{ form_widget(form.recherche) }}<button type="submit">GO</button><br />
-                Litige en cours : {{ form_widget(form.litige) }}<button type="submit">GO</button>
-                Retenir ces paramètres de recherche :{{ form_widget(form.retenir) }}<button type="submit">GO</button>
+                <h2>{% trans %}recherche_contenu{% endtrans %}</h2>
+                {{ form_widget(form.recherche, { 'attr': {'placeholder': 'recherche_placeholder'|trans} }) }}<button type="submit">{% trans %}libelle_bouton{% endtrans %}</button><br />
+                {% trans %}litige_en_cours{% endtrans %} : {{ form_widget(form.litige) }}<button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
+                {% trans %}retenir_parametre{% endtrans %} : {{ form_widget(form.retenir) }}<button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
             </div>
             {{ form_widget(form.tri) }}
         {{ form_end(form) }}
     </div>
 
-    <h1>{{ nbTotalQuestionnaires }} questionnaires trouvés</h1>
+    <h1>{% transchoice nbTotalQuestionnaires with {'%nbr%': nbTotalQuestionnaires} %}questionnaires_trouves{% endtranschoice %}</h1>
 
     {% if nbTotalQuestionnaires != 0 %}
         <table id="listeQuestionnaires" width="100%" cellspacing="0" cellpadding="0" border="0" class="gen">
             <tr>
-                <th>Indicateur</th>
-                <th>Date de commande {% if tri == 1 %}<a onclick="selectTriQuestionnaires(0);" style="cursor: pointer">^</a>{% else %}<a onclick="selectTriQuestionnaires(1);" style="cursor: pointer">V</a>{% endif %}</th>
-                <th>Date de réponse au questionnaire {% if tri == 2 %}<a onclick="selectTriQuestionnaires(3);" style="cursor: pointer">v</a>{% else %}<a onclick="selectTriQuestionnaires(2);" style="cursor: pointer">^</a>{% endif %}</th>
-                <th>Adresse e-mail</th>
-                <th>Verbatim</th>
-                {% if parametrageRecommendation.question_id is not null %}<th>Indice de recommendation</th>{% endif %}
-                <th>Détails</th>
+                <th>{% trans from 'notes' %}notes_indicateur{% endtrans %}</th>
+                <th>{% trans from 'commun' %}commun_commande_date{% endtrans %} {% if tri == 1 %}<a onclick="selectTriQuestionnaires(0);" class="pointer">^</a>{% else %}<a onclick="selectTriQuestionnaires(1);" class="pointer">V</a>{% endif %}</th>
+                <th>{% trans from 'commun' %}commun_date_reponse_questionnaire{% endtrans %} {% if tri == 2 %}<a onclick="selectTriQuestionnaires(3);" class="pointer">v</a>{% else %}<a onclick="selectTriQuestionnaires(2);" class="pointer">^</a>{% endif %}</th>
+                <th>{% trans from 'commun' %}commun_adresse_email{% endtrans %} </th>
+                <th>{% trans from 'commun' %}commun_verbatim{% endtrans %}</th>
+                {% if parametrageRecommendation.question_id is not null %}
+                    <th>{% trans from 'notes' %}notes_indice_recommandation{% endtrans %} {% if tri == 4 %}<a onclick="selectTriQuestionnaires(5);" class="pointer">v</a>{% else %}<a onclick="selectTriQuestionnaires(4);" class="pointer">^</a>{% endif %}</th>
+                {% endif %}
+                <th>{% trans from 'commun' %}commun_details{% endtrans %}</th>
             </tr>
             {{ include('FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig', {'questionnaires': questionnaires, 'parametrageIndicateur': parametrageIndicateur, 'parametrageRecommendation': parametrageRecommendation}) }}
         </table>
@@ -65,7 +81,7 @@
         afficherCalendrier('questionnaires_liste_dateFin');
 
         {% if nbTotalQuestionnaires != 0 %}
-            paquetQuestionnairesSuivants('<p>Il n\'y a plus de questionnaire.</p>', {{ nbQuestionnairesMax  }}, '{{ dateDebut }}', '{{ dateFin }}', {{ tri }})
+            paquetQuestionnairesSuivants("{% trans %}plus_de_questionnaire{% endtrans %}", {{ nbQuestionnairesMax  }}, '{{ dateDebut }}', '{{ dateFin }}', {{ tri }}, '{{ recherche }}', '{{ indicateurs }}');
         {% endif %}
     </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="fr" datatype="plaintext" original="file.ext">
+    <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="0">
                 <source>notes_indicateur_vert</source>
@@ -17,6 +17,14 @@
             <trans-unit id="3">
                 <source>notes_indicateur_gris</source>
                 <target>Customer who have not given his opinion on his satisfaction after purchasing</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>notes_indicateur</source>
+                <target>Indicator</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>notes_indice_recommandation</source>
+                <target>Index recommendation</target>
             </trans-unit>
         </body>
     </file>

@@ -9,7 +9,7 @@ class QuestionnaireRepository extends EntityRepository
 {
     /**
      * Ajoute les restrictions à une requête pour sélectionner uniquement les questionnaires qui répondent à un certain
-     * nombre de filtre.
+     * nombre de filtres.
      *
      * @param QueryBuilder $qb Instance de QueryBuilder
      * @param Site $site Instance de Site
@@ -17,6 +17,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param string $dateDebut Date de début de la période (peut être vide)
      * @param string $dateFin Date de fin de la période (peut être vide)
      * @param string $recherche Recherche de l'utilisateur (N°commande, Email, etc)
+     * @param array $listeReponsesIndicateurs Tableau contenant les réponses des indicateurs à filtrer. Peut être vide.
      *
      * @return QueryBuilder Le QueryBuilder modifié avec l'ajout des restrictions
      */
@@ -26,7 +27,8 @@ class QuestionnaireRepository extends EntityRepository
         QuestionnaireType $questionnaireType,
         $dateDebut,
         $dateFin,
-        $recherche
+        $recherche,
+        $listeReponsesIndicateurs
     ) {
         $qb->andWhere('q.site = :sid')
             ->andWhere('q.questionnaireType = :qtid')
@@ -57,6 +59,21 @@ class QuestionnaireRepository extends EntityRepository
             )->setParameter('recherche', $recherche);
         }
 
+        if ($listeReponsesIndicateurs['reponses']) {
+            if ($listeReponsesIndicateurs['nullable']) {
+                $qb->andWhere($qb->expr()->orX(
+                    $qb->expr()->in('r_ind.id', $listeReponsesIndicateurs['reponses']),
+                    'r_ind.id IS NULL'
+                ));
+
+            } else {
+                $qb->andWhere($qb->expr()->in('r_ind.id', $listeReponsesIndicateurs['reponses']));
+            }
+
+        } elseif ($listeReponsesIndicateurs['nullable']) {
+            $qb->andWhere('r_ind.id IS NULL');
+        }
+
         return $qb;
     }
 
@@ -68,6 +85,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param string $dateDebut Date de début de la période (peut être vide)
      * @param string $dateFin Date de fin de la période (peut être vide)
      * @param string $recherche Recherche de l'utilisateur (N°commande, Email, etc)
+     * @param array $listeReponsesIndicateurs Tableau contenant les réponses des indicateurs à filtrer. Peut être vide.
      *
      * @return int Le nombre de questionnaire
      */
@@ -76,14 +94,31 @@ class QuestionnaireRepository extends EntityRepository
         QuestionnaireType $questionnaireType,
         $dateDebut,
         $dateFin,
-        $recherche
+        $recherche,
+        $listeReponsesIndicateurs
     ) {
         $qb = $this->createQueryBuilder('q')
             ->select('COUNT(q.id)')
             ->leftJoin('q.commande', 'c')
-            ->leftJoin('q.membre', 'm');
+            ->leftJoin('q.membre', 'm')
+            ->leftJoin(
+                'q.questionnaireReponses',
+                'qr_ind',
+                'WITH',
+                'qr_ind.question = :qid_ind'
+            )
+            ->leftJoin('qr_ind.reponse', 'r_ind')
+            ->setParameter('qid_ind', $questionnaireType->getParametrage()['indicateur']['question_id']);
 
-        $qb = $this->restrictionsListeQuestionnaires($qb, $site, $questionnaireType, $dateDebut, $dateFin, $recherche);
+        $qb = $this->restrictionsListeQuestionnaires(
+            $qb,
+            $site,
+            $questionnaireType,
+            $dateDebut,
+            $dateFin,
+            $recherche,
+            $listeReponsesIndicateurs
+        );
 
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
     }
@@ -96,6 +131,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param string $dateDebut Date de début de la période (peut être vide)
      * @param string $dateFin Date de fin de la période (peut être vide)
      * @param string $recherche Recherche de l'utilisateur (N°commande, Email, etc)
+     * @param array $listeReponsesIndicateurs Tableau contenant les réponses des indicateurs à filtrer. Peut être vide.
      * @param int $premierQuestionnaire Numéro du premier questionnaire retourné
      * @param int $nbQuestionnaires Nombre maximum de questionnaire retourné
      * @param int $tri Numéro du tri à appliquer
@@ -108,6 +144,7 @@ class QuestionnaireRepository extends EntityRepository
         $dateDebut,
         $dateFin,
         $recherche,
+        $listeReponsesIndicateurs,
         $premierQuestionnaire,
         $nbQuestionnaires,
         $tri
@@ -143,17 +180,31 @@ class QuestionnaireRepository extends EntityRepository
             ->setFirstResult($premierQuestionnaire)
             ->setMaxResults($nbQuestionnaires);
 
-        $qb = $this->restrictionsListeQuestionnaires($qb, $site, $questionnaireType, $dateDebut, $dateFin, $recherche);
+        $qb = $this->restrictionsListeQuestionnaires(
+            $qb,
+            $site,
+            $questionnaireType,
+            $dateDebut,
+            $dateFin,
+            $recherche,
+            $listeReponsesIndicateurs
+        );
 
-        if ($questionnaireType->getParametrage()['recommendation']['question_id']) {
-            $qb->addSelect('qr_reco.note AS recommendation', 'r_reco.valeurMax AS recommendationValeurMax')
+        if ($questionnaireType->getParametrage()['recommandation']['question_id']) {
+            $qb->addSelect('qr_reco.note AS recommandation', 'r_reco.valeurMax AS recommandationValeurMax')
                 ->leftJoin(
                     'q.questionnaireReponses',
                     'qr_reco',
                     'WITH',
                     'qr_reco.question = :qid_reco'
                 )->leftJoin('qr_reco.reponse', 'r_reco')
-                ->setParameter('qid_reco', $questionnaireType->getParametrage()['recommendation']['question_id']);
+                ->setParameter('qid_reco', $questionnaireType->getParametrage()['recommandation']['question_id']);
+
+            if ($tri == 3) {
+                $qb->orderBy('qr_reco.note', 'ASC');
+            } elseif ($tri == 4) {
+                $qb->orderBy('qr_reco.note', 'DESC');
+            }
         }
 
         if ($tri == 0) {
@@ -162,13 +213,11 @@ class QuestionnaireRepository extends EntityRepository
             $qb->orderBy('c.date', 'ASC');
         } elseif ($tri == 2) {
             $qb->orderBy('q.dateReponse', 'DESC');
-        } elseif ($tri == 3) {
-            $qb->orderBy('q.dateReponse', 'ASC');
         }
 
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
     }
-    
+
     /**
      * Retourne les informations liées au questionnaire répondu (informations sur la commande, le membre, le site,
      * le questionnaire répondu)
@@ -180,7 +229,7 @@ class QuestionnaireRepository extends EntityRepository
     public function infosGeneralesQuestionnaire(Questionnaire $questionnaire)
     {
         $qb = $this->createQueryBuilder('q');
-        
+
         // ToDo : est-il préférable de sélectionner des attributs précis plutôt que l'ensemble ? à confirmer
         //$qb->select('c.reference', 'm.prenom', 'm.nom','m.pseudo', 'c.email', 'c.montant', 'c.date', 'ss.nom', 's.nom', 'q.dateReponse' )
         $qb->leftJoin('q.commande', 'c')
@@ -192,10 +241,9 @@ class QuestionnaireRepository extends EntityRepository
             ->addSelect('ss')
             ->addSelect('s')
             ->where('q.id=:id')
-                ->setParameter('id', $questionnaire->getId())
-            ->andWhere('q.dateReponse IS NOT NULL')
-            ;
-        
+            ->setParameter('id', $questionnaire->getId())
+            ->andWhere('q.dateReponse IS NOT NULL');
+
         // ->innerJoin('q.questionnaireType', 'qt')
         // ->leftJoin('q.questionnaireReponse', 'qr') 
         // ->leftJoin('q.questionnairePersonnalisation', 'qp')
@@ -204,7 +252,7 @@ class QuestionnaireRepository extends EntityRepository
         // ->leftJoin('qp.delaiEnvoi', 'de')
         // ->leftJoin('qt.delaiReception', 'dr')
         // ->leftJoin('qp.delaiReception', 'dr')
-        
+
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
 }

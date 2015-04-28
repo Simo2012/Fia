@@ -1,33 +1,35 @@
+{% trans_default_domain 'notes' %}
+
 {% if indicateurReponseID is not empty %}
     {% if indicateurReponseID in parametrageIndicateur.vert %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-vert.png' %}
-        <img src="{{ asset_url }}" width="15" height="19" alt="{% trans from "notes" %}notes_indicateur_vert{% endtrans %}" title="{% trans from "notes" %}notes_indicateur_vert{% endtrans %}" />
+        <img src="{{ asset_url }}" width="15" height="19" alt="{% trans %}notes_indicateur_vert{% endtrans %}" title="{% trans %}notes_indicateur_vert{% endtrans %}" />
         {% endimage %}
     {% elseif indicateurReponseID in parametrageIndicateur.jaune%}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-jaune.png' %}
-        <img src="{{ asset_url }}" width="15" height="17" alt="{% trans from "notes" %}notes_indicateur_jaune{% endtrans %}"  title="{% trans from "notes" %}notes_indicateur_jaune{% endtrans %}" />
+        <img src="{{ asset_url }}" width="15" height="17" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
         {% endimage %}
     {% else %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-rouge.png' %}
-        <img src="{{ asset_url }}" width="14" height="19" alt="{% trans from "notes" %}notes_indicateur_rouge{% endtrans %}" title="{% trans from "notes" %}notes_indicateur_rouge{% endtrans %}" />
+        <img src="{{ asset_url }}" width="14" height="19" alt="{% trans %}notes_indicateur_rouge{% endtrans %}" title="{% trans %}notes_indicateur_rouge{% endtrans %}" />
         {% endimage %}
     {% endif %}
 {% elseif indicateurNote is not empty %}
     {% if indicateurNote >= indicateurNote.vert.min %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-vert.png' %}
-        <img src="{{ asset_url }}" width="15" height="19" alt="{% trans from "notes" %}notes_indicateur_vert{% endtrans %}" title="{% trans from "notes" %}notes_indicateur_vert{% endtrans %}" />
+        <img src="{{ asset_url }}" width="15" height="19" alt="{% trans %}notes_indicateur_vert{% endtrans %}" title="{% trans %}notes_indicateur_vert{% endtrans %}" />
         {% endimage %}
     {% elseif indicateurNote >= parametrageIndicateur.jaune.min %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-jaune.png' %}
-        <img src="{{ asset_url }}" width="15" height="17" alt="{% trans from "notes" %}notes_indicateur_jaune{% endtrans %}"  title="{% trans from "notes" %}notes_indicateur_jaune{% endtrans %}" />
+        <img src="{{ asset_url }}" width="15" height="17" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
         {% endimage %}
     {% else %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-rouge.png' %}
-        <img src="{{ asset_url }}" width="14" height="19" alt="{% trans from "notes" %}notes_indicateur_rouge{% endtrans %}" title="{% trans from "notes" %}notes_indicateur_rouge{% endtrans %}" />
+        <img src="{{ asset_url }}" width="14" height="19" alt="{% trans %}notes_indicateur_rouge{% endtrans %}" title="{% trans %}notes_indicateur_rouge{% endtrans %}" />
         {% endimage %}
     {% endif %}
 {% else %}
     {% image '@FIANETSceauBundle/Resources/public/images/indicateur-gris.png' %}
-    <img src="{{ asset_url }}" width="15" height="17" alt="{% trans from "notes" %}notes_indicateur_gris{% endtrans %}" title="{% trans from "notes" %}notes_indicateur_gris{% endtrans %}" />
+    <img src="{{ asset_url }}" width="15" height="17" alt="{% trans %}notes_indicateur_gris{% endtrans %}" title="{% trans %}notes_indicateur_gris{% endtrans %}" />
     {% endimage %}
 {% endif %}

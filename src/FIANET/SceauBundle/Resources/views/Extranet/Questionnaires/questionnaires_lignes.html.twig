@@ -18,7 +18,9 @@
                 -
             {% endif %}
         </td>
-        {% if parametrageRecommendation.question_id is not null %}<td>{{ questionnaire.recommendation }} / {{ questionnaire.recommendationValeurMax }}</td>{% endif %}
-        <td></td>
+        {% if parametrageRecommendation.question_id is not null %}<td>{{ questionnaire.recommandation }} / {{ questionnaire.recommandationValeurMax }}</td>{% endif %}
+        <td>
+            <a href="#">Détail</a>
+        </td>
     </tr>
 {% endfor %}
