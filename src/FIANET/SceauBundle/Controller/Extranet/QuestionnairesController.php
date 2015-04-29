@@ -242,7 +242,7 @@ class QuestionnairesController extends Controller
     /**
      * Affiche la page de détail d'un questionnaire (avis)
      *
-     * @Route("/questionnaires/detail-questionnaire/{id}", name="extranet_questionnaires_detail_questionnaire")
+     * @Route("/questionnaires/detail-questionnaire/{id}", requirements={"id" = "\d+"}, name="extranet_questionnaires_detail_questionnaire")
      * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
@@ -258,19 +258,12 @@ class QuestionnairesController extends Controller
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
         
-        $em = $this->getDoctrine()->getManager();
-        
+        if (!$this->get('fianet_sceau.questionnaire_repondu')->coherenceArgumentsDetailsQuestionnaire($site, $id)) {
+            throw new Exception('Questionnaire invalide');
+        }
+
+        $em = $this->getDoctrine()->getManager();        
         $questionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')->find($id);
- 
-        // On vérifie que le questionnaire existe bien
-        if ($questionnaire == null) {
-            throw $this->createNotFoundException("Le questionnaire n'existe pas.");
-        }
-        
-        // On vérifie que le questionnaire appartient bien au site de la session courante ET qu'il est actif
-        if ($questionnaire->getSite()->getId() != $site->getId() || !$questionnaire->getActif()) {
-            throw $this->createNotFoundException("Le questionnaire n'existe pas.");
-        }
         
         // On récupère les informations pour la navigation (questionnaire précédent, questionnaire suivant)
         // La navigation doit se faire :
@@ -322,69 +315,33 @@ class QuestionnairesController extends Controller
     /**
      * Affiche la page avec le formulaire de droit de réponse pour ajout
      * 
-     * @Route("/questionnaires/droit-de-reponse/ajout", name="extranet_questionnaires_droit_de_reponse_ajout")
+     * @Route("/questionnaires/droit-de-reponse/ajout/{qid}/{qrid}", requirements={"qid" = "\d+", "qrid" = "\d+"}, name="extranet_questionnaires_droit_de_reponse_ajout")
      * @Method({"GET", "POST"})
      * 
      * @param Request $request Instance de Request
      *
      * @return Response
+     * 
+     * 
+     * @throws Exception Si on trouve des incohérences dans la vérification des arguments d'appel
      */
-    public function droitDeReponseAjoutAction(Request $request) {
+    public function droitDeReponseAjoutAction(Request $request, $qid, $qrid) {
         
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
         
+        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));        
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
-
-        $em = $this->getDoctrine()->getManager();
-
-        // NOUVEAU : Le droit de réponse peut être exercé sur n'importe quel champ de type commentaire d'un questionnaire
-        // ToDo: on récupèrera l'entité QuestionnaireReponse et non l'id (conversion du paramètre via @ParamConverter)
-        $questionnaireReponse_id = is_numeric($request->request->get('questreponse')) ? $request->request->get('questreponse') : 0;
-        $questionnaireReponse_id = 1; // pour test     
-        if ($questionnaireReponse_id == 0) {
-            throw $this->createNotFoundException("Le commentaire n'existe pas.");
+        
+        if (!$this->get('fianet_sceau.questionnaire_repondu')->coherenceArgumentsDroitDeReponseAjout($site, $qid, $qrid)) {
+            throw new Exception('Ajout de droit de réponse impossible');
         }
         
-        $questionnaireReponse = $em
-                ->getRepository('FIANETSceauBundle:QuestionnaireReponse')
-                ->find($questionnaireReponse_id);        
+        $questionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')->find($qid);
+        $questionnaireReponse = $this->getDoctrine()->getRepository('FIANETSceauBundle:QuestionnaireReponse')->find($qrid);
         
-        // ToDo: on récupèrera l'entité Questionnaire et non l'id (conversion du paramètre via @ParamConverter)        
-        $questionnaire_id = is_numeric($request->request->get('questionnaire')) ? $request->request->get('questionnaire') : 0;
-        $questionnaire_id = 1; // pour test        
-        if ($questionnaire_id == 0) {
-            throw $this->createNotFoundException("Le questionnaire n'existe pas.");
-        }
-
-        $questionnaire = $em
-                ->getRepository('FIANETSceauBundle:Questionnaire')
-                ->find($questionnaire_id);
-        
-        // On vérifie que le questionnaire est bien actif
-        // ToDo : renvoyer sur une page avec un message explicite pour le marchand
-        if ($questionnaire->getActif() !== true) {
-            throw $this->createNotFoundException("Le questionnaire n'existe pas ou plus.");
-        }
-        
-        // On vérifie qu'on a le bon QuestionnaireReponse lié au questionnaire
-        if (!$questionnaire->getQuestionnaireReponses()->contains($questionnaireReponse)) {
-            throw $this->createNotFoundException("Pas de correspondance entre le commentaire et le questionnaire.");
-        }
-        
-        // On vérifie s'il existe déjà un droit de réponse actif pour le commentaire
-        // ToDo : revoir la méthode
-        $nb_DroitDeReponse_Actif = $this->getDoctrine()->getRepository('FIANETSceauBundle:QuestionnaireReponse')
-                ->nbDroitDeReponseActif($questionnaireReponse);
-        if ($nb_DroitDeReponse_Actif > 0) {
-            throw $this->createNotFoundException("Un droit de réponse existe déjà pour ce commentaire.");
-        }
-        
-        // On récupère les informations sur la commande, le membre, le site, le questionnaire répondu
         $infosGeneralesQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                     ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
-        
-        // ToDo : on doit récupérer les informations de satisfaction pour le picto (vert, rouge, jaune, gris) et les transmettre au template
         
         // Construction du formulaire pour le droit de réponse
         $droitDeReponse = new DroitDeReponse();
@@ -399,6 +356,8 @@ class QuestionnairesController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
+        $em = $this->getDoctrine()->getManager();
+        
         // ToDo : il faudra effectuer des checks complets de saisie par la suite (trim, nombre de caractères minimum, mots interdits, mots longs, caractères répétés, etc.)
         if ($form->isValid()) {
             $droitDeReponse->setQuestionnaireReponse($questionnaireReponse);

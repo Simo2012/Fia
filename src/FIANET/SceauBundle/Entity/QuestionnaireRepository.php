@@ -158,6 +158,7 @@ class QuestionnaireRepository extends EntityRepository
                 'm.nom',
                 'm.prenom',
                 'qr_com.commentaire',
+                'qr_com.id AS commentaireID',
                 'qr_ind.note AS indicateurNote',
                 'r_ind.id AS indicateurReponseID'
             )
@@ -216,6 +217,8 @@ class QuestionnaireRepository extends EntityRepository
             $qb->orderBy('q.dateReponse', 'DESC');
         }
 
+        echo $questionnaireType->getParametrage()['commentairePrincipal'];
+        
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
     }
 

@@ -13,7 +13,7 @@
         </td>
         <td>
             {% if questionnaire.commentaire is not empty %}
-                {{ questionnaire.commentaire | truncate(100, true, '') }} {% if  questionnaire.commentaire|length > 100 %}<a href="{{ path('extranet_questionnaires_detail_questionnaire', {'id': questionnaire.id}) }}">[...]</a>{% endif %}<div style="float: right;"><a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout') }}"><-</a></div>
+                {{ questionnaire.commentaire | truncate(100, true, '') }} {% if  questionnaire.commentaire|length > 100 %}<a href="{{ path('extranet_questionnaires_detail_questionnaire', {'id': questionnaire.id}) }}">[...]</a>{% endif %}<div style="float: right;"><a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': questionnaire.commentaireID}) }}"><-</a></div>
             {% else %}
                 -
             {% endif %}

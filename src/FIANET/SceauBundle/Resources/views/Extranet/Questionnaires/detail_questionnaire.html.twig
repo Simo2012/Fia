@@ -63,29 +63,14 @@
     <h1>ToDo_Titre_de_bloc_selon_questionnaire_type_avec_traduction</h1>
     <div class="block-total">
         <div class="block-total-part1-2">
-            <h2>Date de réponse - 01/01/2000 à 00h00 -</h2>
-            <p>De 1 à 10, comment noteriez-vous les différents attributs du site Petite Frimousse ? (10 représente la meilleure note)<br />
-                <span class="color8">8/10</span> - Facilité de recherche et de navigation<br />
-                <span class="color7">7/10</span> - Information sur les produits<br />
-                <span class="color8">8/10</span> - Prix des produits<br />
-                <span class="color10">10/10</span> - Facilité à passer une commande (panier, paiement)<br />
-                <span class="color3">3/10</span> - Prix et options de transport <br />
-                <br />
-                Etes-vous satisfait de la façon dont s'est déroulé votre achat sur ce site ? <span class="color7">Plutôt</span> <br />
-                <br />
-                Votre Avis intéresse les internautes !
-                <br />
-                Pour utiliser votre droit de réponse, <a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout') }}">cliquez ici</a>
-            </p>
-
-            <div>
-                Ici le commentaire de l'internaute
-            </div>
-            <p>Grâce au « Droit de réponse », répondez directement aux remarques de vos clients ! <button><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> Répondez</button></p>
+            {{ include('FIANETSceauBundle:Commun:questionnaire_repondu.html.twig', {'detailsQuestionnaireRepondu': 3 }) }} 
+            <br />
+            <p>Pour utiliser votre droit de réponse, <a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': detailsQuestionnaire[0].id, 'qrid': detailsQuestionnaire[0].id}) }}">cliquez ici</a></p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
+            <br />
+            <p>Grâce au « Droit de réponse », répondez directement aux remarques de vos clients ! <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': detailsQuestionnaire[0].id, 'qrid': detailsQuestionnaire[0].id}) }}' "><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> Répondez</button></p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
         </div>
         
         {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire ET que le questionnaire Q2 n'a pas été répondu dans le cas de questionnaire Q1/Q2 #}
-        
         <div class="block-total-part3">
             <div class="block-info-rep">
                 <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59"/>
@@ -100,7 +85,6 @@
                 <div class="reponse" id="laCharte">{{ 'commun_charte_commercant'|trans|raw }}</div>
             </div>
         </div>
-        
             
     </div>
     {% endif %}
