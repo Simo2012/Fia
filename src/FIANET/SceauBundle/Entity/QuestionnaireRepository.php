@@ -216,8 +216,6 @@ class QuestionnaireRepository extends EntityRepository
         } elseif ($tri == 2) {
             $qb->orderBy('q.dateReponse', 'DESC');
         }
-
-        echo $questionnaireType->getParametrage()['commentairePrincipal'];
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
     }
