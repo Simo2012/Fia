@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Controller\Extranet;
 
 use DateInterval;
 use DateTime;
+use Exception;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
@@ -17,10 +18,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class QuestionnairesController extends Controller
 {
     /**
-     * Affiche la page de listing des questionnaires. Si l'action est appelée via AJAX, elle retourne les questionnaires
-     * par paquet de lignes de tableau (utilisé pour "l'infinite scroll").
+     * Affiche la page de listing des questionnaires. Les questionnaires affichés dépendent des filtres et tris demandés
+     * par l'utilisateur.
      *
-     * @Route("/questionnaires/questionnaires", name="extranet_questionnaires_questionnaires", options={"expose"=true})
+     * @Route("/questionnaires/questionnaires", name="extranet_questionnaires_questionnaires")
      * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
@@ -30,120 +31,138 @@ class QuestionnairesController extends Controller
     public function questionnairesAction(Request $request)
     {
         $nbQuestionnairesMax = $this->container->getParameter('nb_questionnaires_max');
-        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
 
-        /* Requête classique */
-        if (!$request->isXmlHttpRequest()) {
-            $menu = $this->get('fianet_sceau.extranet.menu');
-            $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
+        $menu = $this->get('fianet_sceau.extranet.menu');
+        $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
 
-            $form = $this->createForm(new QuestionnairesListeType(), null);
-            $form->handleRequest($request);
+        $form = $this->createForm(new QuestionnairesListeType(), null);
+        $form->handleRequest($request);
 
-            if (!$form->isSubmitted()) {
-                /* Affichage de la page sans soumission du formulaire : on récupère les éventuels paramètres de
-                recherche sauvegardés dans les cookies. */
-                $tri = 2;
-                $dateDebut = $request->cookies->get('questionnaires_dateDebut');
-                $form->get('dateDebut')->setData($dateDebut);
-                $dateFin = $request->cookies->get('questionnaires_dateFin');
-                $form->get('dateFin')->setData($dateFin);
-                $indicateurs = ($request->cookies->get('questionnaires_indicateurs')) ?
-                    explode('-', $request->cookies->get('questionnaires_indicateurs')) : array();
-                $form->get('indicateurs')->setData($indicateurs);
-                $recherche = $request->cookies->get('questionnaires_recherche');
-                $form->get('recherche')->setData($recherche);
-                $litige = $request->cookies->get('questionnaires_litige') ? true : null;
-                $form->get('litige')->setData($litige);
-                $retenir = false;
-
-            } else {
-                /* Soumission du formulaire */
-                $donneesForm = $form->getData();
-                $tri = is_numeric($donneesForm['tri']) ? $donneesForm['tri'] : 2;
-                $dateDebut = (isset($donneesForm['dateDebut'])) ? $donneesForm['dateDebut'] : '';
-                $dateFin = (isset($donneesForm['dateFin'])) ? $donneesForm['dateFin'] : '';
-                $indicateurs = (isset($donneesForm['indicateurs'])) ? $donneesForm['indicateurs'] : array();
-                $recherche = (isset($donneesForm['recherche'])) ? $donneesForm['recherche'] : '';
-                $litige = $donneesForm['litige'] ? true : null;
-                $retenir = $donneesForm['retenir'];
-            }
-
-            if (!$form->isSubmitted() || ($form->isSubmitted() && $form->isValid())) {
-                /* Affichage de la page sans soumission du formulaire ou formulaire soumis et valide */
-
-                $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
-                    ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
-
-                $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                    ->nbTotalQuestionnaires(
-                        $site,
-                        $questionnaireType,
-                        $dateDebut,
-                        $dateFin,
-                        $recherche,
-                        $listeReponsesIndicateurs
-                    );
-
-                $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                    ->listeQuestionnaires(
-                        $site,
-                        $questionnaireType,
-                        $dateDebut,
-                        $dateFin,
-                        $recherche,
-                        $listeReponsesIndicateurs,
-                        0,
-                        $nbQuestionnairesMax,
-                        $tri
-                    );
-            } else {
-                /* Formulaire soumis et non valide */
-                $nbTotalQuestionnaires = 0;
-                $questionnaires = array();
-            }
-
-            $reponse =  $this->render(
-                'FIANETSceauBundle:Extranet/Questionnaires:questionnaires.html.twig',
-                array(
-                    'nbTotalQuestionnaires' => $nbTotalQuestionnaires,
-                    'questionnaires' => $questionnaires,
-                    'nbQuestionnairesMax' => $nbQuestionnairesMax,
-                    'form' => $form->createView(),
-                    'offset' => 0,
-                    'dateDebut' => $dateDebut,
-                    'dateFin' => $dateFin,
-                    'tri' => $tri,
-                    'recherche' => $recherche,
-                    'indicateurs' => implode('-', $indicateurs),
-                    'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
-                    'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation']
-                )
-            );
-
-            /* Sauvegarde des paramètres de recherche */
-            if ($retenir) {
-                $dateExpiration = new DateTime();
-                $dateExpiration->add(new DateInterval('P6M'));
-
-                $reponse->headers->setCookie(new Cookie('questionnaires_dateDebut', $dateDebut, $dateExpiration));
-                $reponse->headers->setCookie(new Cookie('questionnaires_dateFin', $dateFin, $dateExpiration));
-                $reponse->headers->setCookie(
-                    new Cookie(
-                        'questionnaires_indicateurs',
-                        implode('-', $indicateurs),
-                        $dateExpiration
-                    )
-                );
-                $reponse->headers->setCookie(new Cookie('questionnaires_recherche', $recherche, $dateExpiration));
-                $reponse->headers->setCookie(new Cookie('questionnaires_litige', $litige, $dateExpiration));
-            }
-
-            return $reponse;
+        if (!$form->isSubmitted()) {
+            /* Affichage de la page sans soumission du formulaire : on récupère les éventuels paramètres de
+            recherche sauvegardés dans les cookies. */
+            $tri = 2;
+            $dateDebut = $request->cookies->get('questionnaires_dateDebut');
+            $form->get('dateDebut')->setData($dateDebut);
+            $dateFin = $request->cookies->get('questionnaires_dateFin');
+            $form->get('dateFin')->setData($dateFin);
+            $indicateurs = ($request->cookies->get('questionnaires_indicateurs')) ?
+                explode('-', $request->cookies->get('questionnaires_indicateurs')) : array();
+            $form->get('indicateurs')->setData($indicateurs);
+            $recherche = $request->cookies->get('questionnaires_recherche');
+            $form->get('recherche')->setData($recherche);
+            $litige = $request->cookies->get('questionnaires_litige') ? true : null;
+            $form->get('litige')->setData($litige);
+            $retenir = false;
 
         } else {
-            /* Requête AJAX */
+            /* Soumission du formulaire */
+            $donneesForm = $form->getData();
+            $tri = is_numeric($donneesForm['tri']) ? $donneesForm['tri'] : 2;
+            $dateDebut = (isset($donneesForm['dateDebut'])) ? $donneesForm['dateDebut'] : '';
+            $dateFin = (isset($donneesForm['dateFin'])) ? $donneesForm['dateFin'] : '';
+            $indicateurs = (isset($donneesForm['indicateurs'])) ? $donneesForm['indicateurs'] : array();
+            $recherche = (isset($donneesForm['recherche'])) ? $donneesForm['recherche'] : '';
+            $litige = $donneesForm['litige'] ? true : null;
+            $retenir = $donneesForm['retenir'];
+        }
+
+        if (!$form->isSubmitted() || ($form->isSubmitted() && $form->isValid())) {
+            /* Affichage de la page sans soumission du formulaire ou formulaire soumis et valide */
+
+            $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+
+            $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
+                ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
+
+            $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                ->nbTotalQuestionnaires(
+                    $site,
+                    $questionnaireType,
+                    $dateDebut,
+                    $dateFin,
+                    $recherche,
+                    $listeReponsesIndicateurs
+                );
+
+            $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                ->listeQuestionnaires(
+                    $site,
+                    $questionnaireType,
+                    $dateDebut,
+                    $dateFin,
+                    $recherche,
+                    $listeReponsesIndicateurs,
+                    0,
+                    $nbQuestionnairesMax,
+                    $tri
+                );
+        } else {
+            /* Formulaire soumis et non valide */
+            $nbTotalQuestionnaires = 0;
+            $questionnaires = array();
+        }
+
+        $reponse =  $this->render(
+            'FIANETSceauBundle:Extranet/Questionnaires:questionnaires.html.twig',
+            array(
+                'nbTotalQuestionnaires' => $nbTotalQuestionnaires,
+                'questionnaires' => $questionnaires,
+                'nbQuestionnairesMax' => $nbQuestionnairesMax,
+                'form' => $form->createView(),
+                'offset' => 0,
+                'dateDebut' => $dateDebut,
+                'dateFin' => $dateFin,
+                'tri' => $tri,
+                'recherche' => $recherche,
+                'indicateurs' => implode('-', $indicateurs),
+                'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
+                'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation'],
+                'parametrageLibelleCommandeDate' => $questionnaireType->getParametrage()['libelleCommandeDate'],
+                'parametrageLivraison' => $questionnaireType->getParametrage()['livraison']
+            )
+        );
+
+        /* Sauvegarde des paramètres de recherche */
+        if ($retenir) {
+            $dateExpiration = new DateTime();
+            $dateExpiration->add(new DateInterval('P6M'));
+
+            $reponse->headers->setCookie(new Cookie('questionnaires_dateDebut', $dateDebut, $dateExpiration));
+            $reponse->headers->setCookie(new Cookie('questionnaires_dateFin', $dateFin, $dateExpiration));
+            $reponse->headers->setCookie(
+                new Cookie(
+                    'questionnaires_indicateurs',
+                    implode('-', $indicateurs),
+                    $dateExpiration
+                )
+            );
+            $reponse->headers->setCookie(new Cookie('questionnaires_recherche', $recherche, $dateExpiration));
+            $reponse->headers->setCookie(new Cookie('questionnaires_litige', $litige, $dateExpiration));
+        }
+
+        return $reponse;
+    }
+
+    /**
+     * Action appelable uniquement via AJAX. Elle retourne les questionnaires par paquet de lignes de tableau en
+     * fonction des filtres demandés (utilisé pour le scroll infini).
+     *
+     * @Route("/questionnaires/questionnaires_ajax", name="extranet_questionnaires_questionnaires_ajax",
+     *     options={"expose"=true})
+     * @Method({"POST"})
+     *
+     * @param Request $request Instance de Request
+     *
+     * @return Response Instance de Response
+     *
+     * @throws Exception Si l'action n'est pas appelée en AJAX
+     */
+    public function questionnairesAjaxAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
             $indicateurs = ($request->request->get('indicateurs')) ? $request->request->get('indicateurs') : array();
 
             $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
@@ -151,7 +170,7 @@ class QuestionnairesController extends Controller
 
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->listeQuestionnaires(
-                    $site,
+                    $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne')),
                     $questionnaireType,
                     $request->request->get('dateDebut'),
                     $request->request->get('dateFin'),
@@ -171,6 +190,14 @@ class QuestionnairesController extends Controller
                     'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation']
                 )
             );
+
+        } else {
+            throw new Exception($this->get('translator')->trans(
+                'erreurs_mauvaise_methode_appel',
+                array(),
+                'erreurs',
+                $request->getLocale()
+            ));
         }
     }
 

@@ -14,7 +14,7 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, 
 
                 $('#chargement').fadeIn(400);
 
-                $.post(Routing.generate('extranet_questionnaires_questionnaires', null, true),
+                $.post(Routing.generate('extranet_questionnaires_questionnaires_ajax', null, true),
                     {
                         offset: offset,
                         dateDebut: dateDebut,
@@ -57,4 +57,8 @@ function selectIndicateur(numIndicateur, imageIndicateur) {
         imageIndicateur.className = 'indicateur-selectionne';
         checkbox.checked = true;
     }
+}
+
+function decocherRetenir() {
+    document.getElementById('questionnaires_liste_retenir').checked = false;
 }

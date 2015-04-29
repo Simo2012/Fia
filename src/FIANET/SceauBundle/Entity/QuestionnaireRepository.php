@@ -148,9 +148,10 @@ class QuestionnaireRepository extends EntityRepository
         $premierQuestionnaire,
         $nbQuestionnaires,
         $tri
-    ) {   
+    ) {
         $qb = $this->createQueryBuilder('q')
             ->select(
+                'q.id',
                 'q.email',
                 'q.dateReponse',
                 'c.date AS dateCommande',
