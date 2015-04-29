@@ -60,7 +60,25 @@
             </trans-unit>
             <trans-unit id="15">
                 <source>commun_charte_commercant</source>
-                <target>Welcome to Seal Charter FIA-NET Confidence! This Charter aims to present good practices for managing your clients questionnaires. The comment moderation requests or delete erroneous questionnaires are sent to FIA-NET via the extranet partner. The removal of questionnaires and your customers erroneous comments are processed by FIA-NET, which decides how to respond to the request. Comment deletion is an exceptional measure. It is highly recommended to partner resort to the use of his right of reply for clarification or specific details on the situation ascent by the user. The partner must always bear in mind that his explanations are primarily intended for users.  1 - The partner agrees not to meet the satisfaction questionnaires FIA-NET partners, officers of the company, members of the immediate family (spouse, ascendants and direct descendants), the company's staff and if any of the parent company or its subsidiaries;2 - The partner is invited to use the courtesy and accuracy Response Law to meet the buyers' comments; 3 - The partner must never include any personal data (eg name, last name of his client, etc.) in its response; 4 - The partner agrees to respect the graphic charter of Trust Logo namely to post good FIA-NET logo and the widget on their website. The partner will be informed in advance of any changes that occur in this Charter.</target>
+                <target>
+                    <![CDATA[
+                        <div class="charte-commercant">
+                            <p class="bold">Welcome to Seal Charter FIA-NET Confidence!</p>
+                            <p>This Charter aims to present good practices for managing your clients questionnaires.</p>
+                            <p>The comment moderation requests or delete erroneous questionnaires are sent to FIA-NET via the extranet partner.</p>
+                            <p>The removal of questionnaires and your customers erroneous comments are processed by FIA-NET, which decides how to respond to the request.</p>
+                            <p>Comment deletion is an exceptional measure. It is highly recommended to partner resort to the use of his right of reply for clarification or specific details on the situation ascent by the user.</p>
+                            <p>The partner must always bear in mind that his explanations are primarily intended for users.</p>
+                            <ol>
+                                    <li>The partner agrees not to meet the satisfaction questionnaires FIA-NET partners, officers of the company, members of the immediate family (spouse, ascendants and direct descendants), the company's staff and if any of the parent company or its subsidiaries ;</li>
+                                    <li>The partner is invited to use the courtesy and accuracy Response Law to meet the buyers' comments ;</li>
+                                    <li>The partner must never include any personal data (eg name, last name of his client, etc.) in its response ;</li>
+                                    <li>The partner agrees to respect the graphic charter of Trust Logo namely to post good FIA-NET logo and the widget on their website.</li>
+                            </ol>
+                            <p>The partner will be informed in advance of any changes that occur in this Charter.</p>
+                        </div>
+                    ]]>                    
+                </target>
             </trans-unit>  
             <trans-unit id="16">
                 <source>commun_formulaire_invalide</source>
@@ -89,7 +107,59 @@
            <trans-unit id="22">
                 <source>commun_details</source>
                 <target>Details</target>
+            </trans-unit>            
+            <trans-unit id="23">
+                <source>commun_detail_de_questionnaire</source>
+                <target>Detail of a questionnaire</target>
             </trans-unit>
+            <trans-unit id="24">
+                <source>commun_avis_de</source>
+                <target>Review from</target>
+            </trans-unit> 
+            <trans-unit id="25">
+                <source>commun_du</source>
+                <target>of</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>commun_commande_numero</source>
+                <target>Order number</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>commun_questionnaires</source>
+                <target>Questionnaires</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>commun_questionnaire_envoye_par</source>
+                <target>Questionnaire sent by</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>commun_commande_email</source>
+                <target>E-mail</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>commun_membre_pseudo</source>
+                <target>Pseudonym</target>
+            </trans-unit>              
+            <trans-unit id="31">
+                <source>commun_questionnaire_repondu</source>
+                <target>Answered questionnaire</target>
+            </trans-unit> 
+            <trans-unit id="32">
+                <source>commun_questionnaire_q1_produit</source>
+                <target>Questionnaire before delivery</target>
+            </trans-unit>  
+            <trans-unit id="33">
+                <source>commun_questionnaire_q2_produit</source>
+                <target>Questionnaire after delivery</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>commun_questionnaire_q1_service</source>
+                <target>Questionnaire after booking online</target>
+            </trans-unit>  
+            <trans-unit id="35">
+                <source>commun_questionnaire_q2_service</source>
+                <target>Questionnaire from the use of the service</target>
+            </trans-unit>                                                                                                                                                                   
         </body>
     </file>
 </xliff>

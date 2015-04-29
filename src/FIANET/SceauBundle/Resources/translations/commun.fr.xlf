@@ -52,7 +52,7 @@
             </trans-unit>
             <trans-unit id="13">
                 <source>commun_droit_de_reponse_informations</source>
-                <target>Merci de ne pas publier les noms et prénoms des internautes depuis notre interface. Le droit de réponse n'est pas destiné à remercier vos clients d'avoir participé aux questionnaires de satisfaction FIA-NET. Nous vous conseillons d'utiliser le droit de réponse comme une explication à un avis posté et non comme un remerciement global de participation. Si vous souhaitez remercier vos clients de leur participation, nous vous invitons à leur envoyer un e-mail.</target>
+                <target>Merci de ne pas publier les noms et prénoms des internautes depuis notre interface.Le droit de réponse n'est pas destiné à remercier vos clients d'avoir participé aux questionnaires de satisfaction FIA-NET. Nous vous conseillons d'utiliser le droit de réponse comme une explication à un avis posté et non comme un remerciement global de participation. Si vous souhaitez remercier vos clients de leur participation, nous vous invitons à leur envoyer un e-mail.</target>
             </trans-unit>
             <trans-unit id="14">
                 <source>commun_valider</source>
@@ -60,7 +60,25 @@
             </trans-unit>
             <trans-unit id="15">
                 <source>commun_charte_commercant</source>
-                <target>Bienvenue sur la Charte Sceau de Confiance FIA-NET !Cette charte a pour objectif de présenter les bonnes pratiques pour la gestion des questionnaires de vos clients. Les demandes de modération de commentaire ou de suppression de questionnaires erronés sont adressées à FIA-NET via l'extranet du partenaire. La suppression des questionnaires et des commentaires erronés de vos clients sont traités par FIA-NET, qui décide seule de la réponse à apporter à la demande. La suppression du commentaire est une mesure exceptionnelle. Il est vivement conseillé au partenaire de recourir à l'usage de son droit de réponse pour apporter des éclaircissements ou des précisions spécifiques sur la situation remontée par l'internaute. Le partenaire doit toujours avoir à l'esprit que ses explications sont d'abord destinées aux internautes. 1 - Le partenaire s'engage à ne pas faire répondre aux questionnaires de satisfaction FIA-NET les associés, mandataires sociaux de la société, les membres de sa famille proche (conjoints, ascendants directs et descendants directs), le personnel de la société et le cas échéant de la société mère ou de ses filiales ;2 - Le partenaire est invité à utiliser le Droit de Réponse avec courtoisie et précision pour répondre aux commentaires des acheteurs ; 3 - Le partenaire ne doit jamais inclure de données personnelles (par ex : nom, prénom de son client, etc.) dans sa réponse ;4 - Le partenaire s'engage à respecter la charte graphique du Sceau de Confiance notamment par l'affichage du bon logo FIA-NET et du widget sur son site internet. Le partenaire sera informé au préalable de toute modification qui surviendrait à la présente charte. </target>
+                <target>
+                    <![CDATA[
+                        <div class="charte-commercant">
+                            <p class="bold">Bienvenue sur la Charte Sceau de Confiance FIA-NET !</p>
+                            <p>Cette charte a pour objectif de présenter les bonnes pratiques pour la gestion des questionnaires de vos clients.</p>
+                            <p>Les demandes de modération de commentaire ou de suppression de questionnaires erronés sont adressées à FIA-NET via l'extranet du partenaire.</p>
+                            <p>La suppression des questionnaires et des commentaires erronés de vos clients sont traités par FIA-NET, qui décide seule de la réponse à apporter à la demande.</p>
+                            <p>La suppression du commentaire est une mesure exceptionnelle. Il est vivement conseillé au partenaire de recourir à l'usage de son droit de réponse pour apporter des éclaircissements ou des précisions spécifiques sur la situation remontée par l'internaute.</p>
+                            <p>Le partenaire doit toujours avoir à l'esprit que ses explications sont d'abord destinées aux internautes.</p>
+                            <ol>
+                                <li>Le partenaire s'engage à ne pas faire répondre aux questionnaires de satisfaction FIA-NET les associés, mandataires sociaux de la société, les membres de sa famille proche (conjoints, ascendants directs et descendants directs), le personnel de la société et le cas échéant de la société mère ou de ses filiales ;</li>
+                                <li>Le partenaire est invité à utiliser le Droit de Réponse avec courtoisie et précision pour répondre aux commentaires des acheteurs ;</li>
+                                <li>Le partenaire ne doit jamais inclure de données personnelles (par ex : nom, prénom de son client, etc.) dans sa réponse ;</li>
+                                <li>Le partenaire s'engage à respecter la charte graphique du Sceau de Confiance notamment par l'affichage du bon logo FIA-NET et du widget sur son site internet.</li>
+                            </ol>
+                            <p>Le partenaire sera informé au préalable de toute modification qui surviendrait à la présente charte.</p>
+                        </div>
+                    ]]>
+            </target>
             </trans-unit>
             <trans-unit id="16">
                 <source>commun_formulaire_invalide</source>
@@ -90,6 +108,58 @@
                 <source>commun_details</source>
                 <target>Détails</target>
             </trans-unit>
+            <trans-unit id="23">
+                <source>commun_detail_de_questionnaire</source>
+                <target>Détail d'un questionnaire</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>commun_avis_de</source>
+                <target>Avis de</target>
+            </trans-unit>    
+            <trans-unit id="25">
+                <source>commun_du</source>
+                <target>du</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>commun_commande_numero</source>
+                <target>Numéro de commande</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>commun_questionnaires</source>
+                <target>Questionnaires</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>commun_questionnaire_envoye_par</source>
+                <target>Questionnaire envoyé par</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>commun_commande_email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>commun_membre_pseudo</source>
+                <target>Pseudonyme</target>
+            </trans-unit>             
+            <trans-unit id="31">
+                <source>commun_questionnaire_repondu</source>
+                <target>Questionnaire répondu</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>commun_questionnaire_q1_produit</source>
+                <target>Questionnaire suite à la commande</target>
+            </trans-unit>  
+            <trans-unit id="33">
+                <source>commun_questionnaire_q2_produit</source>
+                <target>Questionnaire suite à la livraison</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>commun_questionnaire_q1_service</source>
+                <target>Questionnaire suite à la réservation en ligne</target>
+            </trans-unit>  
+            <trans-unit id="35">
+                <source>commun_questionnaire_q2_service</source>
+                <target>Questionnaire suite à l'utilisation du service</target>
+            </trans-unit>                                                                     
         </body>
     </file>
 </xliff>

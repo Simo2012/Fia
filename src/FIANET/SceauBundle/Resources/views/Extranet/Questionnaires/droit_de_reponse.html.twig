@@ -31,29 +31,32 @@
     {% if questionnaireReponse is not null %} 
         {% if questionnaireReponse.commentaire is not empty %}    
     
-            {% for infoQuestionnaire in infosGeneralesQuestionnaire %}
-                {% if infoQuestionnaire.commande is not null %}
-                <h2>{{ 'commun_commande_informations'|trans }} {% if infoQuestionnaire.commande.reference is not empty %}{{ infoQuestionnaire.commande.reference }}{% endif %}</h2>
+            {% if infosGeneralesQuestionnaire[0] is not null %}
+                {% if infosGeneralesQuestionnaire[0].commande is not null %}
+                <h2>{{ 'commun_commande_informations'|trans }} {% if infosGeneralesQuestionnaire[0].commande.reference is not empty %}{{ infosGeneralesQuestionnaire[0].commande.reference }}{% endif %}</h2>
 
-                <br />{% if infoQuestionnaire.commande.prenom is not empty %}{% if infoQuestionnaire.commande.prenom is not empty %}{{ infoQuestionnaire.commande.prenom |capitalize }}{% endif %} {% if infoQuestionnaire.commande.nom is not empty %}{{ infoQuestionnaire.commande.nom |upper }}{% endif %}{% endif %}
-                <br />{% if infoQuestionnaire.commande.email is not empty %}{{ infoQuestionnaire.commande.email }}{% endif %} {% if infoQuestionnaire.commande.montant is not empty %}{{ 'commun_commande_montant'|trans }} : {{ infoQuestionnaire.commande.montant }} &euro;  {% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
-                <br />{% if infoQuestionnaire.commande.date is not empty %}{{ 'commun_commande_date'|trans }} : {{ infoQuestionnaire.commande.date|date('d/m/Y \\à H\\hi') }}{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
-                    {% if infoQuestionnaire.site is not null %}
-                        {% if infoQuestionnaire.site.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infoQuestionnaire.site.nom }} {% endif %}
+                <br />{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.prenom |capitalize }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.nom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.nom |upper }}{% endif %}{% endif %}
+                <br />{% if infosGeneralesQuestionnaire[0].commande.email is not empty %}{{ infosGeneralesQuestionnaire[0].commande.email }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.montant is not empty %}{{ 'commun_commande_montant'|trans }} : {{ infosGeneralesQuestionnaire[0].commande.montant }} &euro;  {% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
+                <br />{% if infosGeneralesQuestionnaire[0].commande.date is not empty %}{{ 'commun_commande_date'|trans }} : {{ infosGeneralesQuestionnaire[0].commande.date|date('d/m/Y \\à H\\hi') }}{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
+                    {% if infosGeneralesQuestionnaire[0].site is not null %}
+                        {% if infosGeneralesQuestionnaire[0].site.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infosGeneralesQuestionnaire[0].site.nom }} {% endif %}
                     {% endif %}
-                    {% if infoQuestionnaire.sousSite is not null %}
-                        - {% if infoQuestionnaire.sousSite.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infoQuestionnaire.sousSite.nom }} {% endif %}
+                    {% if infosGeneralesQuestionnaire[0].sousSite is not null %}
+                        - {% if infosGeneralesQuestionnaire[0].sousSite.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infosGeneralesQuestionnaire[0].sousSite.nom }} {% endif %}
                     {% endif %}            
                 {% endif %}
 
                 <h2>{{ 'commun_questionnaire_commentaire'|trans }}</h2>
-                <p>ToDo_v__picto_satisfaction {% if infoQuestionnaire.membre.pseudo is not empty %}{{ infoQuestionnaire.membre.pseudo }}{% endif %} - {{ infoQuestionnaire.dateReponse|date("\\L\\e d/m/Y \\à H\\hi") }}</p>
-                <p>{{ questionnaireReponse.commentaire }}</p>         
-            {% endfor %}
+                <p>
+                     {{ include('FIANETSceauBundle:Extranet/Commun:indicateur.html.twig', {'indicateurReponseID': infosGeneralesQuestionnaire[0].questionnaireReponses[0].reponse.id, 'indicateurNote': null}) }} 
+                    
+                    {% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|date("\\L\\e d/m/Y \\à H\\hi") }}</p>
+                <p>{{ questionnaireReponse.commentaire }}</p>
+            {% endif %}
 
             <h2>{{ 'commun_droit_de_reponse'|trans }} ({{ nbCaracteresMax }} {{ 'commun_nb_caracteres_max'|trans }})</h2>
             <p>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</p>
-            <p id="laCharte">{{ 'commun_charte_commercant'|trans }}</p>
+            <div id="laCharte">{{ 'commun_charte_commercant'|trans|raw}}</div>
 
             {# ToDo : il faudra gérer les divers affichages de formulaire pour lot de modération de contenu abusif #}
             {# ToDo : on doit gérer le contenu du textarea selon la présence ou pas d'un droit de réponse actif pour une question de type commentaire #}    

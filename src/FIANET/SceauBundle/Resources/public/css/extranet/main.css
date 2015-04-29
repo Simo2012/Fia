@@ -135,7 +135,7 @@ button:hover, button:active, .button:hover, .button:active {
 }
 
 .msgRouge {
-  color:#cc0000;
+    color:#cc0000;
 }
 
 .pointeur {
@@ -198,6 +198,11 @@ h1 {
     color: #323744;
     margin-left: 18px;
     text-align: left;
+    overflow: hidden;
+}
+
+h1 span {
+    float: right;
 }
 
 h2 {
@@ -223,15 +228,88 @@ h2 {
     line-height: 20px;
 }
 
-.block-total-part2 {
+.block-total-part2, .block-total-part3b {
     float: left;
     text-align: left;
     font-size: 11px;
     line-height: 20px;
+    width: 33%;
 }
 
 .block-total-part3 {
     float: right;
+}
+
+.block-total-part1-2 {
+    float: left;
+}
+.block-total-part1-2 p {
+    float: left;
+    text-align: left;
+    font-size: 11px;
+    margin-left: 10px;
+}
+.block-total-part1-2 p span {
+    margin-left: 10px;
+}
+span.color1 {
+    color: #e00f2e;
+    font-weight: bold;
+}
+span.color2 {
+    color: #e32f20;
+    font-weight: bold;
+}
+span.color3 {
+    color: #e2460d;
+    font-weight: bold;
+}
+span.color4 {
+    color: #ea6b0a;
+    font-weight: bold;
+}
+span.color5 {
+    color: #ef8901;
+    font-weight: bold;
+}
+span.color6 {
+    color: #ce8e00;
+    font-weight: bold;
+}
+span.color7 {
+    color: #b49813;
+    font-weight: bold;
+}
+span.color8 {
+    color: #999e1e;
+    font-weight: bold;
+}
+span.color9 {
+    color: #7ca428;
+    font-weight: bold;
+}
+span.color10 {
+    color: #61ab30;
+    font-weight: bold;
+}
+.block-total-part1-2 ul {
+    float: left;
+    padding-top: 20px;
+}
+.block-total-part1-2 ul li {
+    float: left;
+    list-style-type: none;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.block-total-part1-2 ul li img {
+    margin-top: 30px;
+}
+.block-total-part1-2 ul li.arrow img {
+    margin-top: 75px;
 }
 
 .block-demi {
@@ -254,8 +332,9 @@ dd {
     float: left;
     text-align: left;
     font-size: 11px;
+    margin: 0;
     padding: 0;
-    margin: 0 0 0 10px;
+    margin-left: 10px;
 }
 
 dt {
@@ -264,7 +343,8 @@ dt {
     font-size: 11px;
     font-weight: bold;
     margin: 0;
-    padding: 0 0 0 5px;
+    padding: 0;
+    padding-left: 5px;
 }
 
 hr {
@@ -276,8 +356,9 @@ hr {
 }
 
 .block-total-part2 input[type=checkbox] {
+    margin: 0;
     padding: 0;
-    margin: 0 0 0 10px;
+    margin-left: 10px;
 }
 
 .block-NL {
@@ -341,6 +422,47 @@ table.gen td div {
     margin-left: 10px;
     margin-right: 10px;
     line-height: 30px;
+}
+
+.block-info-comp {
+	width: 330px;
+	background-color: #e7e4e4;
+	text-align: left;
+	overflow: hidden;
+}
+.block-info-comp p {
+	float: left;
+	width: 306px;
+	font-size: 11px;
+	margin: 0;
+	padding: 0;
+	margin-left: 12px;
+	margin-top: 12px;
+	margin-right: 12px;
+	margin-bottom: 12px;
+}
+.block-info-rep {
+	width: 425px;
+	background-color: #e7e4e4;
+	text-align: left;
+	overflow: hidden;
+}
+.block-info-rep p.reponse {
+	float: right;
+	width: 280px;
+	font-size: 11px;
+	margin: 0;
+	padding: 0;
+	margin-left: 12px;
+	margin-top: 12px;
+	margin-right: 12px;
+	margin-bottom: 12px;
+}
+.btn-droit-reponse {
+	float: left;
+	margin-left: 15px;
+	margin-top: 30px;
+	text-align: center;
 }
 
 /**************************************** DETAILS HEADER ****************************************/
@@ -434,4 +556,11 @@ footer #DIVdate {
     float: right;
     margin-right: 13px;
     padding-right: 13px;
+}
+
+/**************************************** *********************************************/
+
+.charte-commercant {
+    text-align: justify;
+    width: 95%;
 }

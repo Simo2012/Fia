@@ -213,6 +213,86 @@ class QuestionnairesController extends Controller
     }
     
     /**
+     * Affiche la page de détail d'un questionnaire (avis)
+     *
+     * @Route("/questionnaires/detail-questionnaire/{id}", name="extranet_questionnaires_detail_questionnaire")
+     * @Method({"GET", "POST"})
+     *
+     * @param Request $request Instance de Request
+     * @param Integer $id Identifiant du type de questionnaire
+     *
+     * @return Response Instance de Response
+     */
+    public function detailQuestionnaireAction(Request $request, $id)
+    {
+        $menu = $this->get('fianet_sceau.extranet.menu');
+        $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
+        
+        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+        $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $questionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')->find($id);
+ 
+        // On vérifie que le questionnaire existe bien
+        if ($questionnaire == null) {
+            throw $this->createNotFoundException("Le questionnaire n'existe pas.");
+        }
+        
+        // On vérifie que le questionnaire appartient bien au site de la session courante ET qu'il est actif
+        if ($questionnaire->getSite()->getId() != $site->getId() || !$questionnaire->getActif()) {
+            throw $this->createNotFoundException("Le questionnaire n'existe pas.");
+        }
+        
+        // On récupère les informations pour la navigation (questionnaire précédent, questionnaire suivant)
+        // La navigation doit se faire :
+        //  - selon le filtrage qu'il y a eu sur la page de listing de questionnaire + selon la date de réponse au questionnaire
+        //  - OU s'il n'y a pas de filtre, uniquement selon la date de réponse au questionnaire
+        
+        // -> appel de la méthode récupérant le questionnaire précédent selon les règles ci-dessus
+        
+        // -> appel de la méthode récupérant le questionnaire suivant selon les règles ci-dessus
+        
+        // On récupère toutes les informations générales liées au questionnaire
+        $infosGeneralesQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
+        
+        // On récupère toutes les informations liées au questionnaire répondu
+        // 1. Gestion des blocs selon le type du questionnaire (1 ou 2 blocs)
+        // 2. Gestion des titres de bloc selon le type du questionnaire (attention: traductibles)
+        // 3. Récupération des questions et réponses (questions communes, questions personnalisées, etc.)
+        
+        // ToDo : méthode à créer pour récupérer les infos et modifier l'appel ci-dessous
+        $detailsQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
+        
+        // On regarde le type de questionnaire, s'il s'agit d'un Q2 on va devoir chercher les infos du Q2 s'il a été répondu
+        if ($questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant()) {
+            
+            // ToDo : méthode à créer pour récupérer les infos et modifier l'appel ci-dessous
+            $detailsQuestionnaireSuivant = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
+            // ToDo : la méthode doit permettre de retourner les informations suivantes :
+            //          - si le Q2 n'a pas encore été envoyé : mettre la date de prévision d'envoi "Ce questionnaire n'a pas encore été, ou n'a pu être, envoyé à l'internaute. Envoi prévu pour le 07/05/2015"
+            //          - si le Q2 a été envoyé mais non répondu : mettre l'information du style "Ce questionnaire a été envoyé le 14/04/2015, mais l'internaute n'y a pas encore répondu."
+            //          - si le Q2 a été répondu : toutes les informations du questionnaire répondu
+        } else {
+            $detailsQuestionnaireSuivant = NULL;
+        }
+        
+        return $this->render(
+            'FIANETSceauBundle:Extranet/Questionnaires:detail_questionnaire.html.twig', array(
+                'infosGeneralesQuestionnaire' => $infosGeneralesQuestionnaire,
+                'detailsQuestionnaire' => $detailsQuestionnaire,
+                'detailsQuestionnaireSuivant' => $detailsQuestionnaireSuivant,
+                'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur']
+            )
+        );
+        
+    }    
+    
+    /**
      * Affiche la page avec le formulaire de droit de réponse pour ajout
      * 
      * @Route("/questionnaires/droit-de-reponse/ajout", name="extranet_questionnaires_droit_de_reponse_ajout")
@@ -226,6 +306,8 @@ class QuestionnairesController extends Controller
         
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
+        
+        $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
 
         $em = $this->getDoctrine()->getManager();
 
@@ -273,7 +355,7 @@ class QuestionnairesController extends Controller
         
         // On récupère les informations sur la commande, le membre, le site, le questionnaire répondu
         $infosGeneralesQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                    ->infosGeneralesQuestionnaire($questionnaire);
+                    ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
         
         // ToDo : on doit récupérer les informations de satisfaction pour le picto (vert, rouge, jaune, gris) et les transmettre au template
         
@@ -285,7 +367,7 @@ class QuestionnairesController extends Controller
                 ->add('commentaire', 'textarea', array(
                     'trim' => true))
                 ->add('valider', 'submit')      
-        ; // 'allow_extra_fields' => true
+        ;
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
@@ -311,7 +393,8 @@ class QuestionnairesController extends Controller
                 'nbCaracteresMax' => $this->container->getParameter('nb_caracteres_max_droit_de_reponse'),
                 'form' => $form->createView(),
                 'infosGeneralesQuestionnaire' => $infosGeneralesQuestionnaire,
-                'questionnaireReponse' => $questionnaireReponse
+                'questionnaireReponse' => $questionnaireReponse,
+                'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur']
             )
         );
     }

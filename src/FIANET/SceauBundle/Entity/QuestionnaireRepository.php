@@ -148,7 +148,7 @@ class QuestionnaireRepository extends EntityRepository
         $premierQuestionnaire,
         $nbQuestionnaires,
         $tri
-    ) {
+    ) {   
         $qb = $this->createQueryBuilder('q')
             ->select(
                 'q.email',
@@ -220,38 +220,40 @@ class QuestionnaireRepository extends EntityRepository
 
     /**
      * Retourne les informations liées au questionnaire répondu (informations sur la commande, le membre, le site,
-     * le questionnaire répondu)
+     * le questionnaire répondu, l'indicateur de satisfaction )
      *
      * @param Questionnaire $questionnaire Instance de Questionnaire
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      *
      * @return Questionnaire[]
      */
-    public function infosGeneralesQuestionnaire(Questionnaire $questionnaire)
-    {
+    public function infosGeneralesQuestionnaire(
+            Questionnaire $questionnaire, 
+            QuestionnaireType $questionnaireType
+    ){
         $qb = $this->createQueryBuilder('q');
-
-        // ToDo : est-il préférable de sélectionner des attributs précis plutôt que l'ensemble ? à confirmer
-        //$qb->select('c.reference', 'm.prenom', 'm.nom','m.pseudo', 'c.email', 'c.montant', 'c.date', 'ss.nom', 's.nom', 'q.dateReponse' )
+         
         $qb->leftJoin('q.commande', 'c')
             ->leftJoin('q.membre', 'm')
             ->leftJoin('q.sousSite', 'ss')
             ->leftJoin('q.site', 's')
+            ->leftJoin(
+                'q.questionnaireReponses',
+                'qr_ind',
+                'WITH',
+                'qr_ind.question = :qid_ind'
+            )
+            ->leftJoin('qr_ind.reponse', 'r_ind')
             ->addSelect('c')
             ->addSelect('m')
             ->addSelect('ss')
             ->addSelect('s')
+            ->addSelect('qr_ind')
+            ->addSelect('r_ind') 
+            ->setParameter('qid_ind', $questionnaireType->getParametrage()['indicateur']['question_id'])
             ->where('q.id=:id')
             ->setParameter('id', $questionnaire->getId())
             ->andWhere('q.dateReponse IS NOT NULL');
-
-        // ->innerJoin('q.questionnaireType', 'qt')
-        // ->leftJoin('q.questionnaireReponse', 'qr') 
-        // ->leftJoin('q.questionnairePersonnalisation', 'qp')
-        // ->leftJoin('qp.version', 'v')
-        // ->leftJoin('qt.delaiEnvoi', 'de')
-        // ->leftJoin('qp.delaiEnvoi', 'de')
-        // ->leftJoin('qt.delaiReception', 'dr')
-        // ->leftJoin('qp.delaiReception', 'dr')
 
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
