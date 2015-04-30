@@ -8,7 +8,6 @@ use Exception;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
-use Proxies\__CG__\FIANET\SceauBundle\Entity\LivraisonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
