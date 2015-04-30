@@ -18,6 +18,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param string $dateFin Date de fin de la période (peut être vide)
      * @param string $recherche Recherche de l'utilisateur (N°commande, Email, etc)
      * @param array $listeReponsesIndicateurs Tableau contenant les réponses des indicateurs à filtrer. Peut être vide.
+     * @param LivraisonType $livraisonType Instance de LivraisonType. Vaut null si aucun filtre souhaité.
      *
      * @return QueryBuilder Le QueryBuilder modifié avec l'ajout des restrictions
      */
@@ -28,7 +29,8 @@ class QuestionnaireRepository extends EntityRepository
         $dateDebut,
         $dateFin,
         $recherche,
-        $listeReponsesIndicateurs
+        $listeReponsesIndicateurs,
+        $livraisonType
     ) {
         $qb->andWhere('q.site = :sid')
             ->andWhere('q.questionnaireType = :qtid')
@@ -74,6 +76,11 @@ class QuestionnaireRepository extends EntityRepository
             $qb->andWhere('r_ind.id IS NULL');
         }
 
+        if ($livraisonType) {
+            $qb->andWhere('lt.id = :ltid')
+                ->setParameter('ltid', $livraisonType->getId());
+        }
+
         return $qb;
     }
 
@@ -86,6 +93,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param string $dateFin Date de fin de la période (peut être vide)
      * @param string $recherche Recherche de l'utilisateur (N°commande, Email, etc)
      * @param array $listeReponsesIndicateurs Tableau contenant les réponses des indicateurs à filtrer. Peut être vide.
+     * @param LivraisonType $livraisonType Instance de LivraisonType. Vaut null si aucun filtre souhaité.
      *
      * @return int Le nombre de questionnaire
      */
@@ -95,7 +103,8 @@ class QuestionnaireRepository extends EntityRepository
         $dateDebut,
         $dateFin,
         $recherche,
-        $listeReponsesIndicateurs
+        $listeReponsesIndicateurs,
+        $livraisonType
     ) {
         $qb = $this->createQueryBuilder('q')
             ->select('COUNT(q.id)')
@@ -110,6 +119,10 @@ class QuestionnaireRepository extends EntityRepository
             ->leftJoin('qr_ind.reponse', 'r_ind')
             ->setParameter('qid_ind', $questionnaireType->getParametrage()['indicateur']['question_id']);
 
+        if ($livraisonType) {
+            $qb->leftJoin('c.livraisonTypes', 'lt');
+        }
+
         $qb = $this->restrictionsListeQuestionnaires(
             $qb,
             $site,
@@ -117,7 +130,8 @@ class QuestionnaireRepository extends EntityRepository
             $dateDebut,
             $dateFin,
             $recherche,
-            $listeReponsesIndicateurs
+            $listeReponsesIndicateurs,
+            $livraisonType
         );
 
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
@@ -132,6 +146,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param string $dateFin Date de fin de la période (peut être vide)
      * @param string $recherche Recherche de l'utilisateur (N°commande, Email, etc)
      * @param array $listeReponsesIndicateurs Tableau contenant les réponses des indicateurs à filtrer. Peut être vide.
+     * @param LivraisonType $livraisonType Instance de LivraisonType. Vaut null si aucun filtre souhaité.
      * @param int $premierQuestionnaire Numéro du premier questionnaire retourné
      * @param int $nbQuestionnaires Nombre maximum de questionnaire retourné
      * @param int $tri Numéro du tri à appliquer
@@ -145,6 +160,7 @@ class QuestionnaireRepository extends EntityRepository
         $dateFin,
         $recherche,
         $listeReponsesIndicateurs,
+        $livraisonType,
         $premierQuestionnaire,
         $nbQuestionnaires,
         $tri
@@ -182,6 +198,10 @@ class QuestionnaireRepository extends EntityRepository
             ->setFirstResult($premierQuestionnaire)
             ->setMaxResults($nbQuestionnaires);
 
+        if ($livraisonType) {
+            $qb->leftJoin('c.livraisonTypes', 'lt');
+        }
+
         $qb = $this->restrictionsListeQuestionnaires(
             $qb,
             $site,
@@ -189,7 +209,8 @@ class QuestionnaireRepository extends EntityRepository
             $dateDebut,
             $dateFin,
             $recherche,
-            $listeReponsesIndicateurs
+            $listeReponsesIndicateurs,
+            $livraisonType
         );
 
         if ($questionnaireType->getParametrage()['recommandation']['question_id']) {
@@ -230,9 +251,9 @@ class QuestionnaireRepository extends EntityRepository
      * @return Questionnaire[]
      */
     public function infosGeneralesQuestionnaire(
-            Questionnaire $questionnaire, 
-            QuestionnaireType $questionnaireType
-    ){
+        Questionnaire $questionnaire,
+        QuestionnaireType $questionnaireType
+    ) {
         $qb = $this->createQueryBuilder('q');
          
         $qb->leftJoin('q.commande', 'c')
@@ -251,7 +272,7 @@ class QuestionnaireRepository extends EntityRepository
             ->addSelect('ss')
             ->addSelect('s')
             ->addSelect('qr_ind')
-            ->addSelect('r_ind') 
+            ->addSelect('r_ind')
             ->setParameter('qid_ind', $questionnaireType->getParametrage()['indicateur']['question_id'])
             ->where('q.id=:id')
             ->setParameter('id', $questionnaire->getId())

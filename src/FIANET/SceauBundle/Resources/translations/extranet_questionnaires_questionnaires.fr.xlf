@@ -62,6 +62,24 @@
                 <source>plus_de_questionnaire</source>
                 <target>Il n'y a plus de questionnaire.</target>
             </trans-unit>
+            <trans-unit id="15" >
+                <source>tooltip_livraison</source>
+                <target>
+                    <![CDATA[
+                    <p>Le saviez-vous ?</p>
+                    <p>Vous pouvez paramétrer vos questionnaires en fonction du mode de livraison sélectionné par l'internaute au moment de son achat.</p>
+                    <ol>
+                        <li>Retrait immédiat = évaluation du service et de l'accueil</li>
+                        <li>Retrait différé = évaluation de la ponctualité du service</li>
+                        <li>Livraison par transporteur = évaluation de la prise de RDV et de la ponctualité</li>
+                        <li>Livraison par magasin = évaluation de la prise de RDV et de la ponctualité</li>
+                        <li>Colis privé = évaluation de la livraison ou du point relais</li>
+                        <li>Livraison multiple = questions en fonction des différents modes de livraison</li>
+                    </ol>
+                    <p>Pour mettre en place cette fonctionnalité, il faut mettre à jour le flux XML en ajoutant des balises concernant ce mode de livraison. Pour plus d'info, consulter <a href="##LIEN##" target="_blank">le dispositif technique</a>.</p>
+                    ]]>
+                </target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

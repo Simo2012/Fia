@@ -15,7 +15,7 @@ class FluxXmlFormatValidator extends ConstraintValidator
     private $router;
     private $templating;
 
-    public function __construct(Router $router, TimedTwigEngine $templating)
+    public function __construct(Router $router, $templating)
     {
         $this->router = $router;
         $this->templating = $templating;

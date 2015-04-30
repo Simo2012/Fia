@@ -9,6 +9,7 @@
 {% block extranet_stylesheets %}
     {% stylesheets
     'bundles/fianetsceau/css/extranet/questionnaires.css'
+    'bundles/fianetsceau/css/tooltipster/tooltipster.css'
     filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -44,7 +45,7 @@
                 {% if not parametrageLivraison %}
                     {% do  form.livraison.setRendered %}
                 {% else %}
-                    {% trans %}mode_de_livraison{% endtrans %}: <div class="select">{{ form_widget(form.livraison) }}</div><button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
+                    {% trans %}mode_de_livraison{% endtrans %} <div id="tooltip">[I]</div>: <div class="select">{{ form_widget(form.livraison) }}</div><button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
                 {% endif %}
             </div>
             <div class="block-total-part2">
@@ -83,7 +84,8 @@
     {% javascripts
     'components/jquery-ui/ui/datepicker.js'
     'bundles/fianetsceau/js/calendrier.js'
-    'bundles/fianetsceau/js/extranet/questionnaires.js' %}
+    'bundles/fianetsceau/js/extranet/questionnaires.js'
+    'bundles/fianetsceau/js/tooltipster/jquery.tooltipster.min.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
 
@@ -95,6 +97,14 @@
         decocherRetenir();
         afficherCalendrier('questionnaires_liste_dateDebut');
         afficherCalendrier('questionnaires_liste_dateFin');
+
+        $('#tooltip').tooltipster({
+                contentAsHTML: true,
+                content: $('{% spaceless %}{{ 'tooltip_livraison'|trans|replace({"'" : "\\'" })|replace({"##LIEN##" : asset('documents/dispo_techniques_flux_xml.pdf') })|raw }}{% endspaceless %}'),
+                interactive: true,
+                maxWidth: 350
+            }
+        );
 
         {% if nbTotalQuestionnaires != 0 %}
             paquetQuestionnairesSuivants("{% trans %}plus_de_questionnaire{% endtrans %}", {{ nbQuestionnairesMax  }}, '{{ dateDebut }}', '{{ dateFin }}', {{ tri }}, '{{ recherche }}', '{{ indicateurs }}');

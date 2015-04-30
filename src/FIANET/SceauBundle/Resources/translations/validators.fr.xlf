@@ -78,6 +78,10 @@
                 <source>constraints.droit_de_reponse_nb_car_max_nok</source>
                 <target>Malheureusement, votre message est trop long. Nous vous invitons à modifier votre commentaire.</target>
             </trans-unit>
+            <trans-unit id="20">
+                <source>constraints.date_invalide</source>
+                <target>La date n'est pas valide.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

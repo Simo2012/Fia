@@ -62,6 +62,24 @@
                 <source>plus_de_questionnaire</source>
                 <target>There is no more questionnaire.</target>
             </trans-unit>
+            <trans-unit id="15" >
+                <source>tooltip_livraison</source>
+                <target>
+                    <![CDATA[
+                    <p>Did you know ?</p>
+                    <p>You can set your questionnaires depending on the delivery method selected by the user at the time of purchase.</p>
+                    <ol>
+                        <li>Immediate withdrawal = evaluation of the service and hospitality</li>
+                        <li>Removing = deferred assessment of the time service</li>
+                        <li>Delivery by carrier = assessment of making appointments and punctuality</li>
+                        <li>Delivery per store = assessment of making appointments and punctuality</li>
+                        <li>Private Parcels = assessment of delivery or relay point</li>
+                        <li>Multiple Delivery = issues for the different modes of delivery</li>
+                    </ol>
+                    <p>To implement this feature, you must update the XML stream by adding tags on this mode of delivery. For more information, consult <a href="#">the technical device</a>.</p>
+                    ]]>
+                </target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

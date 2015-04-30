@@ -23,7 +23,7 @@ class QuestionnairesListeType extends AbstractType
                     'input' => 'string',
                     'format' => 'dd/MM/yyyy',
                     'required' => false,
-                    'constraints' => new Date(array('message' => 'La date n\'est pas valide.'))
+                    'constraints' => new Date(array('message' => 'constraints.date_invalide'))
                 )
             )
             ->add(
@@ -34,7 +34,7 @@ class QuestionnairesListeType extends AbstractType
                     'input' => 'string',
                     'format' => 'dd/MM/yyyy',
                     'required' => false,
-                    'constraints' => new Date(array('message' => 'La date n\'est pas valide.'))
+                    'constraints' => new Date(array('message' => 'constraints.date_invalide'))
                 )
             )
             ->add(
@@ -52,8 +52,9 @@ class QuestionnairesListeType extends AbstractType
                 array(
                     'class' => 'FIANETSceauBundle:LivraisonType',
                     'property' => 'libelle',
-                    'empty_value' => 'Tous',
+                    'empty_value' => 'livraisons_tous',
                     'required' => false,
+                    'translation_domain' => 'livraisons'
                 )
             )
             ->add(
@@ -87,15 +88,5 @@ class QuestionnairesListeType extends AbstractType
     public function getName()
     {
         return 'questionnaires_liste';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'sites' => null
-        ));
     }
 }

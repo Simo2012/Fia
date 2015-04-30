@@ -8,6 +8,7 @@ use Exception;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
+use Proxies\__CG__\FIANET\SceauBundle\Entity\LivraisonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,6 +55,20 @@ class QuestionnairesController extends Controller
             $form->get('recherche')->setData($recherche);
             $litige = $request->cookies->get('questionnaires_litige') ? true : null;
             $form->get('litige')->setData($litige);
+
+            if ($questionnaireType->getParametrage()['livraison']) {
+                if ($request->cookies->get('questionnaires_livraison')) {
+                    $livraisonType = $this->getDoctrine()->getRepository('FIANETSceauBundle:LivraisonType')
+                        ->find($request->cookies->get('questionnaires_livraison'));
+
+                    $form->get('livraison')->setData($livraisonType);
+                } else {
+                    $livraisonType = null;
+                }
+            } else {
+                $livraisonType = null;
+            }
+
             $retenir = false;
 
         } else {
@@ -65,6 +80,10 @@ class QuestionnairesController extends Controller
             $indicateurs = (isset($donneesForm['indicateurs'])) ? $donneesForm['indicateurs'] : array();
             $recherche = (isset($donneesForm['recherche'])) ? $donneesForm['recherche'] : '';
             $litige = $donneesForm['litige'] ? true : null;
+
+            $livraisonType = $questionnaireType->getParametrage()['livraison'] ?
+                $donneesForm['livraison'] : null;
+
             $retenir = $donneesForm['retenir'];
         }
 
@@ -83,7 +102,8 @@ class QuestionnairesController extends Controller
                     $dateDebut,
                     $dateFin,
                     $recherche,
-                    $listeReponsesIndicateurs
+                    $listeReponsesIndicateurs,
+                    $livraisonType
                 );
 
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
@@ -94,6 +114,7 @@ class QuestionnairesController extends Controller
                     $dateFin,
                     $recherche,
                     $listeReponsesIndicateurs,
+                    $livraisonType,
                     0,
                     $nbQuestionnairesMax,
                     $tri
@@ -140,6 +161,20 @@ class QuestionnairesController extends Controller
             );
             $reponse->headers->setCookie(new Cookie('questionnaires_recherche', $recherche, $dateExpiration));
             $reponse->headers->setCookie(new Cookie('questionnaires_litige', $litige, $dateExpiration));
+
+            if ($questionnaireType->getParametrage()['livraison']) {
+                if ($livraisonType) {
+                    $reponse->headers->setCookie(
+                        new Cookie(
+                            'questionnaires_livraison',
+                            $livraisonType->getId(),
+                            $dateExpiration
+                        )
+                    );
+                } else {
+                    $reponse->headers->clearCookie('questionnaires_livraison');
+                }
+            }
         }
 
         return $reponse;
