@@ -59,13 +59,16 @@ class QuestionnairesController extends Controller
                 if ($request->cookies->get('questionnaires_livraison')) {
                     $livraisonType = $this->getDoctrine()->getRepository('FIANETSceauBundle:LivraisonType')
                         ->find($request->cookies->get('questionnaires_livraison'));
+                    $livraison = $livraisonType->getId();
 
                     $form->get('livraison')->setData($livraisonType);
                 } else {
                     $livraisonType = null;
+                    $livraison = '';
                 }
             } else {
                 $livraisonType = null;
+                $livraison = '';
             }
 
             $retenir = false;
@@ -82,6 +85,7 @@ class QuestionnairesController extends Controller
 
             $livraisonType = $questionnaireType->getParametrage()['livraison'] ?
                 $donneesForm['livraison'] : null;
+            $livraison = $livraisonType ? $livraisonType->getId() : '';
 
             $retenir = $donneesForm['retenir'];
         }
@@ -137,6 +141,7 @@ class QuestionnairesController extends Controller
                 'tri' => $tri,
                 'recherche' => $recherche,
                 'indicateurs' => implode('-', $indicateurs),
+                'livraison' => $livraison,
                 'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
                 'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation'],
                 'parametrageLibelleCommandeDate' => $questionnaireType->getParametrage()['libelleCommandeDate'],
@@ -199,6 +204,13 @@ class QuestionnairesController extends Controller
             $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
             $indicateurs = ($request->request->get('indicateurs')) ? $request->request->get('indicateurs') : array();
 
+            if ($questionnaireType->getParametrage()['livraison'] && $request->request->get('livraison')) {
+                $livraisonType = $this->getDoctrine()->getRepository('FIANETSceauBundle:LivraisonType')
+                    ->find($request->request->get('livraison'));
+            } else {
+                $livraisonType = null;
+            }
+
             $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
                 ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
 
@@ -210,6 +222,7 @@ class QuestionnairesController extends Controller
                     $request->request->get('dateFin'),
                     $request->request->get('recherche'),
                     $listeReponsesIndicateurs,
+                    $livraisonType,
                     $request->request->get('offset', 0),
                     $this->container->getParameter('nb_questionnaires_max'),
                     $request->request->get('tri')

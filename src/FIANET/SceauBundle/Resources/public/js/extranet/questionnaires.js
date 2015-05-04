@@ -1,4 +1,4 @@
-function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, dateFin, tri, recherche, indicateurs) {
+function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, dateFin, tri, recherche, indicateurs, livraison) {
 
     $(document).ready(function () {
 
@@ -21,7 +21,8 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, 
                         dateFin: dateFin,
                         tri: tri,
                         recherche: recherche,
-                        indicateurs: indicateurs.split('-')
+                        indicateurs: indicateurs.split('-'),
+                        livraison: livraison
                     },
                     function (data) {
                         if (data != '') {
