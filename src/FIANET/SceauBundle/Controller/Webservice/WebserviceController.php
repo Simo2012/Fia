@@ -2,7 +2,7 @@
 
 namespace FIANET\SceauBundle\Controller\Webservice;
 
-use Exception;
+use FIANET\SceauBundle\Exception\FluxException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,9 +34,9 @@ class WebserviceController extends Controller
             );
 
             $type = 'OK';
-            $detail = 'Réception OK';
+            $detail = $this->get('translator')->trans('flux_reception_ok', array(), 'flux');
 
-        } catch (Exception $e) {
+        } catch (FluxException $e) {
             $type = 'KO';
             $detail = $e->getMessage();
         }

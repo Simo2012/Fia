@@ -10,7 +10,8 @@ fianet_sceau_extranet:
 fianet_sceau_webservice:
     resource: "@FIANETSceauBundle/Controller/Webservice"
     type:     annotation
-    prefix:   /webservice/
+    prefix:   /webservice/{_locale}/
+    defaults: { _locale: fr }
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

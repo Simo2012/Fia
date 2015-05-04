@@ -5,7 +5,7 @@ namespace FIANET\SceauBundle\Validator\Constraints;
 use DOMDocument;
 use Exception;
 use FIANET\SceauBundle\Entity\Flux;
-use Symfony\Bundle\TwigBundle\Debug\TimedTwigEngine;
+use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -15,7 +15,7 @@ class FluxXmlFormatValidator extends ConstraintValidator
     private $router;
     private $templating;
 
-    public function __construct(Router $router, $templating)
+    public function __construct(Router $router, TwigEngine $templating)
     {
         $this->router = $router;
         $this->templating = $templating;

@@ -35,6 +35,7 @@
         <service id="fianet_sceau.flux" class="FIANET\SceauBundle\Service\GestionFlux">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument type="service" id="validator" />
+            <argument type="service" id="translator" />
         </service>
         <service id="fianet_sceau.questionnaire" class="FIANET\SceauBundle\Service\GestionQuestionnaire">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
