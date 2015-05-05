@@ -1,6 +1,20 @@
+{% trans_default_domain 'commun' %}
+
 {% if detailsQuestionnaireRepondu is not null %}
 {# ToDo : récupérer les infos de questionnaires #}
-<h2>Date de réponse - 01/01/2000 à 00h00 -</h2>
+<h2>{{ 'commun_date_reponse'|trans }} - {{ 'commun_le'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }} -</h2>
+
+{% if listeQuestionsReponses is not null %}
+    <p>
+    {% for questionReponse in listeQuestionsReponses %}
+        {{ questionReponse['question'].libelle }}
+        <br /><br />
+    {% endfor %}
+    </p>
+{% endif %}
+
+<br />
+
 <p>De 1 à 10, comment noteriez-vous les différents attributs du site Petite Frimousse ? (10 représente la meilleure note)<br />
     <span class="color8">8/10</span> - Facilité de recherche et de navigation<br />
     <span class="color7">7/10</span> - Information sur les produits<br />
