@@ -280,4 +280,96 @@ class QuestionnaireRepository extends EntityRepository
 
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
+
+    /**
+     * Ajoute les restrictions à une requête pour sélectionner uniquement les questionnaires pouvant être relancés par
+     * un site pour un type de questionnaire.
+     *
+     * @param QueryBuilder $qb Instance de QueryBuilder
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param string $dateDebut Date de début de la période
+     * @param string $dateFin Date de fin de la période
+     *
+     * @return QueryBuilder Le QueryBuilder modifié avec l'ajout des restrictions
+     */
+    private function restrictionsListeQuestionnairesARelancer(
+        QueryBuilder $qb,
+        Site $site,
+        QuestionnaireType $questionnaireType,
+        $dateDebut,
+        $dateFin
+    ) {
+        $qb->andWhere('q.site = :sid')
+            ->setParameter('sid', $site->getId())
+            ->andWhere('q.questionnaireType = :qtid')
+            ->setParameter('qtid', $questionnaireType->getId())
+            ->andWhere('q.actif = true')
+            ->andWhere('q.dateReponse IS NULL')
+            ->andWhere('q.dateEnvoi >= :dateDebut')
+            ->setParameter('dateDebut', $dateDebut)
+            ->andWhere('q.dateEnvoi < :dateFin')
+            ->setParameter('dateFin', $dateFin);
+
+        return $qb;
+    }
+
+    /**
+     * Retourne le nombre total de questionnaires pouvant être relancés par un site pour un type de questionnaire.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param string $dateDebut Date de début de la période
+     * @param string $dateFin Date de fin de la période
+     *
+     * @return int Le nombre de questionnaire
+     */
+    public function nbTotalQuestionnairesARelancer(
+        Site $site,
+        QuestionnaireType $questionnaireType,
+        $dateDebut,
+        $dateFin
+    ) {
+        $qb = $this->createQueryBuilder('q')
+            ->select('COUNT(q.id)');
+
+        $qb = $this->restrictionsListeQuestionnairesARelancer($qb, $site, $questionnaireType, $dateDebut, $dateFin);
+
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
+    }
+
+    /**
+     * Retourne "un paquet" de questionnaires pouvant être relancés par un site pour un type de questionnaire.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param string $dateDebut Date de début de la période
+     * @param string $dateFin Date de fin de la période
+     * @param int $premierQuestionnaire Numéro du premier questionnaire retourné
+     * @param int $nbQuestionnaires Nombre maximum de questionnaire retourné
+     *
+     * @return array Tableau de string
+     */
+    public function listeQuestionnairesARelancer(
+        Site $site,
+        QuestionnaireType $questionnaireType,
+        $dateDebut,
+        $dateFin,
+        $premierQuestionnaire,
+        $nbQuestionnaires
+    ) {
+        $qb = $this->createQueryBuilder('q')
+            ->select(
+                'q.id',
+                'q.email',
+                'q.dateEnvoi'
+            )->setFirstResult($premierQuestionnaire)
+            ->setMaxResults($nbQuestionnaires);
+
+        $qb = $this->restrictionsListeQuestionnairesARelancer($qb, $site, $questionnaireType, $dateDebut, $dateFin);
+
+        $qb->addOrderBy('q.dateEnvoi', 'DESC');
+
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
+    }
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>titre_page</source>
+                <target>Relaunch questionnaires</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>jour_commande</source>
+                <target>Order date</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>jour_livraison</source>
+                <target>Delivery date</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>questionnaires_trouves</source>
+                <target>%nbJours% days later</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>questionnaires_trouves</source>
+                <target>{0,1}%nbr% questionnaire find|]1,Inf]%nbr% questionnaires find</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>email</source>
+                <target>E-mail</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>date_envoi</source>
+                <target>Dispatch date</target>
+            </trans-unit>
+             <trans-unit id="7">
+                <source>parametrage_relance</source>
+                <target>Relaunch parameterization</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>renvoyer_questionnaire</source>
+                <target>Relaunch questionnaires</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>personnaliser_email</source>
+                <target>Personalize relaunch e-mail</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>relance_auto</source>
+                <target>Automatic relaunch</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>activee</source>
+                <target>Active</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

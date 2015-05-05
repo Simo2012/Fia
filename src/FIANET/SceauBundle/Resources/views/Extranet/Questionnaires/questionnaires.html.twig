@@ -76,7 +76,7 @@
             {{ include('FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig', {'questionnaires': questionnaires, 'parametrageIndicateur': parametrageIndicateur, 'parametrageRecommendation': parametrageRecommendation}) }}
         </table>
 
-        <div id="chargement"><img src="{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}" alt="Chargement en cours" /></div>
+        <div id="chargement"><img src="{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}" alt="{% trans from 'commun' %}commun_chargement{% endtrans %}" /></div>
     {% endif %}
 {% endblock %}
 

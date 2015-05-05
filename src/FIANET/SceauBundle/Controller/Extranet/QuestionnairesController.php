@@ -268,14 +268,16 @@ class QuestionnairesController extends Controller
     }
 
     /**
+     * Affiche la page de relance des questionnaires.
      *
      * @Route("/questionnaires/relance-questionnaires", name="extranet_questionnaires_relance_questionnaires")
      * @Method("GET")
+     *
+     * @return Response Instance de Response
      */
-    public function x3Action()
+    public function relanceAction(Request $request)
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
-
         $elementMenu = $menu->getChild('questionnaires')->getChild('questionnaires.relance_questionnaires');
         $elementMenu->setCurrent(true);
 
@@ -283,7 +285,36 @@ class QuestionnairesController extends Controller
             throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
         }
 
-        return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
+        $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
+        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+
+        $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+            ->nbTotalQuestionnairesARelancer(
+                $site,
+                $questionnaireType,
+                '2015-04-01', // TODO à changer
+                '2015-04-30' // TODO à changer
+            );
+
+        $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+            ->listeQuestionnairesARelancer(
+                $site,
+                $questionnaireType,
+                '2015-04-01', // TODO à changer
+                '2015-04-30', // TODO à changer,
+                0,
+                $this->container->getParameter('nb_questionnaires_max')
+            );
+
+        return $this->render(
+            'FIANETSceauBundle:Extranet/Questionnaires:relance.html.twig',
+            array(
+                'delaiJoursRelance' => $this->container->getParameter('delaiJoursRelance'),
+                'nbTotalQuestionnaires' => $nbTotalQuestionnaires,
+                'questionnaires' => $questionnaires,
+                'offset' => 0
+            )
+        );
     }
     
     /**

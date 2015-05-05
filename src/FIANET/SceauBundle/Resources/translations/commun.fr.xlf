@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="fr" datatype="plaintext" original="file.ext">
+    <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1">
                 <source>commun_attention</source>
@@ -159,7 +159,11 @@
             <trans-unit id="35">
                 <source>commun_questionnaire_q2_service</source>
                 <target>Questionnaire suite à l'utilisation du service</target>
-            </trans-unit>                                                                     
+            </trans-unit>
+            <trans-unit id="36">
+                <source>commun_chargement</source>
+                <target>Chargement en cours</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

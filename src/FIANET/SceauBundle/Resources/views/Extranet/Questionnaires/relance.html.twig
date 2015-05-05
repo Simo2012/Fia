@@ -1,0 +1,57 @@
+{% extends 'FIANETSceauBundle:Extranet:extranet.html.twig' %}
+
+{% trans_default_domain 'extranet_questionnaires_relance' %}
+
+{% block title %}
+    {{ parent() }} : {% trans %}titre_page{% endtrans %}
+{% endblock %}
+
+{% block extranet_body %}
+
+    <h1>{% trans %}titre{% endtrans %}</h1>
+
+    <div class="block-total">
+        <div class="block-total-part1">
+            <h2>{% trans %}jour_commande{% endtrans %}</h2>
+            <h2>{% trans %}jour_livraison{% endtrans %}</h2>
+            <h2>{% trans with {'%nbJours%' : delaiJoursRelance}%}jours_plus_tard{% endtrans %}</h2>
+
+            <h2>{% trans %}parametrage_relance{% endtrans %}</h2>
+            <button>{% trans %}renvoyer_questionnaire{% endtrans %}</button>
+            <button>{% trans %}personnaliser_email{% endtrans %}</button>
+        </div>
+
+        <div class="block-total-part2">
+            <div class="block-info-rep">
+                <h2>{% trans %}Titre dynamique{% endtrans %}</h2>
+                <p>{% trans %}Paragraphe dynamique{% endtrans %}</p>
+            </div>
+
+            <h2>{% trans %}relance_auto{% endtrans %}</h2>
+            <label>
+                <input name="auto" type="checkbox"/>
+                {% trans %}activee{% endtrans %}
+            </label>
+        </div>
+    </div>
+
+    <h1>{% transchoice nbTotalQuestionnaires with {'%nbr%': nbTotalQuestionnaires} %}questionnaires_trouves{% endtranschoice %}</h1>
+
+    {% if nbTotalQuestionnaires != 0 %}
+        <table id="listeQuestionnaires" width="100%" cellspacing="0" cellpadding="0" border="0" class="gen">
+            <tr>
+                <th>{% trans %}email{% endtrans %}</th>
+                <th>{% trans %}date_envoi{% endtrans %}</th>
+            </tr>
+            {% for questionnaire in questionnaires %}
+                <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
+                    <td>{{ questionnaire.email }}</td>
+                    <td>{{ questionnaire.dateEnvoi |date("d/m/Y") }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <div id="chargement"><img src="{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}" alt="{% trans from 'commun' %}commun_chargement{% endtrans %}" /></div>
+    {% endif %}
+
+{% endblock %}
