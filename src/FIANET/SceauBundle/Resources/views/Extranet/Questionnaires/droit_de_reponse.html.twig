@@ -37,7 +37,7 @@
 
                 <br />{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.prenom |capitalize }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.nom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.nom |upper }}{% endif %}{% endif %}
                 <br />{% if infosGeneralesQuestionnaire[0].commande.email is not empty %}{{ infosGeneralesQuestionnaire[0].commande.email }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.montant is not empty %}{{ 'commun_commande_montant'|trans }} : {{ infosGeneralesQuestionnaire[0].commande.montant }} &euro;  {% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
-                <br />{% if infosGeneralesQuestionnaire[0].commande.date is not empty %}{{ 'commun_commande_date'|trans }} : {{ infosGeneralesQuestionnaire[0].commande.date|date('d/m/Y \\à H\\hi') }}{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
+                <br />{% if infosGeneralesQuestionnaire[0].commande.date is not empty %}{{ 'commun_commande_date'|trans }} : {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('none', 'short') }} {% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
                     {% if infosGeneralesQuestionnaire[0].site is not null %}
                         {% if infosGeneralesQuestionnaire[0].site.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infosGeneralesQuestionnaire[0].site.nom }} {% endif %}
                     {% endif %}
@@ -50,7 +50,7 @@
                 <p>
                      {{ include('FIANETSceauBundle:Extranet/Commun:indicateur.html.twig', {'indicateurReponseID': infosGeneralesQuestionnaire[0].questionnaireReponses[0].reponse.id, 'indicateurNote': null}) }} 
                     
-                    {% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|date("\\L\\e d/m/Y \\à H\\hi") }}</p>
+                    {% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }}</p>
                 <p>{{ questionnaireReponse.commentaire }}</p>
             {% endif %}
 

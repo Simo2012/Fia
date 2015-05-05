@@ -164,6 +164,18 @@
                 <source>commun_chargement</source>
                 <target>Chargement en cours</target>
             </trans-unit>
+            <trans-unit id="37">
+                <source>commun_date_reponse</source>
+                <target>Date de réponse</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>commun_le</source>
+                <target>Le</target>
+            </trans-unit>  
+            <trans-unit id="39">
+                <source>commun_a</source>
+                <target>à</target>
+            </trans-unit> 
         </body>
     </file>
 </xliff>

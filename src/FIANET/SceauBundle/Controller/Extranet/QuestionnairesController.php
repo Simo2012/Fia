@@ -360,10 +360,14 @@ class QuestionnairesController extends Controller
         // 1. Gestion des blocs selon le type du questionnaire (1 ou 2 blocs)
         // 2. Gestion des titres de bloc selon le type du questionnaire (attention: traductibles)
         // 3. Récupération des questions et réponses (questions communes, questions personnalisées, etc.)
+        $listeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')->getAllQuestionsReponses($questionnaire, $questionnaireType);
+        
+        $commentairePrincipal = $this->get('fianet_sceau.questionnaire_repondu')->getCommentairePrincipal($questionnaire, $questionnaireType);
+        
         
         // ToDo : méthode à créer pour récupérer les infos et modifier l'appel ci-dessous
         $detailsQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                    ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
+                    ->infosDetailsQuestionnaire($questionnaire, $questionnaireType);
         
         // On regarde le type de questionnaire, s'il s'agit d'un Q2 on va devoir chercher les infos du Q2 s'il a été répondu
         if ($questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant()) {
@@ -383,6 +387,8 @@ class QuestionnairesController extends Controller
             'FIANETSceauBundle:Extranet/Questionnaires:detail_questionnaire.html.twig', array(
                 'infosGeneralesQuestionnaire' => $infosGeneralesQuestionnaire,
                 'detailsQuestionnaire' => $detailsQuestionnaire,
+                'listeQuestionsReponses' => $listeQuestionsReponses,
+                'commentairePrincipal' => $commentairePrincipal,
                 'detailsQuestionnaireSuivant' => $detailsQuestionnaireSuivant,
                 'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur']
             )

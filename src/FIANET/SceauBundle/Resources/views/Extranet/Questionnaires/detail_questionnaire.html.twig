@@ -6,6 +6,14 @@
     {{ parent() }} : {{ 'commun_detail_de_questionnaire'|trans }}
 {% endblock %}
 
+{% block extranet_stylesheets %}
+    {% stylesheets
+    'bundles/fianetsceau/css/tooltipster/tooltipster.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
 {% block extranet_body %}
 
     {% if infosGeneralesQuestionnaire[0] is not null %}    
@@ -22,13 +30,13 @@
         {% if infosGeneralesQuestionnaire[0].commande is not null %}
         <div class="block-total">
             <div class="block-total-part1">
-                <h2>{{ 'commun_commande_informations'|trans }} {% if infosGeneralesQuestionnaire[0].commande.reference is not empty %}{{ infosGeneralesQuestionnaire[0].commande.reference }}{% endif %} {{ 'commun_du'|trans }} {% if infosGeneralesQuestionnaire[0].commande.date is not empty %}{{ infosGeneralesQuestionnaire[0].commande.date|date('d/m/Y \\à H\\hi') }}{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}</h2>
+                <h2>{{ 'commun_commande_informations'|trans }} {% if infosGeneralesQuestionnaire[0].commande.reference is not empty %}{{ infosGeneralesQuestionnaire[0].commande.reference }}{% endif %} {{ 'commun_du'|trans }} {% if infosGeneralesQuestionnaire[0].commande.date is not empty %}{{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('none', 'short') }}{% endif %}</h2>
                 <dt>{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.prenom |capitalize }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.nom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.nom |upper }}{% endif %}{% endif %}</dt>
                 <hr />
                 <dt>{% if infosGeneralesQuestionnaire[0].commande.email is not empty %}{{ infosGeneralesQuestionnaire[0].commande.email }}{% endif %}</dt>
                 <hr />
                 <dd>{{ 'commun_commande_date'|trans }} :</dd>
-                <dt>{% if infosGeneralesQuestionnaire[0].commande.date is not empty %}{{ infosGeneralesQuestionnaire[0].commande.date|date('d/m/Y \\à H\\hi') }}{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}</dt>
+                <dt>{% if infosGeneralesQuestionnaire[0].commande.date is not empty %}{{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('none', 'short') }}{% endif %}</dt>
                 <hr />                
                 <dd>{{ 'commun_questionnaire_envoye_par'|trans }} :</dd>
                 <dt>FIA-NET</dt> {# ToDo : à gérer quand on fera les questionnaires hors flux XML #}
@@ -64,27 +72,30 @@
     <div class="block-total">
         <div class="block-total-part1-2">
             {{ include('FIANETSceauBundle:Commun:questionnaire_repondu.html.twig', {'detailsQuestionnaireRepondu': 3 }) }} 
+            
+            {% if commentairePrincipal is not null %}
             <br />
-            <p>Pour utiliser votre droit de réponse, <a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': detailsQuestionnaire[0].id, 'qrid': detailsQuestionnaire[0].id}) }}">cliquez ici</a></p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
+            <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': detailsQuestionnaire[0].id, 'qrid': detailsQuestionnaire[0].id}) })|raw }}</p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
             <br />
-            <p>Grâce au « Droit de réponse », répondez directement aux remarques de vos clients ! <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': detailsQuestionnaire[0].id, 'qrid': detailsQuestionnaire[0].id}) }}' "><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> Répondez</button></p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
+            <p>{{ 'repondez_directement'|trans({}, 'extranet_droit_de_reponse')|raw }} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': detailsQuestionnaire[0].id, 'qrid': detailsQuestionnaire[0].id}) }}' "><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {{ 'repondez'|trans({}, 'extranet_droit_de_reponse') }}</button></p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
+            {% endif %}
         </div>
         
         {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire ET que le questionnaire Q2 n'a pas été répondu dans le cas de questionnaire Q1/Q2 #}
+        {% if commentairePrincipal is not null %}
         <div class="block-total-part3">
             <div class="block-info-rep">
                 <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59"/>
                 </div>
-                {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traductible #}
-                <p class="reponse"><strong>Utilisez votre droit de réponse</strong><br />
-                    Vous n'êtes pas d'accord avec un avis posté sur votre Fiche Marchand ? Vous souhaitez apporter une explication sur ce qu'il s'est passé ?<br />
-                    <br />
-                    Grâce au « Droit de réponse », vous pouvez répondre directement aux remarques de vos clients ! Votre commentaire sera visible sur le site FIA-NET.com ou depuis n'importe quel moteur de recherche !<br />
-                    <br />
-                    N'oubliez pas que le droit de réponse doit être exercé dans le respect de <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</p>
-                <div class="reponse" id="laCharte">{{ 'commun_charte_commercant'|trans|raw }}</div>
+                {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traduit / ! \ Réfléchir au process #}
+                <p class="reponse">
+                    {{ 'detail_questionnaire_bloc_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|raw }}
+                </p>
+                {# <div class="reponse" id="laCharte">{{ 'commun_charte_commercant'|trans|raw }}</div> 
+                <span class="lien"  id="lienLaCharte" >{{ 'commun_droit_de_reponse_charte_2'|trans }}</span> #}
             </div>
         </div>
+        {% endif %} 
             
     </div>
     {% endif %}
@@ -95,12 +106,29 @@
 {% endblock %}
 
 {% block extranet_javascripts %}
-    <script type="text/javascript">
+    {% javascripts
+    'bundles/fianetsceau/js/tooltipster/jquery.tooltipster.min.js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+    
+    <script type="text/javascript"> 
         $(document).ready(function () {
+            {#
             $("#laCharte").hide();
             $("#lienLaCharte").click(function () {
                 $("#laCharte").slideToggle();
             });
+            #}
+            
+            $('#tooltip').tooltipster({
+                contentAsHTML: true,
+                content: $('{% spaceless %}{{ 'commun_charte_commercant'|trans|replace({"'" : "\\'" })|raw }}{% endspaceless %}'),
+                interactive: true,
+                maxWidth: 550,
+                position: 'left',
+                offsetX: 0
+            });
+
         });
     </script>
 {% endblock %}

@@ -5,7 +5,9 @@ namespace FIANET\SceauBundle\Service;
 use Doctrine\ORM\EntityManager;
 use FIANET\SceauBundle\Entity\Questionnaire;
 use FIANET\SceauBundle\Entity\QuestionnaireReponse;
+use FIANET\SceauBundle\Entity\QuestionnaireType;
 use FIANET\SceauBundle\Entity\Site;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class QuestionnaireRepondu
 {
@@ -196,4 +198,77 @@ class QuestionnaireRepondu
             }
         }
     }
+    
+    /**
+     * Méthode qui permet de retourner toutes les questions d'un questionnaire répondu
+     * 
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * 
+     * @return Array $listeQuestionsReponses tableau contenant l'ensemble des questions et réponses du questionnaire
+     * 
+     * @throw Exception Le QuestionnaireType ne possède pas de question
+     */
+    public function getAllQuestionsReponses(Questionnaire $questionnaire, QuestionnaireType $questionnaireType) {
+        
+        $oQuestions = $this->em
+                   ->getRepository('FIANETSceauBundle:Question')->getAllQuestionsOrdered($questionnaireType);
+        /* ToDo : à revoir pour gestion : sous-questions, questions cachées, questions personnalisées, langues, type de livraison, etc. */
+        
+        if (!$oQuestions) {
+            throw new Exception('Le type de questionnaire n°' . $questionnaireType->getId() . ' ne possède pas de question');
+        }
+        
+        $listeQuestionsReponses = array();
+        
+        $i = 0;
+        
+        foreach($oQuestions as $question) {
+            $listeQuestionsReponses[$i]['question'] = $question;
+            
+            /* ToDo : on va ajouter également les réponses dans le tableau */
+            
+            $i++;
+        }
+        
+        return $listeQuestionsReponses;
+    }
+    
+    
+    /**
+     * Méthode qui permet de récupérer le commentaire principal dans le cas où il existe
+     * 
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * 
+     * @return QuestionnaireReponse[] ou NULL 
+     */
+    public function getCommentairePrincipal(Questionnaire $questionnaire, QuestionnaireType $questionnaireType) {
+        
+        $return = NULL;
+        
+        $commentairePrincipal_id = $questionnaireType->getParametrage()['commentairePrincipal'];
+        
+        if (is_numeric($commentairePrincipal_id)) {
+            $question = $this->em
+                   ->getRepository('FIANETSceauBundle:Questionnaire')
+                   ->find($commentairePrincipal_id);
+            
+            if ($question) {
+                $questionnaireReponse = $this->em
+                       ->getRepository('FIANETSceauBundle:QuestionnaireReponse')
+                       ->findOneBy(array('question' => $question, 'questionnaire' => $questionnaire));
+
+                if ($questionnaireReponse) {
+                    if ($questionnaireReponse->getCommentaire() && $questionnaireReponse->getCommentaire()!='') {
+                        $return = $questionnaireReponse;
+                    }
+                }
+            }
+        }
+        
+        return $return;
+    }    
+    
+    
 }

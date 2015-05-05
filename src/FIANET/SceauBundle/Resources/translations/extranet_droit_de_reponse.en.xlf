@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>pour_utiliser_droit_de_reponse</source>
+                <target>
+                    <![CDATA[
+                        To use your right of reply, <a href="##URL##">click here</a>
+                    ]]>
+                </target>            
+            </trans-unit>
+            <trans-unit id="2">
+                <source>repondez_directement</source>
+                <target>
+                    <![CDATA[
+                        With the « Right of Reply », reply directly to comments from your customers !
+                    ]]>
+                </target>            
+            </trans-unit>
+            <trans-unit id="3">
+                <source>detail_questionnaire_bloc_droit_de_reponse</source>
+                <target>
+                    <![CDATA[
+                        <strong>Use your right of reply</strong>
+                        <br />You do not agree with a notice mailed to your Merchant Card ? You want to make an explanation on what happened?
+                        <br /><br />Thanks to the « Right of Reply » you can respond directly to feedback from your customers ! Your comment will be visible on the site FIA-NET.com or from any search engine !
+                        <br /><br />Remember that the right of reply to be exercised in compliance with <span class="lien" id="tooltip">the charter</span>.
+                    ]]>
+                </target>       
+            </trans-unit>
+            <trans-unit id="4">
+                <source>repondez</source>
+                <target>Answer</target>            
+            </trans-unit>                                                                                                                                                                                                                                                        
+        </body>
+    </file>
+</xliff>
+

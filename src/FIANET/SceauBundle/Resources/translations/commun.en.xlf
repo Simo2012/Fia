@@ -164,6 +164,18 @@
                 <source>commun_chargement</source>
                 <target>Loading</target>
             </trans-unit>
+            <trans-unit id="37">
+                <source>commun_date_reponse</source>
+                <target>Response date</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>commun_le</source>
+                <target>The</target>
+            </trans-unit>  
+            <trans-unit id="39">
+                <source>commun_a</source>
+                <target>at</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

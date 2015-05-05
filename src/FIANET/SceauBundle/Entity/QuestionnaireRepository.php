@@ -242,7 +242,7 @@ class QuestionnaireRepository extends EntityRepository
     }
 
     /**
-     * Retourne les informations liées au questionnaire répondu (informations sur la commande, le membre, le site,
+     * Retourne les informations générales liées au questionnaire répondu (informations sur la commande, le membre, le site,
      * le questionnaire répondu, l'indicateur de satisfaction )
      *
      * @param Questionnaire $questionnaire Instance de Questionnaire
@@ -274,6 +274,29 @@ class QuestionnaireRepository extends EntityRepository
             ->addSelect('qr_ind')
             ->addSelect('r_ind')
             ->setParameter('qid_ind', $questionnaireType->getParametrage()['indicateur']['question_id'])
+            ->where('q.id=:id')
+            ->setParameter('id', $questionnaire->getId())
+            ->andWhere('q.dateReponse IS NOT NULL');
+        
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
+    }
+    
+    
+    /**
+     * Retourne les informations du questionnaire répondu
+     *
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     *
+     * @return Questionnaire[]
+     */
+    public function infosDetailsQuestionnaire(
+        Questionnaire $questionnaire
+    ){
+        $qb = $this->createQueryBuilder('q');
+         
+        $qb
+            ->leftJoin('q.site', 's')
+            ->addSelect('s')
             ->where('q.id=:id')
             ->setParameter('id', $questionnaire->getId())
             ->andWhere('q.dateReponse IS NOT NULL');
