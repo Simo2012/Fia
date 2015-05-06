@@ -6,6 +6,14 @@
     {{ parent() }} : {% trans %}titre_page{% endtrans %}
 {% endblock %}
 
+{% block extranet_stylesheets %}
+    {% stylesheets
+    'bundles/fianetsceau/css/tooltipster/tooltipster.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
 {% block extranet_body %}
 
     <h1>{% trans %}titre{% endtrans %}</h1>
@@ -18,7 +26,9 @@
 
             <h2>{% trans %}parametrage_relance{% endtrans %}</h2>
             <button>{% trans %}renvoyer_questionnaire{% endtrans %}</button>
-            <button>{% trans %}personnaliser_email{% endtrans %}</button>
+            <a href="{{ path('extranet_questionnaires_perso_relance') }}"><button>{% trans %}personnaliser_email{% endtrans %}</button></a>
+            <a id="lien-email-type" class="lien">{% trans %}email_type{% endtrans %}</a>
+            <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaire', {'nomTemplate': templateEmail}))}}</div>
         </div>
 
         <div class="block-total-part2">
@@ -30,12 +40,12 @@
             <h2>{% trans %}relance_auto{% endtrans %}</h2>
             <label>
                 <input name="auto" type="checkbox"/>
-                {% trans %}activee{% endtrans %}
+                {% trans %}activee{% endtrans %} <span id="tooltip-checkbox">[I]</span>
             </label>
         </div>
     </div>
 
-    <h1>{% transchoice nbTotalQuestionnaires with {'%nbr%': nbTotalQuestionnaires} %}questionnaires_trouves{% endtranschoice %}</h1>
+    <h1>{% transchoice nbTotalQuestionnaires with {'%nbr%': nbTotalQuestionnaires, '%dateDebut%': dateDebut|localizeddate('long', 'none'), '%dateFin%': dateFin|localizeddate('long', 'none')} %}questionnaires_trouves{% endtranschoice %}</h1>
 
     {% if nbTotalQuestionnaires != 0 %}
         <table id="listeQuestionnaires" width="100%" cellspacing="0" cellpadding="0" border="0" class="gen">
@@ -46,7 +56,7 @@
             {% for questionnaire in questionnaires %}
                 <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
                     <td>{{ questionnaire.email }}</td>
-                    <td>{{ questionnaire.dateEnvoi |date("d/m/Y") }}</td>
+                    <td>{{ questionnaire.dateEnvoi|localizeddate('short', 'none') }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -54,4 +64,31 @@
         <div id="chargement"><img src="{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}" alt="{% trans from 'commun' %}commun_chargement{% endtrans %}" /></div>
     {% endif %}
 
+{% endblock %}
+
+{% block extranet_javascripts %}
+    {% javascripts
+    'bundles/fianetsceau/js/tooltipster/jquery.tooltipster.min.js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $('#tooltip-checkbox').tooltipster({
+            content: $('{% spaceless %}{{ 'tooltip_checkbox'|trans|replace({"'" : "\\'" })|raw }}{% endspaceless %}'),
+            interactive: true,
+            maxWidth: 350
+        });
+
+        var popupEmail =
+            $("#email-type").dialog({
+                modal: true,
+                autoOpen: false,
+                minWidth: 595
+            });
+
+        $( "#lien-email-type" ).on( "click", function() {
+            popupEmail.dialog( "open" );
+        });
+
+    </script>
 {% endblock %}

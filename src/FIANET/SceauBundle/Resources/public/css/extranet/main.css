@@ -142,6 +142,10 @@ button:hover, button:active, .button:hover, .button:active {
     cursor: pointer;
 }
 
+.cache {
+    display: none;
+}
+
 /**************************************** STRUCTURE ****************************************/
 header {
     display: block;

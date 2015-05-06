@@ -46,6 +46,8 @@
         <service id="fianet_sceau.questionnaire_repondu" class="FIANET\SceauBundle\Service\QuestionnaireRepondu">
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
+        <service id="fianet_sceau.relance" class="FIANET\SceauBundle\Service\Relance">
+        </service>
 
         <!-- Extranet -->
         <service id="fianet_sceau.extranet.menu_builder" class="FIANET\SceauBundle\Service\Extranet\MenuBuilder">            

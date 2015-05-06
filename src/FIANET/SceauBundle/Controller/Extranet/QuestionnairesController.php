@@ -273,6 +273,8 @@ class QuestionnairesController extends Controller
      * @Route("/questionnaires/relance-questionnaires", name="extranet_questionnaires_relance_questionnaires")
      * @Method("GET")
      *
+     * @param Request $request Instance de Request
+     *
      * @return Response Instance de Response
      */
     public function relanceAction(Request $request)
@@ -287,21 +289,22 @@ class QuestionnairesController extends Controller
 
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+        $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriodeRelance();
 
         $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
             ->nbTotalQuestionnairesARelancer(
                 $site,
                 $questionnaireType,
-                '2015-04-01', // TODO à changer
-                '2015-04-30' // TODO à changer
+                $datePeriode['dateDebut'],
+                $datePeriode['dateFin']
             );
 
         $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
             ->listeQuestionnairesARelancer(
                 $site,
                 $questionnaireType,
-                '2015-04-01', // TODO à changer
-                '2015-04-30', // TODO à changer,
+                $datePeriode['dateDebut'],
+                $datePeriode['dateFin'],
                 0,
                 $this->container->getParameter('nb_questionnaires_max')
             );
@@ -312,7 +315,40 @@ class QuestionnairesController extends Controller
                 'delaiJoursRelance' => $this->container->getParameter('delaiJoursRelance'),
                 'nbTotalQuestionnaires' => $nbTotalQuestionnaires,
                 'questionnaires' => $questionnaires,
-                'offset' => 0
+                'offset' => 0,
+                'dateDebut' => $datePeriode['dateDebut'],
+                'dateFin' => $datePeriode['dateFin'],
+                'templateEmail' => $questionnaireType->getParametrage()['templateEmail'] . 'CorpsRelance.html.twig'
+            )
+        );
+    }
+
+    /**
+     * Affiche la page qui permet de personnaliser la relance pour un type de questionnaire.
+     *
+     * @Route("/questionnaires/personnaliser-relance", name="extranet_questionnaires_perso_relance")
+     * @Method("GET")
+     *
+     * @param Request $request Instance de Request
+     *
+     * @return Response Instance de Response
+     */
+    public function personnaliserEmailRelance(Request $request)
+    {
+        $menu = $this->get('fianet_sceau.extranet.menu');
+        $elementMenu = $menu->getChild('questionnaires')->getChild('questionnaires.relance_questionnaires');
+        $elementMenu->setCurrent(true);
+
+        if (!$elementMenu->getExtra('accesAutorise')) {
+            throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
+        }
+
+        $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
+        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+
+        return $this->render(
+            'FIANETSceauBundle:Extranet/Questionnaires:relance_perso.html.twig',
+            array(
             )
         );
     }

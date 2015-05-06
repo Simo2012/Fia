@@ -20,7 +20,7 @@
             </trans-unit>
             <trans-unit id="4">
                 <source>questionnaires_trouves</source>
-                <target>{0,1}%nbr% questionnaire find|]1,Inf]%nbr% questionnaires find</target>
+                <target>{0,1}%nbr% questionnaire find for week from %dateDebut% to %dateFin%|]1,Inf]%nbr% questionnaires find for week from %dateDebut% to %dateFin%</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>email</source>
@@ -49,6 +49,23 @@
             <trans-unit id="11">
                 <source>activee</source>
                 <target>Active</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>tooltip_checkbox</source>
+                <target>
+                     <![CDATA[
+                        <h2>Automated relaunch</h2>
+                        <p>You can choose to automate the relaunch. Every Wednesday morning, users who have not responded to questionnaire will automatically receive the mail by default or one you have configured.</p>
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>email_type</source>
+                <target>See e-mail type</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>titre_email_type</source>
+                <target>E-mail type default</target>
             </trans-unit>
         </body>
     </file>

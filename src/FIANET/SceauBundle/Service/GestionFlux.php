@@ -4,7 +4,7 @@ namespace FIANET\SceauBundle\Service;
 use Doctrine\ORM\EntityManager;
 use FIANET\SceauBundle\Entity\Flux;
 use FIANET\SceauBundle\Exception\FluxException;
-use Symfony\Component\Translation\LoggingTranslator;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 class GestionFlux
@@ -13,7 +13,7 @@ class GestionFlux
     private $validator;
     private $translator;
 
-    public function __construct(EntityManager $em, RecursiveValidator $validator, LoggingTranslator $translator)
+    public function __construct(EntityManager $em, RecursiveValidator $validator, TranslatorInterface $translator)
     {
         $this->em = $em;
         $this->validator = $validator;

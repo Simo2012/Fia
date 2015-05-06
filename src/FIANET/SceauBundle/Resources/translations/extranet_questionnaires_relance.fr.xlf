@@ -20,7 +20,7 @@
             </trans-unit>
             <trans-unit id="4">
                 <source>questionnaires_trouves</source>
-                <target>{0,1}%nbr% questionnaire trouvé|]1,Inf]%nbr% questionnaires trouvés</target>
+                <target>{0,1}%nbr% questionnaire trouvé pour la semaine du %dateDebut% au %dateFin%|]1,Inf]%nbr% questionnaires trouvés pour la semaine du %dateDebut% au %dateFin%</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>email</source>
@@ -49,6 +49,23 @@
             <trans-unit id="11">
                 <source>activee</source>
                 <target>Activée</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>tooltip_checkbox</source>
+                <target>
+                     <![CDATA[
+                        <h2>Automatisation de la relance</h2>
+                        <p>Vous pouvez choisir d'automatiser la relance. Tous les mercredis matin, les internautes n’ayant pas répondu au questionnaire recevront automatiquement l'e-mail par défaut ou celui que vous aurez configuré.</p>
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>email_type</source>
+                <target>Voir e-mail-type</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>titre_email_type</source>
+                <target>E-mail type par défaut</target>
             </trans-unit>
         </body>
     </file>
