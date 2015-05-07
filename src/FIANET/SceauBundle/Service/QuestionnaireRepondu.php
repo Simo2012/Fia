@@ -3,9 +3,11 @@
 namespace FIANET\SceauBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use FIANET\SceauBundle\Entity\Question;
 use FIANET\SceauBundle\Entity\Questionnaire;
 use FIANET\SceauBundle\Entity\QuestionnaireReponse;
 use FIANET\SceauBundle\Entity\QuestionnaireType;
+use FIANET\SceauBundle\Entity\QuestionType;
 use FIANET\SceauBundle\Entity\Site;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
@@ -227,6 +229,12 @@ class QuestionnaireRepondu
             $listeQuestionsReponses[$i]['question'] = $question;
             
             /* ToDo : on va ajouter également les réponses dans le tableau */
+            $listeQuestionsReponses[$i]['questiontype'] = $question->getQuestionType();
+            
+            $this->getListeReponses($question, $question->getQuestionType());
+            
+            $oQuestions = $this->em
+                   ->getRepository('FIANETSceauBundle:Question')->getAllQuestionsOrdered($questionnaireType);
             
             $i++;
         }
@@ -268,7 +276,58 @@ class QuestionnaireRepondu
         }
         
         return $return;
-    }    
+    }
     
     
+    /**
+     * Méthode qui permet de récupérer les réponses répondues pour une question donnée
+     * 
+     * @param Question $question Instance de Question
+     * @param QuestionType $questionType Instance de QuestionType
+     * 
+     * @return ... ToDo à compléter
+     */
+    public function getListeReponses(Question $question, QuestionType $questionType) {
+        
+        $reponsesInfos = $question->getReponses();
+        
+        // ToDo à compléter
+        
+        switch ($questionType->getId()) {
+            case 1: // Commentaire
+                
+            break;
+        
+            case 2: // Choix unique
+            case 4: // Menu déroulant
+                
+            break;
+        
+            case 3: // Multichoix
+                
+            break;
+             
+            case 5: // Notation
+                
+            break;
+        }
+    }
+    
+    /**
+     * Méthode qui permet de récupérer le code libellé de questionnaire à traduire
+     * 
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * 
+     * @return string le code libellé de questionnaire à traduire ou null
+     */
+    public function getLibelleQuestionnaireTypeRepondu(QuestionnaireType $questionnaireType) {    
+        
+        $return = null;
+        
+        if ($questionnaireType->getParametrage()['libelleQuestionnaireRepondu']) {
+            $return = $questionnaireType->getParametrage()['libelleQuestionnaireRepondu'];
+        }
+        
+        return $return;
+    }
 }

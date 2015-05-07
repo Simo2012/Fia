@@ -370,7 +370,7 @@ class QuestionnairesController extends Controller
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
         
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
-        $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
+        //$questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
         
         if (!$this->get('fianet_sceau.questionnaire_repondu')->coherenceArgumentsDetailsQuestionnaire($site, $id)) {
             throw new Exception('Questionnaire invalide');
@@ -378,6 +378,7 @@ class QuestionnairesController extends Controller
 
         $em = $this->getDoctrine()->getManager();        
         $questionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')->find($id);
+        $questionnaireType = $questionnaire->getQuestionnaireType();
         
         // On récupère les informations pour la navigation (questionnaire précédent, questionnaire suivant)
         // La navigation doit se faire :
@@ -389,43 +390,60 @@ class QuestionnairesController extends Controller
         // -> appel de la méthode récupérant le questionnaire suivant selon les règles ci-dessus
         
         // On récupère toutes les informations générales liées au questionnaire
-        $infosGeneralesQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+        $infosGeneralesQuestionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')
                     ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
         
         // On récupère toutes les informations liées au questionnaire répondu
-        // 1. Gestion des blocs selon le type du questionnaire (1 ou 2 blocs)
-        // 2. Gestion des titres de bloc selon le type du questionnaire (attention: traductibles)
-        // 3. Récupération des questions et réponses (questions communes, questions personnalisées, etc.)
-        $listeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')->getAllQuestionsReponses($questionnaire, $questionnaireType);
+        // 1. Gestion du titre de bloc selon le type du questionnaire
+        $questionnaireTypeLibelle = $this->get('fianet_sceau.questionnaire_repondu')->getLibelleQuestionnaireTypeRepondu($questionnaireType);
         
-        $commentairePrincipal = $this->get('fianet_sceau.questionnaire_repondu')->getCommentairePrincipal($questionnaire, $questionnaireType);
-        
+        // 2. Récupération des questions et réponses (questions communes, questions personnalisées, etc.)
+        $questionnaireListeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')->getAllQuestionsReponses($questionnaire, $questionnaireType);
         
         // ToDo : méthode à créer pour récupérer les infos et modifier l'appel ci-dessous
-        $detailsQuestionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                    ->infosDetailsQuestionnaire($questionnaire, $questionnaireType);
+        //$detailsQuestionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')
+                    //->infosDetailsQuestionnaire($questionnaire, $questionnaireType);
         
-        // On regarde le type de questionnaire, s'il s'agit d'un Q2 on va devoir chercher les infos du Q2 s'il a été répondu
+        // 3. On récupère les données du questionnaire lié si ce dernier existe
+        $questionnaireSuivant = false;
+        $questionnaireLie = null;        
+        $questionnaireLieType = null;
+        $questionnaireLieTypeLibelle = null;
+        $questionnaireLieListeQuestionsReponses = null;
+        $questionnaireLieCommentairePrincipal = null;
+        
         if ($questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant()) {
             
-            // ToDo : méthode à créer pour récupérer les infos et modifier l'appel ci-dessous
-            $detailsQuestionnaireSuivant = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
-                    ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
-            // ToDo : la méthode doit permettre de retourner les informations suivantes :
-            //          - si le Q2 n'a pas encore été envoyé : mettre la date de prévision d'envoi "Ce questionnaire n'a pas encore été, ou n'a pu être, envoyé à l'internaute. Envoi prévu pour le 07/05/2015"
-            //          - si le Q2 a été envoyé mais non répondu : mettre l'information du style "Ce questionnaire a été envoyé le 14/04/2015, mais l'internaute n'y a pas encore répondu."
-            //          - si le Q2 a été répondu : toutes les informations du questionnaire répondu
-        } else {
-            $detailsQuestionnaireSuivant = NULL;
+            $questionnaireSuivant = true;
+            
+            echo $questionnaireLieType;
+            
+            $questionnaireLie = $questionnaire->getQuestionnaireLie();
+            $questionnaireLieType = $questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant();
+            $questionnaireLieTypeLibelle = $this->get('fianet_sceau.questionnaire_repondu')->getLibelleQuestionnaireTypeRepondu($questionnaireLieType);            
+            
+            // ToDo : dans un lot suivant (car non demandé dans la spec actuelle), on devra gérer les messages dans les cas suivants :
+            // - le questionnaire lié n'a pas encore été envoyé "Ce questionnaire n'a pas encore été, ou n'a pu être, envoyé à l'internaute. Envoi prévu pour le 07/05/2015"
+            // - le questionnaire lié a été envoyé mais pas encore répondu "Ce questionnaire a été envoyé le 14/04/2015, mais l'internaute n'y a pas encore répondu."
+            // - le questionnaire lié a été envoyé mais le délai de réponse est dépassé
+            
+            if ($questionnaireLie) {
+                $questionnaireLieListeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')->getAllQuestionsReponses($questionnaireLie, $questionnaireLieType);
+                $infosGeneralesQuestionnaireLie = $em->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->infosGeneralesQuestionnaire($questionnaireLie, $questionnaireLieType);
+            }
+            
         }
         
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:detail_questionnaire.html.twig', array(
-                'infosGeneralesQuestionnaire' => $infosGeneralesQuestionnaire,
-                'detailsQuestionnaire' => $detailsQuestionnaire,
-                'listeQuestionsReponses' => $listeQuestionsReponses,
-                'commentairePrincipal' => $commentairePrincipal,
-                'detailsQuestionnaireSuivant' => $detailsQuestionnaireSuivant,
+                'questionnaire' => $infosGeneralesQuestionnaire,
+                'questionnaireTypeLibelle' => $questionnaireTypeLibelle,
+                'questionnaireListeQuestionsReponses' => $questionnaireListeQuestionsReponses,
+                'questionnaireSuivant' => $questionnaireSuivant,
+                'questionnaireLie' => $infosGeneralesQuestionnaireLie,
+                'questionnaireLieTypeLibelle' => $questionnaireLieTypeLibelle,
+                'questionnaireLieListeQuestionsReponses' => $questionnaireLieListeQuestionsReponses,
                 'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur']
             )
         );

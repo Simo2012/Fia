@@ -1,20 +1,23 @@
 {% trans_default_domain 'commun' %}
 
-{% if detailsQuestionnaireRepondu is not null %}
-{# ToDo : récupérer les infos de questionnaires #}
-<h2>{{ 'commun_date_reponse'|trans }} - {{ 'commun_le'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }} -</h2>
+{% if questionnaireRepondu is not null %}
+<h2>{{ 'commun_date_reponse'|trans }} - {{ 'commun_le'|trans }} {{ questionnaireRepondu_dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaireRepondu_dateReponse|localizeddate('none', 'short') }} -</h2>
 
-{% if listeQuestionsReponses is not null %}
-    <p>
-    {% for questionReponse in listeQuestionsReponses %}
+{# Todo : Récupération des questions/réponses à compléter #}
+{% if questionnaireRepondu_listeQuestionsReponses is not null %}
+    
+    {% for questionReponse in questionnaireRepondu_listeQuestionsReponses %}
+        <p class="question">
         {{ questionReponse['question'].libelle }}
-        <br /><br />
+        </p>
+        
+        {# ToDo : s'il s'agit du commentaire principal alors on affichera une mise en forme différente pour la réponse #}
+        {# <div class="area"><div>Ici on mettra le commentaire principal</div></div> #}
     {% endfor %}
-    </p>
 {% endif %}
 
+{#
 <br />
-
 <p>De 1 à 10, comment noteriez-vous les différents attributs du site Petite Frimousse ? (10 représente la meilleure note)<br />
     <span class="color8">8/10</span> - Facilité de recherche et de navigation<br />
     <span class="color7">7/10</span> - Information sur les produits<br />
@@ -28,4 +31,6 @@
     <br />
     Ici le commentaire de l'internaute
 </p>
+#}
+
 {% endif %}

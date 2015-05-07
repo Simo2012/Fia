@@ -244,8 +244,8 @@ class QuestionnaireRepository extends EntityRepository
     }
 
     /**
-     * Retourne les informations générales liées au questionnaire répondu (informations sur la commande, le membre, le site,
-     * le questionnaire répondu, l'indicateur de satisfaction )
+     * Retourne les informations générales liées au questionnaire répondu (informations sur la commande, le membre, le site, 
+     * l'éventuel commentaire principal, l'éventuel droit de réponse lié au commentaire principal)
      *
      * @param Questionnaire $questionnaire Instance de Questionnaire
      * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
@@ -255,30 +255,34 @@ class QuestionnaireRepository extends EntityRepository
     public function infosGeneralesQuestionnaire(
         Questionnaire $questionnaire,
         QuestionnaireType $questionnaireType
-    ) {
+    ) { 
         $qb = $this->createQueryBuilder('q');
-         
+        
         $qb->leftJoin('q.commande', 'c')
             ->leftJoin('q.membre', 'm')
             ->leftJoin('q.sousSite', 'ss')
             ->leftJoin('q.site', 's')
             ->leftJoin(
                 'q.questionnaireReponses',
-                'qr_ind',
+                'qr_com',
                 'WITH',
-                'qr_ind.question = :qid_ind'
+                'qr_com.question = :qid_com'
             )
-            ->leftJoin('qr_ind.reponse', 'r_ind')
+            ->leftJoin('qr_com.droitDeReponses',
+                'ddr',
+                'WITH',
+                'ddr.actif = true'    
+            )
             ->addSelect('c')
             ->addSelect('m')
             ->addSelect('ss')
             ->addSelect('s')
-            ->addSelect('qr_ind')
-            ->addSelect('r_ind')
-            ->setParameter('qid_ind', $questionnaireType->getParametrage()['indicateur']['question_id'])
-            ->where('q.id=:id')
-            ->setParameter('id', $questionnaire->getId())
-            ->andWhere('q.dateReponse IS NOT NULL');
+            ->addSelect('qr_com')
+            ->addSelect('ddr')
+            ->setParameter('qid_com', $questionnaireType->getParametrage()['commentairePrincipal']);
+        
+        $qb->where('q.id=:id')
+           ->setParameter('id', $questionnaire->getId());
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }

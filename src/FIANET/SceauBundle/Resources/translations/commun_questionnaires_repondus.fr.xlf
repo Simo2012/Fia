@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>questionnaire_repondu.1</source>
+                <target>Questionnaire suite à la commande</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>questionnaire_repondu.2</source>
+                <target>Questionnaire suite à la livraison</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>questionnaire_repondu.3</source>
+                <target>Questionnaire suite à la réservation en ligne</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>questionnaire_repondu.4</source>
+                <target>Questionnaire suite à l'utilisation du service</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>questionnaire_repondu.5</source>
+                <target>Questionnaire répondu</target>
+            </trans-unit>                     
+        </body>
+    </file>
+</xliff>
