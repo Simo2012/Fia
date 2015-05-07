@@ -223,10 +223,10 @@ class QuestionnaireRepository extends EntityRepository
                 )->leftJoin('qr_reco.reponse', 'r_reco')
                 ->setParameter('qid_reco', $questionnaireType->getParametrage()['recommandation']['question_id']);
 
-            if ($tri == 3) {
-                $qb->orderBy('qr_reco.note', 'ASC');
-            } elseif ($tri == 4) {
+            if ($tri == 4) {
                 $qb->orderBy('qr_reco.note', 'DESC');
+            } elseif ($tri == 5) {
+                $qb->orderBy('qr_reco.note', 'ASC');
             }
         }
 
@@ -236,6 +236,8 @@ class QuestionnaireRepository extends EntityRepository
             $qb->orderBy('c.date', 'ASC');
         } elseif ($tri == 2) {
             $qb->orderBy('q.dateReponse', 'DESC');
+        } elseif ($tri == 3) {
+            $qb->orderBy('q.dateReponse', 'ASC');
         }
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();

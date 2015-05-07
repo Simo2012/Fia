@@ -80,6 +80,22 @@
                     ]]>
                 </target>
             </trans-unit>
+            <trans-unit id="16">
+                <source>details_questionnaire</source>
+                <target>Voir les détails du questionnaire</target>
+            </trans-unit>
+             <trans-unit id="17">
+                <source>droit_reponse</source>
+                <target>Exercer son droit de réponse</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>tri_decroissant</source>
+                <target>Tri décroissant</target>
+            </trans-unit>
+             <trans-unit id="19">
+                <source>tri_croissant</source>
+                <target>Tri croissant</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

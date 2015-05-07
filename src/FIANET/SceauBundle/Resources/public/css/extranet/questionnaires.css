@@ -13,3 +13,9 @@
 .indicateur-selectionne {
     border: solid 3px #00cc00;
 }
+
+.fleche-droit-reponse {
+    float: right;
+    margin-right: 5px;
+    margin-left: 5px;
+}

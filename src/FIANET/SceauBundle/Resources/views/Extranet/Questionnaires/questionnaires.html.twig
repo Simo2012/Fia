@@ -64,12 +64,49 @@
         <table id="listeQuestionnaires" width="100%" cellspacing="0" cellpadding="0" border="0" class="gen">
             <tr>
                 <th>{% trans from 'notes' %}notes_indicateur{% endtrans %}</th>
-                <th>{{ parametrageLibelleCommandeDate|trans({}, 'commun') }} {% if tri == 1 %}<a onclick="selectTriQuestionnaires(0);" class="pointer">^</a>{% else %}<a onclick="selectTriQuestionnaires(1);" class="pointer">V</a>{% endif %}</th>
-                <th>{% trans from 'commun' %}commun_date_reponse_questionnaire{% endtrans %} {% if tri == 2 %}<a onclick="selectTriQuestionnaires(3);" class="pointer">v</a>{% else %}<a onclick="selectTriQuestionnaires(2);" class="pointer">^</a>{% endif %}</th>
-                <th>{% trans from 'commun' %}commun_adresse_email{% endtrans %} </th>
-                <th>{% trans from 'commun' %}commun_verbatim{% endtrans %}</th>
+                <th>
+                    {{ parametrageLibelleCommandeDate|trans({}, 'commun') }}
+                    {% if tri == 1 %}
+                        <a onclick="selectTriQuestionnaires(0);" class="pointeur">
+                            <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_trie_asc.png') }}" width="12" height="8" title="{% trans %}tri_croissant{% endtrans %}" alt="{% trans %}tri_croissant{% endtrans %}" />
+                        </a>
+                    {% else %}
+                        <a onclick="selectTriQuestionnaires(1);" class="pointeur">
+                            <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_trie_desc.png') }}" width="12" height="8" title="{% trans %}tri_decroissant{% endtrans %}" alt="{% trans %}tri_decroissant{% endtrans %}" />
+                        </a>
+                    {% endif %}
+                </th>
+                <th>
+                    {% trans from 'commun' %}commun_date_reponse_questionnaire{% endtrans %}
+                    {% if tri == 3 %}
+                        <a onclick="selectTriQuestionnaires(2);" class="pointeur">
+                            <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_trie_asc.png') }}" width="12" height="8" title="{% trans %}tri_croissant{% endtrans %}" alt="{% trans %}tri_croissant{% endtrans %}" />
+                        </a>
+                    {% else %}
+                        <a onclick="selectTriQuestionnaires(3);" class="pointeur">
+                            <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_trie_desc.png') }}" width="12" height="8" title="{% trans %}tri_decroissant{% endtrans %}" alt="{% trans %}tri_decroissant{% endtrans %}" />
+                        </a>
+                    {% endif %}
+                </th>
+                <th>
+                    {% trans from 'commun' %}commun_adresse_email{% endtrans %}
+                </th>
+                <th>
+                    {% trans from 'commun' %}commun_verbatim{% endtrans %}
+                </th>
                 {% if parametrageRecommendation.question_id is not null %}
-                    <th>{% trans from 'notes' %}notes_indice_recommandation{% endtrans %} {% if tri == 4 %}<a onclick="selectTriQuestionnaires(5);" class="pointer">v</a>{% else %}<a onclick="selectTriQuestionnaires(4);" class="pointer">^</a>{% endif %}</th>
+                    <th>
+                        {% trans from 'notes' %}notes_indice_recommandation{% endtrans %}
+                        {% if tri == 5 %}
+                            <a onclick="selectTriQuestionnaires(4);" class="pointeur">
+                            <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_trie_asc.png') }}" width="12" height="8" title="{% trans %}tri_croissant{% endtrans %}" alt="{% trans %}tri_croissant{% endtrans %}" />
+                            </a>
+                        {% else %}
+                            <a onclick="selectTriQuestionnaires(5);" class="pointeur">
+                                <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_trie_desc.png') }}" width="12" height="8" title="{% trans %}tri_decroissant{% endtrans %}" alt="{% trans %}tri_decroissant{% endtrans %}" />
+                            </a>
+                        {% endif %}
+                    </th>
                 {% endif %}
                 <th>{% trans from 'commun' %}commun_details{% endtrans %}</th>
             </tr>
