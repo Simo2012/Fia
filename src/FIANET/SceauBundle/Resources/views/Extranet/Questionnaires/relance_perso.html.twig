@@ -8,7 +8,31 @@
 
 {% block extranet_body %}
 
-    <h1>{% trans %}titre{% endtrans %}</h1>
+    <h1>{% trans %}titre_page{% endtrans %}</h1>
+
+    <div class="block-total">
+        <div class="block-total-part1">
+            {{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail}))}}
+        </div>
+        <div class="block-total-part2">
+            <div class="block-info-rep">
+                <h2>{% trans %}titre_paragraphe{% endtrans %}</h2>
+                <p>{% trans %}corps_paragraphe{% endtrans %}</p>
+                {{ form_start(form) }}
+
+                    {% trans %}label_objet{% endtrans %} {{ form_widget(form.objet) }}<br />
+                    {% trans %}precision_objet{% endtrans %}"{{ objetParDefaut }}"<br />
+                    {% trans %}label_corps{% endtrans %}{{ form_widget(form.corps) }}<br />
+
+                    {{ form_errors(form) }}
+
+                    <br />
+                    <button>{% trans %}bouton_visualiser{% endtrans %}</button><br />
+                    <button type="submit">{% trans %}bouton_valider{% endtrans %}</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 

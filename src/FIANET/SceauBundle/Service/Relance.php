@@ -6,6 +6,13 @@ use DateTime;
 
 class Relance
 {
+    private $delaiJoursRelance;
+
+    public function __construct($delaiJoursRelance)
+    {
+        $this->delaiJoursRelance = $delaiJoursRelance;
+    }
+
     /**
      * Calcule la période pendant laquelle les questionnaires qui n'ont pas été répondus peuvent être relancés.
      * Actuellement seuls les questionnaires de la semaine-2 peuvent l'être.
@@ -18,7 +25,7 @@ class Relance
     public function calculerPeriodeRelance()
     {
         $tsDernierLundi = mktime(0, 0, 0, date('m'), date('d') - date('N') + 1, date('Y'));
-        $tsDateDebut = $tsDernierLundi - (14 * 24 * 60 * 60);
+        $tsDateDebut = $tsDernierLundi - ($this->delaiJoursRelance * 24 * 60 * 60);
         $tsDateFin = $tsDateDebut + (6 * 24 * 60 * 60);
 
         return array(

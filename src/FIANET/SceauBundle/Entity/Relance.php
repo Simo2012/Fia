@@ -2,6 +2,7 @@
 
 namespace FIANET\SceauBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -53,21 +54,10 @@ class Relance
     /**
      * @var boolean
      *
-     * @ORM\Column(name="modele", type="boolean")
+     * @ORM\Column(name="auto", type="boolean")
      */
-    private $modele;
+    private $auto;
 
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\Questionnaire")
-     * @ORM\JoinTable(name="Relance_Questionnaire",
-     *      joinColumns={@ORM\JoinColumn(name="relance_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="questionnaire_id", referencedColumnName="id", unique=true)}
-     *      )
-     */
-    private $questionnaires;
 
     /**
      * @var Site
@@ -88,7 +78,7 @@ class Relance
 
     public function __construct()
     {
-        $this->phonenumbers = new ArrayCollection();
+        $this->dateCreation = new DateTime();
     }
 
 
@@ -201,59 +191,25 @@ class Relance
     /**
      * Set modele
      *
-     * @param boolean $modele
+     * @param boolean $auto
      *
      * @return Relance
      */
-    public function setModele($modele)
+    public function setModele($auto)
     {
-        $this->modele = $modele;
+        $this->auto = $auto;
 
         return $this;
     }
 
     /**
-     * Get modele
+     * Get auto
      *
      * @return boolean
      */
-    public function getModele()
+    public function getAuto()
     {
-        return $this->modele;
-    }
-
-    /**
-     * Add questionnaire
-     *
-     * @param Questionnaire $questionnaire
-     *
-     * @return Relance
-     */
-    public function addQuestionnaire(Questionnaire $questionnaire)
-    {
-        $this->questionnaires[] = $questionnaire;
-
-        return $this;
-    }
-
-    /**
-     * Remove questionnaire
-     *
-     * @param Questionnaire $questionnaire
-     */
-    public function removeQuestionnaire(Questionnaire $questionnaire)
-    {
-        $this->questionnaires->removeElement($questionnaire);
-    }
-
-    /**
-     * Get questionnaires
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getQuestionnaires()
-    {
-        return $this->questionnaires;
+        return $this->auto;
     }
 
     /**

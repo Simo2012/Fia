@@ -16,7 +16,7 @@
 
 {% block extranet_body %}
 
-    <h1>{% trans %}titre{% endtrans %}</h1>
+    <h1>{% trans %}titre_page{% endtrans %}</h1>
 
     <div class="block-total">
         <div class="block-total-part1">
@@ -28,7 +28,7 @@
             <button>{% trans %}renvoyer_questionnaire{% endtrans %}</button>
             <a href="{{ path('extranet_questionnaires_perso_relance') }}"><button>{% trans %}personnaliser_email{% endtrans %}</button></a>
             <a id="lien-email-type" class="lien">{% trans %}email_type{% endtrans %}</a>
-            <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaire', {'nomTemplate': templateEmail}))}}</div>
+            <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail}))}}</div>
         </div>
 
         <div class="block-total-part2">
@@ -39,7 +39,7 @@
 
             <h2>{% trans %}relance_auto{% endtrans %}</h2>
             <label>
-                <input name="auto" type="checkbox"/>
+                <input id="auto" name="auto" type="checkbox" onclick="automatiserRelance();"/>
                 {% trans %}activee{% endtrans %} <span id="tooltip-checkbox">[I]</span>
             </label>
         </div>
@@ -53,12 +53,7 @@
                 <th>{% trans %}email{% endtrans %}</th>
                 <th>{% trans %}date_envoi{% endtrans %}</th>
             </tr>
-            {% for questionnaire in questionnaires %}
-                <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
-                    <td>{{ questionnaire.email }}</td>
-                    <td>{{ questionnaire.dateEnvoi|localizeddate('short', 'none') }}</td>
-                </tr>
-            {% endfor %}
+            {{ include('FIANETSceauBundle:Extranet/Questionnaires:relance_lignes.html.twig', {'questionnaires': questionnaires}) }}
         </table>
 
         <div id="chargement"><img src="{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}" alt="{% trans from 'commun' %}commun_chargement{% endtrans %}" /></div>
@@ -68,27 +63,17 @@
 
 {% block extranet_javascripts %}
     {% javascripts
-    'bundles/fianetsceau/js/tooltipster/jquery.tooltipster.min.js' %}
+    'bundles/fianetsceau/js/tooltipster/jquery.tooltipster.min.js'
+    'bundles/fianetsceau/js/extranet/relance.js' %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
 
     <script type="text/javascript">
-        $('#tooltip-checkbox').tooltipster({
-            content: $('{% spaceless %}{{ 'tooltip_checkbox'|trans|replace({"'" : "\\'" })|raw }}{% endspaceless %}'),
-            interactive: true,
-            maxWidth: 350
-        });
+        creerPopupEmail();
+        creerTooltipCheckbox('{% spaceless %}{{ 'tooltip_checkbox'|trans|replace({"'" : "\\'" })|raw }}{% endspaceless %}');
 
-        var popupEmail =
-            $("#email-type").dialog({
-                modal: true,
-                autoOpen: false,
-                minWidth: 595
-            });
-
-        $( "#lien-email-type" ).on( "click", function() {
-            popupEmail.dialog( "open" );
-        });
-
+        {% if nbTotalQuestionnaires != 0 %}
+            paquetQuestionnairesSuivants("{% trans %}plus_de_questionnaire{% endtrans %}", {{ nbQuestionnairesMax  }});
+        {% endif %}
     </script>
 {% endblock %}

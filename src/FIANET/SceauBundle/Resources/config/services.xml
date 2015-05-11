@@ -47,6 +47,7 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         <service id="fianet_sceau.relance" class="FIANET\SceauBundle\Service\Relance">
+            <argument>%delaiJoursRelance%</argument>
         </service>
 
         <!-- Extranet -->

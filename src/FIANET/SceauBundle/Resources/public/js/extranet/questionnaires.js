@@ -1,3 +1,13 @@
+function creerTooltipLivraison(contenu) {
+    $('#tooltip').tooltipster({
+            contentAsHTML: true,
+            content: $(contenu),
+            interactive: true,
+            maxWidth: 350
+        }
+    );
+}
+
 function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, dateFin, tri, recherche, indicateurs, livraison) {
 
     $(document).ready(function () {

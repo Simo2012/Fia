@@ -6,7 +6,9 @@ use DateInterval;
 use DateTime;
 use Exception;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
+use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
+use FIANET\SceauBundle\Form\RelanceType;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -188,7 +190,7 @@ class QuestionnairesController extends Controller
      * Action appelable uniquement via AJAX. Elle retourne les questionnaires par paquet de lignes de tableau en
      * fonction des filtres demandés (utilisé pour le scroll infini).
      *
-     * @Route("/questionnaires/questionnaires_ajax", name="extranet_questionnaires_questionnaires_ajax",
+     * @Route("/questionnaires/questionnaires-ajax", name="extranet_questionnaires_questionnaires_ajax",
      *     options={"expose"=true})
      * @Method({"POST"})
      *
@@ -290,6 +292,7 @@ class QuestionnairesController extends Controller
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
         $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriodeRelance();
+        $nbQuestionnairesMax = $this->container->getParameter('nb_relances_max');
 
         $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
             ->nbTotalQuestionnairesARelancer(
@@ -306,7 +309,7 @@ class QuestionnairesController extends Controller
                 $datePeriode['dateDebut'],
                 $datePeriode['dateFin'],
                 0,
-                $this->container->getParameter('nb_questionnaires_max')
+                $nbQuestionnairesMax
             );
 
         return $this->render(
@@ -314,20 +317,97 @@ class QuestionnairesController extends Controller
             array(
                 'delaiJoursRelance' => $this->container->getParameter('delaiJoursRelance'),
                 'nbTotalQuestionnaires' => $nbTotalQuestionnaires,
+                'nbQuestionnairesMax' => $nbQuestionnairesMax,
                 'questionnaires' => $questionnaires,
                 'offset' => 0,
                 'dateDebut' => $datePeriode['dateDebut'],
                 'dateFin' => $datePeriode['dateFin'],
-                'templateEmail' => $questionnaireType->getParametrage()['templateEmail'] . 'CorpsRelance.html.twig'
+                'templateEmail' => $questionnaireType->getParametrage()['templateEmail']
             )
         );
+    }
+
+    /**
+     * Action appelable uniquement via AJAX. Elle retourne les questionnaires pouvant être relancés par paquet
+     * de lignes de tableau (utilisé pour le scroll infini).
+     *
+     * @Route("/questionnaires/relance-questionnaires-ajax", name="extranet_questionnaires_relance_ajax",
+     *     options={"expose"=true})
+     * @Method({"POST"})
+     *
+     * @param Request $request Instance de Request
+     *
+     * @return Response Instance de Response
+     *
+     * @throws Exception Si l'action n'est pas appelée en AJAX
+     */
+    public function relanceAjaxAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
+            $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+            $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriodeRelance();
+
+            $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+                ->listeQuestionnairesARelancer(
+                    $site,
+                    $questionnaireType,
+                    $datePeriode['dateDebut'],
+                    $datePeriode['dateFin'],
+                    $request->request->get('offset', 0),
+                    $this->container->getParameter('nb_relances_max')
+                );
+
+            return $this->render(
+                'FIANETSceauBundle:Extranet/Questionnaires:relance_lignes.html.twig',
+                array(
+                    'questionnaires' => $questionnaires,
+                    'offset' => $request->request->get('offset', 0)
+                )
+            );
+
+        } else {
+            throw new Exception($this->get('translator')->trans(
+                'erreurs_mauvaise_methode_appel',
+                array(),
+                'erreurs',
+                $request->getLocale()
+            ));
+        }
+    }
+
+    /**
+     * Active ou désactive la relance automatique.
+     *
+     * @Route("/questionnaires/relance-auto", name="extranet_questionnaires_relance_auto",
+     *     options={"expose"=true})
+     * @Method({"POST"})
+     *
+     * @param Request $request Instance de Request
+     *
+     * @return Response Instance de Response
+     *
+     * @throws Exception Si l'action n'est pas appelée en AJAX
+     */
+    public function relanceAutomatisationAjax(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            return new Response();
+        } else {
+            throw new Exception($this->get('translator')->trans(
+                'erreurs_mauvaise_methode_appel',
+                array(),
+                'erreurs',
+                $request->getLocale()
+            ));
+        }
     }
 
     /**
      * Affiche la page qui permet de personnaliser la relance pour un type de questionnaire.
      *
      * @Route("/questionnaires/personnaliser-relance", name="extranet_questionnaires_perso_relance")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
      *
@@ -346,9 +426,22 @@ class QuestionnairesController extends Controller
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
 
+        $relance = new Relance();
+        $form = $this->createForm(new RelanceType(), $relance);
+
+        if ($form->isValid()) {
+            echo 'oki';
+        }
+
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:relance_perso.html.twig',
             array(
+                'templateEmail' => $questionnaireType->getParametrage()['templateEmail'],
+                'objetParDefaut' => sprintf(
+                    $this->container->getParameter('relance_objet_par_defaut'),
+                    $site->getNom()
+                ),
+                'form' => $form->createView()
             )
         );
     }

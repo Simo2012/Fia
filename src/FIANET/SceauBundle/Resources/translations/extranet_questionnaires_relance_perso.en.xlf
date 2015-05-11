@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>titre_page</source>
+                <target>Customize your relaunch</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>titre_paragraphe</source>
+                <target>How customize your relaunch e-mail</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>corps_paragraphe</source>
+                <target>
+                    <![CDATA[
+                        We invite you to customize the subject and content of the stimulus email to encourage your customers to respond to the FIA-NET questionnaire.<br />
+                        In addressing you directly to your customers, you hire dialogue and valuate the opinion of your customers. You can enjoy personalized to highlight your willingness to take into account the opinions of your users and improve your services. The customization is not required.<br />
+                        If you decide to change only one parameter, FIA-NET will use default text.
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>bouton_valider</source>
+                <target>Validate</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>bouton_visualiser</source>
+                <target>Visualize</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>label_objet</source>
+                <target>E-mail object :</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>label_corps</source>
+                <target>E-mail content :</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>precision_objet</source>
+                <target>255 characters maximum, default object :</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

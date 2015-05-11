@@ -134,14 +134,7 @@
         decocherRetenir();
         afficherCalendrier('questionnaires_liste_dateDebut');
         afficherCalendrier('questionnaires_liste_dateFin');
-
-        $('#tooltip').tooltipster({
-                contentAsHTML: true,
-                content: $('{% spaceless %}{{ 'tooltip_livraison'|trans|replace({"'" : "\\'" })|replace({"##LIEN##" : asset('documents/dispo_techniques_flux_xml.pdf') })|raw }}{% endspaceless %}'),
-                interactive: true,
-                maxWidth: 350
-            }
-        );
+        creerTooltipLivraison('{% spaceless %}{{ 'tooltip_livraison'|trans|replace({"'" : "\\'" })|replace({"##LIEN##" : asset('documents/dispo_techniques_flux_xml.pdf') })|raw }}{% endspaceless %}');
 
         {% if nbTotalQuestionnaires != 0 %}
             paquetQuestionnairesSuivants("{% trans %}plus_de_questionnaire{% endtrans %}", {{ nbQuestionnairesMax  }}, '{{ dateDebut }}', '{{ dateFin }}', {{ tri }}, '{{ recherche }}', '{{ indicateurs }}', '{{ livraison }}');

@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: extranet.yml }
     - { resource: moteur.yml }
+    - { resource: emails.yml }
 
 framework:
     #esi:             ~

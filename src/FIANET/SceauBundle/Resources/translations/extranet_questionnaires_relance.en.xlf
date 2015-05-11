@@ -67,6 +67,10 @@
                 <source>titre_email_type</source>
                 <target>E-mail type default</target>
             </trans-unit>
+            <trans-unit id="15">
+                <source>plus_de_questionnaire</source>
+                <target>There is no more questionnaires that can be relaunch</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

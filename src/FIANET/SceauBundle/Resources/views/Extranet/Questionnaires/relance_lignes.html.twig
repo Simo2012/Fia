@@ -1,0 +1,6 @@
+{% for questionnaire in questionnaires %}
+    <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
+        <td>{{ questionnaire.email }}</td>
+        <td>{{ questionnaire.dateEnvoi|localizeddate('short', 'none') }}</td>
+    </tr>
+{% endfor %}
