@@ -1,0 +1,37 @@
+imports:
+    - { resource: config.yml }
+
+framework:
+    validation:
+        cache: apc
+
+doctrine:
+    orm:
+        metadata_cache_driver: apc
+        result_cache_driver: apc
+        query_cache_driver: apc
+    dbal:
+        host: SCEAUBDDR7
+        port: 5439
+        dbname: sceau
+        user: sceau_user
+        password: hello
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        console:
+            type:  console
+
+# Surcharge des paramètres
+parameters:
+    router.request_context.host: recette.fia-net.ccm
+    router.request_context.scheme: https
+    router.request_context.base_url: /
