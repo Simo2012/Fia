@@ -244,8 +244,8 @@ class QuestionnaireRepository extends EntityRepository
     }
 
     /**
-     * Retourne les informations générales liées au questionnaire répondu (informations sur la commande, le membre, le site, 
-     * l'éventuel commentaire principal, l'éventuel droit de réponse lié au commentaire principal)
+     * Retourne les informations générales liées au questionnaire répondu (informations sur la commande, le membre,
+     * le site, l'éventuel commentaire principal, l'éventuel droit de réponse lié au commentaire principal)
      *
      * @param Questionnaire $questionnaire Instance de Questionnaire
      * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
@@ -255,7 +255,7 @@ class QuestionnaireRepository extends EntityRepository
     public function infosGeneralesQuestionnaire(
         Questionnaire $questionnaire,
         QuestionnaireType $questionnaireType
-    ) { 
+    ) {
         $qb = $this->createQueryBuilder('q');
         
         $qb->leftJoin('q.commande', 'c')
@@ -268,10 +268,11 @@ class QuestionnaireRepository extends EntityRepository
                 'WITH',
                 'qr_com.question = :qid_com'
             )
-            ->leftJoin('qr_com.droitDeReponses',
+            ->leftJoin(
+                'qr_com.droitDeReponses',
                 'ddr',
                 'WITH',
-                'ddr.actif = true'    
+                'ddr.actif = true'
             )
             ->addSelect('c')
             ->addSelect('m')
@@ -297,7 +298,7 @@ class QuestionnaireRepository extends EntityRepository
      */
     public function infosDetailsQuestionnaire(
         Questionnaire $questionnaire
-    ){
+    ) {
         $qb = $this->createQueryBuilder('q');
          
         $qb
@@ -319,6 +320,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      * @param string $dateDebut Date de début de la période
      * @param string $dateFin Date de fin de la période
+     * @param integer $langue_id Identifiant de la langue des questionnaires
      *
      * @return QueryBuilder Le QueryBuilder modifié avec l'ajout des restrictions
      */
@@ -327,7 +329,8 @@ class QuestionnaireRepository extends EntityRepository
         Site $site,
         QuestionnaireType $questionnaireType,
         $dateDebut,
-        $dateFin
+        $dateFin,
+        $langue_id
     ) {
         $qb->andWhere('q.site = :sid')
             ->setParameter('sid', $site->getId())
@@ -338,7 +341,9 @@ class QuestionnaireRepository extends EntityRepository
             ->andWhere('q.dateEnvoi >= :dateDebut')
             ->setParameter('dateDebut', $dateDebut)
             ->andWhere('q.dateEnvoi < :dateFin')
-            ->setParameter('dateFin', $dateFin);
+            ->setParameter('dateFin', $dateFin)
+            ->andWhere('q.langue = :lid')
+            ->setParameter('lid', $langue_id);
 
         return $qb;
     }
@@ -350,6 +355,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      * @param string $dateDebut Date de début de la période
      * @param string $dateFin Date de fin de la période
+     * @param integer $langue_id Identifiant de la langue des questionnaires
      *
      * @return int Le nombre de questionnaire
      */
@@ -357,12 +363,20 @@ class QuestionnaireRepository extends EntityRepository
         Site $site,
         QuestionnaireType $questionnaireType,
         $dateDebut,
-        $dateFin
+        $dateFin,
+        $langue_id
     ) {
         $qb = $this->createQueryBuilder('q')
             ->select('COUNT(q.id)');
 
-        $qb = $this->restrictionsListeQuestionnairesARelancer($qb, $site, $questionnaireType, $dateDebut, $dateFin);
+        $qb = $this->restrictionsListeQuestionnairesARelancer(
+            $qb,
+            $site,
+            $questionnaireType,
+            $dateDebut,
+            $dateFin,
+            $langue_id
+        );
 
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
     }
@@ -374,6 +388,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      * @param string $dateDebut Date de début de la période
      * @param string $dateFin Date de fin de la période
+     * @param integer $langue_id Identifiant de la langue des questionnaires
      * @param int $premierQuestionnaire Numéro du premier questionnaire retourné
      * @param int $nbQuestionnaires Nombre maximum de questionnaire retourné
      *
@@ -384,6 +399,7 @@ class QuestionnaireRepository extends EntityRepository
         QuestionnaireType $questionnaireType,
         $dateDebut,
         $dateFin,
+        $langue_id,
         $premierQuestionnaire,
         $nbQuestionnaires
     ) {
@@ -395,7 +411,14 @@ class QuestionnaireRepository extends EntityRepository
             )->setFirstResult($premierQuestionnaire)
             ->setMaxResults($nbQuestionnaires);
 
-        $qb = $this->restrictionsListeQuestionnairesARelancer($qb, $site, $questionnaireType, $dateDebut, $dateFin);
+        $qb = $this->restrictionsListeQuestionnairesARelancer(
+            $qb,
+            $site,
+            $questionnaireType,
+            $dateDebut,
+            $dateFin,
+            $langue_id
+        );
 
         $qb->addOrderBy('q.dateEnvoi', 'DESC');
 

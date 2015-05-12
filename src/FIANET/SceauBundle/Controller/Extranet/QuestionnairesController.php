@@ -10,8 +10,10 @@ use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\RelanceType;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
+use FIANET\SceauBundle\Form\Type\SelectLangueType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -273,7 +275,7 @@ class QuestionnairesController extends Controller
      * Affiche la page de relance des questionnaires.
      *
      * @Route("/questionnaires/relance-questionnaires", name="extranet_questionnaires_relance_questionnaires")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
      *
@@ -291,15 +293,28 @@ class QuestionnairesController extends Controller
 
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
-        $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriodeRelance();
+        $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriode();
         $nbQuestionnairesMax = $this->container->getParameter('nb_relances_max');
+
+        $form = $this->createForm(new SelectLangueType());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $langue = $form->get('langue')->getData();
+
+        } else {
+            $langue = $this->getDoctrine()->getRepository('FIANETSceauBundle:Langue')
+                ->findOneByCode($this->container->getParameter('langue_par_defaut'));
+            $form->get('langue')->setData($langue);
+        }
 
         $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
             ->nbTotalQuestionnairesARelancer(
                 $site,
                 $questionnaireType,
                 $datePeriode['dateDebut'],
-                $datePeriode['dateFin']
+                $datePeriode['dateFin'],
+                $langue->getId()
             );
 
         $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
@@ -308,6 +323,7 @@ class QuestionnairesController extends Controller
                 $questionnaireType,
                 $datePeriode['dateDebut'],
                 $datePeriode['dateFin'],
+                $langue->getId(),
                 0,
                 $nbQuestionnairesMax
             );
@@ -315,6 +331,7 @@ class QuestionnairesController extends Controller
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:relance.html.twig',
             array(
+                'form' => $form->createView(),
                 'delaiJoursRelance' => $this->container->getParameter('delaiJoursRelance'),
                 'nbTotalQuestionnaires' => $nbTotalQuestionnaires,
                 'nbQuestionnairesMax' => $nbQuestionnairesMax,
@@ -322,6 +339,7 @@ class QuestionnairesController extends Controller
                 'offset' => 0,
                 'dateDebut' => $datePeriode['dateDebut'],
                 'dateFin' => $datePeriode['dateFin'],
+                'langue_id' => $langue->getId(),
                 'templateEmail' => $questionnaireType->getParametrage()['templateEmail']
             )
         );
@@ -344,16 +362,15 @@ class QuestionnairesController extends Controller
     public function relanceAjaxAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
-            $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
-            $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriodeRelance();
+            $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriode();
 
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->listeQuestionnairesARelancer(
-                    $site,
-                    $questionnaireType,
+                    $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne')),
+                    $request->getSession()->get('questionnaireTypeSelectionne'),
                     $datePeriode['dateDebut'],
                     $datePeriode['dateFin'],
+                    $request->request->get('langue_id'),
                     $request->request->get('offset', 0),
                     $this->container->getParameter('nb_relances_max')
                 );
@@ -392,7 +409,21 @@ class QuestionnairesController extends Controller
     public function relanceAutomatisationAjax(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            return new Response();
+            $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+            $gestionRelance = $this->get('fianet_sceau.relance');
+
+            $langue = $this->getDoctrine()->getRepository('FIANETSceauBundle:Langue')
+                ->find($request->request->get('langue_id'));
+            $activer = $request->request->get('activer');
+
+            if ($activer) {
+                $gestionRelance->automatiser($site, $langue);
+            } else {
+                $gestionRelance->desautomatiser($site, $langue);
+            }
+
+            return new JsonResponse(true);
+
         } else {
             throw new Exception($this->get('translator')->trans(
                 'erreurs_mauvaise_methode_appel',
@@ -406,14 +437,15 @@ class QuestionnairesController extends Controller
     /**
      * Affiche la page qui permet de personnaliser la relance pour un type de questionnaire.
      *
-     * @Route("/questionnaires/personnaliser-relance", name="extranet_questionnaires_perso_relance")
+     * @Route("/questionnaires/personnaliser-relance/{langue_id}", requirements={"id" = "\d+"},
+     *     name="extranet_questionnaires_perso_relance")
      * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
      *
      * @return Response Instance de Response
      */
-    public function personnaliserEmailRelance(Request $request)
+    public function personnaliserEmailRelance(Request $request, $langue_id)
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $elementMenu = $menu->getChild('questionnaires')->getChild('questionnaires.relance_questionnaires');
@@ -618,5 +650,3 @@ class QuestionnairesController extends Controller
     }
     
 }
-
-

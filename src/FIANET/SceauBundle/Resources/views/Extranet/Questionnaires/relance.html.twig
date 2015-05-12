@@ -25,8 +25,12 @@
             <h2>{% trans with {'%nbJours%' : delaiJoursRelance}%}jours_plus_tard{% endtrans %}</h2>
 
             <h2>{% trans %}parametrage_relance{% endtrans %}</h2>
+            {{ form_start(form) }}
+                Langue : {{ form_widget(form.langue) }}
+                <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button><br />
+            {{ form_end(form) }}
             <button>{% trans %}renvoyer_questionnaire{% endtrans %}</button>
-            <a href="{{ path('extranet_questionnaires_perso_relance') }}"><button>{% trans %}personnaliser_email{% endtrans %}</button></a>
+            <a href="{{ path('extranet_questionnaires_perso_relance', {'langue_id': langue_id}) }}"><button>{% trans %}personnaliser_email{% endtrans %}</button></a>
             <a id="lien-email-type" class="lien">{% trans %}email_type{% endtrans %}</a>
             <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail}))}}</div>
         </div>
@@ -39,7 +43,7 @@
 
             <h2>{% trans %}relance_auto{% endtrans %}</h2>
             <label>
-                <input id="auto" name="auto" type="checkbox" onclick="automatiserRelance();"/>
+                <input id="auto" name="auto" type="checkbox" onclick="automatiserRelance({{ langue_id }}, this.checked);"/>
                 {% trans %}activee{% endtrans %} <span id="tooltip-checkbox">[I]</span>
             </label>
         </div>
@@ -73,7 +77,7 @@
         creerTooltipCheckbox('{% spaceless %}{{ 'tooltip_checkbox'|trans|replace({"'" : "\\'" })|raw }}{% endspaceless %}');
 
         {% if nbTotalQuestionnaires != 0 %}
-            paquetQuestionnairesSuivants("{% trans %}plus_de_questionnaire{% endtrans %}", {{ nbQuestionnairesMax  }});
+            paquetQuestionnairesSuivants("{% trans %}plus_de_questionnaire{% endtrans %}", {{ nbQuestionnairesMax  }}, {{ langue_id }});
         {% endif %}
     </script>
 {% endblock %}

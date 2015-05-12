@@ -19,7 +19,7 @@ function creerTooltipCheckbox(contenu) {
     });
 }
 
-function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax) {
+function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, langue_id) {
 
     $(document).ready(function () {
 
@@ -37,7 +37,8 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax) {
 
                 $.post(Routing.generate('extranet_questionnaires_relance_ajax', null, true),
                     {
-                        offset: offset
+                        offset: offset,
+                        langue_id: langue_id
                     },
                     function (data) {
                         if (data != '') {
@@ -58,13 +59,15 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax) {
     });
 }
 
-function automatiserRelance()
+function automatiserRelance(langue_id, activer)
 {
     $.post(Routing.generate('extranet_questionnaires_relance_auto', null, true),
         {
+            langue_id: langue_id,
+            activer: activer
         },
         function (data) {
-            alert('Magnifique !');
+
         }
     );
 }

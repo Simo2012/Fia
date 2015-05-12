@@ -73,7 +73,15 @@ class Relance
      * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\RelanceStatut")
      * @ORM\JoinColumn(name="relanceStatut_id", referencedColumnName="id", nullable=false)
      */
-    private $statut;
+    private $relanceStatut;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Langue")
+     * @ORM\JoinColumn(name="langue_id", referencedColumnName="id", nullable=false)
+     */
+    private $langue;
 
 
     public function __construct()
@@ -189,13 +197,13 @@ class Relance
     }
 
     /**
-     * Set modele
+     * Set auto
      *
      * @param boolean $auto
      *
      * @return Relance
      */
-    public function setModele($auto)
+    public function setAuto($auto)
     {
         $this->auto = $auto;
 
@@ -237,26 +245,50 @@ class Relance
     }
 
     /**
-     * Set statut
+     * Set relanceStatut
      *
-     * @param RelanceStatut $statut
+     * @param RelanceStatut $relanceStatut
      *
      * @return Relance
      */
-    public function setStatut(RelanceStatut $statut)
+    public function setRelanceStatut(RelanceStatut $relanceStatut)
     {
-        $this->statut = $statut;
+        $this->relanceStatut = $relanceStatut;
 
         return $this;
     }
 
     /**
-     * Get statut
+     * Get relanceStatut
      *
      * @return RelanceStatut
      */
-    public function getStatut()
+    public function getRelanceStatut()
     {
-        return $this->statut;
+        return $this->relanceStatut;
+    }
+
+    /**
+     * Set langue
+     *
+     * @param Langue $langue
+     *
+     * @return Relance
+     */
+    public function setLangue(Langue $langue)
+    {
+        $this->langue = $langue;
+
+        return $this;
+    }
+
+    /**
+     * Get langue
+     *
+     * @return Langue
+     */
+    public function getLangue()
+    {
+        return $this->langue;
     }
 }
