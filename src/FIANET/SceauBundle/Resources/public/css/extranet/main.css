@@ -496,7 +496,7 @@ table.gen td div {
 	overflow: hidden;
 }
 .block-info-rep p.reponse {
-	float: right;
+	float: left;
 	width: 280px;
 	font-size: 11px;
 	margin: 0;
@@ -611,4 +611,6 @@ footer #DIVdate {
 .charte-commercant {
     text-align: justify;
     width: 95%;
+    font-size: 11px;
+    font-family: "Proxima Nova Lt", "Proxima Nova Rg", "Proxima Nova Th", "proxima-nova", "Times New Roman";
 }

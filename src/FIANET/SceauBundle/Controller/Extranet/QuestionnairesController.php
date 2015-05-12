@@ -469,9 +469,12 @@ class QuestionnairesController extends Controller
             throw new Exception('Questionnaire invalide');
         }
 
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $questionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')->find($id);
         $questionnaireType = $questionnaire->getQuestionnaireType();
+        
+        // Dans le cas où on appelle un Q2 directement, on doit d'abord aller chercher les infos du Q1
+        // ToDo :
         
         // On récupère les informations pour la navigation (questionnaire précédent, questionnaire suivant)
         // La navigation doit se faire :
@@ -504,13 +507,11 @@ class QuestionnairesController extends Controller
         $questionnaireLieTypeLibelle = null;
         $questionnaireLieListeQuestionsReponses = null;
         $questionnaireLieCommentairePrincipal = null;
+        $infosGeneralesQuestionnaireLie = null;
         
         if ($questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant()) {
             
             $questionnaireSuivant = true;
-            
-            echo $questionnaireLieType;
-            
             $questionnaireLie = $questionnaire->getQuestionnaireLie();
             $questionnaireLieType = $questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant();
             $questionnaireLieTypeLibelle = $this->get('fianet_sceau.questionnaire_repondu')->getLibelleQuestionnaireTypeRepondu($questionnaireLieType);            
@@ -615,7 +616,7 @@ class QuestionnairesController extends Controller
             )
         );
     }
-
+    
 }
 
 

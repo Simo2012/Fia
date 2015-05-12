@@ -83,29 +83,32 @@
             {% if commentairePrincipal is defined %}
                 {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire ET que le questionnaire Q2 n'a pas été répondu dans le cas de questionnaire Q1/Q2 #}
                 {% if droitDeReponse is defined %}
-                    <div class="drt-rep"><strong>{{ 'commun_droit_de_reponse'|trans()|upper }} - {{ 'commun_le'|trans }} {{ droitDeReponse.dateInsertion|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ droitDeReponse.dateInsertion|localizeddate('none', 'short') }} - </strong>
-                    <br />{{ droitDeReponse.commentaire }}</div>
-                {% else %}                    
+                    <br />
+                    <h2>{{ 'commun_droit_de_reponse'|trans()|upper }} - {{ 'commun_le'|trans }} {{ droitDeReponse.dateInsertion|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ droitDeReponse.dateInsertion|localizeddate('none', 'short') }} - </h2>
+                    <div class="drt-rep">{{ droitDeReponse.commentaire }}</div>
+                {% else %}
+                    {% if questionnaireLie[0] is not defined %}
                     <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire[0].id, 'qrid': commentairePrincipal.id}) })|raw }}</p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
                     <br />
                     <p>{{ 'repondez_directement'|trans({}, 'extranet_droit_de_reponse')|raw }} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire[0].id, 'qrid': commentairePrincipal.id}) }}' "><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {{ 'repondez'|trans({}, 'extranet_droit_de_reponse') }}</button></p>
+                    {% endif %}           
                 {% endif %}
             {% endif %}
             
         </div>
         
         {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire ET que le questionnaire Q2 n'a pas été répondu dans le cas de questionnaire Q1/Q2 #}
-        {% if commentairePrincipal is defined %}
+        {% if commentairePrincipal is defined and questionnaireLie[0] is not defined %}
         <div class="block-total-part3">
             <div class="block-info-rep">
-                <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59"/>
+                <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59"/><br /><br />
                 </div>
                 {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traduit / ! \ Réfléchir au process #}
                 <p class="reponse">
                     {{ 'detail_questionnaire_bloc_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|raw }}
+                    {# <p class="reponse" id="laCharte">{{ 'commun_charte_commercant'|trans|raw }}</p> 
+                    <span class="lien"  id="lienLaCharte" >{{ 'commun_droit_de_reponse_charte_2'|trans }}</span> #}
                 </p>
-                {# <div class="reponse" id="laCharte">{{ 'commun_charte_commercant'|trans|raw }}</div> 
-                <span class="lien"  id="lienLaCharte" >{{ 'commun_droit_de_reponse_charte_2'|trans }}</span> #}
             </div>
         </div>
         {% endif %} 
@@ -113,10 +116,10 @@
     </div>
     {% endif %}
    
-    {% if questionnaireSuivant is not null %}
+    {% if questionnaireSuivant %}
     <h1>{{ questionnaireLieTypeLibelle|trans({}, 'commun_questionnaires_repondus') }}</h1>
     
-        {% if questionnaireLie[0] is not null %}
+        {% if questionnaireLie[0] is defined %}
         <div class="block-total">
             <div class="block-total-part1-2">           
 
@@ -132,8 +135,9 @@
                 {% if commentairePrincipalLie is defined %}
                     {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire ET que le questionnaire Q2 n'a pas été répondu dans le cas de questionnaire Q1/Q2 #}
                     {% if droitDeReponseLie is defined %}
-                        <div class="drt-rep"><strong>{{ 'commun_droit_de_reponse'|trans()|upper }} - {{ 'commun_le'|trans }} {{ droitDeReponseLie.dateInsertion|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ droitDeReponseLie.dateInsertion|localizeddate('none', 'short') }} - </strong>
-                        <br />{{ droitDeReponseLie.commentaire }}</div>
+                        <br />
+                        <h2>{{ 'commun_droit_de_reponse'|trans()|upper }} - {{ 'commun_le'|trans }} {{ droitDeReponseLie.dateInsertion|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ droitDeReponseLie.dateInsertion|localizeddate('none', 'short') }} - </h2>
+                        <div class="drt-rep">{{ droitDeReponseLie.commentaire }}</div>
                     {% else %}                    
                         <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireLie[0].id, 'qrid': commentairePrincipalLie.id}) })|raw }}</p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
                         <br />
@@ -152,9 +156,9 @@
                     {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traduit / ! \ Réfléchir au process #}
                     <p class="reponse">
                         {{ 'detail_questionnaire_bloc_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|raw }}
+                        {# <p class="reponse" id="laCharte">{{ 'commun_charte_commercant'|trans|raw }}</p> 
+                        <span class="lien"  id="lienLaCharte" >{{ 'commun_droit_de_reponse_charte_2'|trans }}</span> #}
                     </p>
-                    {# <div class="reponse" id="laCharte">{{ 'commun_charte_commercant'|trans|raw }}</div> 
-                    <span class="lien"  id="lienLaCharte" >{{ 'commun_droit_de_reponse_charte_2'|trans }}</span> #}
                 </div>
             </div>
             {% endif %} 
