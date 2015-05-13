@@ -71,6 +71,14 @@
                 <source>plus_de_questionnaire</source>
                 <target>There is no more questionnaires that can be relaunch</target>
             </trans-unit>
+            <trans-unit id="16">
+                <source>renvoyer_succes</source>
+                <target>Questionnaires were sent successfully.</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>renvoyer_erreur</source>
+                <target>questionnaires can not have been sent.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

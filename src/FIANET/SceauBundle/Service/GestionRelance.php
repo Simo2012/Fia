@@ -4,7 +4,9 @@ namespace FIANET\SceauBundle\Service;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Exception;
 use FIANET\SceauBundle\Entity\Langue;
+use FIANET\SceauBundle\Entity\QuestionnaireType;
 use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Entity\Site;
 
@@ -50,56 +52,110 @@ class GestionRelance
      *
      * @param bool $activer true => active les relances auto, false => désactive les relances auto
      * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      * @param Langue $langue Instance de Langue
+     *
+     * @return bool true si le traitement s'est déroulé correctement sinon false
      */
-    private function changerAutomatisation($activer, Site $site, $langue)
+    private function changerAutomatisation($activer, Site $site, QuestionnaireType $questionnaireType, $langue)
     {
-        $relance = $this->em->getRepository('FIANETSceauBundle:Relance')->relanceValidee($site, $langue);
+        try {
+            $relance = $this->em->getRepository('FIANETSceauBundle:Relance')
+                ->relanceValidee($site, $questionnaireType, $langue);
 
-        if ($activer) {
-            if ($relance) {
-                $relance->setAuto(true);
-                $this->em->flush();
+            if ($activer) {
+                if ($relance) {
+                    $relance->setAuto(true);
+                    $this->em->flush();
+
+                } else {
+                    $relance = new Relance();
+                    $relance->setDateCreation(new DateTime());
+                    $relance->setAuto(true);
+                    $relance->setRelanceStatut($this->em->getRepository('FIANETSceauBundle:RelanceStatut')->find(1));
+                    $relance->setSite($site);
+                    $relance->setQuestionnaireType($questionnaireType);
+                    $relance->setLangue($langue);
+
+                    $this->em->persist($relance);
+                    $this->em->flush();
+                }
 
             } else {
-                $relance = new Relance();
-                $relance->setDateCreation(new DateTime());
-                $relance->setAuto(true);
-                $relance->setRelanceStatut($this->em->getRepository('FIANETSceauBundle:RelanceStatut')->find(1));
-                $relance->setSite($site);
-                $relance->setLangue($langue);
-
-                $this->em->persist($relance);
-                $this->em->flush();
+                if ($relance) {
+                    $relance->setAuto(false);
+                    $this->em->flush();
+                }
             }
 
-        } else {
-            if ($relance) {
-                $relance->setAuto(false);
-                $this->em->flush();
-            }
+        } catch (Exception $e) {
+            return false;
         }
+
+        return true;
     }
 
     /**
-     * Active les relances automatiques pour un site et pour une langue.
+     * Active les relances automatiques pour un site, un type de questionnaire et une langue.
      *
      * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      * @param Langue $langue Instance de Langue
+     *
+     * @return bool true si le traitement s'est déroulé correctement sinon false
      */
-    public function automatiser(Site $site, $langue)
+    public function automatiser(Site $site, QuestionnaireType $questionnaireType, $langue)
     {
-        $this->changerAutomatisation(true, $site, $langue);
+        return $this->changerAutomatisation(true, $site, $questionnaireType, $langue);
     }
 
     /**
-     * Désactive les relances automatiques pour un site et pour une langue.
+     * Désactive les relances automatiques pour un site, un type de questionnaire et une langue.
      *
      * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      * @param Langue $langue Instance de Langue
+     *
+     * @return bool true si le traitement s'est déroulé correctement sinon false
      */
-    public function desautomatiser(Site $site, $langue)
+    public function desautomatiser(Site $site, QuestionnaireType $questionnaireType, $langue)
     {
-        $this->changerAutomatisation(false, $site, $langue);
+        return $this->changerAutomatisation(false, $site, $questionnaireType, $langue);
+    }
+
+    /**
+     * Renvoie les questionnaires non répondus pour un site, un type de questionnaire et une langue :
+     * l'attribut datePrevRelance des questionnaires est mis à jour avec la date du jour.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param integer $langue_id Identifiant de la langue
+     *
+     * @return bool true si le traitement s'est déroulé correctement sinon false
+     */
+    public function renvoyerQuestionnaires(Site $site, QuestionnaireType $questionnaireType, $langue_id)
+    {
+        try {
+            $dates = $this->calculerPeriode();
+
+            $questionnaires = $this->em->getRepository('FIANETSceauBundle:Questionnaire')->listeQuestionnairesARelancer(
+                $site,
+                $questionnaireType,
+                $dates['dateDebut'],
+                $dates['dateFin'],
+                $langue_id
+            );
+
+            foreach ($questionnaires as $questionnaire) {
+                $questionnaire->setDatePrevRelance(new DateTime());
+            }
+
+            $this->em->flush();
+
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -83,6 +83,14 @@ class Relance
      */
     private $langue;
 
+    /**
+     * @var RelanceStatut
+     *
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireType")
+     * @ORM\JoinColumn(name="questionnaireType_id", referencedColumnName="id", nullable=false)
+     */
+    private $questionnaireType;
+
 
     public function __construct()
     {
@@ -290,5 +298,29 @@ class Relance
     public function getLangue()
     {
         return $this->langue;
+    }
+
+    /**
+     * Set questionnaireType
+     *
+     * @param QuestionnaireType $questionnaireType
+     *
+     * @return Relance
+     */
+    public function setQuestionnaireType(QuestionnaireType $questionnaireType)
+    {
+        $this->questionnaireType = $questionnaireType;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaireType
+     *
+     * @return QuestionnaireType
+     */
+    public function getQuestionnaireType()
+    {
+        return $this->questionnaireType;
     }
 }

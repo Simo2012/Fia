@@ -99,6 +99,10 @@ button:hover, button:active, .button:hover, .button:active {
     margin-top: 10px;
 }
 
+.succes {
+    color: #007700;
+}
+
 .erreur {
     color: #C00000;
 }

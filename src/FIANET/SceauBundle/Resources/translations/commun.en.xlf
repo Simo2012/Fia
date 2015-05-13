@@ -176,6 +176,14 @@
                 <source>commun_a</source>
                 <target>at</target>
             </trans-unit>
+            <trans-unit id="40">
+                <source>commun_demande_succes</source>
+                <target>Your request has been taken into account.</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>commun_demande_erreur</source>
+                <target>Your request could not be considered.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

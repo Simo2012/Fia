@@ -59,15 +59,22 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, langue_id) 
     });
 }
 
-function automatiserRelance(langue_id, activer)
-{
+function automatiserRelance(langue_id, activer, msgSuccess, msgErreur) {
+    var autoMessage = $('#auto-message');
+    autoMessage.removeClass().html('');
+
     $.post(Routing.generate('extranet_questionnaires_relance_auto', null, true),
         {
             langue_id: langue_id,
             activer: activer
         },
-        function (data) {
+        function (success) {
+            if (success) {
+                autoMessage.addClass('succes').html(msgSuccess);
 
+            } else {
+                autoMessage.addClass('erreur').html(msgErreur);
+            }
         }
     );
 }

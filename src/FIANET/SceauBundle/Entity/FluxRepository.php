@@ -41,6 +41,6 @@ class FluxRepository extends EntityRepository
             ->orderBy('f.id', 'ASC')
             ->setMaxResults($nbMaxFlux);
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->useQueryCache(true)->getResult();
     }
 }

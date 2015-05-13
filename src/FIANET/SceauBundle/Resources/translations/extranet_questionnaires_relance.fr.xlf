@@ -71,6 +71,14 @@
                 <source>plus_de_questionnaire</source>
                 <target>Il n'y a plus de questionnaires pouvant être relancés</target>
             </trans-unit>
+            <trans-unit id="16">
+                <source>renvoyer_succes</source>
+                <target>Les questionnaires ont été renvoyés avec succès.</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>renvoyer_erreur</source>
+                <target>Les questionnaires n'ont pas pu être renvoyés.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

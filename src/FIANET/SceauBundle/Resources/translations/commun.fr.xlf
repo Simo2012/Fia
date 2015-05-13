@@ -175,7 +175,15 @@
             <trans-unit id="39">
                 <source>commun_a</source>
                 <target>à</target>
-            </trans-unit> 
+            </trans-unit>
+            <trans-unit id="40">
+                <source>commun_demande_succes</source>
+                <target>Votre demande a bien été prise en compte.</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>commun_demande_erreur</source>
+                <target>Votre demande n'a pas pu être prise en compte.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

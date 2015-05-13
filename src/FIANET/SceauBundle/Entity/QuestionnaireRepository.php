@@ -239,7 +239,8 @@ class QuestionnaireRepository extends EntityRepository
         } elseif ($tri == 3) {
             $qb->orderBy('q.dateReponse', 'ASC');
         }
-        
+
+        // TODO : étudier le cache dans ce cas
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
     }
 
@@ -342,6 +343,7 @@ class QuestionnaireRepository extends EntityRepository
             ->setParameter('dateDebut', $dateDebut)
             ->andWhere('q.dateEnvoi < :dateFin')
             ->setParameter('dateFin', $dateFin)
+            ->andWhere('q.datePrevRelance IS NULL')
             ->andWhere('q.langue = :lid')
             ->setParameter('lid', $langue_id);
 
@@ -349,7 +351,8 @@ class QuestionnaireRepository extends EntityRepository
     }
 
     /**
-     * Retourne le nombre total de questionnaires pouvant être relancés par un site pour un type de questionnaire.
+     * Retourne le nombre total de questionnaires pouvant être relancés par un site, pour un type de questionnaire et
+     * pour une langue.
      *
      * @param Site $site Instance de Site
      * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
@@ -378,11 +381,12 @@ class QuestionnaireRepository extends EntityRepository
             $langue_id
         );
 
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
+        return $qb->getQuery()->useQueryCache(true)->getSingleScalarResult();
     }
 
     /**
-     * Retourne "un paquet" de questionnaires pouvant être relancés par un site pour un type de questionnaire.
+     * Retourne "un paquet" de questionnaires pouvant être relancés par un site pour un type de questionnaire et
+     * pour une langue.
      *
      * @param Site $site Instance de Site
      * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
@@ -394,7 +398,7 @@ class QuestionnaireRepository extends EntityRepository
      *
      * @return array Tableau de string
      */
-    public function listeQuestionnairesARelancer(
+    public function listeQuestionnairesARelancerParPaquet(
         Site $site,
         QuestionnaireType $questionnaireType,
         $dateDebut,
@@ -422,6 +426,39 @@ class QuestionnaireRepository extends EntityRepository
 
         $qb->addOrderBy('q.dateEnvoi', 'DESC');
 
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
+        return $qb->getQuery()->useQueryCache(true)->getArrayResult();
+    }
+
+    /**
+     * Retourne les questionnaires pouvant être relancés par un site, pour un type de questionnaire et
+     * pour une langue.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param string $dateDebut Date de début de la période
+     * @param string $dateFin Date de fin de la période
+     * @param integer $langue_id Identifiant de la langue des questionnaires
+     *
+     * @return Questionnaire[]
+     */
+    public function listeQuestionnairesARelancer(
+        Site $site,
+        QuestionnaireType $questionnaireType,
+        $dateDebut,
+        $dateFin,
+        $langue_id
+    ) {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb = $this->restrictionsListeQuestionnairesARelancer(
+            $qb,
+            $site,
+            $questionnaireType,
+            $dateDebut,
+            $dateFin,
+            $langue_id
+        );
+
+        return $qb->getQuery()->useQueryCache(true)->getResult();
     }
 }
