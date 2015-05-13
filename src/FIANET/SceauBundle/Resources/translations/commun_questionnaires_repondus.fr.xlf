@@ -21,7 +21,31 @@
             <trans-unit id="5">
                 <source>questionnaire_repondu.5</source>
                 <target>Questionnaire répondu</target>
-            </trans-unit>                     
+            </trans-unit>
+            <trans-unit id="6">
+                <source>questionnaire_non_envoye</source>
+                <target>
+                    <![CDATA[
+                        Ce questionnaire n'a pas encore été, ou n'a pu être, envoyé à l'internaute. Envoi prévu pour le ##DATE_ENVOI##.
+                    ]]>
+                </target>            
+            </trans-unit>
+            <trans-unit id="7">
+                <source>questionnaire_envoye_non_repondu</source>
+                <target>
+                    <![CDATA[
+                        Ce questionnaire a été envoyé le ##DATE_ENVOI##, mais l'internaute n'y a pas encore répondu.
+                    ]]>
+                </target>        
+            </trans-unit>                       
+            <trans-unit id="8">
+                <source>questionnaire_envoye_delai_depasse</source>
+                <target>
+                    <![CDATA[
+                        Ce questionnaire a été envoyé le ##DATE_ENVOI##, mais le délai pour y répondre est dépassé.
+                    ]]>
+                </target>      
+            </trans-unit>                                
         </body>
     </file>
 </xliff>

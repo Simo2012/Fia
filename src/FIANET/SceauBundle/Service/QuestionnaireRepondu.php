@@ -370,4 +370,25 @@ class QuestionnaireRepondu
         return $questionnaireLieSuivant;
     }
     
+    /**
+     * Méthode qui permet de créer le message à afficher lorsqu'un questionnaire lié suivant n'est pas envoyé/répondu
+     * 
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     * 
+     * @return array Tableau contenant le code message à traduire et à afficher + la date d'envoi prévu ou effectué
+     */
+    public function getMsgQuestionnaireLieSuivant(Questionnaire $questionnaire) {
+
+        // ToDo : compléter la méthode qui va retourner le message + la date dans un tableau
+        // - le questionnaire lié n'a pas encore été envoyé "Ce questionnaire n'a pas encore été, ou n'a pu être, envoyé à l'internaute. Envoi prévu pour le 07/05/2015"
+        // - le questionnaire lié a été envoyé mais pas encore répondu "Ce questionnaire a été envoyé le 14/04/2015, mais l'internaute n'y a pas encore répondu."
+        // - le questionnaire lié a été envoyé mais le délai de réponse est dépassé                
+
+        // Petit test pour affichage avant créa méthode :
+        $questionnaireLieSuivantMsg = array();
+        $questionnaireLieSuivantMsg['texte'] = 'questionnaire_non_envoye'; // autres choix : questionnaire_envoye_non_repondu questionnaire_delai_depasse
+        $questionnaireLieSuivantMsg['dateEnvoi'] = '2015/05/14';
+
+        return $questionnaireLieSuivantMsg;
+    }
 }

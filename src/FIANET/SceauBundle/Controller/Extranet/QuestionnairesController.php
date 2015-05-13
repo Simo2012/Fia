@@ -531,6 +531,7 @@ class QuestionnairesController extends Controller
         $questionnaireLieSuivantTypeLibelle = null;
         $questionnaireLieSuivantListeQuestionsReponses = null;
         $infosGeneralesQuestionnaireLieSuivant = null;
+        $questionnaireLieSuivantMsg = array();
         
         if ($questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant()) {
             
@@ -540,15 +541,12 @@ class QuestionnairesController extends Controller
                         
             $questionnaireLieSuivantTypeLibelle = $this->get('fianet_sceau.questionnaire_repondu')->getLibelleQuestionnaireTypeRepondu($questionnaireLieSuivantType);            
             
-            // ToDo : dans un lot suivant (car non demandé dans la spec actuelle), on devra gérer les messages dans les cas suivants :
-            // - le questionnaire lié n'a pas encore été envoyé "Ce questionnaire n'a pas encore été, ou n'a pu être, envoyé à l'internaute. Envoi prévu pour le 07/05/2015"
-            // - le questionnaire lié a été envoyé mais pas encore répondu "Ce questionnaire a été envoyé le 14/04/2015, mais l'internaute n'y a pas encore répondu."
-            // - le questionnaire lié a été envoyé mais le délai de réponse est dépassé
-            
             if ($questionnaireLieSuivant) {
                 $questionnaireLieSuivantListeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')->getAllQuestionsReponses($questionnaireLieSuivant, $questionnaireLieSuivantType);
                 $infosGeneralesQuestionnaireLieSuivant = $em->getRepository('FIANETSceauBundle:Questionnaire')
                     ->infosGeneralesQuestionnaire($questionnaireLieSuivant, $questionnaireLieSuivantType);
+            } else {
+                $questionnaireLieSuivantMsg = $this->get('fianet_sceau.questionnaire_repondu')->getMsgQuestionnaireLieSuivant($questionnaire);
             }
             
         }
@@ -562,6 +560,7 @@ class QuestionnairesController extends Controller
                 'questionnaireLieSuivant' => $infosGeneralesQuestionnaireLieSuivant,
                 'questionnaireLieSuivantTypeLibelle' => $questionnaireLieSuivantTypeLibelle,
                 'questionnaireLieSuivantListeQuestionsReponses' => $questionnaireLieSuivantListeQuestionsReponses,
+                'questionnaireLieSuivantMsg' => $questionnaireLieSuivantMsg,
                 'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur']
             )
         );

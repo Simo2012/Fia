@@ -116,9 +116,10 @@
    
     {% if questionnaireSuivant %}
     <h1>{{ questionnaireLieSuivantTypeLibelle|trans({}, 'commun_questionnaires_repondus') }}</h1>
-    
-        {% if questionnaireLieSuivant[0] is defined %}
+
         <div class="block-total">
+        {% if questionnaireLieSuivant[0] is defined %}
+
             <div class="block-total-part1-2">           
 
                 {% if questionnaireLieSuivant[0].questionnaireReponses[0] is defined %}
@@ -136,7 +137,7 @@
                         <h2>{{ 'commun_droit_de_reponse'|trans()|upper }} - {{ 'commun_le'|trans }} {{ droitDeReponseLieSuivant.dateInsertion|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ droitDeReponseLieSuivant.dateInsertion|localizeddate('none', 'short') }} - </h2>
                         <div class="drt-rep">{{ droitDeReponseLieSuivant.commentaire }}</div>
                     {% else %}                    
-                        <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireLieSuivant[0].id, 'qrid': commentairePrincipalLieSuivant.id}) })|raw }}</p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
+                        <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireLieSuivant[0].id, 'qrid': commentairePrincipalLieSuivant.id}) })|raw }}</p>
                         <br />
                         <p>{{ 'repondez_directement'|trans({}, 'extranet_droit_de_reponse')|raw }} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireLieSuivant[0].id, 'qrid': commentairePrincipalLieSuivant.id}) }}' "><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {{ 'repondez'|trans({}, 'extranet_droit_de_reponse') }}</button></p>
                     {% endif %}
@@ -158,9 +159,13 @@
                 </div>
             </div>
             {% endif %} 
-
-        </div>
+        {% else %}
+            <div class="block-total-part1-2"> 
+                <p class="question">{{ questionnaireLieSuivantMsg['texte']|trans({}, 'commun_questionnaires_repondus')|replace({"##DATE_ENVOI##" : questionnaireLieSuivantMsg['dateEnvoi']|localizeddate('short', 'none')})|raw }}</p>
+                <br />
+            </div>
         {% endif %}
+        </div>
         
     {% endif %} 
     

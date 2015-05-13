@@ -21,7 +21,31 @@
             <trans-unit id="5">
                 <source>questionnaire_repondu.5</source>
                 <target>Questionnaire answered</target>
-            </trans-unit>                    
+            </trans-unit>
+            <trans-unit id="6">
+                <source>questionnaire_non_envoye</source>
+                <target>
+                    <![CDATA[
+                        This questionnaire has not been, or could not be sent to the user. Sending scheduled for ##DATE_ENVOI##.
+                    ]]>
+                </target>            
+            </trans-unit>
+            <trans-unit id="7">
+                <source>questionnaire_envoye_non_repondu</source>
+                <target>
+                    <![CDATA[
+                        The questionnaire was sent on ##DATE_ENVOI##, but the user has not responded yet.
+                    ]]>
+                </target>   
+            </trans-unit>                  
+            <trans-unit id="8">
+                <source>questionnaire_envoye_delai_depasse</source>
+                <target>
+                    <![CDATA[
+                        The questionnaire was sent on ##DATE_ENVOI##, but the deadline to respond is exceeded.
+                    ]]>
+                </target>      
+            </trans-unit>                                                  
         </body>
     </file>
 </xliff>
