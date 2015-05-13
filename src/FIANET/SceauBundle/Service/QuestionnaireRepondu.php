@@ -253,9 +253,12 @@ class QuestionnaireRepondu
      */
     public function getCommentairePrincipal(Questionnaire $questionnaire, QuestionnaireType $questionnaireType) {
         
-        $return = NULL;
+        $return = null;
+        $commentairePrincipal_id = null;
         
-        $commentairePrincipal_id = $questionnaireType->getParametrage()['commentairePrincipal'];
+        if (defined($questionnaireType->getParametrage()['commentairePrincipal'])) {
+            $commentairePrincipal_id = $questionnaireType->getParametrage()['commentairePrincipal'];
+        }
         
         if (is_numeric($commentairePrincipal_id)) {
             $question = $this->em
@@ -330,4 +333,41 @@ class QuestionnaireRepondu
         
         return $return;
     }
+     
+    /**
+     * Méthode qui permet de récupérer le questionnaire principal à afficher
+     * Si un Q2 est en paramètre, on retournera le Q1.
+     * Si un QU est en paramètre, on retournera ce QU.
+     * 
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     * 
+     * @return Questionnaire[]
+     */
+    public function getQuestionnairePrincipal(Questionnaire $questionnaire) {
+        
+        if ($questionnaire->getQuestionnaireLie()) {
+            $questionnaire = $questionnaire->getQuestionnaireLie();
+        }
+        
+        return $questionnaire;
+    }
+    
+    /**
+     * Méthode qui permet de récupérer le questionnaire lié suivant à afficher
+     * 
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     * 
+     * @return Questionnaire[]
+     */
+    public function getQuestionnaireLieSuivant(Questionnaire $questionnaire) {
+
+        $questionnaireTypeSuivant = $questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant();
+        
+        $questionnaireLieSuivant = $this->em
+               ->getRepository('FIANETSceauBundle:Questionnaire')
+               ->findOneBy(array('questionnaireLie' => $questionnaire, 'questionnaireType' => $questionnaireTypeSuivant));
+        
+        return $questionnaireLieSuivant;
+    }
+    
 }

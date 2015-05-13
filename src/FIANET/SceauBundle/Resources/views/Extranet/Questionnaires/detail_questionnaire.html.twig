@@ -81,14 +81,13 @@
             {{ include('FIANETSceauBundle:Commun:questionnaire_repondu.html.twig', {'questionnaireRepondu': questionnaire[0], 'questionnaireRepondu_dateReponse': questionnaire[0].dateReponse, 'questionnaireRepondu_listeQuestionsReponses' : questionnaireListeQuestionsReponses }) }}
             
             {% if commentairePrincipal is defined %}
-                {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire ET que le questionnaire Q2 n'a pas été répondu dans le cas de questionnaire Q1/Q2 #}
                 {% if droitDeReponse is defined %}
                     <br />
                     <h2>{{ 'commun_droit_de_reponse'|trans()|upper }} - {{ 'commun_le'|trans }} {{ droitDeReponse.dateInsertion|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ droitDeReponse.dateInsertion|localizeddate('none', 'short') }} - </h2>
                     <div class="drt-rep">{{ droitDeReponse.commentaire }}</div>
                 {% else %}
-                    {% if questionnaireLie[0] is not defined %}
-                    <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire[0].id, 'qrid': commentairePrincipal.id}) })|raw }}</p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
+                    {% if questionnaireLieSuivant[0] is not defined %}
+                    <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire[0].id, 'qrid': commentairePrincipal.id}) })|raw }}</p>
                     <br />
                     <p>{{ 'repondez_directement'|trans({}, 'extranet_droit_de_reponse')|raw }} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire[0].id, 'qrid': commentairePrincipal.id}) }}' "><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {{ 'repondez'|trans({}, 'extranet_droit_de_reponse') }}</button></p>
                     {% endif %}           
@@ -97,8 +96,7 @@
             
         </div>
         
-        {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire ET que le questionnaire Q2 n'a pas été répondu dans le cas de questionnaire Q1/Q2 #}
-        {% if commentairePrincipal is defined and questionnaireLie[0] is not defined %}
+        {% if commentairePrincipal is defined and questionnaireLieSuivant[0] is not defined %}
         <div class="block-total-part3">
             <div class="block-info-rep">
                 <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59"/><br /><br />
@@ -117,38 +115,36 @@
     {% endif %}
    
     {% if questionnaireSuivant %}
-    <h1>{{ questionnaireLieTypeLibelle|trans({}, 'commun_questionnaires_repondus') }}</h1>
+    <h1>{{ questionnaireLieSuivantTypeLibelle|trans({}, 'commun_questionnaires_repondus') }}</h1>
     
-        {% if questionnaireLie[0] is defined %}
+        {% if questionnaireLieSuivant[0] is defined %}
         <div class="block-total">
             <div class="block-total-part1-2">           
 
-                {% if questionnaireLie[0].questionnaireReponses[0] is defined %}
-                    {% set commentairePrincipalLie = questionnaireLie[0].questionnaireReponses[0] %}
-                    {% if questionnaireLie[0].questionnaireReponses[0].droitDeReponses[0] is defined %}
-                        {% set droitDeReponseLie = questionnaireLie[0].questionnaireReponses[0].droitDeReponses[0] %}
+                {% if questionnaireLieSuivant[0].questionnaireReponses[0] is defined %}
+                    {% set commentairePrincipalLieSuivant = questionnaireLieSuivant[0].questionnaireReponses[0] %}
+                    {% if questionnaireLieSuivant[0].questionnaireReponses[0].droitDeReponses[0] is defined %}
+                        {% set droitDeReponseLieSuivant = questionnaireLieSuivant[0].questionnaireReponses[0].droitDeReponses[0] %}
                     {% endif %}
                 {% endif %}
 
-                {{ include('FIANETSceauBundle:Commun:questionnaire_repondu.html.twig', {'questionnaireRepondu': questionnaireLie[0], 'questionnaireRepondu_dateReponse': questionnaireLie[0].dateReponse, 'questionnaireRepondu_listeQuestionsReponses' : questionnaireLieListeQuestionsReponses }) }}
+                {{ include('FIANETSceauBundle:Commun:questionnaire_repondu.html.twig', {'questionnaireRepondu': questionnaireLieSuivant[0], 'questionnaireRepondu_dateReponse': questionnaireLieSuivant[0].dateReponse, 'questionnaireRepondu_listeQuestionsReponses' : questionnaireLieSuivantListeQuestionsReponses }) }}
 
-                {% if commentairePrincipalLie is defined %}
-                    {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire ET que le questionnaire Q2 n'a pas été répondu dans le cas de questionnaire Q1/Q2 #}
-                    {% if droitDeReponseLie is defined %}
+                {% if commentairePrincipalLieSuivant is defined %}
+                    {% if droitDeReponseLieSuivant is defined %}
                         <br />
-                        <h2>{{ 'commun_droit_de_reponse'|trans()|upper }} - {{ 'commun_le'|trans }} {{ droitDeReponseLie.dateInsertion|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ droitDeReponseLie.dateInsertion|localizeddate('none', 'short') }} - </h2>
-                        <div class="drt-rep">{{ droitDeReponseLie.commentaire }}</div>
+                        <h2>{{ 'commun_droit_de_reponse'|trans()|upper }} - {{ 'commun_le'|trans }} {{ droitDeReponseLieSuivant.dateInsertion|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ droitDeReponseLieSuivant.dateInsertion|localizeddate('none', 'short') }} - </h2>
+                        <div class="drt-rep">{{ droitDeReponseLieSuivant.commentaire }}</div>
                     {% else %}                    
-                        <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireLie[0].id, 'qrid': commentairePrincipalLie.id}) })|raw }}</p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
+                        <p>{{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireLieSuivant[0].id, 'qrid': commentairePrincipalLieSuivant.id}) })|raw }}</p> {#ToDo : récupérer les bons qid et qrid pour mettre en arguments #}
                         <br />
-                        <p>{{ 'repondez_directement'|trans({}, 'extranet_droit_de_reponse')|raw }} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireLie[0].id, 'qrid': commentairePrincipalLie.id}) }}' "><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {{ 'repondez'|trans({}, 'extranet_droit_de_reponse') }}</button></p>
+                        <p>{{ 'repondez_directement'|trans({}, 'extranet_droit_de_reponse')|raw }} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireLieSuivant[0].id, 'qrid': commentairePrincipalLieSuivant.id}) }}' "><img src="{{ asset('bundles/fianetsceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {{ 'repondez'|trans({}, 'extranet_droit_de_reponse') }}</button></p>
                     {% endif %}
                 {% endif %}
 
             </div>
 
-            {# ToDo : on doit ajouter le bloc de droit de réponse UNIQUEMENT si un commentaire a été mis pour le commentaire principal du questionnaire #}
-            {% if commentairePrincipalLie is defined %}
+            {% if commentairePrincipalLieSuivant is defined %}
             <div class="block-total-part3">
                 <div class="block-info-rep">
                     <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59"/>

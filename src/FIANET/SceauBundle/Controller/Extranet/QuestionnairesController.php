@@ -495,18 +495,14 @@ class QuestionnairesController extends Controller
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
         
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
-        //$questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
-        
+
         if (!$this->get('fianet_sceau.questionnaire_repondu')->coherenceArgumentsDetailsQuestionnaire($site, $id)) {
             throw new Exception('Questionnaire invalide');
         }
 
         $em = $this->getDoctrine()->getManager();
-        $questionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')->find($id);
+        $questionnaire = $this->get('fianet_sceau.questionnaire_repondu')->getQuestionnairePrincipal($em->getRepository('FIANETSceauBundle:Questionnaire')->find($id));    
         $questionnaireType = $questionnaire->getQuestionnaireType();
-        
-        // Dans le cas où on appelle un Q2 directement, on doit d'abord aller chercher les infos du Q1
-        // ToDo :
         
         // On récupère les informations pour la navigation (questionnaire précédent, questionnaire suivant)
         // La navigation doit se faire :
@@ -528,35 +524,31 @@ class QuestionnairesController extends Controller
         // 2. Récupération des questions et réponses (questions communes, questions personnalisées, etc.)
         $questionnaireListeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')->getAllQuestionsReponses($questionnaire, $questionnaireType);
         
-        // ToDo : méthode à créer pour récupérer les infos et modifier l'appel ci-dessous
-        //$detailsQuestionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')
-                    //->infosDetailsQuestionnaire($questionnaire, $questionnaireType);
-        
         // 3. On récupère les données du questionnaire lié si ce dernier existe
         $questionnaireSuivant = false;
-        $questionnaireLie = null;        
-        $questionnaireLieType = null;
-        $questionnaireLieTypeLibelle = null;
-        $questionnaireLieListeQuestionsReponses = null;
-        $questionnaireLieCommentairePrincipal = null;
-        $infosGeneralesQuestionnaireLie = null;
+        $questionnaireLieSuivant = null;        
+        $questionnaireLieSuivantType = null;
+        $questionnaireLieSuivantTypeLibelle = null;
+        $questionnaireLieSuivantListeQuestionsReponses = null;
+        $infosGeneralesQuestionnaireLieSuivant = null;
         
         if ($questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant()) {
             
             $questionnaireSuivant = true;
-            $questionnaireLie = $questionnaire->getQuestionnaireLie();
-            $questionnaireLieType = $questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant();
-            $questionnaireLieTypeLibelle = $this->get('fianet_sceau.questionnaire_repondu')->getLibelleQuestionnaireTypeRepondu($questionnaireLieType);            
+            $questionnaireLieSuivantType = $questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant();
+            $questionnaireLieSuivant = $this->get('fianet_sceau.questionnaire_repondu')->getQuestionnaireLieSuivant($questionnaire);
+                        
+            $questionnaireLieSuivantTypeLibelle = $this->get('fianet_sceau.questionnaire_repondu')->getLibelleQuestionnaireTypeRepondu($questionnaireLieSuivantType);            
             
             // ToDo : dans un lot suivant (car non demandé dans la spec actuelle), on devra gérer les messages dans les cas suivants :
             // - le questionnaire lié n'a pas encore été envoyé "Ce questionnaire n'a pas encore été, ou n'a pu être, envoyé à l'internaute. Envoi prévu pour le 07/05/2015"
             // - le questionnaire lié a été envoyé mais pas encore répondu "Ce questionnaire a été envoyé le 14/04/2015, mais l'internaute n'y a pas encore répondu."
             // - le questionnaire lié a été envoyé mais le délai de réponse est dépassé
             
-            if ($questionnaireLie) {
-                $questionnaireLieListeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')->getAllQuestionsReponses($questionnaireLie, $questionnaireLieType);
-                $infosGeneralesQuestionnaireLie = $em->getRepository('FIANETSceauBundle:Questionnaire')
-                    ->infosGeneralesQuestionnaire($questionnaireLie, $questionnaireLieType);
+            if ($questionnaireLieSuivant) {
+                $questionnaireLieSuivantListeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')->getAllQuestionsReponses($questionnaireLieSuivant, $questionnaireLieSuivantType);
+                $infosGeneralesQuestionnaireLieSuivant = $em->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->infosGeneralesQuestionnaire($questionnaireLieSuivant, $questionnaireLieSuivantType);
             }
             
         }
@@ -567,9 +559,9 @@ class QuestionnairesController extends Controller
                 'questionnaireTypeLibelle' => $questionnaireTypeLibelle,
                 'questionnaireListeQuestionsReponses' => $questionnaireListeQuestionsReponses,
                 'questionnaireSuivant' => $questionnaireSuivant,
-                'questionnaireLie' => $infosGeneralesQuestionnaireLie,
-                'questionnaireLieTypeLibelle' => $questionnaireLieTypeLibelle,
-                'questionnaireLieListeQuestionsReponses' => $questionnaireLieListeQuestionsReponses,
+                'questionnaireLieSuivant' => $infosGeneralesQuestionnaireLieSuivant,
+                'questionnaireLieSuivantTypeLibelle' => $questionnaireLieSuivantTypeLibelle,
+                'questionnaireLieSuivantListeQuestionsReponses' => $questionnaireLieSuivantListeQuestionsReponses,
                 'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur']
             )
         );
