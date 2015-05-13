@@ -10,6 +10,7 @@ use FIANET\SceauBundle\Entity\QuestionnaireType;
 use FIANET\SceauBundle\Entity\QuestionType;
 use FIANET\SceauBundle\Entity\Site;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use \DateTime;
 
 class QuestionnaireRepondu
 {
@@ -378,16 +379,29 @@ class QuestionnaireRepondu
      * @return array Tableau contenant le code message à traduire et à afficher + la date d'envoi prévu ou effectué
      */
     public function getMsgQuestionnaireLieSuivant(Questionnaire $questionnaire) {
-
-        // ToDo : compléter la méthode qui va retourner le message + la date dans un tableau
-        // - le questionnaire lié n'a pas encore été envoyé "Ce questionnaire n'a pas encore été, ou n'a pu être, envoyé à l'internaute. Envoi prévu pour le 07/05/2015"
-        // - le questionnaire lié a été envoyé mais pas encore répondu "Ce questionnaire a été envoyé le 14/04/2015, mais l'internaute n'y a pas encore répondu."
-        // - le questionnaire lié a été envoyé mais le délai de réponse est dépassé                
-
-        // Petit test pour affichage avant créa méthode :
+               
         $questionnaireLieSuivantMsg = array();
-        $questionnaireLieSuivantMsg['texte'] = 'questionnaire_non_envoye'; // autres choix : questionnaire_envoye_non_repondu questionnaire_delai_depasse
-        $questionnaireLieSuivantMsg['dateEnvoi'] = '2015/05/14';
+        
+        if ($questionnaire->getDateEnvoi()) {
+            
+            $questionnaireLieSuivantMsg['dateEnvoi'] = $questionnaire->getDateEnvoi();            
+            
+            $nbJoursPourRepondre = $this->getQuestionnairePrincipal($questionnaire)->getQuestionnaireType()->getNbJoursPourRepondre();
+            
+            $dateDuJour = new DateTime();
+            $dateDiff = $dateDuJour->diff($questionnaireLieSuivantMsg['dateEnvoi']);
+            $nbJoursPasses = $dateDiff->format('%a');
+            
+            if ( $nbJoursPasses <= $nbJoursPourRepondre) {
+                $questionnaireLieSuivantMsg['texte'] = 'questionnaire_envoye_non_repondu';
+            } else {
+                $questionnaireLieSuivantMsg['texte'] = 'questionnaire_envoye_delai_depasse';
+            }
+
+        } else {
+            $questionnaireLieSuivantMsg['dateEnvoi'] = $questionnaire->getDatePrevEnvoi();
+            $questionnaireLieSuivantMsg['texte'] = 'questionnaire_non_envoye'; 
+        }
 
         return $questionnaireLieSuivantMsg;
     }
