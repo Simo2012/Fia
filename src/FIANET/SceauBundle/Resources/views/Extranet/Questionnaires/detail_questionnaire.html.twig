@@ -17,28 +17,29 @@
 {% block extranet_body %}
 
     {% if questionnaire[0] is not null %}    
-    <h1>{{ 'commun_avis_de'|trans }} {% if questionnaire[0].commande.prenom is not empty %}{% if questionnaire[0].commande.prenom is not empty %}{{ questionnaire[0].commande.prenom |capitalize }}{% endif %} {% if questionnaire[0].commande.nom is not empty %}{{ questionnaire[0].commande.nom |upper }}{% endif %}{% endif %} <span>
-            {# ToDo : il faudra gérer l'affichage prénom+nom ou adresse e-mail selon le statut du membre - à voir dans le lot lié aux membres #}
-            
-            <button><<</button> {# ToDo : gérer le bouton #}
-            &nbsp;
-            <button onclick="window.location.href = '{{ path('extranet_questionnaires_questionnaires') }}' ">{{ 'commun_questionnaires'|trans }}</button>
-            &nbsp;
-            <button>>></button> {# ToDo : gérer le bouton #}
+    <h1>{{ 'commun_avis_de'|trans }} {% if questionnaire[0].commande.prenom is not empty %}{% if questionnaire[0].commande.prenom is not empty %}{{ questionnaire[0].commande.prenom |capitalize }}{% endif %} {% if questionnaire[0].commande.nom is not empty %}{{ questionnaire[0].commande.nom |upper }}{% endif %}{% endif %} 
+        <span>
+            {% if navigation['precedent'] is not empty %}
+                {% if navigation['precedent'][0] is not null %}<a href="{{ path('extranet_questionnaires_detail_questionnaire', {'id': navigation['precedent'][0].id}) }}"><button><<</button></a>&nbsp;{% endif %}
+            {% endif %}
+            <a href="{{ path('extranet_questionnaires_questionnaires') }}"><button>{{ 'commun_questionnaires'|trans }}</button></a>
+            {% if navigation['suivant'] is not empty %}
+                {% if navigation['suivant'][0] is not null %}&nbsp;<a href="{{ path('extranet_questionnaires_detail_questionnaire', {'id': navigation['suivant'][0].id}) }}"><button>>></button></a>{% endif %}
+            {% endif %}       
         </span>
     </h1>
-            
+        {# ToDo : il faudra gérer l'affichage prénom+nom ou adresse e-mail selon le statut du membre - à voir dans le lot lié aux membres #}
         {% if questionnaire[0].commande is not null %}
         <div class="block-total">
             <div class="block-total-part1">
                 <h2>{{ 'commun_commande_informations'|trans }} {% if questionnaire[0].commande.reference is not empty %}{{ questionnaire[0].commande.reference }}{% endif %} {{ 'commun_du'|trans }} {% if questionnaire[0].commande.date is not empty %}{{ questionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaire[0].commande.date|localizeddate('none', 'short') }}{% endif %}</h2>
-                <dt>{% if questionnaire[0].commande.prenom is not empty %}{% if questionnaire[0].commande.prenom is not empty %}{{ questionnaire[0].commande.prenom |capitalize }}{% endif %} {% if questionnaire[0].commande.nom is not empty %}{{ questionnaire[0].commande.nom |upper }}{% endif %}{% endif %}</dt>
+                <dt>&nbsp;&nbsp;{% if questionnaire[0].commande.prenom is not empty %}{% if questionnaire[0].commande.prenom is not empty %}{{ questionnaire[0].commande.prenom |capitalize }}{% endif %} {% if questionnaire[0].commande.nom is not empty %}{{ questionnaire[0].commande.nom |upper }}{% endif %}{% endif %}</dt>
                 <hr />
-                <dt>{% if questionnaire[0].commande.email is not empty %}{{ questionnaire[0].commande.email }}{% endif %}</dt>
+                <dt>&nbsp;&nbsp;{% if questionnaire[0].commande.email is not empty %}{{ questionnaire[0].commande.email }}{% endif %}</dt>
                 <hr />
                 <dd>{{ 'commun_commande_date'|trans }} :</dd>
                 <dt>{% if questionnaire[0].commande.date is not empty %}{{ questionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaire[0].commande.date|localizeddate('none', 'short') }}{% endif %}</dt>
-                <hr />                
+                <hr />        
                 <dd>{{ 'commun_questionnaire_envoye_par'|trans }} :</dd>
                 <dt>FIA-NET</dt> {# ToDo : à gérer quand on fera les questionnaires hors flux XML #}
             </div>

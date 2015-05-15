@@ -257,6 +257,8 @@ class QuestionnaireRepository extends EntityRepository
         Questionnaire $questionnaire,
         QuestionnaireType $questionnaireType
     ) {
+        $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;        
+        
         $qb = $this->createQueryBuilder('q');
         
         $qb->leftJoin('q.commande', 'c')
@@ -281,7 +283,7 @@ class QuestionnaireRepository extends EntityRepository
             ->addSelect('s')
             ->addSelect('qr_com')
             ->addSelect('ddr')
-            ->setParameter('qid_com', $questionnaireType->getParametrage()['commentairePrincipal']);
+            ->setParameter('qid_com', $commentairePrincipal);
         
         $qb->where('q.id=:id')
            ->setParameter('id', $questionnaire->getId());
@@ -461,4 +463,124 @@ class QuestionnaireRepository extends EntityRepository
 
         return $qb->getQuery()->useQueryCache(true)->getResult();
     }
+    
+    /**
+     * Retourne le questionnaire répondu suivant ou précédent répondant à certains critères
+     * 
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param string $dateDebut Date de début de la période (peut être vide)
+     * @param string $dateFin Date de fin de la période (peut être vide)
+     * @param string $recherche Recherche de l'utilisateur (N°commande, Email, etc)
+     * @param array $listeReponsesIndicateurs Tableau contenant les réponses des indicateurs à filtrer. Peut être vide.
+     * @param LivraisonType $livraisonType Instance de LivraisonType. Vaut null si aucun filtre souhaité.
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     * @param int $tri Numéro du tri à appliquer
+     * @param $suivant Boolean vaut 1 pour avoir le questionnaire suivant, 0 avoir pour le questionnaire précédent 
+     *
+     * @return Questionnaire[]|null instance de questionnaire trouvé ou null si pas de questionnaire trouvé
+     */
+    public function getQuestionnaireReponduNavigation(
+        Site $site,
+        QuestionnaireType $questionnaireType,
+        $dateDebut,
+        $dateFin,
+        $recherche,
+        $listeReponsesIndicateurs,
+        $livraisonType,
+        $questionnaire,
+        $tri,
+        $suivant
+    ) {
+        
+        $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;
+        $indicateur = isset($questionnaireType->getParametrage()['indicateur']['question_id']) ? $questionnaireType->getParametrage()['indicateur']['question_id'] : null;
+        
+        $qb = $this->createQueryBuilder('q')
+            ->leftJoin('q.commande', 'c')
+            ->leftJoin('q.membre', 'm')
+            ->lefetJoin(
+                'q.questionnaireReponses',
+                'qr_com',
+                'WITH',
+                'qr_com.question = :qid_com'
+            )
+            ->leftJoin(
+                'q.questionnaireReponses',
+                'qr_ind',
+                'WITH',
+                'qr_ind.question = :qid_ind'
+            )
+            ->leftJoin('qr_ind.reponse', 'r_ind')
+            ->setParameter('qid_com', $commentairePrincipal)
+            ->setParameter('qid_ind', $questionnaireType->getParametrage()['indicateur']['question_id'])
+            ->setMaxResults(1);
+
+        if ($livraisonType) {
+            $qb->leftJoin('c.livraisonTypes', 'lt');
+        }
+
+        $qb = $this->restrictionsListeQuestionnaires(
+            $qb,
+            $site,
+            $questionnaireType,
+            $dateDebut,
+            $dateFin,
+            $recherche,
+            $listeReponsesIndicateurs,
+            $livraisonType
+        );
+        
+        if ($questionnaireType->getParametrage()['recommandation']['question_id']) {
+            $qb->leftJoin(
+                    'q.questionnaireReponses',
+                    'qr_reco',
+                    'WITH',
+                    'qr_reco.question = :qid_reco'
+                )->leftJoin('qr_reco.reponse', 'r_reco')
+                ->setParameter('qid_reco', $questionnaireType->getParametrage()['recommandation']['question_id']);
+
+            if ($tri == 4) {
+                $qb->orderBy('qr_reco.note', 'DESC');
+            } elseif ($tri == 5) {
+                $qb->orderBy('qr_reco.note', 'ASC');
+            }
+        }
+
+        
+        $dateReponse = $questionnaire->getDateReponse();
+        $listeTrisOk = array(0,1,3,4,5);
+        
+        /* ToDo : bloc à revoir */
+        if (in_array($tri,$listeTrisOk)) {
+            if ($suivant) {
+                $qb->andWhere('q.dateReponse > :dateReponse')
+                    ->setParameter('dateReponse', $dateReponse);            
+            } else {
+                $qb->andWhere('q.dateReponse < :dateReponse')
+                    ->setParameter('dateReponse', $dateReponse);          
+            }
+        } else {
+            if ($suivant) {
+                $qb->andWhere('q.dateReponse < :dateReponse')
+                    ->setParameter('dateReponse', $dateReponse);            
+            } else {
+                $qb->andWhere('q.dateReponse > :dateReponse')
+                    ->setParameter('dateReponse', $dateReponse);          
+            }
+        }
+        
+        if ($tri == 0) {
+            $qb->orderBy('c.date', 'DESC');
+        } elseif ($tri == 1) {
+            $qb->orderBy('c.date', 'ASC');
+        } elseif ($tri == 2) {
+            $qb->orderBy('q.dateReponse', 'DESC');
+        } elseif ($tri == 3) {
+            $qb->orderBy('q.dateReponse', 'ASC');
+        }
+        
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
+    } 
+    
 }

@@ -183,6 +183,8 @@ class QuestionnairesController extends Controller
                     $reponse->headers->clearCookie('questionnaires_livraison');
                 }
             }
+            
+            $reponse->headers->setCookie(new Cookie('questionnaires_tri', $tri, $dateExpiration));
         }
 
         return $reponse;
@@ -551,19 +553,47 @@ class QuestionnairesController extends Controller
         if (!$this->get('fianet_sceau.questionnaire_repondu')->coherenceArgumentsDetailsQuestionnaire($site, $id)) {
             throw new Exception('Questionnaire invalide');
         }
-
+        
         $em = $this->getDoctrine()->getManager();
-        $questionnaire = $this->get('fianet_sceau.questionnaire_repondu')->getQuestionnairePrincipal($em->getRepository('FIANETSceauBundle:Questionnaire')->find($id));    
+        
+        $questionnaire_param = $em->getRepository('FIANETSceauBundle:Questionnaire')->find($id);
+        $questionnaireType_param = $questionnaire_param->getQuestionnaireType();
+        
+        /* On récupère les éventuels paramètres de recherche sauvegardés dans les cookies. */
+        $dateDebut = $request->cookies->get('questionnaires_dateDebut');
+        $dateFin = $request->cookies->get('questionnaires_dateFin');
+        $recherche = $request->cookies->get('questionnaires_recherche');
+        $indicateurs = ($request->cookies->get('questionnaires_indicateurs')) ?
+            explode('-', $request->cookies->get('questionnaires_indicateurs')) : array();
+        $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
+                ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType_param, $indicateurs);
+        
+        if ($questionnaireType_param->getParametrage()['livraison']) {
+            if ($request->cookies->get('questionnaires_livraison')) {
+                $livraisonType = $this->getDoctrine()->getRepository('FIANETSceauBundle:LivraisonType')
+                    ->find($request->cookies->get('questionnaires_livraison'));
+            } else {
+                $livraisonType = null;
+            }
+        } else {
+            $livraisonType = null;
+        }
+        $tri = ($request->cookies->get('questionnaires_tri')) ? $request->cookies->get('questionnaires_tri') : 2;
+        
+        /* ToDo : on devra ajouter/gérer le filtre avec les litiges dans un prochain lot */        
+        
+        $navigation = $this->get('fianet_sceau.questionnaire_repondu')->getNavigation($site,
+                    $questionnaireType_param,
+                    $dateDebut,
+                    $dateFin,
+                    $recherche,
+                    $listeReponsesIndicateurs,
+                    $livraisonType,
+                    $questionnaire_param,
+                    $tri);
+        
+        $questionnaire = $this->get('fianet_sceau.questionnaire_repondu')->getQuestionnairePrincipal($questionnaire_param);    
         $questionnaireType = $questionnaire->getQuestionnaireType();
-        
-        // On récupère les informations pour la navigation (questionnaire précédent, questionnaire suivant)
-        // La navigation doit se faire :
-        //  - selon le filtrage qu'il y a eu sur la page de listing de questionnaire + selon la date de réponse au questionnaire
-        //  - OU s'il n'y a pas de filtre, uniquement selon la date de réponse au questionnaire
-        
-        // -> appel de la méthode récupérant le questionnaire précédent selon les règles ci-dessus
-        
-        // -> appel de la méthode récupérant le questionnaire suivant selon les règles ci-dessus
         
         // On récupère toutes les informations générales liées au questionnaire
         $infosGeneralesQuestionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')
@@ -603,6 +633,8 @@ class QuestionnairesController extends Controller
             
         }
         
+        $parametrageIndicateur = (isset($questionnaireType->getParametrage()['indicateur'])) ?  $questionnaireType->getParametrage()['indicateur'] : null;
+        
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:detail_questionnaire.html.twig', array(
                 'questionnaire' => $infosGeneralesQuestionnaire,
@@ -613,7 +645,8 @@ class QuestionnairesController extends Controller
                 'questionnaireLieSuivantTypeLibelle' => $questionnaireLieSuivantTypeLibelle,
                 'questionnaireLieSuivantListeQuestionsReponses' => $questionnaireLieSuivantListeQuestionsReponses,
                 'questionnaireLieSuivantMsg' => $questionnaireLieSuivantMsg,
-                'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur']
+                'navigation' => $navigation,
+                'parametrageIndicateur' => $parametrageIndicateur
             )
         );
         
