@@ -26,9 +26,9 @@ class Relance
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateCreation", type="datetimetz")
+     * @ORM\Column(name="date", type="datetimetz")
      */
-    private $dateCreation;
+    private $date;
 
     /**
      * @var string
@@ -94,7 +94,7 @@ class Relance
 
     public function __construct()
     {
-        $this->dateCreation = new DateTime();
+        $this->date = new DateTime();
     }
 
 
@@ -109,27 +109,27 @@ class Relance
     }
 
     /**
-     * Set dateCreation
+     * Set date
      *
-     * @param \DateTime $dateCreation
+     * @param \DateTime $date
      *
      * @return Relance
      */
-    public function setDateCreation($dateCreation)
+    public function setDate($date)
     {
-        $this->dateCreation = $dateCreation;
+        $this->date = $date;
 
         return $this;
     }
 
     /**
-     * Get dateCreation
+     * Get date
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+    public function getDate()
     {
-        return $this->dateCreation;
+        return $this->date;
     }
 
     /**

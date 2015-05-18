@@ -44,3 +44,10 @@ FIANET\SceauBundle\Entity\DroitDeReponse:
                 minMessage: "constraints.droit_de_reponse_nb_car_min_nok"
                 maxMessage: "constraints.droit_de_reponse_nb_car_max_nok"
                 groups: [validation]
+
+FIANET\SceauBundle\Entity\Relance:
+    properties:
+        objet:
+            - Length:
+                max: 255
+                maxMessage: "constraints.relance_objet_nb_car_max"

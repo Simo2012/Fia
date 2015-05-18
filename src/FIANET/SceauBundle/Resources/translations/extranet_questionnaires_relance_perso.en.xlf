@@ -40,6 +40,14 @@
                 <source>precision_objet</source>
                 <target>255 characters maximum, default object :</target>
             </trans-unit>
+            <trans-unit id="8">
+                <source>personnaliser_succes</source>
+                <target>Your customization has been saved successfully.</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>personnaliser_erreur</source>
+                <target>Your customization could not be saved.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

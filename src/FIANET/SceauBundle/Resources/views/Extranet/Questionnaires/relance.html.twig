@@ -45,6 +45,12 @@
             {% for messageErreur in app.session.flashbag.get('renvoyer_erreur') %}
                 <p class="erreur">{{ messageErreur }}</p>
             {% endfor %}
+            {% for messageSucces in app.session.flashbag.get('personnaliser_succes') %}
+                <p class="succes">{{ messageSucces }}</p>
+            {% endfor %}
+            {% for messageErreur in app.session.flashbag.get('personnaliser_erreur') %}
+                <p class="succes">{{ messageErreur }}</p>
+            {% endfor %}
         </div>
 
         <div class="block-total-part2">

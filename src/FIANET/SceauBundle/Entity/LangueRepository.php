@@ -6,22 +6,41 @@ use Doctrine\ORM\EntityRepository;
 
 class LangueRepository extends EntityRepository
 {
-
     /**
-     * Récupère la langue à utiliser par défaut. Le code de la langue par défaut doit être transmise à la méthode.
-     * Ce code est stocké dans les paramètres.
+     * Récupère une langue via son identifiant. Le résultat est en cache pendant 1 jour.
      *
-     * @param string $code Code ISO de la langue (ex : fr)
+     * @param integer $id Identifiant de la langue
      *
-     * @return mixed Instance de Langue
+     * @return Langue Instance de Langue
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getLangueParDefaut($code)
+    public function langueViaId($id)
     {
         $qb = $this->createQueryBuilder('l')
-            ->where('l.code=:code')
+            ->where('l.id = :id')
+            ->setParameter('id', $id);
+
+        return $qb->getQuery()
+            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
+            ->getSingleResult();
+    }
+
+    /**
+     * Récupère une langue via son identifiant. Le résultat est en cache pendant 1 jour.
+     *
+     * @param string $code Code ISO de la langue (ex : fr)
+     *
+     * @return Langue Instance de Langue
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function langueViaCode($code)
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->where('l.code = :code')
             ->setParameter('code', $code);
 
         return $qb->getQuery()

@@ -24,7 +24,9 @@
                     {% trans %}precision_objet{% endtrans %}"{{ objetParDefaut }}"<br />
                     {% trans %}label_corps{% endtrans %}{{ form_widget(form.corps) }}<br />
 
-                    {{ form_errors(form) }}
+                    <span class="erreur">
+                        {{ form_errors(form.objet) }}
+                    </span>
 
                     <br />
                     <button>{% trans %}bouton_visualiser{% endtrans %}</button><br />

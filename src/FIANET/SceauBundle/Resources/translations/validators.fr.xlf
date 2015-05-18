@@ -82,6 +82,10 @@
                 <source>constraints.date_invalide</source>
                 <target>La date n'est pas valide.</target>
             </trans-unit>
+            <trans-unit id="21">
+                <source>constraints.relance_objet_nb_car_max</source>
+                <target>Votre objet est trop long.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

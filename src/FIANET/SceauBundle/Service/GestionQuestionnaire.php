@@ -46,13 +46,13 @@ class GestionQuestionnaire
         $langue = null;
         if (!$xml->infocommande->langue) {
             $langue = $this->em->getRepository('FIANETSceauBundle:Langue')
-                ->getLangueParDefaut($this->codeLangueParDefaut);
+                ->langueViaCode($this->codeLangueParDefaut);
         } else {
             $langue = $this->em->getRepository('FIANETSceauBundle:Langue')
-                ->findOneByCode($xml->infocommande->langue->__toString());
+                ->langueViaCode($xml->infocommande->langue->__toString());
             if (!$langue) {
                 $langue = $this->em->getRepository('FIANETSceauBundle:Langue')
-                    ->getLangueParDefaut($this->codeLangueParDefaut);
+                    ->langueViaCode($this->codeLangueParDefaut);
             }
         }
         $commande->setLangue($langue);

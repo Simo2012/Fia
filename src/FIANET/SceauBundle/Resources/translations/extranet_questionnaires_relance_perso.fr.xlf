@@ -40,6 +40,14 @@
                 <source>precision_objet</source>
                 <target>255 caractères maximum, objet par défaut :</target>
             </trans-unit>
+            <trans-unit id="8">
+                <source>personnaliser_succes</source>
+                <target>Votre personnalisation a été sauvegardée avec succès.</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>personnaliser_erreur</source>
+                <target>Votre personnalisation n'a pas pu être sauvegardée.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

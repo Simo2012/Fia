@@ -49,6 +49,7 @@ class GestionRelance
      *  - S'il n'existe pas de modèle de relance validé, une relance par défaut validé est créée et automatisée.
      * Dans le cas d'une désactivation :
      * - On récupère le modèle de relance validé et on désautomatise.
+     * Dans les 2 cas, on automatise/désautomatise l'éventuelle relance en attente de validation.
      *
      * @param bool $activer true => active les relances auto, false => désactive les relances auto
      * @param Site $site Instance de Site
@@ -60,33 +61,43 @@ class GestionRelance
     private function changerAutomatisation($activer, Site $site, QuestionnaireType $questionnaireType, $langue)
     {
         try {
-            $relance = $this->em->getRepository('FIANETSceauBundle:Relance')
+            $relanceValidee = $this->em->getRepository('FIANETSceauBundle:Relance')
                 ->relanceValidee($site, $questionnaireType, $langue);
 
+            $relanceEnAttenteValidation = $this->em->getRepository('FIANETSceauBundle:Relance')
+                ->relanceEnAttenteValidation($site, $questionnaireType, $langue);
+
             if ($activer) {
-                if ($relance) {
-                    $relance->setAuto(true);
-                    $this->em->flush();
+                if ($relanceValidee) {
+                    $relanceValidee->setAuto(true);
 
                 } else {
                     $relance = new Relance();
-                    $relance->setDateCreation(new DateTime());
+                    $relance->setDate(new DateTime());
                     $relance->setAuto(true);
-                    $relance->setRelanceStatut($this->em->getRepository('FIANETSceauBundle:RelanceStatut')->find(1));
+                    $relance->setRelanceStatut($this->em->getRepository('FIANETSceauBundle:RelanceStatut')->validee());
                     $relance->setSite($site);
                     $relance->setQuestionnaireType($questionnaireType);
                     $relance->setLangue($langue);
 
                     $this->em->persist($relance);
-                    $this->em->flush();
+                }
+
+                if ($relanceEnAttenteValidation) {
+                    $relanceEnAttenteValidation->setAuto(true);
                 }
 
             } else {
-                if ($relance) {
-                    $relance->setAuto(false);
-                    $this->em->flush();
+                if ($relanceValidee) {
+                    $relanceValidee->setAuto(false);
+                }
+
+                if ($relanceEnAttenteValidation) {
+                    $relanceEnAttenteValidation->setAuto(false);
                 }
             }
+
+            $this->em->flush();
 
         } catch (Exception $e) {
             return false;
@@ -148,6 +159,100 @@ class GestionRelance
 
             foreach ($questionnaires as $questionnaire) {
                 $questionnaire->setDatePrevRelance(new DateTime());
+            }
+
+            $this->em->flush();
+
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Regarde si une relance doit être automatisée ou non lors de sa création. Pour cela, la méthode regarde
+     * si la dernière relance validée pour un site, un type de questionnaire et une langue a été automatisée.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param Langue $langue Instance de Langue
+     *
+     * @return bool true si oui, false si non
+     */
+    private function automatiserOuNon(Site $site, QuestionnaireType $questionnaireType, Langue $langue)
+    {
+        $derniereRelanceValidee = $this->em->getRepository('FIANETSceauBundle:Relance')
+            ->relanceValidee($site, $questionnaireType, $langue);
+
+        if ($derniereRelanceValidee) {
+            if ($derniereRelanceValidee->getAuto()) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Crée une relance pour un site, un type de questionnaire et une langue.
+     * Le statut de la relance dépend de la personnalisation ou non. Si aucune personnalisation alors elle passe
+     * directement au statut "validée" sinon elle passe au statut "en attente de validation".
+     *
+     * Si 1er statut :
+     * 1) On regarde s'il existe une relance en attente de validation. Si oui, on la supprime.
+     * 2) On crée une nouvelle relance validée. On regarde si la précédente etait automatisée. Si oui, on reporte
+     * cette automatisation dans la nouvelle.
+     *
+     * Si 2ème statut :
+     * - On regarde s'il existe une relance en attente de validation. Si oui, au lieu de créer une nouvelle relance,
+     * on met à jour celle qui existe déjà.
+     *  - Sinon on crée une nouvelle relance. On regarde si la précédente etait automatisée. Si oui, on reporte
+     * cette automatisation dans la nouvelle.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param Langue $langue Instance de Langue
+     * @param Relance $relance Instance de Relance
+     *
+     * @return bool true si le traitement s'est déroulé correctement sinon false
+     */
+    public function creer(Site $site, QuestionnaireType $questionnaireType, Langue $langue, Relance $relance)
+    {
+        try {
+            $relanceEnAttenteValidation = $this->em->getRepository('FIANETSceauBundle:Relance')
+                ->relanceEnAttenteValidation($site, $questionnaireType, $langue);
+
+            if ($relance->getObjet() == '' && $relance->getCorps() == '') {
+                $this->em->beginTransaction();
+
+                if ($relanceEnAttenteValidation) {
+                    $this->em->remove($relanceEnAttenteValidation);
+                }
+
+                $relance->setRelanceStatut($this->em->getRepository('FIANETSceauBundle:RelanceStatut')->validee());
+                $relance->setAuto($this->automatiserOuNon($site, $questionnaireType, $langue));
+
+                $this->em->persist($relance);
+                $this->em->commit();
+
+            } else {
+                if ($relanceEnAttenteValidation) {
+                    $relanceEnAttenteValidation->setDate(new DateTime());
+                    $relanceEnAttenteValidation->setObjet($relance->getObjet());
+                    $relanceEnAttenteValidation->setCorps($relance->getCorps());
+
+                } else {
+                    $relance->setRelanceStatut(
+                        $this->em->getRepository('FIANETSceauBundle:RelanceStatut')->enAttenteDeValidation()
+                    );
+                    $relance->setAuto($this->automatiserOuNon($site, $questionnaireType, $langue));
+
+                    $this->em->persist($relance);
+                }
             }
 
             $this->em->flush();

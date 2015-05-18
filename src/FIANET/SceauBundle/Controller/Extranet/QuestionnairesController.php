@@ -6,6 +6,7 @@ use DateInterval;
 use DateTime;
 use Exception;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
+use FIANET\SceauBundle\Entity\Langue;
 use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\RelanceType;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class QuestionnairesController extends Controller
 {
@@ -297,6 +299,8 @@ class QuestionnairesController extends Controller
             throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
         }
 
+        $em = $this->getDoctrine()->getManager();
+
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
         $site = $request->getSession()->get('siteSelectionne');
         $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriode();
@@ -310,17 +314,17 @@ class QuestionnairesController extends Controller
 
         } else {
             if ($langue_id) {
-                $langue = $this->getDoctrine()->getRepository('FIANETSceauBundle:Langue')->find($langue_id);
+                $langue = $em->getRepository('FIANETSceauBundle:Langue')->langueViaId($langue_id);
 
             } else {
-                $langue = $this->getDoctrine()->getRepository('FIANETSceauBundle:Langue')
-                    ->findOneByCode($this->container->getParameter('langue_par_defaut'));
+                $langue = $em->getRepository('FIANETSceauBundle:Langue')
+                    ->langueViaCode($this->container->getParameter('langue_par_defaut'));
             }
 
             $form->get('langue')->setData($langue);
         }
 
-        $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+        $nbTotalQuestionnaires = $em->getRepository('FIANETSceauBundle:Questionnaire')
             ->nbTotalQuestionnairesARelancer(
                 $site,
                 $questionnaireType,
@@ -329,7 +333,7 @@ class QuestionnairesController extends Controller
                 $langue->getId()
             );
 
-        $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
+        $questionnaires = $em->getRepository('FIANETSceauBundle:Questionnaire')
             ->listeQuestionnairesARelancerParPaquet(
                 $site,
                 $questionnaireType,
@@ -339,6 +343,14 @@ class QuestionnairesController extends Controller
                 0,
                 $nbQuestionnairesMax
             );
+
+        $relanceValidee = $em->getRepository('FIANETSceauBundle:Relance')
+            ->relanceValidee($site, $questionnaireType, $langue);
+        if ($relanceValidee && $relanceValidee->getAuto()) {
+            $auto = true;
+        } else {
+            $auto = false;
+        }
 
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:relance.html.twig',
@@ -353,8 +365,7 @@ class QuestionnairesController extends Controller
                 'dateFin' => $datePeriode['dateFin'],
                 'langue_id' => $langue->getId(),
                 'templateEmail' => $questionnaireType->getParametrage()['templateEmail'],
-                'auto' => ($this->getDoctrine()->getRepository('FIANETSceauBundle:Relance')
-                    ->relanceValidee($site, $questionnaireType, $langue, true)) ? true : false
+                'auto' => $auto
             )
         );
     }
@@ -429,7 +440,7 @@ class QuestionnairesController extends Controller
             $gestionRelance = $this->get('fianet_sceau.relance');
 
             $langue = $this->getDoctrine()->getRepository('FIANETSceauBundle:Langue')
-                ->find($request->request->get('langue_id'));
+                ->langueViaId($request->request->get('langue_id'));
 
             if ($request->request->get('activer') == 'true') {
                 return new JsonResponse($gestionRelance->automatiser($site, $questionnaireType, $langue));
@@ -489,17 +500,19 @@ class QuestionnairesController extends Controller
 
 
     /**
-     * Affiche la page qui permet de personnaliser la relance pour un type de questionnaire.
+     * Affiche la page et traite le formulaire qui permet de personnaliser la relance pour un type de questionnaire.
      *
      * @Route("/questionnaires/personnaliser-relance/{langue_id}", requirements={"langue_id" = "\d+"},
      *     name="extranet_questionnaires_relance_perso")
+     * @ParamConverter("langue", class="FIANETSceauBundle:Langue", options={"id" = "langue_id"})
      * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
+     * @param Langue $langue Instance de Langue
      *
      * @return Response Instance de Response
      */
-    public function relancePersonnaliserEmailAction(Request $request, $langue_id)
+    public function relancePersonnaliserEmailAction(Request $request, Langue $langue)
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $elementMenu = $menu->getChild('questionnaires')->getChild('questionnaires.relance_questionnaires');
@@ -509,14 +522,35 @@ class QuestionnairesController extends Controller
             throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
         }
 
-        $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
-        $site = $request->getSession()->get('siteSelectionne');
+        $em = $this->getDoctrine()->getManager();
+
+        $questionnaireType = $em->merge($request->getSession()->get('questionnaireTypeSelectionne'));
+        $site = $em->merge($request->getSession()->get('siteSelectionne'));
 
         $relance = new Relance();
+        $relance->setSite($site);
+        $relance->setQuestionnaireType($questionnaireType);
+        $relance->setLangue($langue);
+
         $form = $this->createForm(new RelanceType(), $relance);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
-            echo 'oki';
+            if ($this->get('fianet_sceau.relance')->creer($site, $questionnaireType, $langue, $form->getData())) {
+                $message = 'personnaliser_succes';
+            } else {
+                $message = 'personnaliser_erreur';
+            }
+
+            $this->get('session')->getFlashBag()->add(
+                $message,
+                $this->get('translator')->trans($message, array(), 'extranet_questionnaires_relance_perso')
+            );
+
+            return $this->redirect($this->generateUrl(
+                'extranet_questionnaires_relance_questionnaires_langue',
+                array('langue_id' => $langue->getId())
+            ));
         }
 
         return $this->render(
