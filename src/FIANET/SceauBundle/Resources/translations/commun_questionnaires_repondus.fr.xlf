@@ -45,7 +45,11 @@
                         Ce questionnaire a été envoyé le ##DATE_ENVOI##, mais le délai pour y répondre est dépassé.
                     ]]>
                 </target>      
-            </trans-unit>                                
+            </trans-unit>
+            <trans-unit id="9">
+                <source>questionnaire_libelle_commentaire_principal</source>
+                <target>Avis rédigé par votre client</target>      
+            </trans-unit>                                          
         </body>
     </file>
 </xliff>

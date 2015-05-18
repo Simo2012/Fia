@@ -492,14 +492,13 @@ class QuestionnaireRepository extends EntityRepository
         $tri,
         $suivant
     ) {
-        
         $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;
         $indicateur = isset($questionnaireType->getParametrage()['indicateur']['question_id']) ? $questionnaireType->getParametrage()['indicateur']['question_id'] : null;
         
         $qb = $this->createQueryBuilder('q')
             ->leftJoin('q.commande', 'c')
             ->leftJoin('q.membre', 'm')
-            ->lefetJoin(
+            ->leftJoin(
                 'q.questionnaireReponses',
                 'qr_com',
                 'WITH',
@@ -539,45 +538,86 @@ class QuestionnaireRepository extends EntityRepository
                     'qr_reco.question = :qid_reco'
                 )->leftJoin('qr_reco.reponse', 'r_reco')
                 ->setParameter('qid_reco', $questionnaireType->getParametrage()['recommandation']['question_id']);
-
-            if ($tri == 4) {
-                $qb->orderBy('qr_reco.note', 'DESC');
-            } elseif ($tri == 5) {
-                $qb->orderBy('qr_reco.note', 'ASC');
-            }
         }
 
-        
         $dateReponse = $questionnaire->getDateReponse();
-        $listeTrisOk = array(0,1,3,4,5);
         
-        /* ToDo : bloc à revoir */
-        if (in_array($tri,$listeTrisOk)) {
-            if ($suivant) {
-                $qb->andWhere('q.dateReponse > :dateReponse')
-                    ->setParameter('dateReponse', $dateReponse);            
-            } else {
-                $qb->andWhere('q.dateReponse < :dateReponse')
-                    ->setParameter('dateReponse', $dateReponse);          
-            }
+        if ($questionnaire->getCommande()) {
+            $dateCommande = $questionnaire->getCommande()->getDate();
         } else {
-            if ($suivant) {
-                $qb->andWhere('q.dateReponse < :dateReponse')
-                    ->setParameter('dateReponse', $dateReponse);            
-            } else {
-                $qb->andWhere('q.dateReponse > :dateReponse')
-                    ->setParameter('dateReponse', $dateReponse);          
-            }
+            $dateCommande = null;
         }
+        
+        /* ToDo : à revoir lorsqu'on fera le lot des questionnaires hors flux XML (gestion lorsqu'il n'y a pas de date de commande) */
         
         if ($tri == 0) {
-            $qb->orderBy('c.date', 'DESC');
+            if ($dateCommande != null) {
+                if ($suivant) {
+                    $qb->andWhere('c.date < :dateCommande')
+                        ->setParameter('dateCommande', $dateCommande);
+                    $qb->orderBy('c.date', 'DESC');
+                } else {
+                    $qb->andWhere('c.date > :dateCommande')
+                        ->setParameter('dateCommande', $dateCommande); 
+                    $qb->orderBy('c.date', 'ASC');
+                }
+            } else {   
+                if ($suivant) {
+                    $qb->andWhere('q.dateReponse < :dateReponse')
+                        ->setParameter('dateReponse', $dateReponse);
+                    $qb->orderBy('c.date', 'DESC');
+                    $qb->addOrderBy('q.dateReponse', 'DESC');
+                } else {
+                    $qb->andWhere('q.dateReponse > :dateReponse')
+                        ->setParameter('dateReponse', $dateReponse); 
+                    $qb->orderBy('c.date', 'ASC');
+                    $qb->addOrderBy('q.dateReponse', 'ASC');
+                }             
+            }
         } elseif ($tri == 1) {
-            $qb->orderBy('c.date', 'ASC');
-        } elseif ($tri == 2) {
-            $qb->orderBy('q.dateReponse', 'DESC');
-        } elseif ($tri == 3) {
-            $qb->orderBy('q.dateReponse', 'ASC');
+            if ($dateCommande != null) {
+                if ($suivant) {
+                    $qb->andWhere('c.date > :dateCommande')
+                        ->setParameter('dateCommande', $dateCommande);
+                    $qb->orderBy('c.date', 'ASC');
+                } else {
+                    $qb->andWhere('c.date < :dateCommande')
+                        ->setParameter('dateCommande', $dateCommande); 
+                    $qb->orderBy('c.date', 'DESC');
+                }
+            } else {
+                if ($suivant) {
+                    $qb->andWhere('q.dateReponse < :dateReponse')
+                        ->setParameter('dateReponse', $dateReponse);
+                    $qb->orderBy('c.date', 'DESC');
+                    $qb->addOrderBy('q.dateReponse', 'DESC');
+                } else {
+                    $qb->andWhere('q.dateReponse > :dateReponse')
+                        ->setParameter('dateReponse', $dateReponse); 
+                    $qb->orderBy('c.date', 'ASC');
+                    $qb->addOrderBy('q.dateReponse', 'ASC');
+                }  
+            }
+        } elseif ($tri == 2 or $tri == 4) { /* ToDo : à revoir si la MOA décide que la pagination doit se faire également sur le tri d'indice de recommandation (tri vaut 4) */
+            if ($suivant) {
+                $qb->andWhere('q.dateReponse < :dateReponse')
+                    ->setParameter('dateReponse', $dateReponse);
+                $qb->orderBy('q.dateReponse', 'DESC');
+            } else {
+                $qb->andWhere('q.dateReponse > :dateReponse')
+                    ->setParameter('dateReponse', $dateReponse); 
+                $qb->orderBy('q.dateReponse', 'ASC');
+            }
+        } elseif ($tri == 3 or $tri == 5) { /* ToDo : à revoir si la MOA décide que la pagination doit se faire également sur le tri d'indice de recommandation (tri vaut 5) */
+            if ($suivant) {
+                $qb->andWhere('q.dateReponse > :dateReponse')
+                    ->setParameter('dateReponse', $dateReponse);
+                $qb->orderBy('q.dateReponse', 'ASC');
+            } else {
+                $qb->andWhere('q.dateReponse < :dateReponse')
+                    ->setParameter('dateReponse', $dateReponse);
+                $qb->orderBy('q.dateReponse', 'DESC');
+            }
         }
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
