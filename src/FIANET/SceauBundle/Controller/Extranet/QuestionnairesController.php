@@ -151,7 +151,8 @@ class QuestionnairesController extends Controller
                 'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
                 'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation'],
                 'parametrageLibelleCommandeDate' => $questionnaireType->getParametrage()['libelleCommandeDate'],
-                'parametrageLivraison' => $questionnaireType->getParametrage()['livraison']
+                'parametrageLivraison' => $questionnaireType->getParametrage()['livraison'],
+                'urlRedirection' => $this->generateUrl('extranet_questionnaires_questionnaires', array(), true)
             )
         );
 
@@ -365,7 +366,13 @@ class QuestionnairesController extends Controller
                 'dateFin' => $datePeriode['dateFin'],
                 'langue_id' => $langue->getId(),
                 'templateEmail' => $questionnaireType->getParametrage()['templateEmail'],
-                'auto' => $auto
+                'auto' => $auto,
+                'site_nom' => $site->getNom(),
+                'urlRedirection' => $this->generateUrl(
+                    'extranet_questionnaires_relance_questionnaires_langue',
+                    array('langue_id' =>  $langue->getId()),
+                    true
+                )
             )
         );
     }
@@ -561,7 +568,9 @@ class QuestionnairesController extends Controller
                     $this->container->getParameter('relance_objet_par_defaut'),
                     $site->getNom()
                 ),
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'site_nom' => $site->getNom(),
+                'urlRedirection' => $this->generateUrl('extranet_questionnaires_relance_questionnaires')
             )
         );
     }

@@ -22,9 +22,9 @@ class ProduitQuestionnaireReponse
     private $id;
 
     /**
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="note", type="float")
+     * @ORM\Column(name="note", type="decimal", precision=10, scale=2 )
      */
     private $note;
 
@@ -49,7 +49,7 @@ class ProduitQuestionnaireReponse
     /**
      * Set note
      *
-     * @param float $note
+     * @param string $note
      *
      * @return ProduitQuestionnaireReponse
      */
@@ -63,7 +63,7 @@ class ProduitQuestionnaireReponse
     /**
      * Get note
      *
-     * @return float
+     * @return string
      */
     public function getNote()
     {

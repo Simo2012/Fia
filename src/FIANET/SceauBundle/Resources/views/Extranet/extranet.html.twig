@@ -29,6 +29,8 @@
 {% block javascripts_head %}
     {{ parent() }}
 
+
+
     {% block extranet_javascripts_head %}
     {% endblock %}
 {% endblock %}
@@ -64,6 +66,27 @@
     {% endjavascripts %}
 
     <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function selectionListeDeroulante(action, id) {
+            $('#masque').show();
+
+            $.get(Routing.generate(action, {id: id}, true),
+                null,
+                function (data) {
+                    document.location.href = '{% if urlRedirection is defined %}{{ urlRedirection }}{% else %}{{ url('extranet_accueil') }}{% endif %}';
+                }
+            );
+        }
+
+        function changerSite(id) {
+            selectionListeDeroulante('extranet_commun_site_selectionne', id);
+        }
+
+        function changerQuestionnaireType(id) {
+            selectionListeDeroulante('extranet_commun_questionnaire_type_selectionne', id);
+        }
+    </script>
 
     {% block extranet_javascripts %}
     {% endblock %}

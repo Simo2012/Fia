@@ -10,25 +10,3 @@ function recupDate() {
     document.getElementById('DIVdate').innerHTML = recupDate;
 }
 window.onload = recupDate;
-
-function selectionListeDeroulante(action, id)
-{
-    $('#masque').show();
-
-    $.get(Routing.generate(action, {id: id}, true),
-        null,
-        function (data) {
-            location.reload(true);
-        }
-    );
-}
-
-function changerSite(id)
-{
-    selectionListeDeroulante('extranet_commun_site_selectionne', id);
-}
-
-function changerQuestionnaireType(id)
-{
-    selectionListeDeroulante('extranet_commun_questionnaire_type_selectionne', id);
-}

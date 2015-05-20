@@ -45,7 +45,7 @@ class GestionFlux
             throw new FluxException($this->translator->trans('flux_site_inexistant_ou_sans_garantie', array(), 'flux'));
         }
 
-        if ($site->getAdministrationType()->getId() !== 1) {
+        if ($site->getAdministrationType()->getId() !== 3) {
             throw new FluxException($this->translator->trans('flux_site_non_autorise', array(), 'flux'));
         }
 
@@ -54,7 +54,7 @@ class GestionFlux
         $flux->setChecksum($checksum);
         $flux->setDateInsertion(new \DateTime());
         $flux->setIp($ip);
-        $flux->setFluxStatut($this->em->getRepository('FIANETSceauBundle:FluxStatut')->find(1));
+        $flux->setFluxStatut($this->em->getRepository('FIANETSceauBundle:FluxStatut')->aTraiter());
         $flux->setSite($site);
 
         $listeErreurs = $this->validator->validate($flux, array(), array('reception, reception2'));

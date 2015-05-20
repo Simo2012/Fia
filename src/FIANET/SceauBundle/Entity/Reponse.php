@@ -51,16 +51,16 @@ class Reponse
 
 
     /**
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="valeurMin", type="float", nullable=true)
+     * @ORM\Column(name="valeurMin", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $valeurMin;
 
     /**
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="valeurMax", type="float", nullable=true)
+     * @ORM\Column(name="valeurMax", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $valeurMax;
 
@@ -237,7 +237,7 @@ class Reponse
     /**
      * Set valeurMin
      *
-     * @param float $valeurMin
+     * @param string $valeurMin
      *
      * @return Reponse
      */
@@ -251,7 +251,7 @@ class Reponse
     /**
      * Get valeurMin
      *
-     * @return float
+     * @return string
      */
     public function getValeurMin()
     {
@@ -261,7 +261,7 @@ class Reponse
     /**
      * Set valeurMax
      *
-     * @param float $valeurMax
+     * @param string $valeurMax
      *
      * @return Reponse
      */
@@ -275,7 +275,7 @@ class Reponse
     /**
      * Get valeurMax
      *
-     * @return float
+     * @return string
      */
     public function getValeurMax()
     {

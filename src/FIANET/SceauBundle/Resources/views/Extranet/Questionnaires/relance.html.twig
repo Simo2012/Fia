@@ -37,7 +37,7 @@
             <a href="{{ path('extranet_questionnaires_relance_perso', {'langue_id': langue_id}) }}"><button>{% trans %}personnaliser_email{% endtrans %}</button></a>
 
             <a id="lien-email-type" class="lien">{% trans %}email_type{% endtrans %}</a>
-            <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail}))}}</div>
+            <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}</div>
 
             {% for messageSucces in app.session.flashbag.get('renvoyer_succes') %}
                 <p class="succes">{{ messageSucces }}</p>

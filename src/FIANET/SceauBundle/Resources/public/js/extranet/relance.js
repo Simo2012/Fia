@@ -78,3 +78,7 @@ function automatiserRelance(langue_id, activer, msgSuccess, msgErreur) {
         }
     );
 }
+
+function visualiserEmail(corps) {
+    $('#js_relance_perso').html(corps);
+}

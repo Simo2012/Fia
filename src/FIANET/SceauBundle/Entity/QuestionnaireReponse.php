@@ -30,9 +30,9 @@ class QuestionnaireReponse
     private $commentaire;
 
     /**
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="note", type="float", nullable=true)
+     * @ORM\Column(name="note", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $note;
 
@@ -115,7 +115,7 @@ class QuestionnaireReponse
     /**
      * Set note
      *
-     * @param float $note
+     * @param string $note
      *
      * @return QuestionnaireReponse
      */
@@ -129,7 +129,7 @@ class QuestionnaireReponse
     /**
      * Get note
      *
-     * @return float
+     * @return string
      */
     public function getNote()
     {

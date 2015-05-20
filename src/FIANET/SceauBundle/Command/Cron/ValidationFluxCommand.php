@@ -42,9 +42,9 @@ EOT
         $fluxNonTraites = $em->getRepository('FIANETSceauBundle:Flux')->fluxNonTraites($nbMaxFlux);
 
         if (!empty($fluxNonTraites)) {
-            $fluxStatutEnCours = $em->getRepository('FIANETSceauBundle:FluxStatut')->find(2);
-            $fluxStatutValide = $em->getRepository('FIANETSceauBundle:FluxStatut')->find(3);
-            $fluxStatutNonValide = $em->getRepository('FIANETSceauBundle:FluxStatut')->find(4);
+            $fluxStatutEnCours = $em->getRepository('FIANETSceauBundle:FluxStatut')->enCoursDeTraitement();
+            $fluxStatutValide = $em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtValide();
+            $fluxStatutNonValide = $em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtInvalide();
 
             /* On change le statut des flux -> en cours de traitement */
             foreach ($fluxNonTraites as $fluxNonTraite) {

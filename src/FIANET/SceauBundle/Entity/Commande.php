@@ -58,9 +58,9 @@ class Commande
     private $reference;
 
     /**
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="montant", type="float", nullable=true)
+     * @ORM\Column(name="montant", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $montant;
 
@@ -282,7 +282,7 @@ class Commande
     /**
      * Set montant
      *
-     * @param float $montant
+     * @param string $montant
      *
      * @return Commande
      */
@@ -296,7 +296,7 @@ class Commande
     /**
      * Get montant
      *
-     * @return float
+     * @return string
      */
     public function getMontant()
     {

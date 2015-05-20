@@ -12,7 +12,7 @@
 
     <div class="block-total">
         <div class="block-total-part1">
-            {{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail}))}}
+            {{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}
         </div>
         <div class="block-total-part2">
             <div class="block-info-rep">
@@ -29,7 +29,7 @@
                     </span>
 
                     <br />
-                    <button>{% trans %}bouton_visualiser{% endtrans %}</button><br />
+                    <button onclick="visualiserEmail(document.getElementById('fianet_sceaubundle_relance_corps').value); return false;">{% trans %}bouton_visualiser{% endtrans %}</button><br />
                     <button type="submit">{% trans %}bouton_valider{% endtrans %}</button>
                 {{ form_end(form) }}
             </div>
@@ -39,5 +39,8 @@
 {% endblock %}
 
 {% block extranet_javascripts %}
-
+    {% javascripts
+    'bundles/fianetsceau/js/extranet/relance.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
 {% endblock %}

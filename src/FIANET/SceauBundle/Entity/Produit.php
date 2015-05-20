@@ -43,9 +43,9 @@ class Produit
     private $libelle;
 
     /**
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="montant", type="float")
+     * @ORM\Column(name="montant", type="decimal", precision=10, scale=2)
      */
     private $montant;
 
@@ -151,7 +151,7 @@ class Produit
     /**
      * Set montant
      *
-     * @param float $montant
+     * @param string $montant
      *
      * @return Produit
      */
@@ -165,7 +165,7 @@ class Produit
     /**
      * Get montant
      *
-     * @return float
+     * @return string
      */
     public function getMontant()
     {
