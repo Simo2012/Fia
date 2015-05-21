@@ -34,16 +34,14 @@
         <div class="block-total">
             <div class="block-total-part1">
                 <h2>{{ 'commun_commande_informations'|trans }} {% if questionnaire[0].commande.reference is not empty %}{{ questionnaire[0].commande.reference }}{% endif %} {{ 'commun_du'|trans }} {% if questionnaire[0].commande.date is not empty %}{{ questionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaire[0].commande.date|localizeddate('none', 'short') }}{% endif %}</h2>
-                <dd></dd>
-                <dt>{% if questionnaire[0].commande.prenom is not empty %}{% if questionnaire[0].commande.prenom is not empty %}{{ questionnaire[0].commande.prenom |capitalize }}{% endif %} {% if questionnaire[0].commande.nom is not empty %}{{ questionnaire[0].commande.nom |upper }}{% endif %}{% endif %}</dt>
+                <dt>&nbsp;&nbsp;{% if questionnaire[0].commande.prenom is not empty %}{% if questionnaire[0].commande.prenom is not empty %}{{ questionnaire[0].commande.prenom |capitalize }}{% endif %} {% if questionnaire[0].commande.nom is not empty %}{{ questionnaire[0].commande.nom |upper }}{% endif %}{% endif %}</dt>
                 <hr />
-                <dd></dd>
-                <dt>{% if questionnaire[0].commande.email is not empty %}{{ questionnaire[0].commande.email }}{% endif %}</dt>
+                <dt>&nbsp;&nbsp;{% if questionnaire[0].commande.email is not empty %}{{ questionnaire[0].commande.email }}{% endif %}</dt>
                 <hr />
-                <dd>&nbsp;&nbsp;{{ 'commun_commande_date'|trans }} :</dd>
+                <dd>{{ 'commun_commande_date'|trans }} :</dd>
                 <dt>{% if questionnaire[0].commande.date is not empty %}{{ questionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaire[0].commande.date|localizeddate('none', 'short') }}{% endif %}</dt>
                 <hr />        
-                <dd>&nbsp;&nbsp;{{ 'commun_questionnaire_envoye_par'|trans }} :</dd>
+                <dd>{{ 'commun_questionnaire_envoye_par'|trans }} :</dd>
                 <dt>FIA-NET</dt> {# ToDo : à gérer quand on fera les questionnaires hors flux XML #}
             </div>
             <div class="block-total-part2">

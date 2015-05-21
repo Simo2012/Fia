@@ -689,7 +689,8 @@ class QuestionnairesController extends Controller
                 'questionnaireLieSuivantListeQuestionsReponses' => $questionnaireLieSuivantListeQuestionsReponses,
                 'questionnaireLieSuivantMsg' => $questionnaireLieSuivantMsg,
                 'navigation' => $navigation,
-                'parametrageIndicateur' => $parametrageIndicateur
+                'parametrageIndicateur' => $parametrageIndicateur,
+                'urlRedirection' => $this->generateUrl('extranet_questionnaires_questionnaires', array(), true)
             )
         );
         
@@ -717,7 +718,7 @@ class QuestionnairesController extends Controller
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
         
         if (!$this->get('fianet_sceau.questionnaire_repondu')->coherenceArgumentsDroitDeReponseAjout($site, $qid, $qrid)) {
-            throw new Exception('Ajout de droit de réponse impossible');
+            return $this->redirect($this->generateUrl('extranet_questionnaires_detail_questionnaire', array('id' => $qid)));
         }
         
         $questionnaire = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')->find($qid);
@@ -763,7 +764,8 @@ class QuestionnairesController extends Controller
                 'form' => $form->createView(),
                 'infosGeneralesQuestionnaire' => $infosGeneralesQuestionnaire,
                 'questionnaireReponse' => $questionnaireReponse,
-                'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur']
+                'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
+                'urlRedirection' => $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('id' => $qid))
             )
         );
     }
