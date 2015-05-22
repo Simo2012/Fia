@@ -1,37 +1,65 @@
 {% trans_default_domain 'commun' %}
 
 {% if questionnaireRepondu is not null %}
-<h2>{{ 'commun_date_reponse'|trans }} - {{ 'commun_le'|trans }} {{ questionnaireRepondu_dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaireRepondu_dateReponse|localizeddate('none', 'short') }} -</h2>
+    <h2>{{ 'commun_date_reponse'|trans }} - {{ 'commun_le'|trans }} {{ questionnaireRepondu_dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaireRepondu_dateReponse|localizeddate('none', 'short') }} -</h2>
 
-{# Todo : Récupération des questions/réponses à compléter #}
-{% if questionnaireRepondu_listeQuestionsReponses is not null %}
-    
-    {% for questionReponse in questionnaireRepondu_listeQuestionsReponses %}
-        <p class="question">
-        {{ questionReponse['question'].libelle }}
-        </p>
-        
-        {# ToDo : s'il s'agit du commentaire principal alors on affichera une mise en forme différente pour la réponse #}
-        {# <p class="question bold">{{ 'questionnaire_libelle_commentaire_principal'|trans({}, 'commun_questionnaires_repondus') }}</p> #}
-        {# <div class="area"><div>Ici on mettra le commentaire principal</div></div> #}
-    {% endfor %}
-{% endif %}
+    {# Todo : Récupération des questions/réponses à compléter #}
+    {% if questionnaireRepondu_listeQuestionsReponses is not null %}
 
-{#
-<br />
-<p>De 1 à 10, comment noteriez-vous les différents attributs du site Petite Frimousse ? (10 représente la meilleure note)<br />
-    <span class="color8">8/10</span> - Facilité de recherche et de navigation<br />
-    <span class="color7">7/10</span> - Information sur les produits<br />
-    <span class="color8">8/10</span> - Prix des produits<br />
-    <span class="color10">10/10</span> - Facilité à passer une commande (panier, paiement)<br />
-    <span class="color3">3/10</span> - Prix et options de transport <br />
-    <br />
-    Etes-vous satisfait de la façon dont s'est déroulé votre achat sur ce site ? <span class="color7">Plutôt</span> <br />
-    <br />
-    Votre Avis intéresse les internautes !
-    <br />
-    Ici le commentaire de l'internaute
-</p>
-#}
+        {% for questionReponse in questionnaireRepondu_listeQuestionsReponses %}
 
+            <p class="question">
+            {{ questionReponse['question'].libelle }}
+
+            {# ToDo : à gérer #}
+            {#
+            {% if questionReponse['commentairePrincipal'] == true and commentairePrincipal is defined %}
+                {% if questionnaireLieSuivant == false %}
+                    {% if droitDeReponse == false %}
+                    - {{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireRepondu.id, 'qrid': questionReponse['question'].id}) })|raw }}
+                    {% endif %}       
+                {% endif %}
+            {% endif %}
+            #}
+            </p>
+
+            {% set questionType = questionReponse['questiontype'].id %}
+
+            {% if questionReponse['reponses'] is not empty %}
+
+                {% for questionReponseRepondu in questionReponse['reponses'] %}
+
+                    {# ToDo : modifier les questionReponseRepondu.libelle avec les bonnes valeurs une fois les méthodes de récupération créées #}
+
+                    {% if questionType == 1   %} {# commentaire #}
+                        {% if questionReponse['commentairePrincipal'] == true %}
+                            <p class="question bold">{{ 'questionnaire_libelle_commentaire_principal'|trans({}, 'commun_questionnaires_repondus') }}</p>
+                            <div class="area"><div>{{ questionReponseRepondu.libelle }}</div></div>
+                        {% else %}
+                            <p class="reponse">{{ questionReponseRepondu.libelle }}</p>   
+                        {% endif %}
+                    {% elseif questionType == 2 %} {# choix unique #}
+                        <p class="reponse">{{ questionReponseRepondu.libelle }}</p>
+                    {% elseif questionType == 3 %} {# multichoix #}  
+                        <p class="reponse">
+                            - {{ questionReponseRepondu.libelle }}
+                        </p>
+                    {% elseif questionType == 4 %} {# menu déroulant #}    
+                        <p class="reponse">{{ questionReponseRepondu.libelle }}</p>
+                    {% elseif questionType == 5 %} {# notation #}
+                        <p class="reponse">
+                            {# ToDo : Récupérer la note + la note max, si pas de réponse mettre NC #}
+                            <span class="color8">8/10</span> - {{ questionReponseRepondu.libelle }}
+                        </p>
+                    {% else %}
+                        <p class="reponse">{{ questionReponseRepondu.libelle }}</p>
+                    {% endif %}
+
+                {% endfor %}
+
+            {% else %}
+                <p class="reponse">Pas de réponse à cette question</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 {% endif %}

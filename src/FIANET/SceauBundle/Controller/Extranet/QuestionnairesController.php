@@ -756,6 +756,9 @@ class QuestionnairesController extends Controller
             // On redirige vers la page de visualisation de listing des questionnaires une fois le message flash affiché
             // ToDo : mettre la condition avant redirection
             return $this->redirect($this->generateUrl('extranet_questionnaires_questionnaires'));
+            
+            // Pour retrouner sur le détail de questionnaire
+            // return $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('id' => $qid);
         }
         
         return $this->render(

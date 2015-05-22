@@ -48,7 +48,7 @@
             </trans-unit> 
             <trans-unit id="9">
                 <source>questionnaire_libelle_commentaire_principal</source>
-                <target>Review drafted by your client</target>      
+                <target>Review drafted by the client</target>      
             </trans-unit>                                                           
         </body>
     </file>

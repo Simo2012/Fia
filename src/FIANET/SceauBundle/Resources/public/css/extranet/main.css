@@ -40,6 +40,10 @@ body {
     background-color: #e7e4e4;
 }
 
+.right {
+    float:right;
+}
+
 a, .lien {
     color: #1d8bdf;
     text-decoration: underline;
@@ -260,6 +264,16 @@ h2 {
 .block-total-part1-2 p span {
     margin-left: 10px;
 }
+
+p.question {
+    float:none;
+    padding:0px;
+    margin-top:15px;
+    margin-bottom:0px;
+    margin-left:12px;
+    margin-right:12px;
+}
+
 span.color1 {
     color: #e00f2e;
     font-weight: bold;
@@ -330,8 +344,12 @@ span.color10 {
 }
 
 .block-total-part1-2 p.reponse {
-    
-    
+    float:none;
+    padding:0px;
+    margin-top:2px;
+    margin-bottom:0px;
+    margin-left:20px;
+    margin-right:12px;
 }
 
 .block-total-part1-2 div.area {
@@ -407,6 +425,36 @@ hr {
     margin: 0;
     background-color: transparent;
     clear: both;
+}
+
+.area {
+    clear:both;
+    float:none;
+    overflow:hidden;
+    margin-bottom:5px;
+}
+
+.area div {
+    overflow:hidden;
+    margin-bottom:5px;
+    min-height:50px;
+    border:#c2c2c2 solid 1px;
+    padding:9px 5px;
+    color:#444;
+    font-size:11px;
+    text-align:left;
+    font-weight:bold;
+}
+
+.drt-rep {
+    float:none;
+    overflow:hidden;
+    background-color:#f2f1f1;
+    border-radius:2px;
+    font-size:11px;
+    color:#444;
+    text-align:left;
+    padding:10px;
 }
 
 .block-total-part2 input[type=checkbox] {

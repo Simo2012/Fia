@@ -225,14 +225,28 @@ class QuestionnaireRepondu {
 
         foreach ($oQuestions as $question) {
             $listeQuestionsReponses[$i]['question'] = $question;
-
-            /* ToDo : on va ajouter également les réponses dans le tableau */
             $listeQuestionsReponses[$i]['questiontype'] = $question->getQuestionType();
-
-            $this->getListeReponses($question, $question->getQuestionType());
-
-            $oQuestions = $this->em
+            
+            $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;
+            
+            if ($commentairePrincipal != null && $question->getId() == $commentairePrincipal) {
+                $listeQuestionsReponses[$i]['commentairePrincipal'] = true;
+            } else {
+                $listeQuestionsReponses[$i]['commentairePrincipal'] = false;
+            }
+            
+            $oReponses = $this->em
                             ->getRepository('FIANETSceauBundle:Question')->getAllQuestionsOrdered($questionnaireType);
+            
+            $j = 0;
+            
+            foreach ($oReponses as $reponse) {
+            
+                //$listeQuestionsReponses[$i]['reponses'][$j] = $this->getListeReponses($question, $question->getQuestionType());
+                $listeQuestionsReponses[$i]['reponses'][$j] = $reponse;
+                
+                $j++;
+            }
 
             $i++;
         }
@@ -290,25 +304,28 @@ class QuestionnaireRepondu {
 
         $reponsesInfos = $question->getReponses();
 
-        // ToDo à compléter
-
         switch ($questionType->getId()) {
+            
             case 1: // Commentaire
 
-                break;
-
+            break;
+            
             case 2: // Choix unique
             case 4: // Menu déroulant
 
-                break;
-
+            break;
+        
             case 3: // Multichoix
 
-                break;
+            break;
 
             case 5: // Notation
 
-                break;
+            break;
+        
+            default:
+                
+            break;
         }
     }
 
