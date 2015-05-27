@@ -23,43 +23,44 @@
             #}
             </p>
 
-            {% set questionType = questionReponse['questiontype'].id %}
+            {% set questionType = questionReponse['questionType'].id %}
 
-            {% if questionReponse['reponses'] is not empty %}
-
+            {% if questionReponse['questionRepondue'] == false %}
+                
+                <p class="reponse">{{ 'questionnaire_question_pas_de_reponse'|trans({}, 'commun_questionnaires_repondus') }}</p>
+            
+            {% else %}
+                
                 {% for questionReponseRepondu in questionReponse['reponses'] %}
 
-                    {# ToDo : modifier les questionReponseRepondu.libelle avec les bonnes valeurs une fois les méthodes de récupération créées #}
-
-                    {% if questionType == 1   %} {# commentaire #}
+                    {% if questionType == 1 %}  {# commentaire #} 
                         {% if questionReponse['commentairePrincipal'] == true %}
                             <p class="question bold">{{ 'questionnaire_libelle_commentaire_principal'|trans({}, 'commun_questionnaires_repondus') }}</p>
-                            <div class="area"><div>{{ questionReponseRepondu.libelle }}</div></div>
+                            <div class="area"><div>{{ questionReponseRepondu.commentaire|raw }}</div></div>
                         {% else %}
-                            <p class="reponse">{{ questionReponseRepondu.libelle }}</p>   
+                            <p class="reponse">{{ questionReponseRepondu.commentaire|raw }}</p>   
                         {% endif %}
-                    {% elseif questionType == 2 %} {# choix unique #}
-                        <p class="reponse">{{ questionReponseRepondu.libelle }}</p>
-                    {% elseif questionType == 3 %} {# multichoix #}  
+                    {% elseif questionType == 2 %}  {# choix unique #} 
+                        <p class="reponse">{{ questionReponseRepondu.reponse.libelle|raw }}</p>
+                    {% elseif questionType == 3 %}  {# multichoix #} 
                         <p class="reponse">
-                            - {{ questionReponseRepondu.libelle }}
+                            - {{ questionReponseRepondu.reponse.libelle|raw }}
                         </p>
-                    {% elseif questionType == 4 %} {# menu déroulant #}    
-                        <p class="reponse">{{ questionReponseRepondu.libelle }}</p>
-                    {% elseif questionType == 5 %} {# notation #}
+                    {% elseif questionType == 4 %}  {# menu déroulant #}     
+                        <p class="reponse">{{ questionReponseRepondu.reponse.libelle|raw }}</p>
+                    {% elseif questionType == 5 %}  {# notation #} 
                         <p class="reponse">
-                            {# ToDo : Récupérer la note + la note max, si pas de réponse mettre NC #}
-                            <span class="color8">8/10</span> - {{ questionReponseRepondu.libelle }}
+                            {# ToDo : Récupérer la note + la note max, si pas de réponse mettre NC (fr) N/A (en) #}
+                            <span class="color{{ questionReponseRepondu.note|round(0, 'floor') }}">{{ questionReponseRepondu.note|round(0, 'floor') }}/{{ questionReponseRepondu.reponse.valeurmax|round(0, 'floor') }}</span>   {{ questionReponseRepondu.reponse.libelle|raw }}
                         </p>
                     {% else %}
-                        <p class="reponse">{{ questionReponseRepondu.libelle }}</p>
+                        <p class="reponse">{{ questionReponseRepondu.reponse.libelle|raw }}</p>
                     {% endif %}
-
-                {% endfor %}
-
-            {% else %}
-                <p class="reponse">Pas de réponse à cette question</p>
+                    
+                {% endfor %}                
+                
             {% endif %}
+           
         {% endfor %}
     {% endif %}
 {% endif %}

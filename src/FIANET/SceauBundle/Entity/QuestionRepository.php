@@ -29,27 +29,5 @@ class QuestionRepository extends EntityRepository
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
-    
-    
-    /**
-     * Récupère l'ensemble des questions d'un questionnaireType de manière ordonnée (ToDo : à revoir)
-     *
-     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
-     *
-     * @return Question[]
-     */
-    public function getAllReponsesRepondues(Question $question)
-    {
-        $qb = $this->createQueryBuilder('q');
-
-        $qb->where('q.questionnaireType=:id')
-            ->andWhere($qb->expr()->eq('q.actif', 'true'))
-            ->setParameter('id', $questionnaireType->getId())
-            ->orderBy('q.ordre', 'ASC')
-            ->addOrderBy('q.page', 'ASC');
-        
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
-    }    
-    
-    
+      
 }

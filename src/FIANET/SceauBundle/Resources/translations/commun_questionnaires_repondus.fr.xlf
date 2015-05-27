@@ -49,7 +49,15 @@
             <trans-unit id="9">
                 <source>questionnaire_libelle_commentaire_principal</source>
                 <target>Avis rédigé par le client</target>      
-            </trans-unit>                                          
+            </trans-unit>
+            <trans-unit id="10">
+                <source>questionnaire_question_pas_de_reponse</source>
+                <target>Pas de réponse à cette question</target>      
+            </trans-unit>
+            <trans-unit id="11">
+                <source>questionnaire_reponse_non_communiquee</source>
+                <target>NC</target>      
+            </trans-unit>                                              
         </body>
     </file>
 </xliff>

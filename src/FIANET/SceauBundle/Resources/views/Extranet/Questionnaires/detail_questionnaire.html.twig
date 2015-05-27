@@ -42,7 +42,7 @@
                 <dt>{% if questionnaire[0].commande.date is not empty %}{{ questionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaire[0].commande.date|localizeddate('none', 'short') }}{% endif %}</dt>
                 <hr />        
                 <dd>{{ 'commun_questionnaire_envoye_par'|trans }} :</dd>
-                <dt>FIA-NET</dt> {# ToDo : à gérer quand on fera les questionnaires hors flux XML #}
+                <dt>{% if questionnaire[0].site.administrationType.id == 1 %}{{ 'commun_marchand'|trans }}{% else %}FIA-NET{% endif %}</dt> {# ToDo : à revoir quand on fera les demandes de questionnaires via Espace Membre + peut être formulation de "Marchand" à revoir #}
             </div>
             <div class="block-total-part2">
                 <h2>&nbsp;</h2>

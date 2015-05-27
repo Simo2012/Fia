@@ -215,6 +215,8 @@ class QuestionnaireRepondu {
                         ->getRepository('FIANETSceauBundle:Question')->getAllQuestionsOrdered($questionnaireType);
         /* ToDo : à revoir pour gestion : sous-questions, questions cachées, questions personnalisées, langues, type de livraison, etc. */
 
+        /* ToDo : revoir les boucles de récupération de questions/réponses proposées/réponses apportées */
+        
         if (!$oQuestions) {
             throw new Exception('Le type de questionnaire n°' . $questionnaireType->getId() . ' ne possède pas de question');
         }
@@ -225,7 +227,7 @@ class QuestionnaireRepondu {
 
         foreach ($oQuestions as $question) {
             $listeQuestionsReponses[$i]['question'] = $question;
-            $listeQuestionsReponses[$i]['questiontype'] = $question->getQuestionType();
+            $listeQuestionsReponses[$i]['questionType'] = $question->getQuestionType();
             
             $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;
             
@@ -235,17 +237,19 @@ class QuestionnaireRepondu {
                 $listeQuestionsReponses[$i]['commentairePrincipal'] = false;
             }
             
-            $oReponses = $this->em
-                            ->getRepository('FIANETSceauBundle:Question')->getAllQuestionsOrdered($questionnaireType);
+            $listeQuestionsReponses[$i]['questionPrimaire'] = $question->getQuestionPrimaire();
+            $listeQuestionsReponses[$i]['questionsSecondaires'] = $question->getQuestionsSecondaires();            
             
-            $j = 0;
+            $oReponsesRepondues = $this->em
+                        ->getRepository('FIANETSceauBundle:QuestionnaireReponse')->getAllReponsesRepondues($question, $questionnaire);
             
-            foreach ($oReponses as $reponse) {
-            
-                //$listeQuestionsReponses[$i]['reponses'][$j] = $this->getListeReponses($question, $question->getQuestionType());
-                $listeQuestionsReponses[$i]['reponses'][$j] = $reponse;
-                
-                $j++;
+            /* Si la question n'est pas cachée par défaut et que l'internaute n'y a pas répondu; on indique le message "Pas de réponse à cette question" */
+            if ($question->getCache() == false && $oReponsesRepondues == null) {
+                $listeQuestionsReponses[$i]['questionRepondue'] = false;
+                $listeQuestionsReponses[$i]['reponses'] = null;
+            } else {
+                $listeQuestionsReponses[$i]['questionRepondue'] = true; // todo : pour test, à revoir/compléter
+                $listeQuestionsReponses[$i]['reponses'] = $oReponsesRepondues;
             }
 
             $i++;
@@ -296,18 +300,19 @@ class QuestionnaireRepondu {
      * Méthode qui permet de récupérer les réponses répondues pour une question donnée
      * 
      * @param Question $question Instance de Question
-     * @param QuestionType $questionType Instance de QuestionType
      * 
      * @return ... ToDo à compléter
      */
-    public function getListeReponses(Question $question, QuestionType $questionType) {
+    public function getListeReponses(Question $question) {
 
-        $reponsesInfos = $question->getReponses();
-
+        $questionType  = $question->getQuestionType();
+        
+        // $reponsesInfos = $question->getReponses();
+        
         switch ($questionType->getId()) {
             
             case 1: // Commentaire
-
+                
             break;
             
             case 2: // Choix unique
@@ -326,6 +331,7 @@ class QuestionnaireRepondu {
             default:
                 
             break;
+        
         }
     }
 
@@ -382,7 +388,7 @@ class QuestionnaireRepondu {
 
         return $questionnaireLieSuivant;
     }
-
+    
     /**
      * Méthode qui permet de créer le message à afficher lorsqu'un questionnaire lié suivant n'est pas envoyé/répondu
      * 

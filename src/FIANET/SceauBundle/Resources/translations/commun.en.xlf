@@ -184,6 +184,10 @@
                 <source>commun_demande_erreur</source>
                 <target>Your request could not be considered.</target>
             </trans-unit>
+            <trans-unit id="42">
+                <source>commun_marchand</source>
+                <target>Merchant</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

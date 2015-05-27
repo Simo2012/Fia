@@ -184,6 +184,10 @@
                 <source>commun_demande_erreur</source>
                 <target>Votre demande n'a pas pu être prise en compte.</target>
             </trans-unit>
+            <trans-unit id="42">
+                <source>commun_marchand</source>
+                <target>Marchand</target>
+            </trans-unit>            
         </body>
     </file>
 </xliff>

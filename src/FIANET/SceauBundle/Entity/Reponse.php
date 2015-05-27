@@ -24,14 +24,14 @@ class Reponse
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="string", length=50)
+     * @ORM\Column(name="libelle", type="string", length=255)
      */
     private $libelle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelleCourt", type="string", length=50)
+     * @ORM\Column(name="libelleCourt", type="string", length=255)
      */
     private $libelleCourt;
 
