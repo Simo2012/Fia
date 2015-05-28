@@ -314,6 +314,11 @@ span.color10 {
     color: #61ab30;
     font-weight: bold;
 }
+span.colorNC {
+    color: #595959;
+    font-weight: bold;
+}
+
 .block-total-part1-2 ul {
     float: left;
     padding-top: 20px;
@@ -342,6 +347,7 @@ span.color10 {
     margin-left:12px;
     margin-right:12px;
     width:520px;
+    font-weight: bold;
 }
 
 .block-total-part1-2 p.reponse {

@@ -211,47 +211,50 @@ class QuestionnaireRepondu {
      */
     public function getAllQuestionsReponses(Questionnaire $questionnaire, QuestionnaireType $questionnaireType) {
 
-        $oQuestions = $this->em
-                        ->getRepository('FIANETSceauBundle:Question')->getAllQuestionsOrdered($questionnaireType);
-        /* ToDo : à revoir pour gestion : sous-questions, questions cachées, questions personnalisées, langues, type de livraison, etc. */
+        $oQuestions = $this->em->getRepository('FIANETSceauBundle:Question')->getAllQuestionsOrdered($questionnaireType);
 
-        /* ToDo : revoir les boucles de récupération de questions/réponses proposées/réponses apportées */
-        
-        if (!$oQuestions) {
-            throw new Exception('Le type de questionnaire n°' . $questionnaireType->getId() . ' ne possède pas de question');
-        }
+        if (!$oQuestions) { throw new Exception('Le type de questionnaire n°' . $questionnaireType->getId() . ' ne possède pas de question'); }
 
         $listeQuestionsReponses = array();
-
+        
         $i = 0;
-
+        
         foreach ($oQuestions as $question) {
             $listeQuestionsReponses[$i]['question'] = $question;
             $listeQuestionsReponses[$i]['questionType'] = $question->getQuestionType();
             
             $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;
             
-            if ($commentairePrincipal != null && $question->getId() == $commentairePrincipal) {
-                $listeQuestionsReponses[$i]['commentairePrincipal'] = true;
-            } else {
-                $listeQuestionsReponses[$i]['commentairePrincipal'] = false;
-            }
+            $listeQuestionsReponses[$i]['commentairePrincipal'] = ($commentairePrincipal != null && $question->getId() == $commentairePrincipal) ? true : false;         
             
             $listeQuestionsReponses[$i]['questionPrimaire'] = $question->getQuestionPrimaire();
             $listeQuestionsReponses[$i]['questionsSecondaires'] = $question->getQuestionsSecondaires();            
             
-            $oReponsesRepondues = $this->em
-                        ->getRepository('FIANETSceauBundle:QuestionnaireReponse')->getAllReponsesRepondues($question, $questionnaire);
+            $listeQuestionsReponses[$i]['cacher'] = false;
             
-            /* Si la question n'est pas cachée par défaut et que l'internaute n'y a pas répondu; on indique le message "Pas de réponse à cette question" */
-            if ($question->getCache() == false && $oReponsesRepondues == null) {
-                $listeQuestionsReponses[$i]['questionRepondue'] = false;
-                $listeQuestionsReponses[$i]['reponses'] = null;
-            } else {
-                $listeQuestionsReponses[$i]['questionRepondue'] = true; // todo : pour test, à revoir/compléter
-                $listeQuestionsReponses[$i]['reponses'] = $oReponsesRepondues;
-            }
+            $influenceFianet = isset($questionnaireType->getParametrage()['influenceFianet']) ? $questionnaireType->getParametrage()['influenceFianet'] : null;
 
+            /* ToDo : condition à revoir car la question sur l'influence de FIA-NET devrait peut-être être visible sur d'autres interfaces (à voir selon les specs des autres lots...) */
+            if ($influenceFianet != null && $question->getId() == $influenceFianet) {
+                $listeQuestionsReponses[$i]['cacher'] = true;
+            } else {
+            
+                $listeQuestionsReponses[$i]['reponses'] = $this->getListeReponses($questionnaire,$question);
+                
+                /* Si la question n'est pas cachée par défaut et que l'internaute n'y a pas répondu; on indique le message "Pas de réponse à cette question" */
+                if ($question->getCache() == false && $listeQuestionsReponses[$i]['reponses'] == null) {
+                    $listeQuestionsReponses[$i]['questionRepondue'] = false;
+                } else {
+                    $listeQuestionsReponses[$i]['questionRepondue'] = true;
+                    
+                    if ($question->getCache() == true) {
+                        $listeQuestionsReponses[$i]['cacher'] = true;
+                    }
+
+                }
+                
+            }
+            
             $i++;
         }
 
@@ -299,40 +302,34 @@ class QuestionnaireRepondu {
     /**
      * Méthode qui permet de récupérer les réponses répondues pour une question donnée
      * 
+     * @param Questionnaire $questionnaire Instance de Questionnaire
      * @param Question $question Instance de Question
      * 
-     * @return ... ToDo à compléter
+     * @return $oReponsesRepondues|null Array Collection de QuestionnaireReponse ou null si aucune réponse n'est trouvée (hors cas questionType notation)
      */
-    public function getListeReponses(Question $question) {
+    public function getListeReponses(Questionnaire $questionnaire, Question $question) {
 
         $questionType  = $question->getQuestionType();
-        
-        // $reponsesInfos = $question->getReponses();
-        
+               
         switch ($questionType->getId()) {
-            
-            case 1: // Commentaire
-                
-            break;
-            
-            case 2: // Choix unique
-            case 4: // Menu déroulant
-
-            break;
-        
-            case 3: // Multichoix
-
-            break;
 
             case 5: // Notation
-
+                /* on affichera toutes les réponses proposées, suivies des éventuelles réponses données ou NC (N/A) si pas de réponse */
+                $oReponsesProposees = $question->getReponses();
+                $oReponsesRepondues = $this->em
+                    ->getRepository('FIANETSceauBundle:QuestionnaireReponse')->getAllReponsesRepondues($question, $questionnaire);
+                /* ToDo : lignes ci-dessus à modifier ! */
+                
             break;
         
             default:
-                
+                $oReponsesRepondues = $this->em
+                    ->getRepository('FIANETSceauBundle:QuestionnaireReponse')->getAllReponsesRepondues($question, $questionnaire);
             break;
         
         }
+        
+        return $oReponsesRepondues;
     }
 
     /**
