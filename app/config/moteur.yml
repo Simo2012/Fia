@@ -2,4 +2,5 @@ parameters:
     flux_delai_max_commande: P3W
     langue_par_defaut: fr
     periode_notation_max: 6
-    delaiJoursRelance: 14
+    relance_delai_jours: 14
+    delai_envoi_date_utilisation: P3D

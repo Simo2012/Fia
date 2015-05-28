@@ -76,6 +76,6 @@ class FluxStatutRepository extends EntityRepository
      */
     public function traiteEtInvalide()
     {
-        return $this->getStatut(3);
+        return $this->getStatut(4);
     }
 }

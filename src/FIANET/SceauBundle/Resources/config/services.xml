@@ -40,6 +40,7 @@
         <service id="fianet_sceau.questionnaire" class="FIANET\SceauBundle\Service\GestionQuestionnaire">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument>%langue_par_defaut%</argument>
+            <argument>%delai_envoi_date_utilisation%</argument>
         </service>
         <service id="fianet_sceau.notes" class="FIANET\SceauBundle\Service\Notes">
         </service>
@@ -48,7 +49,7 @@
         </service>
         <service id="fianet_sceau.relance" class="FIANET\SceauBundle\Service\GestionRelance">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument>%delaiJoursRelance%</argument>
+            <argument>%relance_delai_jours%</argument>
         </service>
 
         <!-- Extranet -->

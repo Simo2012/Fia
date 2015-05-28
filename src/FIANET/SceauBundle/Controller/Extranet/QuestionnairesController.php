@@ -357,7 +357,7 @@ class QuestionnairesController extends Controller
             'FIANETSceauBundle:Extranet/Questionnaires:relance.html.twig',
             array(
                 'form' => $form->createView(),
-                'delaiJoursRelance' => $this->container->getParameter('delaiJoursRelance'),
+                'delaiJoursRelance' => $this->container->getParameter('relance_delai_jours'),
                 'nbTotalQuestionnaires' => $nbTotalQuestionnaires,
                 'nbQuestionnairesMax' => $nbQuestionnairesMax,
                 'questionnaires' => $questionnaires,

@@ -1,7 +1,7 @@
 <?php
 namespace FIANET\SceauBundle\Command\Cron;
 
-use Exception;
+use FIANET\SceauBundle\Exception\FluxException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -61,7 +61,7 @@ EOT
 
                     $fluxNonTraite->setFluxStatut($fluxStatutValide);
 
-                } catch (Exception $e) {
+                } catch (FluxException $e) {
                     $fluxNonTraite->setFluxStatut($fluxStatutNonValide);
                     $fluxNonTraite->setLibelleErreur($e->getMessage());
                 }
