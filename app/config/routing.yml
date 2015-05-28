@@ -5,7 +5,6 @@ fianet_sceau_extranet:
     defaults: { _locale: fr }
     requirements:
         _locale: fr|en
-        _scheme: "%extranet_protocole%"
 
 fianet_sceau_webservice:
     resource: "@FIANETSceauBundle/Controller/Webservice"

@@ -29,7 +29,3 @@ monolog:
             level: debug
         console:
             type:  console
-
-# Surcharge des paramètres
-parameters:
-    extranet_protocole: http

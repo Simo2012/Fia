@@ -1,5 +1,4 @@
 parameters:
-    extranet_protocole: https
     nb_questionnaires_max: 15
     nb_caracteres_max_droit_de_reponse: 700
     nb_relances_max: 15

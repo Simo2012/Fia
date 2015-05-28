@@ -3,7 +3,7 @@ parameters:
     database_driver: pdo_pgsql
     database_host: loki
     database_port: 5439
-    database_name: sceau_v4_0
+    database_name: sceau
     database_user: sceau_user
     database_password: hello
     mailer_transport: smtp
@@ -15,5 +15,5 @@ parameters:
     secret: RobertTenaif
 
     router.request_context.host: www.fia-net.ccm
-    router.request_context.scheme: https
+    router.request_context.scheme: http
     router.request_context.base_url: /

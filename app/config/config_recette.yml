@@ -33,5 +33,5 @@ monolog:
 # Surcharge des paramètres
 parameters:
     router.request_context.host: recette.fia-net.ccm
-    router.request_context.scheme: https
+    router.request_context.scheme: http
     router.request_context.base_url: /
