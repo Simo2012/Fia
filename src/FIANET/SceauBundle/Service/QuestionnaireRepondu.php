@@ -241,8 +241,15 @@ class QuestionnaireRepondu {
             
                 $listeQuestionsReponses[$i]['reponses'] = $this->getListeReponses($questionnaire,$question);
                 
+                $nbReponses = 0;
+                foreach ($listeQuestionsReponses[$i]['reponses'] as $reponse) {
+                    if ($reponse['reponseRepondue'] != null) {
+                        $nbReponses++;
+                    }
+                }
+                
                 /* Si la question n'est pas cachée par défaut et que l'internaute n'y a pas répondu; on indique le message "Pas de réponse à cette question" */
-                if ($question->getCache() == false && $listeQuestionsReponses[$i]['reponses'] == null) {
+                if ($question->getCache() == false && $nbReponses == 0) {
                     $listeQuestionsReponses[$i]['questionRepondue'] = false;
                 } else {
                     $listeQuestionsReponses[$i]['questionRepondue'] = true;
@@ -305,31 +312,28 @@ class QuestionnaireRepondu {
      * @param Questionnaire $questionnaire Instance de Questionnaire
      * @param Question $question Instance de Question
      * 
-     * @return $oReponsesRepondues|null Array Collection de QuestionnaireReponse ou null si aucune réponse n'est trouvée (hors cas questionType notation)
+     * @return Array tableau avec les reponses proposées et les réponses apportées
      */
     public function getListeReponses(Questionnaire $questionnaire, Question $question) {
 
         $questionType  = $question->getQuestionType();
-               
-        switch ($questionType->getId()) {
-
-            case 5: // Notation
-                /* on affichera toutes les réponses proposées, suivies des éventuelles réponses données ou NC (N/A) si pas de réponse */
-                $oReponsesProposees = $question->getReponses();
-                $oReponsesRepondues = $this->em
-                    ->getRepository('FIANETSceauBundle:QuestionnaireReponse')->getAllReponsesRepondues($question, $questionnaire);
-                /* ToDo : lignes ci-dessus à modifier ! */
-                
-            break;
         
-            default:
-                $oReponsesRepondues = $this->em
-                    ->getRepository('FIANETSceauBundle:QuestionnaireReponse')->getAllReponsesRepondues($question, $questionnaire);
-            break;
+        $tReponses = array();
         
+        $oReponsesProposees = $question->getReponses();
+        
+        $i = 0;
+        
+        foreach($oReponsesProposees as $reponseProposee) {
+            $tReponses[$i]['reponseProposee'] = $reponseProposee;
+            
+            $tReponses[$i]['reponseRepondue'] = $this->em
+                    ->getRepository('FIANETSceauBundle:QuestionnaireReponse')->findOneBy(array('questionnaire' => $questionnaire, 'question' => $question, 'reponse' => $reponseProposee));
+            
+            $i++;
         }
         
-        return $oReponsesRepondues;
+        return $tReponses;
     }
 
     /**

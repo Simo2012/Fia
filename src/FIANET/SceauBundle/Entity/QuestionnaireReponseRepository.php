@@ -26,24 +26,4 @@ class QuestionnaireReponseRepository extends EntityRepository
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
     }
     
-    /**
-     * Récupère l'ensemble des réponses apportées à une question
-     *
-     * @param Question $question Instance de Question
-     * @param Questionnaire $questionnaire Instance de Questionnaire
-     *
-     * @return QuestionnaireReponse[]|null instance de questionnaireReponse ou null si pas de réponse répondue trouvée
-     */
-    public function getAllReponsesRepondues(Question $question, Questionnaire $questionnaire)
-    {
-        $qb = $this->createQueryBuilder('qr');
-
-        $qb->where('qr.question = :question')
-            ->setParameter('question', $question)
-            ->andWhere('qr.questionnaire = :questionnaire')
-            ->setParameter('questionnaire', $questionnaire);
-        
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
-    }
-    
 }

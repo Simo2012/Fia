@@ -35,51 +35,60 @@
 
                     {% for questionReponseRepondu in questionReponse['reponses'] %}
 
-                        {# {{ questionReponseRepondu.reponse.id }} #}
-
-                        {% if questionType == 1 %}  {# commentaire #} 
-                            {% if questionReponse['commentairePrincipal'] == true %}
-                                <p class="question">{{ 'questionnaire_libelle_commentaire_principal'|trans({}, 'commun_questionnaires_repondus') }}</p>
-                                <div class="area"><div>{{ questionReponseRepondu.commentaire|raw }}</div></div>
-                            {% else %}
-                                <p class="reponse">{{ questionReponseRepondu.commentaire|raw }}</p>   
-                            {% endif %}
-                        {% elseif questionType == 2 %}  {# choix unique #} 
-                            <p class="reponse">{{ questionReponseRepondu.reponse.libelle|raw }}
-                                {% if questionReponseRepondu.reponse.precision == true and questionReponseRepondu.commentaire|length > 0 %}
-                                <br />{{ questionReponseRepondu.commentaire|raw }}
-                                {% endif %}                                
-                            </p>
-                        {% elseif questionType == 3 %}  {# multichoix #} 
-                            <p class="reponse">
-                                - {{ questionReponseRepondu.reponse.libelle|raw }}
-                                {% if questionReponseRepondu.reponse.precision == true and questionReponseRepondu.commentaire|length > 0 %}
-                                <br />{{ questionReponseRepondu.commentaire|raw }}
+                        {% if questionType != 5 and questionReponseRepondu.reponseRepondue is not null %}
+                        
+                            {% if questionType == 1 %}  {# commentaire #} 
+                                {% if questionReponse['commentairePrincipal'] == true %}
+                                    <p class="question">{{ 'questionnaire_libelle_commentaire_principal'|trans({}, 'commun_questionnaires_repondus') }}</p>
+                                    <div class="area"><div>{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}</div></div>
+                                {% else %}
+                                    <p class="reponse">{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}</p>   
                                 {% endif %}
-                            </p>
-                        {% elseif questionType == 4 %}  {# menu déroulant #}     
-                            <p class="reponse">{{ questionReponseRepondu.reponse.libelle|raw }}
-                               {% if questionReponseRepondu.reponse.precision == true and questionReponseRepondu.commentaire|length > 0 %}
-                                <br />{{ questionReponseRepondu.commentaire|raw }}
-                                {% endif %}                                
-                            </p>
+                            {% elseif questionType == 2 %}  {# choix unique #} 
+                                <p class="reponse">{{ questionReponseRepondu.reponseProposee.libelle|raw }}
+                                    {% if questionReponseRepondu.reponseProposee.precision == true and questionReponseRepondu.reponseRepondue is not null %}
+                                        {% if questionReponseRepondu.reponseRepondue.commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}
+                                        {% endif %}                                
+                                    {% endif %}                        
+                                </p>
+                            {% elseif questionType == 3 %}  {# multichoix #} 
+                                <p class="reponse">
+                                    - {{ questionReponseRepondu.reponseProposee.libelle|raw }}
+                                    {% if questionReponseRepondu.reponseProposee.precision == true and questionReponseRepondu.reponseRepondue is not null %}
+                                        {% if questionReponseRepondu.reponseRepondue.commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}
+                                        {% endif %}                                
+                                    {% endif %} 
+                                </p>
+                            {% elseif questionType == 4 %}  {# menu déroulant #}     
+                                <p class="reponse">{{ questionReponseRepondu.reponseProposee.libelle|raw }}
+                                    {% if questionReponseRepondu.reponseProposee.precision == true and questionReponseRepondu.reponseRepondue is not null %}
+                                        {% if questionReponseRepondu.reponseRepondue.commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}
+                                        {% endif %}                                
+                                    {% endif %}                               
+                                </p>
+                            {% endif %}    
+                            
                         {% elseif questionType == 5 %}  {# notation #} 
                             <p class="reponse">
-                                {# ToDo : Récupérer la note + la note max, si pas de réponse mettre NC (fr) N/A (en) #}
-                                {% if questionReponseRepondu.note is null %}
+                                {% if questionReponseRepondu.reponseRepondue is null %}
                                 <span class="colorNC">{{ 'questionnaire_reponse_non_communiquee'|trans({}, 'commun_questionnaires_repondus') }}</span>
                                 {% else %}
-                                <span class="color{{ questionReponseRepondu.note|round(0, 'floor') }}">{{ questionReponseRepondu.note|round(0, 'floor') }}/{{ questionReponseRepondu.reponse.valeurmax|round(0, 'floor') }}</span>
+                                <span class="color{{ questionReponseRepondu.reponseRepondue.note|round(0, 'floor') }}">{{ questionReponseRepondu.reponseRepondue.note|round(0, 'floor') }}/{{ questionReponseRepondu.reponseProposee.valeurmax|round(0, 'floor') }}</span>
                                 {% endif %}
-                                   {{ questionReponseRepondu.reponse.libelle|raw }}
+                                   {{ questionReponseRepondu.reponseProposee.libelle|raw }}
                                 
-                                {% if questionReponseRepondu.reponse.precision == true and questionReponseRepondu.commentaire|length > 0 %}
-                                <br />{{ questionReponseRepondu.commentaire|raw }}
-                                {% endif %}
+                                {% if questionReponseRepondu.reponseProposee.precision == true and questionReponseRepondu.reponseRepondue is not null %}
+                                    {% if questionReponseRepondu.reponseRepondue.commentaire|length > 0 %}
+                                        <br />{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}
+                                    {% endif %}                                
+                                {% endif %} 
                             </p>
                         {% endif %}
 
-                    {% endfor %}         
+                    {% endfor %}
 
                 {% endif %}
             
