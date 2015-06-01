@@ -12,4 +12,32 @@ use Doctrine\ORM\EntityRepository;
  */
 class ReponseRepository extends EntityRepository
 {
+    /**
+    * Récupère l'ensemble des réponses apportées à une question
+    *
+    * @param Question $question Instance de Question
+    * @param Questionnaire $questionnaire Instance de Questionnaire
+    *
+    * @return QuestionnaireReponse[]|null instance de questionnaireReponse ou null si pas de réponse répondue trouvée
+    */
+    public function getAllReponsesRepondues(Question $question, Questionnaire $questionnaire)
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        $qb->leftJoin('r.questionnaireReponses','qr')
+        ->addSelect('qr')
+        ->where('r.question = :question')
+        ->setParameter('question', $question)
+        ->andWhere($qb->expr()->orX(
+            ($qb->expr()->andX(
+                $qb->expr()->eq('qr.questionnaire', $questionnaire->getId()),
+                $qb->expr()->eq('qr.question', $question->getId())
+                )
+            ),
+            $qb->expr()->isNull('qr.questionnaire')
+        ));
+
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
+    }
+
 }

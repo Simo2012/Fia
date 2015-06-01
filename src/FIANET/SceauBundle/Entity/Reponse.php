@@ -80,6 +80,17 @@ class Reponse
      */
     private $question;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireReponse", mappedBy="reponse")
+     */
+    private $questionnaireReponses;
+    
+    public function __construct()
+    {
+        $this->questionnaireReponses = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -280,5 +291,39 @@ class Reponse
     public function getValeurMax()
     {
         return $this->valeurMax;
+    }
+
+    /**
+     * Add questionnaireReponse
+     *
+     * @param \FIANET\SceauBundle\Entity\QuestionnaireReponse $questionnaireReponse
+     *
+     * @return Reponse
+     */
+    public function addQuestionnaireReponse(\FIANET\SceauBundle\Entity\QuestionnaireReponse $questionnaireReponse)
+    {
+        $this->questionnaireReponses[] = $questionnaireReponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionnaireReponse
+     *
+     * @param \FIANET\SceauBundle\Entity\QuestionnaireReponse $questionnaireReponse
+     */
+    public function removeQuestionnaireReponse(\FIANET\SceauBundle\Entity\QuestionnaireReponse $questionnaireReponse)
+    {
+        $this->questionnaireReponses->removeElement($questionnaireReponse);
+    }
+
+    /**
+     * Get questionnaireReponses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionnaireReponses()
+    {
+        return $this->questionnaireReponses;
     }
 }

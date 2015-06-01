@@ -25,7 +25,7 @@
                 #}
                 </p>
 
-                {% set questionType = questionReponse['questionType'].id %}
+                {% set questionType = questionReponse.question.questionType.id %}
 
                 {% if questionReponse['questionRepondue'] == false %}
 
@@ -35,56 +35,56 @@
 
                     {% for questionReponseRepondu in questionReponse['reponses'] %}
 
-                        {% if questionType != 5 and questionReponseRepondu.reponseRepondue is not null %}
+                        {% if questionType != 5 and questionReponseRepondu.questionnairereponses[0] is defined %}
                         
-                            {% if questionType == 1 %}  {# commentaire #} 
+                            {% if questionType == 1 %}  {# commentaire #}
                                 {% if questionReponse['commentairePrincipal'] == true %}
                                     <p class="question">{{ 'questionnaire_libelle_commentaire_principal'|trans({}, 'commun_questionnaires_repondus') }}</p>
-                                    <div class="area"><div>{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}</div></div>
+                                    <div class="area"><div>{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}</div></div>
                                 {% else %}
-                                    <p class="reponse">{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}</p>   
+                                    <p class="reponse">{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}</p>   
                                 {% endif %}
-                            {% elseif questionType == 2 %}  {# choix unique #} 
-                                <p class="reponse">{{ questionReponseRepondu.reponseProposee.libelle|raw }}
-                                    {% if questionReponseRepondu.reponseProposee.precision == true and questionReponseRepondu.reponseRepondue is not null %}
-                                        {% if questionReponseRepondu.reponseRepondue.commentaire|length > 0 %}
-                                            <br />{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}
+                            {% elseif questionType == 2 %}  {# choix unique #}
+                                <p class="reponse">{{ questionReponseRepondu.libelle|raw }}
+                                    {% if questionReponseRepondu.precision == true and questionReponseRepondu.questionnairereponses[0] is defined %}
+                                        {% if questionReponseRepondu.questionnairereponses[0].commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}
                                         {% endif %}                                
                                     {% endif %}                        
                                 </p>
                             {% elseif questionType == 3 %}  {# multichoix #} 
                                 <p class="reponse">
-                                    - {{ questionReponseRepondu.reponseProposee.libelle|raw }}
-                                    {% if questionReponseRepondu.reponseProposee.precision == true and questionReponseRepondu.reponseRepondue is not null %}
-                                        {% if questionReponseRepondu.reponseRepondue.commentaire|length > 0 %}
-                                            <br />{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}
+                                    - {{ questionReponseRepondu.libelle|raw }}
+                                    {% if questionReponseRepondu.precision == true and questionReponseRepondu.questionnairereponses[0] is defined %}
+                                        {% if questionReponseRepondu.questionnairereponses[0].commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}
                                         {% endif %}                                
                                     {% endif %} 
                                 </p>
                             {% elseif questionType == 4 %}  {# menu déroulant #}     
-                                <p class="reponse">{{ questionReponseRepondu.reponseProposee.libelle|raw }}
-                                    {% if questionReponseRepondu.reponseProposee.precision == true and questionReponseRepondu.reponseRepondue is not null %}
-                                        {% if questionReponseRepondu.reponseRepondue.commentaire|length > 0 %}
-                                            <br />{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}
+                                <p class="reponse">{{ questionReponseRepondu.libelle|raw }}
+                                    {% if questionReponseRepondu.precision == true and questionReponseRepondu.questionnairereponses[0] is defined %}
+                                        {% if questionReponseRepondu.questionnairereponses[0].commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}
                                         {% endif %}                                
                                     {% endif %}                               
                                 </p>
-                            {% endif %}    
-                            
+                            {% endif %}
+                           
                         {% elseif questionType == 5 %}  {# notation #} 
                             <p class="reponse">
-                                {% if questionReponseRepondu.reponseRepondue is null %}
+                                {% if questionReponseRepondu.questionnairereponses[0] is not defined %}
                                 <span class="colorNC">{{ 'questionnaire_reponse_non_communiquee'|trans({}, 'commun_questionnaires_repondus') }}</span>
                                 {% else %}
-                                <span class="color{{ questionReponseRepondu.reponseRepondue.note|round(0, 'floor') }}">{{ questionReponseRepondu.reponseRepondue.note|round(0, 'floor') }}/{{ questionReponseRepondu.reponseProposee.valeurmax|round(0, 'floor') }}</span>
+                                <span class="color{{ questionReponseRepondu.questionnairereponses[0].note|round(0, 'floor') }}">{{ questionReponseRepondu.questionnairereponses[0].note|round(0, 'floor') }}/{{ questionReponseRepondu.valeurmax|round(0, 'floor') }}</span>
                                 {% endif %}
-                                   {{ questionReponseRepondu.reponseProposee.libelle|raw }}
+                                   {{ questionReponseRepondu.libelle|raw }}
                                 
-                                {% if questionReponseRepondu.reponseProposee.precision == true and questionReponseRepondu.reponseRepondue is not null %}
-                                    {% if questionReponseRepondu.reponseRepondue.commentaire|length > 0 %}
-                                        <br />{{ questionReponseRepondu.reponseRepondue.commentaire|raw }}
+                                {% if questionReponseRepondu.precision == true and questionReponseRepondu.questionnairereponses[0] is not null %}
+                                    {% if questionReponseRepondu.questionnairereponses[0].commentaire|length > 0 %}
+                                        <br />{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}
                                     {% endif %}                                
-                                {% endif %} 
+                                {% endif %}
                             </p>
                         {% endif %}
 

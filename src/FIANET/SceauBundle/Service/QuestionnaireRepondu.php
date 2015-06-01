@@ -7,7 +7,6 @@ use FIANET\SceauBundle\Entity\Question;
 use FIANET\SceauBundle\Entity\Questionnaire;
 use FIANET\SceauBundle\Entity\QuestionnaireReponse;
 use FIANET\SceauBundle\Entity\QuestionnaireType;
-use FIANET\SceauBundle\Entity\QuestionType;
 use FIANET\SceauBundle\Entity\Site;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use \DateTime;
@@ -221,7 +220,6 @@ class QuestionnaireRepondu {
         
         foreach ($oQuestions as $question) {
             $listeQuestionsReponses[$i]['question'] = $question;
-            $listeQuestionsReponses[$i]['questionType'] = $question->getQuestionType();
             
             $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;
             
@@ -240,10 +238,10 @@ class QuestionnaireRepondu {
             } else {
             
                 $listeQuestionsReponses[$i]['reponses'] = $this->getListeReponses($questionnaire,$question);
-                
+
                 $nbReponses = 0;
                 foreach ($listeQuestionsReponses[$i]['reponses'] as $reponse) {
-                    if ($reponse['reponseRepondue'] != null) {
+                    if (is_object($reponse->getQuestionnaireReponses()[0])) {
                         $nbReponses++;
                     }
                 }
@@ -255,7 +253,28 @@ class QuestionnaireRepondu {
                     $listeQuestionsReponses[$i]['questionRepondue'] = true;
                     
                     if ($question->getCache() == true) {
+                        
+                        /* Si la question ou réponse liée a été répondue on affichera la question étudiée */
                         $listeQuestionsReponses[$i]['cacher'] = true;
+                        $reponseLieeRepondue  = null;
+                        $questionLieeRepondue = null;
+                        
+                        if ($question->getVisible()['reponse_id'] && is_numeric($question->getVisible()['reponse_id'])) {
+                            $reponseLieeRepondue = $this->em
+                                ->getRepository('FIANETSceauBundle:QuestionnaireReponse')
+                                ->findOneBy(array('reponse' => $question->getVisible()['reponse_id'], 'questionnaire' => $questionnaire));
+                            
+                            if ($reponseLieeRepondue != null) $listeQuestionsReponses[$i]['cacher'] = false;
+                        } else {
+                            if ($question->getVisible()['question_id'] && is_numeric($question->getVisible()['question_id'])) {
+                                $questionLieeRepondue = $this->em
+                                    ->getRepository('FIANETSceauBundle:QuestionnaireReponse')
+                                    ->findOneBy(array('question' => $question->getVisible()['question_id'], 'questionnaire' => $questionnaire));
+                            
+                                if ($questionLieeRepondue != null) $listeQuestionsReponses[$i]['cacher'] = false;
+                            }                        
+                        }                   
+                        
                     }
 
                 }
@@ -316,24 +335,10 @@ class QuestionnaireRepondu {
      */
     public function getListeReponses(Questionnaire $questionnaire, Question $question) {
 
-        $questionType  = $question->getQuestionType();
-        
-        $tReponses = array();
-        
-        $oReponsesProposees = $question->getReponses();
-        
-        $i = 0;
-        
-        foreach($oReponsesProposees as $reponseProposee) {
-            $tReponses[$i]['reponseProposee'] = $reponseProposee;
-            
-            $tReponses[$i]['reponseRepondue'] = $this->em
-                    ->getRepository('FIANETSceauBundle:QuestionnaireReponse')->findOneBy(array('questionnaire' => $questionnaire, 'question' => $question, 'reponse' => $reponseProposee));
-            
-            $i++;
-        }
-        
-        return $tReponses;
+        $oReponsesRepondues = $this->em
+            ->getRepository('FIANETSceauBundle:Reponse')->getAllReponsesRepondues($question, $questionnaire);
+
+        return $oReponsesRepondues;
     }
 
     /**

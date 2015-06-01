@@ -48,7 +48,7 @@ class QuestionnaireReponse
     /**
      * @var Reponse
      *
-     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Reponse")
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Reponse", inversedBy="questionnaireReponses")
      * @ORM\JoinColumn(name="reponse_id", referencedColumnName="id", nullable=false)
      **/
     private $reponse;
