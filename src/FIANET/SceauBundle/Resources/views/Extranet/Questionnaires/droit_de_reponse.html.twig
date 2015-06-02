@@ -5,18 +5,18 @@
 
 {% block form_errors %}
     {% if errors|length > 0 %}
-    <p class="erreur libelle_erreur">
-        <img src="{{ asset('bundles/fianetsceau/images/extranet/warning.png') }}" width="19" height="16"
-             alt="{% trans from "commun" %}commun_attention{% endtrans %}"
-             title="{% trans from "commun" %}commun_attention{% endtrans %}" /> {{ 'commun_formulaire_invalide'|trans }}&nbsp;:
-    </p>
-    <div class="erreur">
-        <ul class="error_list">
-            {% for error in errors %}
-                <li >{{error.message }}</li>
-            {% endfor %}  
-        </u>
-    </div>
+        <p class="erreur libelle_erreur">
+            <img src="{{ asset('bundles/fianetsceau/images/extranet/warning.png') }}" width="19" height="16"
+                 alt="{% trans from "commun" %}commun_attention{% endtrans %}"
+                 title="{% trans from "commun" %}commun_attention{% endtrans %}" /> {{ 'commun_formulaire_invalide'|trans }}&nbsp;:
+        </p>
+        <div class="erreur">
+            <ul class="error_list">
+                {% for error in errors %}
+                    <li >{{error.message }}</li>
+                    {% endfor %}  
+                </u>
+        </div>
     {% endif %}
 {% endblock %}
 
@@ -29,68 +29,82 @@
     <h1>{{ 'commun_droit_de_reponse'|trans }}</h1>
 
     {% if questionnaireReponse is not null %} 
-        {% if questionnaireReponse.commentaire is not empty %}    
-    
+        {% if questionnaireReponse.commentaire is not empty %}
             {% if infosGeneralesQuestionnaire[0] is not null %}
+            <div class="block-total">
+                
                 {% if infosGeneralesQuestionnaire[0].commande is not null %}
-                <h2>{{ 'commun_commande_informations'|trans }} {% if infosGeneralesQuestionnaire[0].commande.reference is not empty %}{{ infosGeneralesQuestionnaire[0].commande.reference }}{% endif %}</h2>
-
-                <br />{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.prenom |capitalize }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.nom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.nom |upper }}{% endif %}{% endif %}
-                <br />{% if infosGeneralesQuestionnaire[0].commande.email is not empty %}{{ infosGeneralesQuestionnaire[0].commande.email }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.montant is not empty %}{{ 'commun_commande_montant'|trans }} : {{ infosGeneralesQuestionnaire[0].commande.montant }} &euro;  {% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
-                <br />{% if infosGeneralesQuestionnaire[0].commande.date is not empty %}{{ 'commun_commande_date'|trans }} : {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('none', 'short') }} {% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
+                <div class="block-total-part1">
+                    <h2>{{ 'commun_commande_informations'|trans }} {% if infosGeneralesQuestionnaire[0].commande.reference is not empty %}{{ infosGeneralesQuestionnaire[0].commande.reference }}{% endif %}</h2>
+                    <dd>{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.prenom |capitalize }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.nom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.nom |upper }}{% endif %}{% endif %}</dd>
+                    <hr />
+                    {% if infosGeneralesQuestionnaire[0].commande.email is not empty %}<dd>{{ infosGeneralesQuestionnaire[0].commande.email }}</dd><hr />{% endif %}
+                    {% if infosGeneralesQuestionnaire[0].commande.montant is not empty %}<dd>{{ 'commun_commande_montant'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].commande.montant }} &euro;</dt><hr />{% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
+                    {% if infosGeneralesQuestionnaire[0].commande.date is not empty %}<dd>{{ 'commun_commande_date'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('none', 'short') }}</dt><hr />{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
+                    <hr />
                     {% if infosGeneralesQuestionnaire[0].site is not null %}
-                        {% if infosGeneralesQuestionnaire[0].site.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infosGeneralesQuestionnaire[0].site.nom }} {% endif %}
+                        {% if infosGeneralesQuestionnaire[0].site.nom is not empty %}<dd>{{ 'commun_commande_site'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].site.nom }}</dt>{% endif %}
                     {% endif %}
                     {% if infosGeneralesQuestionnaire[0].sousSite is not null %}
-                        - {% if infosGeneralesQuestionnaire[0].sousSite.nom is not empty %}{{ 'commun_commande_site'|trans }} : {{ infosGeneralesQuestionnaire[0].sousSite.nom }} {% endif %}
-                    {% endif %}            
+                        {% if infosGeneralesQuestionnaire[0].sousSite.nom is not empty %}<dd>{{ 'commun_commande_site'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].sousSite.nom }}</dt>{% endif %}
+                    {% endif %}
+                </div>
                 {% endif %}
-
-                <h2>{{ 'commun_questionnaire_commentaire'|trans }}</h2>
-                <p>
-                     {{ include('FIANETSceauBundle:Extranet/Commun:indicateur.html.twig', {'indicateurReponseID': infosGeneralesQuestionnaire[0].questionnaireReponses[0].reponse.id, 'indicateurNote': null}) }} 
-                    
-                    {% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }}</p>
-                <p>{{ questionnaireReponse.commentaire }}</p>
+                
+                <div class="block-total-part1-2b">
+                    <h2>{{ 'commun_questionnaire_commentaire'|trans }}</h2>
+                    <p>{{ include('FIANETSceauBundle:Extranet/Commun:indicateur.html.twig', {'indicateurReponseID': infosGeneralesQuestionnaire[0].questionnaireReponses[0].reponse.id, 'indicateurNote': null}) }}&nbsp;&nbsp;{% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }}</p>
+                    <br />
+                    <br />
+                    <p class="commentaire">{{ questionnaireReponse.commentaire|raw }}</p>
+                </div>
+                
+            </div>
+            <br />
+            <br />
             {% endif %}
-
-            <h2>{{ 'commun_droit_de_reponse'|trans }} ({{ nbCaracteresMax }} {{ 'commun_nb_caracteres_max'|trans }})</h2>
-            <p>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</p>
-            <div id="laCharte">{{ 'commun_charte_commercant'|trans|raw}}</div>
-
-            {# ToDo : il faudra gérer les divers affichages de formulaire pour lot de modération de contenu abusif #}
-            {# ToDo : on doit gérer le contenu du textarea selon la présence ou pas d'un droit de réponse actif pour une question de type commentaire #}    
-
-            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
             
-            {# {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder': 'commun_droit_de_reponse_informations'|trans }}) }} #}
-            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control'}}) }}
-            <br />
-            {{ 'commun_nb_caracteres_restants'|trans }} : <span id="compteurCaracteres">0</span>    
-            <br />
-            
-            {{ form_errors(form) }}
-            {{ form_errors(form.commentaire) }}
-            <br />
-            {# <button id="form_valider" class="btn btn-primary" name="form[valider]" type="submit">{{ 'commun_valider'|trans }}</button> #}
-            {{ form_widget(form.valider, {'attr': {'class': 'btn btn-primary', 'value' : 'commun_valider'|trans }}) }} 
-            {# ToDo : bouton de validation à revoir pour pouvoir utiliser le form_widget mais avec texte traductible #}
+            <div class="block-total">
+                <h2>{{ 'commun_droit_de_reponse'|trans }} ({{ nbCaracteresMax }} {{ 'commun_nb_caracteres_max'|trans }})</h2>
+                <dd>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</dt>
+                <br />
+                <div class="Totalook">
+                    <div id="laCharte">{{ 'commun_charte_commercant'|trans|raw}}</div>
 
-            {# Génération automatique des champs pas encore écrits.
-            Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
-            et tous les champs cachés (type « hidden »). #}
-            {{ form_rest(form) }}
+                {# ToDo : il faudra gérer les divers affichages de formulaire pour lot de modération de contenu abusif #}
+                {# ToDo : on doit gérer le contenu du textarea selon la présence ou pas d'un droit de réponse actif pour une question de type commentaire #}    
+                
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
-            {# Fermeture de la balise <form> du formulaire HTML #}
-            {{ form_end(form) }}
-            
+                {# {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder': 'commun_droit_de_reponse_informations'|trans }}) }} #}
+                {{ form_widget(form.commentaire, {'attr': {'class': 'form-control' }}) }}
+                <br />
+                {{ 'commun_nb_caracteres_restants'|trans }} : <span id="compteurCaracteres">0</span>    
+                <br />
+
+                {{ form_errors(form) }}
+                {{ form_errors(form.commentaire) }}
+                <br />
+                {# <button id="form_valider" class="btn btn-primary" name="form[valider]" type="submit">{{ 'commun_valider'|trans }}</button> #}
+                {{ form_widget(form.valider, {'attr': {'class': 'btn btn-primary', 'value' : 'commun_valider'|trans}}) }}
+                {# ToDo : bouton de validation à revoir pour pouvoir utiliser le form_widget mais avec texte traductible #}
+
+                {# Génération automatique des champs pas encore écrits.
+                Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
+                et tous les champs cachés (type « hidden »). #}
+                {{ form_rest(form) }}
+
+                {# Fermeture de la balise <form> du formulaire HTML #}
+                {{ form_end(form) }}
+                </div>
+            </div>
         {% else %}
-            Aucun droit de réponse ne peut être exercé pour cette réponse au questionnaire.
+            <div class="block-total">Aucun droit de réponse ne peut être exercé pour cette réponse au questionnaire.</div>
         {% endif %} 
     {% else %}
-        Aucune réponse correspondante trouvée.
-    {% endif %}    
-    
+        <div class="block-total">Aucune réponse correspondante trouvée.</div>
+    {% endif %}
+
 {% endblock %}
 
 {% block extranet_javascripts %}
@@ -100,20 +114,20 @@
             $("#lienLaCharte").click(function () {
                 $("#laCharte").slideToggle();
             });
-            
-            gestion_commentaire();            
-            
-            $('#form_commentaire').focus(function() {
+
+            gestion_commentaire();
+
+            $('#form_commentaire').focus(function () {
                 gestion_commentaire()
             });
-            
-            $('#form_commentaire').focusout(function() {
+
+            $('#form_commentaire').focusout(function () {
                 gestion_commentaire()
-            });      
-            
-            $('form[name="form"]').submit(function() {
+            });
+
+            $('form[name="form"]').submit(function () {
                 var txtDroitDeReponse = "{{ 'commun_droit_de_reponse_informations'|trans|raw }}";
-                if($('#form_commentaire').val() == txtDroitDeReponse) {
+                if ($('#form_commentaire').val() == txtDroitDeReponse) {
                     $('#form_commentaire').val('');
                     alert("{{ 'commun_formulaire_commentaire_obligatoire'|trans }}");
                     $('#form_commentaire').val(txtDroitDeReponse);
@@ -122,10 +136,10 @@
                     confirm("{{ 'commun_droit_de_reponse_confirm_envoi'|trans }}");
                 }
             });
-            
+
             function gestion_commentaire() {
                 var txtDroitDeReponse = "{{ 'commun_droit_de_reponse_informations'|trans|raw }}";
-                if($('#form_commentaire').val() == txtDroitDeReponse || ($('#form_commentaire').is(":focus") && $('#form_commentaire').val() == '')) {
+                if ($('#form_commentaire').val() == txtDroitDeReponse || ($('#form_commentaire').is(":focus") && $('#form_commentaire').val() == '')) {
                     $('#form_commentaire').val('');
                     $('#form_commentaire').removeClass('msgRouge');
                     donnerNbCaracteres();
@@ -138,7 +152,7 @@
                     donnerNbCaracteres();
                 }
             }
-            
+
             function donnerNbCaracteres() {
                 var nbCaracteres = $('#form_commentaire').val().length;
                 var nbCaracteresRestants = parseInt({{ nbCaracteresMax }}) - nbCaracteres;

@@ -233,7 +233,28 @@ h2 {
     padding: 5px;
     overflow: hidden;
 }
-
+.block-total dd .Totalook {
+    width: 50%;
+    text-align:center;
+    margin-top:15px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size:11px;
+}
+#laCharte p {
+    margin:0px;
+    text-align:left;
+}
+#laCharte ol {
+    width:75%;
+    margin:5px 0px 5px 80px;
+    padding:0px;
+    text-align:left;
+}
+.block-total dd .Totalook textarea {
+    width:75%;
+    font-size:11px;
+}
 .block-total-part1 {
     width: 34%;
     float: left;
@@ -255,7 +276,13 @@ h2 {
 .block-total-part1-2 {
     float: left;
 }
-.block-total-part1-2 p {
+
+.block-total-part1-2b {
+    width:65%;
+    float: left;
+}
+
+.block-total-part1-2 p, .block-total-part1-2b p {
     float: left;
     text-align: left;
     font-size: 11px;
@@ -263,6 +290,10 @@ h2 {
 }
 .block-total-part1-2 p span {
     margin-left: 10px;
+}
+
+.block-total-part1-2b p.commentaire {
+    clear: both;
 }
 
 p.question {
@@ -415,6 +446,7 @@ dd {
     margin: 0;
     padding: 0;
     margin-left: 10px;
+    width: inherit;
 }
 
 dt {
@@ -669,6 +701,7 @@ footer #DIVdate {
 }
 
 /**************************************** *********************************************/
+
 
 .charte-commercant {
     text-align: justify;
