@@ -41,16 +41,13 @@ body {
 }
 
 .right {
-    float:right;
+    float: right;
 }
 
 a, .lien {
     color: #1d8bdf;
     text-decoration: underline;
     font-weight: bold;
-}
-
-.lien {
     cursor: pointer;
 }
 
@@ -143,7 +140,7 @@ button:hover, button:active, .button:hover, .button:active {
 }
 
 .msgRouge {
-    color:#cc0000;
+    color: #cc0000;
 }
 
 .pointeur {
@@ -225,6 +222,15 @@ h2 {
     margin-left: 10px;
 }
 
+h3 {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #323744;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
 .block-total {
     display: inline-block;
     width: 99%;
@@ -255,6 +261,15 @@ h2 {
     width:75%;
     font-size:11px;
 }
+
+.block-total-part1-3 {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 20px 0 0 0;
+}
+
 .block-total-part1 {
     width: 34%;
     float: left;
@@ -267,6 +282,19 @@ h2 {
     font-size: 11px;
     line-height: 20px;
     width: 33%;
+}
+
+.block-total-part1-3 .block-total-part3 {
+    width: 330px;
+    text-align: left;
+    padding-right:0;
+    overflow: hidden;
+    color:#444444;
+    font-size:11px;
+}
+
+.block-total-part1-3 .block-total-part3 h2 {
+    margin-left:0;
 }
 
 .block-total-part3 {
@@ -288,6 +316,7 @@ h2 {
     font-size: 11px;
     margin-left: 10px;
 }
+
 .block-total-part1-2 p span {
     margin-left: 10px;
 }
@@ -296,64 +325,87 @@ h2 {
     clear: both;
 }
 
+p.bold {
+    font-size:12px;
+    font-weight:bold;
+}
+
 p.question {
-    float:none;
-    padding:0px;
-    margin-top:15px;
-    margin-bottom:0px;
-    margin-left:12px;
-    margin-right:12px;
+    float: none;
+    padding: 0;
+    margin: 15px 12px 0;
 }
 
 span.color1 {
     color: #e00f2e;
     font-weight: bold;
 }
+
 span.color2 {
     color: #e32f20;
     font-weight: bold;
 }
+
 span.color3 {
     color: #e2460d;
     font-weight: bold;
 }
+
 span.color4 {
     color: #ea6b0a;
     font-weight: bold;
 }
+
 span.color5 {
     color: #ef8901;
     font-weight: bold;
 }
+
 span.color6 {
     color: #ce8e00;
     font-weight: bold;
 }
+
 span.color7 {
     color: #b49813;
     font-weight: bold;
 }
+
 span.color8 {
     color: #999e1e;
     font-weight: bold;
 }
+
 span.color9 {
     color: #7ca428;
     font-weight: bold;
 }
+
 span.color10 {
     color: #61ab30;
     font-weight: bold;
 }
+
+.color11 {
+    color: #666565;
+}
+
 span.colorNC {
     color: #595959;
     font-weight: bold;
+}
+
+.block-total-part1-3 .block-total-part1-2 ul {
+    float: left;
+    margin-top:0;
+    padding-top:0;
 }
 
 .block-total-part1-2 ul {
     float: left;
     padding-top: 20px;
 }
+
 .block-total-part1-2 ul li {
     float: left;
     list-style-type: none;
@@ -363,64 +415,135 @@ span.colorNC {
     padding-left: 10px;
     padding-right: 10px;
 }
+
 .block-total-part1-2 ul li img {
     margin-top: 30px;
 }
+
+.block-total-part1-2 ul li h3+img {
+    margin-top: 15px;
+    margin-bottom:10px;
+}
+
 .block-total-part1-2 ul li.arrow img {
     margin-top: 75px;
 }
 
+.block-total-part1-2 ul li.arrow-b img {
+    margin-top: 75px;
+    margin-left:30px;
+    margin-right:30px;
+}
+
+.block-total-part1-2 ul li.arrow-b button.decalage {
+    margin-top: 5px;
+    margin-left:100px;
+    margin-right:20px;
+}
+
+.block-total-part1-2 ul li.arrow-b a {
+    display:block;
+    margin-top: 5px;
+    margin-left:80px;
+}
+
+.block-total-part1 ul, .block-total-part2 ul {
+    float: left;
+    margin:0 0 0 10px;
+    padding:0;
+    text-align:left;
+    font-size:11px;
+    color:#444444;
+}
+
+.block-total-part1 ul li {
+    float: left;
+    list-style-type: none;
+    padding-left:0;
+    padding-right:15px;
+}
+
+.block-total-part2 ul li {
+    float: left;
+    list-style-type: none;
+    padding-left:0;
+    padding-right:5px;
+    padding-bottom:4px;
+}
+
+.block-total-part2 ul li input[type="text"] {
+    font-size:11px;
+    margin-right:10px;
+}
+
+.block-total-part2 ul li input[type="checkbox"] {
+    margin-right:10px;
+    margin-left:0;
+    margin-top:4px;
+}
+.block-total-part1 ul li .select {
+    margin-left:-5px;
+}
+
+.tooltipstered {
+    display:inline-block;
+}
+
 .block-total-part1-2 p.question {
-    float:none;
-    padding:0px;
-    margin-top:15px;
-    margin-bottom:0px;
-    margin-left:12px;
-    margin-right:12px;
-    width:520px;
+    float: none;
+    padding: 0;
+    margin: 15px 12px 0;
+    width: 520px;
     font-weight: bold;
 }
 
 .block-total-part1-2 p.reponse {
-    float:none;
-    padding:0px;
-    margin-top:2px;
-    margin-bottom:0px;
-    margin-left:20px;
-    margin-right:12px;
-    width:520px;
+    float: none;
+    padding: 0;
+    margin: 2px 12px 0 20px;
+    width: 520px;
 }
 
 .block-total-part1-2 div.area {
-    clear:both;
-    float:none;
-    overflow:hidden;
-    margin-bottom:5px;  
+    clear: both;
+    float: none;
+    overflow: hidden;
+    margin-bottom: 5px;
 }
 
 .block-total-part1-2 div.area div {
-    overflow:hidden;
-    margin-bottom:5px;
-    min-height:50px;
-    border:#c2c2c2 solid 1px;
-    padding:9px 5px;
-    color:#444;
-    font-size:11px;
-    text-align:left;
-    font-weight:bold;
-    width:520px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    min-height: 50px;
+    border: #c2c2c2 solid 1px;
+    padding: 9px 5px;
+    color: #444;
+    font-size: 11px;
+    text-align: left;
+    font-weight: bold;
+    width: 520px;
 }
 
 .block-total-part1-2 div.drt-rep {
-    float:none;
-    overflow:hidden;
-    background-color:#f2f1f1;
-    border-radius:2px;
-    font-size:11px;
-    color:#444;
-    text-align:left;
-    padding:10px;
+    float: none;
+    overflow: hidden;
+    background-color: #f2f1f1;
+    border-radius: 2px;
+    font-size: 11px;
+    color: #444;
+    text-align: left;
+    padding: 10px;
     width: 510px;
+}
+
+.block-total-part1-3 .block-total-part1-2 ul {
+    float: left;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.block-message {
+    text-align: center;
 }
 
 .block-demi {
@@ -443,9 +566,8 @@ dd {
     float: left;
     text-align: left;
     font-size: 11px;
-    margin: 0;
     padding: 0;
-    margin-left: 10px;
+    margin: 0 0 0 10px;
     width: inherit;
 }
 
@@ -455,8 +577,7 @@ dt {
     font-size: 11px;
     font-weight: bold;
     margin: 0;
-    padding: 0;
-    padding-left: 5px;
+    padding: 0 0 0 5px;
 }
 
 hr {
@@ -468,39 +589,38 @@ hr {
 }
 
 .area {
-    clear:both;
-    float:none;
-    overflow:hidden;
-    margin-bottom:5px;
+    clear: both;
+    float: none;
+    overflow: hidden;
+    margin-bottom: 5px;
 }
 
 .area div {
-    overflow:hidden;
-    margin-bottom:5px;
-    min-height:50px;
-    border:#c2c2c2 solid 1px;
-    padding:9px 5px;
-    color:#444;
-    font-size:11px;
-    text-align:left;
-    font-weight:bold;
+    overflow: hidden;
+    margin-bottom: 5px;
+    min-height: 50px;
+    border: #c2c2c2 solid 1px;
+    padding: 9px 5px;
+    color: #444;
+    font-size: 11px;
+    text-align: left;
+    font-weight: bold;
 }
 
 .drt-rep {
-    float:none;
-    overflow:hidden;
-    background-color:#f2f1f1;
-    border-radius:2px;
-    font-size:11px;
-    color:#444;
-    text-align:left;
-    padding:10px;
+    float: none;
+    overflow: hidden;
+    background-color: #f2f1f1;
+    border-radius: 2px;
+    font-size: 11px;
+    color: #444;
+    text-align: left;
+    padding: 10px;
 }
 
 .block-total-part2 input[type=checkbox] {
-    margin: 0;
     padding: 0;
-    margin-left: 10px;
+    margin: 0 0 0 10px;
 }
 
 .block-NL {
@@ -567,44 +687,40 @@ table.gen td div {
 }
 
 .block-info-comp {
-	width: 330px;
-	background-color: #e7e4e4;
-	text-align: left;
-	overflow: hidden;
+    width: 330px;
+    background-color: #e7e4e4;
+    text-align: left;
+    overflow: hidden;
 }
+
 .block-info-comp p {
-	float: left;
-	width: 306px;
-	font-size: 11px;
-	margin: 0;
-	padding: 0;
-	margin-left: 12px;
-	margin-top: 12px;
-	margin-right: 12px;
-	margin-bottom: 12px;
+    float: left;
+    width: 306px;
+    font-size: 11px;
+    padding: 0;
+    margin: 12px;
 }
+
 .block-info-rep {
-	width: 425px;
-	background-color: #e7e4e4;
-	text-align: left;
-	overflow: hidden;
+    width: 425px;
+    background-color: #e7e4e4;
+    text-align: left;
+    overflow: hidden;
 }
+
 .block-info-rep p.reponse {
-	float: left;
-	width: 280px;
-	font-size: 11px;
-	margin: 0;
-	padding: 0;
-	margin-left: 12px;
-	margin-top: 12px;
-	margin-right: 12px;
-	margin-bottom: 12px;
+    float: left;
+    width: 280px;
+    font-size: 11px;
+    padding: 0;
+    margin: 12px;
 }
+
 .btn-droit-reponse {
-	float: left;
-	margin-left: 15px;
-	margin-top: 30px;
-	text-align: center;
+    float: left;
+    margin-left: 15px;
+    margin-top: 30px;
+    text-align: center;
 }
 
 /**************************************** DETAILS HEADER ****************************************/

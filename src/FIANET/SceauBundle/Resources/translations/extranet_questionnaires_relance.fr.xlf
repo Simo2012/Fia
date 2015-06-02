@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="0">
                 <source>titre_page</source>
-                <target>Relance des questionnaires</target>
+                <target>Comment faire ?</target>
             </trans-unit>
             <trans-unit id="1">
                 <source>jour_commande</source>
@@ -36,11 +36,11 @@
             </trans-unit>
             <trans-unit id="8">
                 <source>renvoyer_questionnaire</source>
-                <target>Renvoyer les questionnaires</target>
+                <target><![CDATA[Renvoyer<br />les questionnaires]]></target>
             </trans-unit>
             <trans-unit id="9">
                 <source>personnaliser_email</source>
-                <target>Personnaliser l'email de relance</target>
+                <target><![CDATA[Personnaliser<br /> l'email de relance]]></target>
             </trans-unit>
             <trans-unit id="10">
                 <source>relance_auto</source>
@@ -54,7 +54,7 @@
                 <source>tooltip_checkbox</source>
                 <target>
                      <![CDATA[
-                        <h2>Automatisation de la relance</h2>
+                        <h1>Automatisation de la relance</h1>
                         <p>Vous pouvez choisir d'automatiser la relance. Tous les mercredis matin, les internautes n’ayant pas répondu au questionnaire recevront automatiquement l'e-mail par défaut ou celui que vous aurez configuré.</p>
                     ]]>
                 </target>
@@ -78,6 +78,22 @@
             <trans-unit id="17">
                 <source>renvoyer_erreur</source>
                 <target>Les questionnaires n'ont pas pu être renvoyés.</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>title_page</source>
+                <target>Relance des questionnaires</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>frise_commande</source>
+                <target>Envoi du questionnaire à la commande</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>frise_livraison</source>
+                <target>Envoi du questionnaire à la livraison</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>frise_relance</source>
+                <target>Envoi du questionnaire de relance</target>
             </trans-unit>
         </body>
     </file>

@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="0">
                 <source>titre_page</source>
-                <target>Relaunch questionnaires</target>
+                <target>How to do ?</target>
             </trans-unit>
             <trans-unit id="1">
                 <source>jour_commande</source>
@@ -36,11 +36,11 @@
             </trans-unit>
             <trans-unit id="8">
                 <source>renvoyer_questionnaire</source>
-                <target>Relaunch questionnaires</target>
+                <target><![CDATA[Relaunch<br />questionnaires]]></target>
             </trans-unit>
             <trans-unit id="9">
                 <source>personnaliser_email</source>
-                <target>Personalize relaunch e-mail</target>
+                <target><![CDATA[Personalize<br/>relaunch e-mail]]></target>
             </trans-unit>
             <trans-unit id="10">
                 <source>relance_auto</source>
@@ -54,7 +54,7 @@
                 <source>tooltip_checkbox</source>
                 <target>
                      <![CDATA[
-                        <h2>Automated relaunch</h2>
+                        <h1>Automated relaunch</h1>
                         <p>You can choose to automate the relaunch. Every Wednesday morning, users who have not responded to questionnaire will automatically receive the mail by default or one you have configured.</p>
                     ]]>
                 </target>
@@ -78,6 +78,22 @@
             <trans-unit id="17">
                 <source>renvoyer_erreur</source>
                 <target>questionnaires can not have been sent.</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>title_page</source>
+                <target>Relaunch questionnaires</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>frise_commande</source>
+                <target>Dispatch order questionnaire</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>frise_livraison</source>
+                <target>Dispatch delivery questionnaire</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>frise_relance</source>
+                <target>Dispatch relaunch questionnaire</target>
             </trans-unit>
         </body>
     </file>

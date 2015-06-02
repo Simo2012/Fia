@@ -3,7 +3,7 @@
 {% trans_default_domain 'extranet_questionnaires_relance' %}
 
 {% block title %}
-    {{ parent() }} : {% trans %}titre_page{% endtrans %}
+    {{ parent() }} : {% trans %}title_page{% endtrans %}
 {% endblock %}
 
 {% block extranet_stylesheets %}
@@ -19,26 +19,77 @@
     <h1>{% trans %}titre_page{% endtrans %}</h1>
 
     <div class="block-total">
-        <div class="block-total-part1">
-            <h2>{% trans %}jour_commande{% endtrans %}</h2>
-            <h2>{% trans %}jour_livraison{% endtrans %}</h2>
-            <h2>{% trans with {'%nbJours%' : delaiJoursRelance}%}jours_plus_tard{% endtrans %}</h2>
+        <div class="block-total-part1-2">
+            <ul>
+                <li>
+                    <h3>{% trans %}jour_commande{% endtrans %}</h3>
+                    <img src="{{ asset('bundles/fianetsceau/images/extranet/relance_commande.png') }}" width="82" height="84" alt=""/><br />
+                    {% trans %}frise_commande{% endtrans %}
+                </li>
+                <li class="arrow-b"><img src="{{ asset('bundles/fianetsceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/></li>
+                <li>
+                    <h3>{% trans %}jour_livraison{% endtrans %}</h3>
+                    <img src="{{ asset('bundles/fianetsceau/images/extranet/relance_livraison.png') }}" width="92" height="84" alt=""/><br />
+                    {% trans %}frise_livraison{% endtrans %}
+                </li>
+                <li class="arrow-b"><img src="{{ asset('bundles/fianetsceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/></li>
+                <li>
+                    <h3>{% trans with {'%nbJours%' : delaiJoursRelance} %}jours_plus_tard{% endtrans %}</h3>
+                    <img src="{{ asset('bundles/fianetsceau/images/extranet/relance_relance.png') }}" width="110" height="84" alt=""/><br />
+                    {% trans %}frise_relance{% endtrans %}
+                </li>
+            </ul>
+        </div>
 
-            <h2>{% trans %}parametrage_relance{% endtrans %}</h2>
-            {{ form_start(form) }}
-                Langue : {{ form_widget(form.langue) }}
-                <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button><br />
-            {{ form_end(form) }}
+        <div class="block-total-part3">
+            <div class="block-info-comp">
+                <p><strong>Optimiser votre stratégie de livraison avec le Sceau de Confiance FIA-NET</strong></p>
+                <p class="color11">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <a href="#">Lire la suite</a>
+                </p>
+            </div>
+        </div>
 
-            {% if nbTotalQuestionnaires != 0 %}
-                <a href="{{ path('extranet_questionnaires_relance_renvoyer', {'langue_id': langue_id}) }}"><button>{% trans %}renvoyer_questionnaire{% endtrans %}</button></a>
-            {% endif %}
+        <div class="block-total-part1-3">
+            <div class="block-total-part1-2">
+                <ul>
+                    <h2>{% trans %}parametrage_relance{% endtrans %}</h2>
+                    <li class="arrow-b">
+                        {{ form_start(form) }}
+                        Langue : <div class="select">{{ form_widget(form.langue) }}</div>
+                        <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button><br />
+                        {{ form_end(form) }}
+                    </li>
 
-            <a href="{{ path('extranet_questionnaires_relance_perso', {'langue_id': langue_id}) }}"><button>{% trans %}personnaliser_email{% endtrans %}</button></a>
+                    {% if nbTotalQuestionnaires != 0 %}
+                        <li class="arrow-b">
+                            <a href="{{ path('extranet_questionnaires_relance_renvoyer', {'langue_id': langue_id}) }}"><button class="decalage">{% trans %}renvoyer_questionnaire{% endtrans %}</button></a>
 
-            <a id="lien-email-type" class="lien">{% trans %}email_type{% endtrans %}</a>
-            <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}</div>
+                            <a id="lien-email-type" class="lien" style="margin-left: 150px;">{% trans %}email_type{% endtrans %}</a>
+                            <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}</div>
+                        </li>
+                    {% endif %}
 
+                    <li class="arrow-b">
+                        <a href="{{ path('extranet_questionnaires_relance_perso', {'langue_id': langue_id}) }}"><button class="decalage">{% trans %}personnaliser_email{% endtrans %}</button></a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="block-total-part3">
+                <h2>{% trans %}relance_auto{% endtrans %}</h2>
+                <label>
+                    <input id="auto" name="auto" type="checkbox" {% if auto %}checked="checked"{% endif %} onclick="automatiserRelance({{ langue_id }}, this.checked, '{{ 'commun_demande_succes'|trans({}, 'commun')|replace({"'" : "\\'" }) }}', '{{ 'commun_demande_erreur'|trans({}, 'commun')|replace({"'" : "\\'" }) }}');"/>
+                    {% trans %}activee{% endtrans %} <span id="tooltip-checkbox">[I]</span>
+                    <p id="auto-message"></p>
+                </label>
+            </div>
+        </div>
+
+        <div class="block-message">
             {% for messageSucces in app.session.flashbag.get('renvoyer_succes') %}
                 <p class="succes">{{ messageSucces }}</p>
             {% endfor %}
@@ -51,20 +102,6 @@
             {% for messageErreur in app.session.flashbag.get('personnaliser_erreur') %}
                 <p class="succes">{{ messageErreur }}</p>
             {% endfor %}
-        </div>
-
-        <div class="block-total-part2">
-            <div class="block-info-rep">
-                <h2>{% trans %}Titre dynamique{% endtrans %}</h2>
-                <p>{% trans %}Paragraphe dynamique{% endtrans %}</p>
-            </div>
-
-            <h2>{% trans %}relance_auto{% endtrans %}</h2>
-            <label>
-                <input id="auto" name="auto" type="checkbox" {% if auto %}checked="checked"{% endif %} onclick="automatiserRelance({{ langue_id }}, this.checked, '{{ 'commun_demande_succes'|trans({}, 'commun')|replace({"'" : "\\'" }) }}', '{{ 'commun_demande_erreur'|trans({}, 'commun')|replace({"'" : "\\'" }) }}');"/>
-                {% trans %}activee{% endtrans %} <span id="tooltip-checkbox">[I]</span>
-                <p id="auto-message"></p>
-            </label>
         </div>
     </div>
 
