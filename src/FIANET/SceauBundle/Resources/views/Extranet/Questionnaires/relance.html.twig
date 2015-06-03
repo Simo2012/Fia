@@ -6,14 +6,6 @@
     {{ parent() }} : {% trans %}title_page{% endtrans %}
 {% endblock %}
 
-{% block extranet_stylesheets %}
-    {% stylesheets
-    'bundles/fianetsceau/css/tooltipster/tooltipster.css'
-    filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock %}
-
 {% block extranet_body %}
 
     <h1>{% trans %}titre_page{% endtrans %}</h1>
@@ -59,8 +51,8 @@
                     <h2>{% trans %}parametrage_relance{% endtrans %}</h2>
                     <li class="arrow-b">
                         {{ form_start(form) }}
-                        Langue : <div class="select">{{ form_widget(form.langue) }}</div>
-                        <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button><br />
+                        {% trans from 'commun' %}commun_langue{% endtrans %} : <div class="select">{{ form_widget(form.langue) }}</div><br />
+                        <button type="submit" class="marge0">{% trans from 'commun' %}commun_valider{% endtrans %}</button><br />
                         {{ form_end(form) }}
                     </li>
 
@@ -83,7 +75,7 @@
                 <h2>{% trans %}relance_auto{% endtrans %}</h2>
                 <label>
                     <input id="auto" name="auto" type="checkbox" {% if auto %}checked="checked"{% endif %} onclick="automatiserRelance({{ langue_id }}, this.checked, '{{ 'commun_demande_succes'|trans({}, 'commun')|replace({"'" : "\\'" }) }}', '{{ 'commun_demande_erreur'|trans({}, 'commun')|replace({"'" : "\\'" }) }}');"/>
-                    {% trans %}activee{% endtrans %} <span id="tooltip-checkbox">[I]</span>
+                    {% trans %}activee{% endtrans %} <div class="tooltipstered" id="tooltip-checkbox"><img src="{{ asset('bundles/fianetsceau/images/extranet/picto_info_bulle.jpg') }}" width="14" height="14" alt="{% trans from 'commun' %}commun_infobulle{% endtrans %}" /></div>
                     <p id="auto-message"></p>
                 </label>
             </div>

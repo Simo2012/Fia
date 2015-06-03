@@ -6,31 +6,46 @@
     {{ parent() }} : {% trans %}titre_page{% endtrans %}
 {% endblock %}
 
+{% block extranet_stylesheets %}
+    {% stylesheets
+    'bundles/fianetsceau/css/extranet/questionnaires.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
 {% block extranet_body %}
 
     <h1>{% trans %}titre_page{% endtrans %}</h1>
 
     <div class="block-total">
-        <div class="block-total-part1">
+        <div class="block-relance-email">
             {{ render(controller('FIANETSceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}
         </div>
-        <div class="block-total-part2">
-            <div class="block-info-rep">
-                <h2>{% trans %}titre_paragraphe{% endtrans %}</h2>
-                <p>{% trans %}corps_paragraphe{% endtrans %}</p>
-                {{ form_start(form) }}
+        <div class="block-relance-info-form">
+            <div class="block-relance-info">
+                <p><strong>{% trans %}titre_paragraphe{% endtrans %}</strong></p>
+                <p class="color11">{% trans %}corps_paragraphe{% endtrans %}</p>
+            </div>
 
-                    {% trans %}label_objet{% endtrans %} {{ form_widget(form.objet) }}<br />
+            <div class="block-relance-form">
+                {{ form_start(form) }}
+                    {% trans %}label_objet{% endtrans %}<br />
+                    {{ form_widget(form.objet) }}<br />
                     {% trans %}precision_objet{% endtrans %}"{{ objetParDefaut }}"<br />
-                    {% trans %}label_corps{% endtrans %}{{ form_widget(form.corps) }}<br />
+                    <br />
+                    {% trans %}label_corps{% endtrans %} <br />
+                    {{ form_widget(form.corps) }}<br />
 
                     <span class="erreur">
                         {{ form_errors(form.objet) }}
                     </span>
 
                     <br />
-                    <button onclick="visualiserEmail(document.getElementById('fianet_sceaubundle_relance_corps').value); return false;">{% trans %}bouton_visualiser{% endtrans %}</button><br />
-                    <button type="submit">{% trans %}bouton_valider{% endtrans %}</button>
+                    <div class="droite">
+                        <button onclick="visualiserEmail(document.getElementById('fianet_sceaubundle_relance_corps').value); return false;">{% trans %}bouton_visualiser{% endtrans %}</button>
+                        <button type="submit">{% trans %}bouton_valider{% endtrans %}</button>
+                    </div>
                 {{ form_end(form) }}
             </div>
         </div>

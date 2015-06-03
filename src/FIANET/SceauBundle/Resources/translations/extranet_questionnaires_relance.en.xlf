@@ -15,7 +15,7 @@
                 <target>Delivery date</target>
             </trans-unit>
             <trans-unit id="3">
-                <source>questionnaires_trouves</source>
+                <source>jours_plus_tard</source>
                 <target>%nbJours% days later</target>
             </trans-unit>
             <trans-unit id="4">

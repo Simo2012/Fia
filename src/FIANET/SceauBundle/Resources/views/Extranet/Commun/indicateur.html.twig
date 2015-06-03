@@ -7,7 +7,7 @@
         {% endimage %}
     {% elseif indicateurReponseID in parametrageIndicateur.jaune%}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-jaune.png' %}
-        <img src="{{ asset_url }}" width="15" height="19" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
+        <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
         {% endimage %}
     {% else %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-rouge.png' %}
@@ -21,7 +21,7 @@
         {% endimage %}
     {% elseif indicateurNote >= parametrageIndicateur.jaune.min %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-jaune.png' %}
-        <img src="{{ asset_url }}" width="15" height="19" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
+        <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
         {% endimage %}
     {% else %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-rouge.png' %}
@@ -30,6 +30,6 @@
     {% endif %}
 {% else %}
     {% image '@FIANETSceauBundle/Resources/public/images/indicateur-gris.png' %}
-    <img src="{{ asset_url }}" width="15" height="17" alt="{% trans %}notes_indicateur_gris{% endtrans %}" title="{% trans %}notes_indicateur_gris{% endtrans %}" />
+    <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_gris{% endtrans %}" title="{% trans %}notes_indicateur_gris{% endtrans %}" />
     {% endimage %}
 {% endif %}

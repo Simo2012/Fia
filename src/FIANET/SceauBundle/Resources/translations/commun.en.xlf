@@ -188,6 +188,14 @@
                 <source>commun_marchand</source>
                 <target>Merchant</target>
             </trans-unit>
+            <trans-unit id="43">
+                <source>commun_langue</source>
+                <target>Language</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>commun_infobulle</source>
+                <target>Tooltip</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

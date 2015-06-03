@@ -14,9 +14,9 @@
                 <source>corps_paragraphe</source>
                 <target>
                     <![CDATA[
-                        Nous vous proposons de personnaliser l’objet et le contenu de l’e-mail de relance afin d’inciter vos clients à répondre au questionnaire FIA-NET.<br />
-                        En vous adressant directement à vos clients, vous engagez le dialogue et valorisez l’avis de vos clients. Vous pouvez profiter de la personnalisation pour mettre en avant votre volonté de prendre en compte les avis de vos internautes et d’améliorer vos services. La personnalisation n’est pas obligatoire.<br />
-                        Si vous décidez de modifier uniquement un paramètre, FIA-NET utilisera un texte par défaut.
+                        <p>Nous vous proposons de personnaliser l'objet et le contenu de l'e-mail de relance afin d'inciter vos clients à répondre au questionnaire FIA-NET.</p>
+                        <p> En vous adressant directement à vos clients, vous engagez le dialogue et valorisez l'avis de vos clients. Vous pouvez profiter de la personnalisation pour mettre en avant votre volonté de prendre en compte les avis de vos internautes et d'améliorer vos services. La personnalisation n'est pas obligatoire.<br />
+                        Si vous décidez de modifier uniquement un paramètre, FIA-NET utilisera un texte par défaut.</p>
                     ]]>
                 </target>
             </trans-unit>

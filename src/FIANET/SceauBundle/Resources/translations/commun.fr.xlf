@@ -187,7 +187,15 @@
             <trans-unit id="42">
                 <source>commun_marchand</source>
                 <target>Marchand</target>
-            </trans-unit>            
+            </trans-unit>
+            <trans-unit id="43">
+                <source>commun_langue</source>
+                <target>Langue</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>commun_infobulle</source>
+                <target>Infobulle</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

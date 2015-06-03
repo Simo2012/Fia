@@ -95,6 +95,17 @@ button:hover, button:active, .button:hover, .button:active {
     background: url(../../images/extranet/flche_deroul.png) no-repeat right #fff;
 }
 
+li.arrow-b .select {
+    display:inline-block;
+    margin-left:0;
+    vertical-align:middle;
+}
+
+.block-total-part1-2 ul li.arrow-b button.marge0 {
+    margin-left:0;
+    margin-right:0;
+}
+
 #chargement {
     display: none;
     margin-top: 10px;
@@ -486,7 +497,8 @@ span.colorNC {
 }
 
 .tooltipstered {
-    display:inline-block;
+    display: inline-block;
+    vertical-align: text-top;
 }
 
 .block-total-part1-2 p.question {
@@ -568,7 +580,6 @@ dd {
     font-size: 11px;
     padding: 0;
     margin: 0 0 0 10px;
-    width: inherit;
 }
 
 dt {
@@ -721,6 +732,10 @@ table.gen td div {
     margin-left: 15px;
     margin-top: 30px;
     text-align: center;
+}
+
+.droite {
+    float: right;
 }
 
 /**************************************** DETAILS HEADER ****************************************/

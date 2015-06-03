@@ -1,21 +1,53 @@
 @charset "utf-8";
 /* CSS Document */
 
-#indicateurs input {
+.indicateurs input {
     position: absolute;
     left: -100px;
 }
 
-#indicateurs img {
-    margin-left: 10px;
+.indicateur-non-selectionne {
+    border: solid 2px #ffffff;
 }
 
 .indicateur-selectionne {
-    border: solid 3px #00cc00;
+    border: solid 2px #04B404;
 }
 
 .fleche-droit-reponse {
     float: right;
     margin-right: 5px;
     margin-left: 5px;
+}
+
+.block-relance-email {
+    float: left;
+}
+
+.block-relance-info-form {
+    float: right;
+    margin-right: 15px;
+    max-width: 65%;
+}
+
+.block-relance-info {
+    background-color: #e7e4e4;
+    padding-bottom: 1px;
+    padding-top: 1px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.block-relance-info p {
+    margin: 12px;
+    color: #666565;
+}
+
+.block-relance-form {
+    color: #666565;
+    text-align: left;
+}
+
+.block-relance-form input,textarea {
+    width: 100%;
 }

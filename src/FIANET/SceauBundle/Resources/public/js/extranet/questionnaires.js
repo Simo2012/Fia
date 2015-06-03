@@ -62,7 +62,7 @@ function selectIndicateur(numIndicateur, imageIndicateur) {
     var checkbox = document.getElementById('questionnaires_liste_indicateurs_' + numIndicateur);
 
     if (checkbox.checked) {
-        imageIndicateur.className = '';
+        imageIndicateur.className = 'indicateur-non-selectionne';
         checkbox.checked = false;
     } else {
         imageIndicateur.className = 'indicateur-selectionne';
