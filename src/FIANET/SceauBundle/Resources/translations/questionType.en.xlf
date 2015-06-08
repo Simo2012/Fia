@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>choix_unique</source>
+                <target>Unique choice</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>choix_multiple</source>
+                <target>Multiple choice</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>notation</source>
+                <target>Notation</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>commentaire</source>
+                <target>Comment</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>etoile</source>
+                <target>Star</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>choisir_valeur</source>
+                <target>--- Choose a value ---</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

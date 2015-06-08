@@ -7,9 +7,11 @@ use DateTime;
 use Exception;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
 use FIANET\SceauBundle\Entity\Langue;
+use FIANET\SceauBundle\Entity\Question;
 use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
-use FIANET\SceauBundle\Form\RelanceType;
+use FIANET\SceauBundle\Form\Type\QuestionType;
+use FIANET\SceauBundle\Form\Type\RelanceType;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
 use FIANET\SceauBundle\Form\Type\SelectLangueType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -258,22 +260,43 @@ class QuestionnairesController extends Controller
     }
 
     /**
+     * Affichage la page de création de question personnalisée.
      *
      * @Route("/questionnaires/questions-personnalisées", name="extranet_questionnaires_questions_personnalisees")
      * @Method("GET")
+     *
+     * @param Request $request Instance de Request
+     *
+     * @return Response Instance de Response
      */
-    public function x2Action()
+    public function questionPersoAction(Request $request)
     {
-        $menu = $this->get('fianet_sceau.extranet.menu');
-
-        $elementMenu = $menu->getChild('questionnaires')->getChild('questionnaires.questions_personnalisees');
+        $elementMenu = $this->get('fianet_sceau.extranet.menu')
+            ->getChild('questionnaires')->getChild('questionnaires.questions_personnalisees');
         $elementMenu->setCurrent(true);
 
         if (!$elementMenu->getExtra('accesAutorise')) {
             throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
         }
 
-        return $this->render('FIANETSceauBundle:Extranet/Questionnaires:index.html.twig');
+        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+        $questionnaireType = $this->getDoctrine()
+            ->getManager()->merge($request->getSession()->get('questionnaireTypeSelectionne'));
+
+        $question = new Question();
+        $question->setQuestionnaireType($questionnaireType);
+
+        $form = $this->createForm(new QuestionType(false, $this->get('translator')), $question);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            //TODO lier le site à la question
+        }
+
+        return $this->render(
+            'FIANETSceauBundle:Extranet/Questionnaires:question_perso.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
     /**
@@ -574,7 +597,7 @@ class QuestionnairesController extends Controller
             )
         );
     }
-    
+
     /**
      * Affiche la page de détail d'un questionnaire (avis)
      *

@@ -95,6 +95,11 @@ button:hover, button:active, .button:hover, .button:active {
     background: url(../../images/extranet/flche_deroul.png) no-repeat right #fff;
 }
 
+.select-inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 li.arrow-b .select {
     display:inline-block;
     margin-left:0;

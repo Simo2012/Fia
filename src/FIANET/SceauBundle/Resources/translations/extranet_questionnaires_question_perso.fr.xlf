@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>title_page</source>
+                <target>Vos questions personnalisées</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>titre_page</source>
+                <target>Comment faire ?</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>frise1</source>
+                <target><![CDATA[Création des questions<br />personnalisés]]></target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>frise2</source>
+                <target>Validation des questions par FIA-NET</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>frise3</source>
+                <target>Publication sur les questionnaires</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>frise4</source>
+                <target>Résultats disponibles dans l'onglet statistiques</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>titre2_page</source>
+                <target>Personnalisez une question</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

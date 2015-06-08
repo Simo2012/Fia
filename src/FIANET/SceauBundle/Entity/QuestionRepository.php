@@ -22,7 +22,7 @@ class QuestionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('q');
 
         $qb->where('q.questionnaireType=:id')
-            ->andWhere($qb->expr()->eq('q.actif', 'true'))
+            ->andWhere($qb->expr()->eq('q.questionStatut', 1))
             ->setParameter('id', $questionnaireType->getId())
             ->orderBy('q.ordre', 'ASC')
             ->addOrderBy('q.page', 'ASC');

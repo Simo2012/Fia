@@ -74,13 +74,6 @@ class Question
     /**
      * @var boolean
      *
-     * @ORM\Column(name="actif", type="boolean")
-     */
-    private $actif;
-
-    /**
-     * @var boolean
-     *
      * @ORM\Column(name="cache", type="boolean")
      */
     private $cache;
@@ -98,6 +91,20 @@ class Question
      * @ORM\Column(name="obligatoire", type="json_array", nullable=true)
      */
     private $obligatoire;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valeurMin", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $valeurMin;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valeurMax", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $valeurMax;
 
 
     /**
@@ -134,7 +141,7 @@ class Question
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\Reponse", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\Reponse", mappedBy="question", cascade={"persist"})
      */
     private $reponses;
 
@@ -159,6 +166,14 @@ class Question
      *      )
      */
     private $notationLibelles;
+
+    /**
+     * @var QuestionStatut
+     *
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\QuestionStatut")
+     * @ORM\JoinColumn(name="questionStatut_id", referencedColumnName="id", nullable=false)
+     */
+    private $questionStatut;
 
 
     /**
@@ -321,29 +336,6 @@ class Question
     public function getDateFin()
     {
         return $this->dateFin;
-    }
-
-    /**
-     * Set actif
-     *
-     * @param boolean $actif
-     * @return Question
-     */
-    public function setActif($actif)
-    {
-        $this->actif = $actif;
-
-        return $this;
-    }
-
-    /**
-     * Get actif
-     *
-     * @return boolean
-     */
-    public function getActif()
-    {
-        return $this->actif;
     }
 
     /**
@@ -646,5 +638,77 @@ class Question
     public function getObligatoire()
     {
         return $this->obligatoire;
+    }
+
+    /**
+     * Set questionStatut
+     *
+     * @param QuestionStatut $questionStatut
+     *
+     * @return Question
+     */
+    public function setQuestionStatut(QuestionStatut $questionStatut = null)
+    {
+        $this->questionStatut = $questionStatut;
+
+        return $this;
+    }
+
+    /**
+     * Get questionStatut
+     *
+     * @return QuestionStatut
+     */
+    public function getQuestionStatut()
+    {
+        return $this->questionStatut;
+    }
+
+    /**
+     * Set valeurMin
+     *
+     * @param string $valeurMin
+     *
+     * @return Reponse
+     */
+    public function setValeurMin($valeurMin)
+    {
+        $this->valeurMin = $valeurMin;
+
+        return $this;
+    }
+
+    /**
+     * Get valeurMin
+     *
+     * @return string
+     */
+    public function getValeurMin()
+    {
+        return $this->valeurMin;
+    }
+
+    /**
+     * Set valeurMax
+     *
+     * @param string $valeurMax
+     *
+     * @return Reponse
+     */
+    public function setValeurMax($valeurMax)
+    {
+        $this->valeurMax = $valeurMax;
+
+        return $this;
+    }
+
+    /**
+     * Get valeurMax
+     *
+     * @return string
+     */
+    public function getValeurMax()
+    {
+        return $this->valeurMax;
     }
 }

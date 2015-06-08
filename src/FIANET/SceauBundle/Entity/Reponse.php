@@ -2,6 +2,7 @@
 
 namespace FIANET\SceauBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,21 +49,6 @@ class Reponse
      * @ORM\Column(name="precision", type="boolean")
      */
     private $precision;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="valeurMin", type="decimal", precision=10, scale=2, nullable=true)
-     */
-    private $valeurMin;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="valeurMax", type="decimal", precision=10, scale=2, nullable=true)
-     */
-    private $valeurMax;
 
     /**
      * @var boolean
@@ -246,61 +232,13 @@ class Reponse
     }
 
     /**
-     * Set valeurMin
-     *
-     * @param string $valeurMin
-     *
-     * @return Reponse
-     */
-    public function setValeurMin($valeurMin)
-    {
-        $this->valeurMin = $valeurMin;
-
-        return $this;
-    }
-
-    /**
-     * Get valeurMin
-     *
-     * @return string
-     */
-    public function getValeurMin()
-    {
-        return $this->valeurMin;
-    }
-
-    /**
-     * Set valeurMax
-     *
-     * @param string $valeurMax
-     *
-     * @return Reponse
-     */
-    public function setValeurMax($valeurMax)
-    {
-        $this->valeurMax = $valeurMax;
-
-        return $this;
-    }
-
-    /**
-     * Get valeurMax
-     *
-     * @return string
-     */
-    public function getValeurMax()
-    {
-        return $this->valeurMax;
-    }
-
-    /**
      * Add questionnaireReponse
      *
-     * @param \FIANET\SceauBundle\Entity\QuestionnaireReponse $questionnaireReponse
+     * @param QuestionnaireReponse $questionnaireReponse
      *
      * @return Reponse
      */
-    public function addQuestionnaireReponse(\FIANET\SceauBundle\Entity\QuestionnaireReponse $questionnaireReponse)
+    public function addQuestionnaireReponse(QuestionnaireReponse $questionnaireReponse)
     {
         $this->questionnaireReponses[] = $questionnaireReponse;
 
@@ -310,9 +248,9 @@ class Reponse
     /**
      * Remove questionnaireReponse
      *
-     * @param \FIANET\SceauBundle\Entity\QuestionnaireReponse $questionnaireReponse
+     * @param QuestionnaireReponse $questionnaireReponse
      */
-    public function removeQuestionnaireReponse(\FIANET\SceauBundle\Entity\QuestionnaireReponse $questionnaireReponse)
+    public function removeQuestionnaireReponse(QuestionnaireReponse $questionnaireReponse)
     {
         $this->questionnaireReponses->removeElement($questionnaireReponse);
     }

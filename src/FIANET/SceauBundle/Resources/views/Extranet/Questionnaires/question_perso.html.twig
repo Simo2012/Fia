@@ -1,0 +1,117 @@
+{% extends 'FIANETSceauBundle:Extranet:extranet.html.twig' %}
+
+{% trans_default_domain 'extranet_questionnaires_question_perso' %}
+
+{% block title %}
+    {{ parent() }} : {% trans %}title_page{% endtrans %}
+{% endblock %}
+
+{% block extranet_stylesheets %}
+    {% stylesheets
+    'bundles/fianetsceau/css/extranet/questionnaires.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block extranet_body %}
+    <div class="content">
+        <h1>{% trans %}titre_page{% endtrans %}</h1>
+
+        <div class="block-total">
+            <div class="block-total-part1-2">
+                <ul>
+                    <li>
+                        {% trans %}frise1{% endtrans %}<br/>
+                        <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-quest-create.png') }}" width="66" height="54" alt=""/>
+                    </li>
+                    <li class="arrow">
+                        <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/>
+                    </li>
+                    <li>
+                        {% trans %}frise2{% endtrans %}<br/>
+                        <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-quest-valid.png') }}" width="82" height="55" alt=""/>
+                    </li>
+                    <li class="arrow">
+                        <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/>
+                    </li>
+                    <li>
+                        {% trans %}frise3{% endtrans %}<br/>
+                        <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-quest-online.png') }}" width="89" height="54" alt=""/>
+                    </li>
+                    <li class="arrow">
+                        <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/>
+                    </li>
+                    <li>
+                        {% trans %}frise4{% endtrans %}<br/><br/>
+                        <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-quest-stat.png') }}" width="92" height="54" alt=""/>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="block-total-part3">
+                <div class="block-info-comp">
+                    <p>
+                        <strong>
+                            Profitez de nos questionnaires de satisfaction pour solliciter l'avis de vos clients sur
+                            un élément spécifique : une opération promotionnelle, un service spécifique, une refonte de
+                            votre site, une nouvelle mise en avant de vos produits… Tous ces évènements peuvent être la
+                            source de retours précis et qualitatifs sur vos actions.<br/>
+                            <br/>
+                            Vous pouvez ajouter deux questions par questionnaire envoyé, post-achat ou post-livraison en
+                            choisissant la date qui convient le mieux. Ciblez ainsi le moment le plus opportun pour
+                            communiquer avec vos clients. Les questions seront ajoutées à la fin du
+                            questionnaire.
+                        </strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <h1>{% trans %}titre2_page{% endtrans %}</h1>
+
+        <div class="block-total">
+            {{ form_start(form) }}
+                {% trans %}Libellé de la question{% endtrans %} : {{ form_widget(form.libelle) }}<br />
+                <br />
+
+                {% trans %}Type de question{% endtrans %} : <div class="select select-inline">{{ form_widget(form.questionType) }}</div><br />
+                <br />
+
+                <div id="reponses" data-prototype="{{ form_widget(form.reponses.vars.prototype.libelle)|e }}"></div>
+                <div>Pour ajouter une réponse, <a class="pointeur" onclick="addForm('reponses');">cliquez ici</a></div>
+
+                {% trans %}Date de publication{% endtrans %} : {{ form_widget(form.dateDebut) }} au {{ form_widget(form.dateFin) }}<br />
+                <br />
+                <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button>
+            {{ form_end(form) }}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block extranet_javascripts %}
+    {% javascripts
+    'components/jquery-ui/ui/datepicker.js'
+    'bundles/fianetsceau/js/calendrier.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
+    {% if app.request.locale != 'en' %}
+        <script src="{{  asset('bundles/fianetsceau/js/calendrier-'~ app.request.locale ~'.js') }}" type="text/javascript"></script>
+    {% endif  %}
+
+    <script type="text/javascript">
+        afficherCalendrier('fianet_sceaubundle_question_perso_dateDebut');
+        afficherCalendrier('fianet_sceaubundle_question_perso_dateFin');
+
+        function addForm(idReponses) {
+            var divReponses =  $('#'+ idReponses);
+
+            var nbReponses =  divReponses.children().length;
+            var reponse = '<div><label>Réponse n°' + (nbReponses + 1) + ' : ' + $(divReponses).attr('data-prototype').replace(/__name__/g, nbReponses) + '</label></div>';
+
+            divReponses.append(reponse);
+        }
+    </script>
+{% endblock %}
