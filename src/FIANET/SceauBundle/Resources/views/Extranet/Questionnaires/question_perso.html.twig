@@ -16,6 +16,15 @@
 
 {% block extranet_body %}
     <div class="content">
+        <div class="block-message">
+            {% for messageSucces in app.session.flashbag.get('creation_succes') %}
+                <p class="succes">{{ messageSucces }}</p>
+            {% endfor %}
+            {% for messageErreur in app.session.flashbag.get('creation_erreur') %}
+                <p class="erreur">{{ messageErreur }}</p>
+            {% endfor %}
+        </div>
+
         <h1>{% trans %}titre_page{% endtrans %}</h1>
 
         <div class="block-total">
@@ -72,18 +81,25 @@
 
         <div class="block-total">
             {{ form_start(form) }}
-                {% trans %}Libellé de la question{% endtrans %} : {{ form_widget(form.libelle) }}<br />
+                {% trans %}Type de question{% endtrans %} : <div class="select select-inline">{{ form_widget(form.questionType, {'attr' : {'onchange' : 'changerTypeQuestion(this.value);'}} ) }}</div><br />
                 <br />
+                {% if questionType is not null %}
+                    <div id="libelle">{% trans %}Libellé de la question{% endtrans %} : {{ form_widget(form.libelle) }}</div><br />
 
-                {% trans %}Type de question{% endtrans %} : <div class="select select-inline">{{ form_widget(form.questionType) }}</div><br />
-                <br />
+                    {% if questionType.id == 3 %}
+                        <div id="notation">{% trans %}Borne de notation (incluses){% endtrans %} : {{ form_widget(form.valeurMin) }} à {{ form_widget(form.valeurMax) }}</div><br />
+                    {% endif %}
 
-                <div id="reponses" data-prototype="{{ form_widget(form.reponses.vars.prototype.libelle)|e }}"></div>
-                <div>Pour ajouter une réponse, <a class="pointeur" onclick="addForm('reponses');">cliquez ici</a></div>
+                    {{ form_widget(form.reponses) }}
 
-                {% trans %}Date de publication{% endtrans %} : {{ form_widget(form.dateDebut) }} au {{ form_widget(form.dateFin) }}<br />
-                <br />
-                <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button>
+                    {% if questionType.id != 4 %}
+                        <div id="ajout_reponse">Pour ajouter une réponse, <a href="#" id="lien_ajout_reponse">cliquez ici</a></div><br />
+                    {% endif  %}
+
+                    <div id="dates">{% trans %}Date de publication{% endtrans %} : {{ form_widget(form.dateDebut) }} au {{ form_widget(form.dateFin) }}</div><br />
+
+                    <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button>
+                {% endif %}
             {{ form_end(form) }}
         </div>
 
@@ -101,17 +117,66 @@
         <script src="{{  asset('bundles/fianetsceau/js/calendrier-'~ app.request.locale ~'.js') }}" type="text/javascript"></script>
     {% endif  %}
 
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}" type="text/javascript"></script>
+
     <script type="text/javascript">
-        afficherCalendrier('fianet_sceaubundle_question_perso_dateDebut');
-        afficherCalendrier('fianet_sceaubundle_question_perso_dateFin');
+        afficherCalendrier('fianet_sceaubundle_question_dateDebut');
+        afficherCalendrier('fianet_sceaubundle_question_dateFin');
 
-        function addForm(idReponses) {
-            var divReponses =  $('#'+ idReponses);
+        {% if questionType is not null %}
+            $(document).ready(function() {
+                var container = $('div#fianet_sceaubundle_question_reponses');
 
-            var nbReponses =  divReponses.children().length;
-            var reponse = '<div><label>Réponse n°' + (nbReponses + 1) + ' : ' + $(divReponses).attr('data-prototype').replace(/__name__/g, nbReponses) + '</label></div>';
+                $('#lien_ajout_reponse').click(function(e) {
+                    ajoutReponse(container);
+                    e.preventDefault();
+                    return false;
+                });
 
-            divReponses.append(reponse);
+                {# Au chargement de la page il faut soit ajouter la première réponse (formulaire vide) soit afficher tous les liens de suppression (formulaire rempli) #}
+                var index = container.find(':input').length;
+                if (index == 0) {
+                    ajoutReponse(container);
+                } else {
+                    container.children('div').each(function() {
+                        ajoutLienSuppression($(this));
+                    });
+                }
+
+                function ajoutReponse(container) {
+                    var prototype = $(container.attr('data-prototype').replace(/__name__label__/g, 'Réponse n°' + (index+1)).replace(/__name__/g, index));
+
+                    ajoutLienSuppression(prototype);
+                    container.append(prototype);
+
+                    index++;
+                }
+
+                function ajoutLienSuppression(prototype) {
+                    {# Le lien de suppression n'est pas affiché pour les commentaires car il n'y a au mini et au maxi une réponse #}
+                    if ($('#fianet_sceaubundle_question_questionType').value != 4) {
+                        var deleteLink = $('<a href="#" class="pointer">Supprimer la réponse</a>');
+
+                        prototype.append(deleteLink);
+
+                        deleteLink.click(function (e) {
+                            prototype.remove();
+                            e.preventDefault();
+                            return false;
+                        });
+                    }
+                }
+            });
+        {% endif %}
+
+        function changerTypeQuestion(questionType)
+        {
+            document.location.href = Routing.generate(
+                    'extranet_questionnaires_questions_personnalisees_question_type',
+                    {id: questionType},
+                    true
+            );
         }
+
     </script>
 {% endblock %}

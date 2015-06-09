@@ -6,6 +6,10 @@
                 <source>erreurs_mauvaise_methode_appel</source>
                 <target>Mauvaise méthode d'appel</target>
             </trans-unit>
+            <trans-unit id="1">
+                <source>probleme_technique</source>
+                <target>Un problème technique est survenu. Merci de réessayer ou de contacter le service technique si le problème persiste.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -30,6 +30,10 @@
                 <source>titre2_page</source>
                 <target>Personnalisez une question</target>
             </trans-unit>
+            <trans-unit id="7">
+                <source>message_succes</source>
+                <target>La question a bien été enregistrée. Elle apparaitra dans les questionnaires après la validation de FIA-NET.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

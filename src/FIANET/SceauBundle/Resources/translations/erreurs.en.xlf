@@ -6,6 +6,10 @@
                 <source>erreurs_mauvaise_methode_appel</source>
                 <target>Bad method request</target>
             </trans-unit>
+            <trans-unit id="1">
+                <source>probleme_technique</source>
+                <target>A technical problem has occured. Thanks for re-trying or contacting the technical service if the problem persists.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

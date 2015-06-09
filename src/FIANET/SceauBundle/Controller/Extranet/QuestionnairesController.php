@@ -17,6 +17,7 @@ use FIANET\SceauBundle\Form\Type\SelectLangueType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -263,13 +264,16 @@ class QuestionnairesController extends Controller
      * Affichage la page de création de question personnalisée.
      *
      * @Route("/questionnaires/questions-personnalisées", name="extranet_questionnaires_questions_personnalisees")
-     * @Method("GET")
+     * @Route("/questionnaires/questions-personnalisées/{id}",
+     *     name="extranet_questionnaires_questions_personnalisees_question_type", options={"expose"=true})
+     * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
+     * @param \FIANET\SceauBundle\Entity\QuestionType $questionType
      *
-     * @return Response Instance de Response
+     * @return RedirectResponse|Response Instance de Response ou RedirectResponse
      */
-    public function questionPersoAction(Request $request)
+    public function questionPersoAction(Request $request, \FIANET\SceauBundle\Entity\QuestionType $questionType = null)
     {
         $elementMenu = $this->get('fianet_sceau.extranet.menu')
             ->getChild('questionnaires')->getChild('questionnaires.questions_personnalisees');
@@ -279,23 +283,61 @@ class QuestionnairesController extends Controller
             throw new AccesInterditException($elementMenu->getLabel(), $elementMenu->getExtra('accesDescriptif'));
         }
 
-        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
-        $questionnaireType = $this->getDoctrine()
-            ->getManager()->merge($request->getSession()->get('questionnaireTypeSelectionne'));
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get('translator');
+        $site = $em->merge($request->getSession()->get('siteSelectionne'));
+        $questionnaireType = $em->merge($request->getSession()->get('questionnaireTypeSelectionne'));
 
         $question = new Question();
         $question->setQuestionnaireType($questionnaireType);
+        if ($questionType) {
+            $question->setQuestionType($questionType);
+        }
 
-        $form = $this->createForm(new QuestionType(false, $this->get('translator')), $question);
+        $form = $this->createForm(new QuestionType(false, $translator), $question);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            //TODO lier le site à la question
+            try {
+                //TODO pour l'instant le libelle court = libelle, et autres à gérer
+                $question->setLibelleCourt($question->getLibelle());
+                $question->setOrdre(100);
+                $question->setCache(false);
+                $question->setQuestionStatut(
+                    $em->getRepository('FIANETSceauBundle:QuestionStatut')->enAttenteValidation()
+                );
+                $question->setPage(1);
+                foreach ($question->getReponses() as $reponse) {
+                    $reponse->setLibelleCourt($reponse->getLibelle());
+                    $reponse->setOrdre(100);
+                    $reponse->setPrecision(false);
+                    $reponse->setActif(true);
+                }
+
+                $em->persist($question);
+                $site->addQuestion($question);
+                $em->flush();
+
+            } catch (Exception $e) {
+                $request->getSession()->getFlashBag()->add(
+                    'creation_erreur',
+                    $translator->trans('probleme_technique', array(), 'erreurs')
+                );
+
+                return $this->redirect($this->generateUrl('extranet_questionnaires_questions_personnalisees'));
+            }
+
+            $request->getSession()->getFlashBag()->add(
+                'creation_succes',
+                $translator->trans('message_succes', array(), 'extranet_questionnaires_question_perso')
+            );
+
+            return $this->redirect($this->generateUrl('extranet_questionnaires_questions_personnalisees'));
         }
 
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:question_perso.html.twig',
-            array('form' => $form->createView())
+            array('form' => $form->createView(), 'questionType' => $questionType)
         );
     }
 

@@ -453,6 +453,7 @@ class Question
     public function addReponse(Reponse $reponse)
     {
         $this->reponses[] = $reponse;
+        $reponse->setQuestion($this);
 
         return $this;
     }

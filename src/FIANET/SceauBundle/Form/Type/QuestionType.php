@@ -3,8 +3,11 @@
 namespace FIANET\SceauBundle\Form\Type;
 
 use Collator;
+use FIANET\SceauBundle\Entity\QuestionTypeRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -42,7 +45,7 @@ class QuestionType extends AbstractType
                     'date',
                     array(
                         'widget' => 'single_text',
-                        'input' => 'string',
+                        'input' => 'datetime',
                         'format' => 'dd/MM/yyyy',
                         'required' => true,
                         'constraints' => new Date(array('message' => 'constraints.date_invalide'))
@@ -53,25 +56,28 @@ class QuestionType extends AbstractType
                     'date',
                     array(
                         'widget' => 'single_text',
-                        'input' => 'string',
+                        'input' => 'datetime',
                         'format' => 'dd/MM/yyyy',
                         'required' => true,
                         'constraints' => new Date(array('message' => 'constraints.date_invalide'))
                     )
+                )->add(
+                    'questionType',
+                    'entity',
+                    array(
+                        'class' => 'FIANETSceauBundle:QuestionType',
+                        'property' => 'libelle',
+                        'empty_value' => 'choisir_valeur',
+                        'translation_domain' => 'questionType',
+                        'required' => true,
+                        'query_builder' => function(QuestionTypeRepository $repo) {
+                            return $repo->typesPersonnalisablesQueryBuilder();
+                        }
+                    )
                 );
         }
 
-        $builder->add(
-            'questionType',
-            'entity',
-            array(
-                'class' => 'FIANETSceauBundle:QuestionType',
-                'property' => 'libelle',
-                'empty_value' => 'choisir_valeur',
-                'translation_domain' => 'questionType',
-                'required' => true,
-            )
-        )
+        $builder
             ->add(
                 'reponses',
                 'collection',
@@ -81,6 +87,32 @@ class QuestionType extends AbstractType
                     'by_reference' => false
                 )
             );
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function(FormEvent $event) {
+                $question = $event->getData();
+
+                if (null === $question) {
+                    return;
+                }
+
+                if ($question->getQuestionType() == null) {
+                    /* Aucun type de question n'a été sélectionné */
+                    $event->getForm()->remove('libelle');
+                    $event->getForm()->remove('dateDebut');
+                    $event->getForm()->remove('dateFin');
+                    $event->getForm()->remove('valeurMin');
+                    $event->getForm()->remove('valeurMax');
+                    $event->getForm()->remove('reponses');
+
+                } elseif ($question->getQuestionType()->getId() == \FIANET\SceauBundle\Entity\QuestionType::NOTATION) {
+                    $event->getForm()
+                        ->add('valeurMin')
+                        ->add('valeurMax');
+                }
+            }
+        );
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options)

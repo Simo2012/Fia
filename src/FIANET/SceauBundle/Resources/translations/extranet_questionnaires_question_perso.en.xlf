@@ -30,6 +30,10 @@
                 <source>titre2_page</source>
                 <target>Custom a question</target>
             </trans-unit>
+           <trans-unit id="7">
+                <source>message_succes</source>
+                <target>The question was well recorded. It will appear in questionnaires after the validation of FIA-NET.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

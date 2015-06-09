@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class QuestionType
 {
+    const CHOIX_UNIQUE = 1;
+    const CHOIX_MULTIPLE = 2;
+    const NOTATION = 3;
+    const COMMENTAIRE = 4;
+    const ETOILE = 5;
+
     /**
      * @var integer
      *
@@ -27,6 +33,13 @@ class QuestionType
      * @ORM\Column(name="libelle", type="string", length=50)
      */
     private $libelle;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="personnalisable", type="boolean", options={"default" = true})
+     */
+    private $personnalisable;
 
 
     /**
@@ -61,5 +74,29 @@ class QuestionType
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set personnalisable
+     *
+     * @param boolean $personnalisable
+     *
+     * @return QuestionType
+     */
+    public function setPersonnalisable($personnalisable)
+    {
+        $this->personnalisable = $personnalisable;
+
+        return $this;
+    }
+
+    /**
+     * Get personnalisable
+     *
+     * @return boolean
+     */
+    public function getPersonnalisable()
+    {
+        return $this->personnalisable;
     }
 }

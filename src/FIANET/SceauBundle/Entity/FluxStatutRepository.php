@@ -30,7 +30,7 @@ class FluxStatutRepository extends EntityRepository
     /**
      * Récupère le statut "A traiter". Le résultat est en cache pendant 1 jour.
      *
-     * @return RelanceStatut Instance de FluxStatut
+     * @return FluxStatut Instance de FluxStatut
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -43,7 +43,7 @@ class FluxStatutRepository extends EntityRepository
     /**
      * Récupère le statut "En cours de traitement". Le résultat est en cache pendant 1 jour.
      *
-     * @return RelanceStatut Instance de FluxStatut
+     * @return FluxStatut Instance de FluxStatut
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -56,7 +56,7 @@ class FluxStatutRepository extends EntityRepository
     /**
      * Récupère le statut "Traité et valide". Le résultat est en cache pendant 1 jour.
      *
-     * @return RelanceStatut Instance de FluxStatut
+     * @return FluxStatut Instance de FluxStatut
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -69,7 +69,7 @@ class FluxStatutRepository extends EntityRepository
     /**
      * Récupère le statut "Traité et invalide". Le résultat est en cache pendant 1 jour.
      *
-     * @return RelanceStatut Instance de FluxStatut
+     * @return FluxStatut Instance de FluxStatut
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
