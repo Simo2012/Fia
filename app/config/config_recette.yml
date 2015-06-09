@@ -12,7 +12,7 @@ doctrine:
         query_cache_driver: apc
     dbal:
         host: SCEAUBDDR7
-        port: 5439
+        port: 5442
         dbname: sceau
         user: sceau_user
         password: hello
