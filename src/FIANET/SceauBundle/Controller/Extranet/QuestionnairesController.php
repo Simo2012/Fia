@@ -10,6 +10,7 @@ use FIANET\SceauBundle\Entity\Langue;
 use FIANET\SceauBundle\Entity\Question;
 use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
+use FIANET\SceauBundle\Form\Type\QuestionPersoType;
 use FIANET\SceauBundle\Form\Type\QuestionType;
 use FIANET\SceauBundle\Form\Type\RelanceType;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
@@ -285,7 +286,6 @@ class QuestionnairesController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get('translator');
-        $site = $em->merge($request->getSession()->get('siteSelectionne'));
         $questionnaireType = $em->merge($request->getSession()->get('questionnaireTypeSelectionne'));
 
         $question = new Question();
@@ -294,29 +294,15 @@ class QuestionnairesController extends Controller
             $question->setQuestionType($questionType);
         }
 
-        $form = $this->createForm(new QuestionType(false, $translator), $question);
+        $form = $this->createForm('fianet_sceaubundle_question_perso', $question);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             try {
-                //TODO pour l'instant le libelle court = libelle, et autres à gérer
-                $question->setLibelleCourt($question->getLibelle());
-                $question->setOrdre(100);
-                $question->setCache(false);
-                $question->setQuestionStatut(
-                    $em->getRepository('FIANETSceauBundle:QuestionStatut')->enAttenteValidation()
+                $this->get('fianet_sceau.questionnaire_structure')->ajouterQuestionPerso(
+                    $em->merge($request->getSession()->get('siteSelectionne')),
+                    $question
                 );
-                $question->setPage(1);
-                foreach ($question->getReponses() as $reponse) {
-                    $reponse->setLibelleCourt($reponse->getLibelle());
-                    $reponse->setOrdre(100);
-                    $reponse->setPrecision(false);
-                    $reponse->setActif(true);
-                }
-
-                $em->persist($question);
-                $site->addQuestion($question);
-                $em->flush();
 
             } catch (Exception $e) {
                 $request->getSession()->getFlashBag()->add(

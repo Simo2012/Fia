@@ -86,6 +86,34 @@
                 <source>constraints.relance_objet_nb_car_max</source>
                 <target>Votre objet est trop long.</target>
             </trans-unit>
+            <trans-unit id="22">
+                <source>constraints.question.libelle_not_blank</source>
+                <target>Le libellé de la question est obligatoire.</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>constraints.question.libelle_max_length</source>
+                <target>Le libellé de la question ne doit pas dépasser {{ limit }} caractères.</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>constraints.reponse.libelle_not_blank</source>
+                <target>Le libellé de la réponse est obligatoire.</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>constraints.reponse.libelle_max_length</source>
+                <target>Le libellé de la réponse ne doit pas dépasser {{ limit }} caractères.</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>constraints.question.date_invalide</source>
+                <target>La date n'est pas valide.</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>constraints.question.date_debut_not_null</source>
+                <target>La date de début est obligatoire.</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>constraints.question.date_fin_not_null</source>
+                <target>La date de fin est obligatoire.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

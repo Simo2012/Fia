@@ -1,3 +1,17 @@
+FIANET\SceauBundle\Entity\DroitDeReponse:
+    group_sequence_provider: true
+    properties:
+        commentaire:
+            - NotBlank:
+                message: "constraints.droit_de_reponse_not_blank"
+                groups: [validation]
+            - Length:
+                min: 4
+                max: 700
+                minMessage: "constraints.droit_de_reponse_nb_car_min_nok"
+                maxMessage: "constraints.droit_de_reponse_nb_car_max_nok"
+                groups: [validation]
+
 FIANET\SceauBundle\Entity\Flux:
     group_sequence_provider: true
     properties:
@@ -30,20 +44,6 @@ FIANET\SceauBundle\Entity\Flux:
             groups: [reception2]
         - FIANET\SceauBundle\Validator\Constraints\FluxXmlContenu:
             groups: [validation]
-            
-FIANET\SceauBundle\Entity\DroitDeReponse:
-    group_sequence_provider: true
-    properties:
-        commentaire:
-            - NotBlank:
-                message: "constraints.droit_de_reponse_not_blank"
-                groups: [validation]               
-            - Length:
-                min: 4
-                max: 700
-                minMessage: "constraints.droit_de_reponse_nb_car_min_nok"
-                maxMessage: "constraints.droit_de_reponse_nb_car_max_nok"
-                groups: [validation]
 
 FIANET\SceauBundle\Entity\Relance:
     properties:
@@ -51,3 +51,39 @@ FIANET\SceauBundle\Entity\Relance:
             - Length:
                 max: 255
                 maxMessage: "constraints.relance_objet_nb_car_max"
+
+FIANET\SceauBundle\Entity\Reponse:
+    properties:
+        libelle:
+             - NotBlank:
+                message: "constraints.reponse.libelle_not_blank"
+                groups: [globale, perso]
+             - Length:
+                max: 100
+                maxMessage: "constraints.reponse.libelle_max_length"
+                groups: [globale, perso]
+
+FIANET\SceauBundle\Entity\Question:
+    properties:
+        libelle:
+            - NotBlank:
+                message: "constraints.question.libelle_not_blank"
+                groups: [globale, perso]
+            - Length:
+                max: 100
+                maxMessage: "constraints.question.libelle_max_length"
+                groups: [globale, perso]
+        dateDebut:
+            - NotNull:
+                message: "constraints.question.date_debut_not_null"
+                groups: [perso]
+            - Date:
+                message: "constraints.question.date_invalide"
+                groups: [perso]
+        dateFin:
+            - NotNull:
+                message: "constraints.question.date_fin_not_null"
+                groups: [perso]
+            - Date:
+                message: "constraints.question.date_invalide"
+                groups: [perso]

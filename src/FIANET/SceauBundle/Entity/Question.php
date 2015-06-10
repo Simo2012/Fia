@@ -175,7 +175,13 @@ class Question
      */
     private $questionStatut;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Site", inversedBy="questions")
+     * @ORM\JoinColumn(name="site_id", referencedColumnName="id")
+     **/
+    private $site;
 
+    
     /**
      * Constructor
      */
@@ -711,5 +717,29 @@ class Question
     public function getValeurMax()
     {
         return $this->valeurMax;
+    }
+
+    /**
+     * Set site
+     *
+     * @param Site $site
+     *
+     * @return Question
+     */
+    public function setSite(Site $site = null)
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * Get site
+     *
+     * @return Site
+     */
+    public function getSite()
+    {
+        return $this->site;
     }
 }

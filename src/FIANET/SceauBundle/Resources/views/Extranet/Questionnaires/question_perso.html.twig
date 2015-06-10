@@ -80,23 +80,31 @@
         <h1>{% trans %}titre2_page{% endtrans %}</h1>
 
         <div class="block-total">
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr' : {'novalidate' : 'novalidate'}}) }}
                 {% trans %}Type de question{% endtrans %} : <div class="select select-inline">{{ form_widget(form.questionType, {'attr' : {'onchange' : 'changerTypeQuestion(this.value);'}} ) }}</div><br />
                 <br />
                 {% if questionType is not null %}
-                    <div id="libelle">{% trans %}Libellé de la question{% endtrans %} : {{ form_widget(form.libelle) }}</div><br />
+                    <div id="libelle">{% trans %}Libellé de la question{% endtrans %} : {{ form_widget(form.libelle) }} <span class="erreur">{{ form_errors(form.libelle) }}</span></div><br />
 
                     {% if questionType.id == 3 %}
-                        <div id="notation">{% trans %}Borne de notation (incluses){% endtrans %} : {{ form_widget(form.valeurMin) }} à {{ form_widget(form.valeurMax) }}</div><br />
+                        <div id="notation">
+                            {% trans %}Borne de notation (incluses){% endtrans %} : {{ form_widget(form.valeurMin) }} à {{ form_widget(form.valeurMax) }}
+                            <span class="erreur">{{ form_errors(form.valeurMin) }}</span><br />
+                            <span class="erreur">{{ form_errors(form.valeurMax) }}</span>
+                        </div><br />
                     {% endif %}
 
-                    {{ form_widget(form.reponses) }}
+                    {{ form_widget(form.reponses) }}<span class="erreur">{{ form_errors(form.reponses) }}</span>
 
                     {% if questionType.id != 4 %}
                         <div id="ajout_reponse">Pour ajouter une réponse, <a href="#" id="lien_ajout_reponse">cliquez ici</a></div><br />
                     {% endif  %}
 
-                    <div id="dates">{% trans %}Date de publication{% endtrans %} : {{ form_widget(form.dateDebut) }} au {{ form_widget(form.dateFin) }}</div><br />
+                    <div id="dates">
+                        {% trans %}Date de publication{% endtrans %} : {{ form_widget(form.dateDebut) }} au {{ form_widget(form.dateFin) }}
+                        <span class="erreur">{{ form_errors(form.dateDebut) }}</span><br />
+                        <span class="erreur">{{ form_errors(form.dateFin) }}</span>
+                    </div><br />
 
                     <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button>
                 {% endif %}
@@ -120,12 +128,12 @@
     <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}" type="text/javascript"></script>
 
     <script type="text/javascript">
-        afficherCalendrier('fianet_sceaubundle_question_dateDebut');
-        afficherCalendrier('fianet_sceaubundle_question_dateFin');
+        afficherCalendrier('fianet_sceaubundle_question_perso_dateDebut');
+        afficherCalendrier('fianet_sceaubundle_question_perso_dateFin');
 
         {% if questionType is not null %}
             $(document).ready(function() {
-                var container = $('div#fianet_sceaubundle_question_reponses');
+                var container = $('div#fianet_sceaubundle_question_perso_reponses');
 
                 $('#lien_ajout_reponse').click(function(e) {
                     ajoutReponse(container);
@@ -144,7 +152,15 @@
                 }
 
                 function ajoutReponse(container) {
-                    var prototype = $(container.attr('data-prototype').replace(/__name__label__/g, 'Réponse n°' + (index+1)).replace(/__name__/g, index));
+                    var libelleReponse;
+
+                    if ($('#fianet_sceaubundle_question_perso_questionType').val() != 4) {
+                        libelleReponse = 'Réponse n°' + (index+1) + ' : ';
+                    } else {
+                        libelleReponse = 'Libellé du champ de texte : ';
+                    }
+
+                    var prototype = $(container.attr('data-prototype').replace(/__name__label__/g, libelleReponse).replace(/__name__/g, index));
 
                     ajoutLienSuppression(prototype);
                     container.append(prototype);
@@ -154,7 +170,7 @@
 
                 function ajoutLienSuppression(prototype) {
                     {# Le lien de suppression n'est pas affiché pour les commentaires car il n'y a au mini et au maxi une réponse #}
-                    if ($('#fianet_sceaubundle_question_questionType').value != 4) {
+                    if ($('#fianet_sceaubundle_question_perso_questionType').val() != 4) {
                         var deleteLink = $('<a href="#" class="pointer">Supprimer la réponse</a>');
 
                         prototype.append(deleteLink);

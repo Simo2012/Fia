@@ -2,17 +2,14 @@
 
 namespace FIANET\SceauBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ReponseType extends AbstractType
+class ReponsePersoType extends ReponseType
 {
-    protected $questionType_id;
-
     public function __construct($questionType_id)
     {
-        $this->questionType_id = $questionType_id;
+        parent::__construct($questionType_id);
     }
 
     /**
@@ -21,17 +18,14 @@ class ReponseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('libelle', 'text', array('label' => ' '))
-            ->add('libelleCourt')
-            ->add('ordre')
-            ->add('actif');
+        parent::buildForm($builder, $options);
 
-        if ($this->questionType_id == \FIANET\SceauBundle\Entity\QuestionType::CHOIX_MULTIPLE) {
-            $builder->add('precision');
-        }
+        $builder
+            ->remove('libelleCourt')
+            ->remove('ordre')
+            ->remove('actif');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -39,7 +33,7 @@ class ReponseType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'FIANET\SceauBundle\Entity\Reponse',
-            'validation_groups' => 'globale'
+            'validation_groups' => 'perso'
         ));
     }
 
@@ -48,6 +42,6 @@ class ReponseType extends AbstractType
      */
     public function getName()
     {
-        return 'fianet_sceaubundle_reponse';
+        return 'fianet_sceaubundle_reponse_perso';
     }
 }

@@ -29,5 +29,30 @@ class QuestionRepository extends EntityRepository
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
-      
+
+    /**
+     * Récupère l'ordre maximal des questions pour un type de questionnaire et un site.
+     * Les questions personnalisées du site sont prises en compte.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     *
+     * @return int L'ordre maximal trouvée. S'il n'y a encore aucune question, retourne 0.
+     */
+    public function maxOrdre(Site $site, QuestionnaireType $questionnaireType)
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb->select('COALESCE(MAX(q.ordre), 0)')
+            ->where('q.questionnaireType = :qtid')
+            ->setParameter('qtid', $questionnaireType->getId())
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('q.site'),
+                    $qb->expr()->eq('q.site', $site->getId())
+                )
+            );
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

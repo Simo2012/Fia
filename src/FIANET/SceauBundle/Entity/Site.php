@@ -126,11 +126,7 @@ class Site
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\Question")
-     * @ORM\JoinTable(name="Site_Question",
-     *      joinColumns={@ORM\JoinColumn(name="site_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="question_id", referencedColumnName="id", unique=true)}
-     *      )
+     * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\Question", mappedBy="site")
      */
     private $questions;
 
