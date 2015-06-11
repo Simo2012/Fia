@@ -31,33 +31,40 @@ class QuestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle')
+            ->add('libelle', 'text', array('attr' => array('class' => 'libelle')))
             ->add('libelleCourt')
             ->add('questionType');
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
-            function(FormEvent $event) {
+            function (FormEvent $event) {
                 $question = $event->getData();
 
                 if (null === $question) {
                     return;
                 }
 
-                $event->getForm()->add(
-                    'reponses',
-                    'collection',
-                    array(
-                        'type' => new ReponseType($question->getQuestionType()->getId()),
-                        'allow_add' => true,
-                        'by_reference' => false
-                    )
-                );
+                if ($question->getQuestionType() == null) {
+                    /* Aucun type de question n'a été sélectionné */
+                    $event->getForm()->remove('libelle');
+                    $event->getForm()->remove('libelleCourt');
 
-                if ($question->getQuestionType()->getId() == \FIANET\SceauBundle\Entity\QuestionType::NOTATION) {
-                    $event->getForm()
-                        ->add('valeurMin')
-                        ->add('valeurMax');
+                } else {
+                    $event->getForm()->add(
+                        'reponses',
+                        'collection',
+                        array(
+                            'type' => new ReponseType($question->getQuestionType()->getId()),
+                            'allow_add' => true,
+                            'by_reference' => false
+                        )
+                    );
+
+                    if ($question->getQuestionType()->getId() == \FIANET\SceauBundle\Entity\QuestionType::NOTATION) {
+                        $event->getForm()
+                            ->add('valeurMin', 'number', array('precision' => 1))
+                            ->add('valeurMax', 'number', array('precision' => 1));
+                    }
                 }
             }
         );

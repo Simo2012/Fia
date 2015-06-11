@@ -62,10 +62,16 @@
     {% javascripts
     'components/jquery/jquery.min.js'
     'components/jquery-ui/jquery-ui.min.js'
+    'components/jquery-ui/ui/datepicker.js'
     'bundles/fosjsrouting/js/router.js'
-    'bundles/fianetsceau/js/extranet/main.js' %}
+    'bundles/fianetsceau/js/extranet/main.js'
+    'bundles/fianetsceau/js/calendrier.js' %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
+
+    {% if app.request.locale != 'en' %}
+        <script src="{{  asset('bundles/fianetsceau/js/calendrier-'~ app.request.locale ~'.js') }}" type="text/javascript"></script>
+    {% endif  %}
 
     <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}" type="text/javascript"></script>
 

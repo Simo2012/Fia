@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class QuestionStatut
 {
+    const DESACTIVEE = 0;
+    const ACTIVEE = 1;
+    const EN_ATTENTE_DE_VALIDATION = 2;
+    const REFUSEE = 3;
+
     /**
      * @var integer
      *

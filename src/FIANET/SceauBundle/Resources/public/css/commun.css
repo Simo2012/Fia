@@ -4,3 +4,7 @@
 .bold {
     font-weight: bold;
 }
+
+.align-gauche {
+    text-align: left;
+}

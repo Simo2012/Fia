@@ -3,8 +3,8 @@
         <td>
             {{ include('FIANETSceauBundle:Extranet/Commun:indicateur.html.twig', {'indicateurReponseID': questionnaire.indicateurReponseID, 'indicateurNote': questionnaire.indicateurNote}) }}
         </td>
-        <td>{{ questionnaire.dateCommande|date("d/m/Y") }}</td>
-        <td>{{ questionnaire.dateReponse|date("d/m/Y") }}</td>
+        <td>{{ questionnaire.dateCommande|localizeddate('short', 'none') }}</td>
+        <td>{{ questionnaire.dateReponse|localizeddate('short', 'none') }}</td>
         <td>
             {% if questionnaire.nom is not empty %}
                 {{ questionnaire.prenom }} {{ questionnaire.nom }}<br />

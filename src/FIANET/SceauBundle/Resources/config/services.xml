@@ -24,6 +24,10 @@
             <argument>%flux_delai_max_commande%</argument>
             <tag name="validator.constraint_validator" alias="validator.flux_xml_contenu" />
         </service>
+        <service id="fianet_sceau.validator.question_perso" class="FIANET\SceauBundle\Validator\Constraints\QuestionPersoValidator">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <tag name="validator.constraint_validator" alias="validator.question_perso" />
+        </service>
 
         <!-- Listener -->
         <service id="fianet_sceau.kernel.listener.exception" class="FIANET\SceauBundle\Listener\ExceptionListener">

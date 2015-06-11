@@ -286,9 +286,13 @@ class QuestionnairesController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get('translator');
+        $site = $em->merge($request->getSession()->get('siteSelectionne'));
         $questionnaireType = $em->merge($request->getSession()->get('questionnaireTypeSelectionne'));
+        $questionsEnAttenteDeValidation = $em->getRepository('FIANETSceauBundle:Question')
+            ->questionsPersosEnAttenteDeValidation($site, $questionnaireType);
 
         $question = new Question();
+        $question->setSite($site);
         $question->setQuestionnaireType($questionnaireType);
         if ($questionType) {
             $question->setQuestionType($questionType);
@@ -299,10 +303,7 @@ class QuestionnairesController extends Controller
 
         if ($form->isValid()) {
             try {
-                $this->get('fianet_sceau.questionnaire_structure')->ajouterQuestionPerso(
-                    $em->merge($request->getSession()->get('siteSelectionne')),
-                    $question
-                );
+                $this->get('fianet_sceau.questionnaire_structure')->ajouterQuestionPerso($question);
 
             } catch (Exception $e) {
                 $request->getSession()->getFlashBag()->add(
@@ -323,7 +324,11 @@ class QuestionnairesController extends Controller
 
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:question_perso.html.twig',
-            array('form' => $form->createView(), 'questionType' => $questionType)
+            array(
+                'form' => $form->createView(),
+                'questionType' => $questionType,
+                'questionsEnAttenteDeValidation' => $questionsEnAttenteDeValidation
+            )
         );
     }
 

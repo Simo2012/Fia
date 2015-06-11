@@ -2,9 +2,9 @@
 
 namespace FIANET\SceauBundle\Form\Type\Extranet;
 
+use IntlDateFormatter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Date;
 
 class QuestionnairesListeType extends AbstractType
@@ -21,7 +21,7 @@ class QuestionnairesListeType extends AbstractType
                 array(
                     'widget' => 'single_text',
                     'input' => 'string',
-                    'format' => 'dd/MM/yyyy',
+                    'format' => IntlDateFormatter::SHORT,
                     'required' => false,
                     'constraints' => new Date(array('message' => 'constraints.date_invalide'))
                 )
@@ -32,7 +32,7 @@ class QuestionnairesListeType extends AbstractType
                 array(
                     'widget' => 'single_text',
                     'input' => 'string',
-                    'format' => 'dd/MM/yyyy',
+                    'format' => IntlDateFormatter::SHORT,
                     'required' => false,
                     'constraints' => new Date(array('message' => 'constraints.date_invalide'))
                 )

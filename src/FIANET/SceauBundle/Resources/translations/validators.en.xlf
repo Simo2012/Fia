@@ -114,6 +114,18 @@
                 <source>constraints.question.date_fin_not_null</source>
                 <target>End date is mandatory.</target>
             </trans-unit>
+            <trans-unit id="29">
+                <source>constraints.question_perso.date_debut_gt_date_fin</source>
+                <target>Start date must not be greater than end date.</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>constraints.question_perso.date_debut_demain</source>
+                <target>Start date must be no earlier than the day after creation.</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>constraints.question_perso.quotas</source>
+                <target>You can only have at most 2 questions over.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

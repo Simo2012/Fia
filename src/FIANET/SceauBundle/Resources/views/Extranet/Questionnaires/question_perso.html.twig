@@ -77,34 +77,64 @@
             </div>
         </div>
 
-        <h1>{% trans %}titre2_page{% endtrans %}</h1>
+        {% if questionsEnAttenteDeValidation is not null %}
+            <h1>{% trans %}titre2_page{% endtrans %}</h1>
 
-        <div class="block-total">
-            {{ form_start(form, {'attr' : {'novalidate' : 'novalidate'}}) }}
-                {% trans %}Type de question{% endtrans %} : <div class="select select-inline">{{ form_widget(form.questionType, {'attr' : {'onchange' : 'changerTypeQuestion(this.value);'}} ) }}</div><br />
-                <br />
+            <div class="block-total">
+                <table width="100%" cellspacing="0" cellpadding="0" border="0" class="gen" >
+                    <tr>
+                        <th>Libellé</th>
+                        <th>Type</th>
+                        <th>Liste des réponses</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                    </tr>
+                    {% for question in questionsEnAttenteDeValidation %}
+                        <tr {% if loop.index0 is even %}class="alt"{% endif %}>
+                            <td>{{ question.libelle }}</td>
+                            <td>{{ question.questionType.libelle|trans({}, 'questionType') }}</td>
+                            <td>
+                                {% for reponse in question.reponses %}
+                                    {{ loop.index }} ) {{ reponse.libelle }}<br />
+                                {% endfor %}
+                            </td>
+                            <td>{{ question.dateDebut|localizeddate('short', 'none') }}</td>
+                            <td>{{ question.dateFin|localizeddate('short', 'none') }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <h1>{% trans %}titre3_page{% endtrans %}</h1>
+
+        <div class="block-total align-gauche">
+            {{ form_start(form, {'attr' : {'id': 'form_question_perso'}}) }}
+
+                <h2>Question</h2>
+                <div>{{ form_label(form.questionType, 'Type') }} : {{ form_widget(form.questionType, {'attr' : {'onchange' : 'changerTypeQuestion(this.value);'}} ) }}</div>
+
                 {% if questionType is not null %}
-                    <div id="libelle">{% trans %}Libellé de la question{% endtrans %} : {{ form_widget(form.libelle) }} <span class="erreur">{{ form_errors(form.libelle) }}</span></div><br />
+                    <div>{{ form_label(form.libelle, 'Libellé') }} : {{ form_widget(form.libelle) }} <span class="erreur">{{ form_errors(form.libelle) }}</span></div>
+
+                    <div id="dates">
+                        {{ form_label(form.dateDebut, 'Date de publication') }} : {{ form_widget(form.dateDebut, {'attr' : {'class' : 'calendrier'}}) }} {{ form_label(form.dateFin, 'au') }} : {{ form_widget(form.dateFin, {'attr' : {'class' : 'calendrier'}}) }}
+                        <span class="erreur">{{ form_errors(form.dateDebut) }}</span> <span class="erreur">{{ form_errors(form.dateFin) }}</span>
+                    </div>
 
                     {% if questionType.id == 3 %}
                         <div id="notation">
-                            {% trans %}Borne de notation (incluses){% endtrans %} : {{ form_widget(form.valeurMin) }} à {{ form_widget(form.valeurMax) }}
-                            <span class="erreur">{{ form_errors(form.valeurMin) }}</span><br />
-                            <span class="erreur">{{ form_errors(form.valeurMax) }}</span>
-                        </div><br />
+                            {{ form_label(form.dateDebut, 'Bornes de notation (incluses)') }} : {{ form_widget(form.valeurMin) }} {{ form_label(form.dateDebut, 'à') }} {{ form_widget(form.valeurMax) }}
+                            <span class="erreur">{{ form_errors(form.valeurMin) }}</span> <span class="erreur">{{ form_errors(form.valeurMax) }}</span>
+                        </div>
                     {% endif %}
 
-                    {{ form_widget(form.reponses) }}<span class="erreur">{{ form_errors(form.reponses) }}</span>
+                    <h2>Liste des réponses</h2>
+                    {{ form_widget(form.reponses) }}
 
                     {% if questionType.id != 4 %}
-                        <div id="ajout_reponse">Pour ajouter une réponse, <a href="#" id="lien_ajout_reponse">cliquez ici</a></div><br />
+                        <div id="ajout_reponse">Pour ajouter une réponse, <a href="#" id="lien_ajout_reponse">cliquez ici</a></div>
                     {% endif  %}
-
-                    <div id="dates">
-                        {% trans %}Date de publication{% endtrans %} : {{ form_widget(form.dateDebut) }} au {{ form_widget(form.dateFin) }}
-                        <span class="erreur">{{ form_errors(form.dateDebut) }}</span><br />
-                        <span class="erreur">{{ form_errors(form.dateFin) }}</span>
-                    </div><br />
 
                     <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button>
                 {% endif %}
@@ -115,21 +145,10 @@
 {% endblock %}
 
 {% block extranet_javascripts %}
-    {% javascripts
-    'components/jquery-ui/ui/datepicker.js'
-    'bundles/fianetsceau/js/calendrier.js' %}
-    <script src="{{ asset_url }}" type="text/javascript"></script>
-    {% endjavascripts %}
-
-    {% if app.request.locale != 'en' %}
-        <script src="{{  asset('bundles/fianetsceau/js/calendrier-'~ app.request.locale ~'.js') }}" type="text/javascript"></script>
-    {% endif  %}
-
-    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}" type="text/javascript"></script>
-
     <script type="text/javascript">
-        afficherCalendrier('fianet_sceaubundle_question_perso_dateDebut');
-        afficherCalendrier('fianet_sceaubundle_question_perso_dateFin');
+        var parametresCalendriers = { firstDay: 1, minDate: 1};
+        afficherCalendrier('fianet_sceaubundle_question_perso_dateDebut', '{{ app.request.locale  }}', parametresCalendriers);
+        afficherCalendrier('fianet_sceaubundle_question_perso_dateFin', '{{ app.request.locale  }}', parametresCalendriers);
 
         {% if questionType is not null %}
             $(document).ready(function() {
@@ -146,7 +165,8 @@
                 if (index == 0) {
                     ajoutReponse(container);
                 } else {
-                    container.children('div').each(function() {
+                    console.log(container.children('div').children('div').children('div'));
+                    container.children('div').children('div').children('div').each(function() {
                         ajoutLienSuppression($(this));
                     });
                 }
@@ -157,7 +177,7 @@
                     if ($('#fianet_sceaubundle_question_perso_questionType').val() != 4) {
                         libelleReponse = 'Réponse n°' + (index+1) + ' : ';
                     } else {
-                        libelleReponse = 'Libellé du champ de texte : ';
+                        libelleReponse = ' ';
                     }
 
                     var prototype = $(container.attr('data-prototype').replace(/__name__label__/g, libelleReponse).replace(/__name__/g, index));
@@ -171,9 +191,11 @@
                 function ajoutLienSuppression(prototype) {
                     {# Le lien de suppression n'est pas affiché pour les commentaires car il n'y a au mini et au maxi une réponse #}
                     if ($('#fianet_sceaubundle_question_perso_questionType').val() != 4) {
-                        var deleteLink = $('<a href="#" class="pointer">Supprimer la réponse</a>');
+                        var img = "{{ asset('bundles/fianetsceau/images/extranet/supprimer.png') }}";
 
-                        prototype.append(deleteLink);
+                        var deleteLink = $('<a href="#" class="pointer"><img src="'+ img +'" width="20" height="20" title="Supprimer la réponse" alt="Supprimer" class="supprimer"/></a>');
+
+                        prototype.children('div').children('div').first().append(deleteLink);
 
                         deleteLink.click(function (e) {
                             prototype.remove();
@@ -185,14 +207,14 @@
             });
         {% endif %}
 
-        function changerTypeQuestion(questionType)
-        {
+        function changerTypeQuestion(questionType) {
+            afficherMasque();
+
             document.location.href = Routing.generate(
                     'extranet_questionnaires_questions_personnalisees_question_type',
                     {id: questionType},
                     true
             );
         }
-
     </script>
 {% endblock %}

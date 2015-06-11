@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Form\Type;
 
 use Collator;
 use FIANET\SceauBundle\Entity\QuestionTypeRepository;
+use IntlDateFormatter;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -31,7 +32,7 @@ class QuestionPersoType extends QuestionType
                 array(
                     'widget' => 'single_text',
                     'input' => 'datetime',
-                    'format' => 'dd/MM/yyyy',
+                    'format' => IntlDateFormatter::SHORT,
                     'required' => true,
                     'constraints' => new Date(array('message' => 'constraints.date_invalide'))
                 )
@@ -42,7 +43,7 @@ class QuestionPersoType extends QuestionType
                 array(
                     'widget' => 'single_text',
                     'input' => 'datetime',
-                    'format' => 'dd/MM/yyyy',
+                    'format' => IntlDateFormatter::SHORT,
                     'required' => true,
                     'constraints' => new Date(array('message' => 'constraints.date_invalide'))
                 )
@@ -55,7 +56,7 @@ class QuestionPersoType extends QuestionType
                     'empty_value' => 'choisir_valeur',
                     'translation_domain' => 'questionType',
                     'required' => true,
-                    'query_builder' => function(QuestionTypeRepository $repo) {
+                    'query_builder' => function (QuestionTypeRepository $repo) {
                         return $repo->typesPersonnalisablesQueryBuilder();
                     }
                 )
@@ -63,7 +64,7 @@ class QuestionPersoType extends QuestionType
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
-            function(FormEvent $event) {
+            function (FormEvent $event) {
                 $question = $event->getData();
 
                 if (null === $question) {
@@ -72,24 +73,21 @@ class QuestionPersoType extends QuestionType
 
                 if ($question->getQuestionType() == null) {
                     /* Aucun type de question n'a été sélectionné */
-                    $event->getForm()->remove('libelle');
                     $event->getForm()->remove('dateDebut');
                     $event->getForm()->remove('dateFin');
-                    $event->getForm()->remove('valeurMin');
-                    $event->getForm()->remove('valeurMax');
-                    $event->getForm()->remove('reponses');
 
+                } else {
+                    $event->getForm()->add(
+                        'reponses',
+                        'collection',
+                        array(
+                            'label' => ' ',
+                            'type' => new ReponsePersoType($question->getQuestionType()->getId()),
+                            'allow_add' => true,
+                            'by_reference' => false
+                        )
+                    );
                 }
-
-                $event->getForm()->add(
-                    'reponses',
-                    'collection',
-                    array(
-                        'type' => new ReponsePersoType($question->getQuestionType()->getId()),
-                        'allow_add' => true,
-                        'by_reference' => false
-                    )
-                );
             }
         );
     }

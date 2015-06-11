@@ -21,14 +21,24 @@ class ReponseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if ($this->questionType_id == \FIANET\SceauBundle\Entity\QuestionType::COMMENTAIRE) {
+            $labelLibelle = 'Libellé du champ de texte : ';
+        } else {
+            $labelLibelle = 'Libellé : ';
+        }
+
         $builder
-            ->add('libelle', 'text', array('label' => ' '))
+            ->add('libelle', 'text', array('label' => $labelLibelle, 'attr' => array('class' => 'libelle')))
             ->add('libelleCourt')
             ->add('ordre')
             ->add('actif');
 
         if ($this->questionType_id == \FIANET\SceauBundle\Entity\QuestionType::CHOIX_MULTIPLE) {
-            $builder->add('precision');
+            $builder->add(
+                'precision',
+                'checkbox',
+                array('label' => 'Ajouter un champ de texte pour préciser la réponse : ', 'required' => false)
+            );
         }
     }
     

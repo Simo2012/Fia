@@ -178,7 +178,7 @@ class Question
     /**
      * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\Site", inversedBy="questions")
      * @ORM\JoinColumn(name="site_id", referencedColumnName="id")
-     **/
+     */
     private $site;
 
     

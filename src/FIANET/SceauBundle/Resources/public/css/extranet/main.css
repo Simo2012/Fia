@@ -167,6 +167,13 @@ li.arrow-b .select {
     display: none;
 }
 
+.calendrier {
+    background: #eeeeee url('../../images/extranet/picto_date.png') no-repeat scroll right center;
+    width: 90px;
+    padding: 5px;
+    border: 1px solid #cccccc;
+}
+
 /**************************************** STRUCTURE ****************************************/
 header {
     display: block;

@@ -2,9 +2,9 @@
 
 namespace FIANET\SceauBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
-
 
 class QuestionRepository extends EntityRepository
 {
@@ -53,6 +53,68 @@ class QuestionRepository extends EntityRepository
                 )
             );
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $qb->getQuery()->useQueryCache(true)->getSingleScalarResult();
+    }
+
+    /**
+     * Récupère le nombre de questions personnalisées d'un site sur une période.
+     * Les questions désactivées ou refusées ne sont pas prises en compte.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param DateTime $dateDebut Date de début de la période
+     * @param DateTime $dateFin Date de fin de la période
+     *
+     * @return int Le nombre de questions
+     */
+    public function nbQuestionPersoPourUnePeriode(
+        Site $site,
+        QuestionnaireType $questionnaireType,
+        $dateDebut,
+        $dateFin
+    ) {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb->select('COUNT(q.id)')
+            ->andWhere($qb->expr()->eq('q.site', $site->getId()))
+            ->andWhere($qb->expr()->eq('q.questionnaireType', $questionnaireType->getId()))
+            ->andWhere('q.dateDebut <= :dateFin')
+            ->setParameter('dateDebut', $dateDebut)
+            ->andWhere('q.dateFin >= :dateDebut')
+            ->setParameter('dateFin', $dateFin)
+            ->andWhere(
+                $qb->expr()->in(
+                    'q.questionStatut',
+                    array(QuestionStatut::ACTIVEE, QuestionStatut::EN_ATTENTE_DE_VALIDATION)
+                )
+            );
+
+        return $qb->getQuery()->useQueryCache(true)->getSingleScalarResult();
+    }
+
+    /**
+     * Récupère les questions personnalisées d'un site en attente de validation.
+     * Elle sont triées par date de début croissante.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     *
+     * @return Question[]
+     */
+    public function questionsPersosEnAttenteDeValidation(Site $site, QuestionnaireType $questionnaireType)
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb->innerJoin('q.reponses', 'r')
+            ->addSelect('r')
+            ->innerJoin('q.questionType', 'qt')
+            ->addSelect('qt')
+            ->andWhere($qb->expr()->eq('q.site', $site->getId()))
+            ->andWhere($qb->expr()->eq('q.questionnaireType', $questionnaireType->getId()))
+            ->andWhere($qb->expr()->eq('q.questionStatut', QuestionStatut::EN_ATTENTE_DE_VALIDATION))
+            ->orderBy('q.dateDebut', 'ASC')
+            ->addOrderBy('r.ordre', 'ASC');
+
+        return $qb->getQuery()->useQueryCache(true)->getResult();
     }
 }

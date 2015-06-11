@@ -1,7 +1,5 @@
-function afficherCalendrier(idInputDate)
+function afficherCalendrier(idInputDate, locale, parametres)
 {
-    $('#' + idInputDate).datepicker({
-        dateFormat: 'dd/mm/yy',
-        firstDay: 1
-    });
+    $.datepicker.setDefaults($.datepicker.regional[locale]);
+    $('#' + idInputDate).datepicker(parametres);
 }

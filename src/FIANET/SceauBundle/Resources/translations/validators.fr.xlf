@@ -114,6 +114,18 @@
                 <source>constraints.question.date_fin_not_null</source>
                 <target>La date de fin est obligatoire.</target>
             </trans-unit>
+            <trans-unit id="29">
+                <source>constraints.question_perso.date_debut_gt_date_fin</source>
+                <target>La date de début ne doit pas être plus grande que la date de fin.</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>constraints.question_perso.date_debut_demain</source>
+                <target>La date de début doit être au plus tôt le lendemain du jour de création.</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>constraints.question_perso.quotas</source>
+                <target>Vous ne pouvez avoir qu'au maximum 2 questions sur une période.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

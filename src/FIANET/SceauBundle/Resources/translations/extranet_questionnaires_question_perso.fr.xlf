@@ -27,12 +27,16 @@
                 <target>Résultats disponibles dans l'onglet statistiques</target>
             </trans-unit>
             <trans-unit id="6">
-                <source>titre2_page</source>
+                <source>titre3_page</source>
                 <target>Personnalisez une question</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>message_succes</source>
                 <target>La question a bien été enregistrée. Elle apparaitra dans les questionnaires après la validation de FIA-NET.</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>titre2_page</source>
+                <target>Liste des questions en attente de validation</target>
             </trans-unit>
         </body>
     </file>

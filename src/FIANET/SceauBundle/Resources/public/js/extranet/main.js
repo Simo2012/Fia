@@ -10,3 +10,8 @@ function recupDate() {
     document.getElementById('DIVdate').innerHTML = recupDate;
 }
 window.onload = recupDate;
+
+function afficherMasque()
+{
+    $('#masque').height($(document).height()).show();
+}
