@@ -22,7 +22,7 @@
         {{ form_start(form, {'action' : path('extranet_questionnaires_questionnaires')}) }}
             <div class="block-total-part1">
                 <h2>{% trans %}label_recherche_date{% endtrans %}</h2>
-                <dd>{% trans %}recherche_date_du{% endtrans %} {{ form_widget(form.dateDebut) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span> {% trans %}recherche_date_au{% endtrans %} {{ form_widget(form.dateFin) }} <span class="erreur">{{ form_errors(form.dateFin) }}</span></dd>
+                <dd>{% trans %}recherche_date_du{% endtrans %} {{ form_widget(form.dateDebut, {'attr' : {'class': 'calendrier'}}) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span> {% trans %}recherche_date_au{% endtrans %} {{ form_widget(form.dateFin, {'attr' : {'class': 'calendrier'}}) }} <span class="erreur">{{ form_errors(form.dateFin) }}</span></dd>
                 <dt><button type="submit">{% trans %}libelle_bouton{% endtrans %}</button></dt><br />
                 <br />
                 <h2>{% trans %}recherche_avancee{% endtrans %}</h2>

@@ -52,7 +52,7 @@
                         <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/>
                     </li>
                     <li>
-                        {% trans %}frise4{% endtrans %}<br/><br/>
+                        {% trans %}frise4{% endtrans %}<br/>
                         <img src="{{ asset('bundles/fianetsceau/images/extranet/picto-quest-stat.png') }}" width="92" height="54" alt=""/>
                     </li>
                 </ul>
@@ -83,11 +83,11 @@
             <div class="block-total">
                 <table width="100%" cellspacing="0" cellpadding="0" border="0" class="gen" >
                     <tr>
-                        <th>Libellé</th>
-                        <th>Type</th>
-                        <th>Liste des réponses</th>
-                        <th>Date de début</th>
-                        <th>Date de fin</th>
+                        <th>{% trans %}libelle{% endtrans %}</th>
+                        <th>{% trans %}type{% endtrans %}</th>
+                        <th>{% trans %}reponses{% endtrans %}</th>
+                        <th>{% trans %}date_debut{% endtrans %}</th>
+                        <th>{% trans %}date_fin{% endtrans %}</th>
                     </tr>
                     {% for question in questionsEnAttenteDeValidation %}
                         <tr {% if loop.index0 is even %}class="alt"{% endif %}>
@@ -112,19 +112,19 @@
             {{ form_start(form, {'attr' : {'id': 'form_question_perso'}}) }}
 
                 <h2>Question</h2>
-                <div>{{ form_label(form.questionType, 'Type') }} : {{ form_widget(form.questionType, {'attr' : {'onchange' : 'changerTypeQuestion(this.value);'}} ) }}</div>
+                <div>{{ form_label(form.questionType, 'type'|trans) }} : {{ form_widget(form.questionType, {'attr' : {'onchange' : 'changerTypeQuestion(this.value);'}} ) }}</div>
 
                 {% if questionType is not null %}
-                    <div>{{ form_label(form.libelle, 'Libellé') }} : {{ form_widget(form.libelle) }} <span class="erreur">{{ form_errors(form.libelle) }}</span></div>
+                    <div>{{ form_label(form.libelle, 'libelle'|trans) }} : {{ form_widget(form.libelle) }} <span class="erreur">{{ form_errors(form.libelle) }}</span></div>
 
                     <div id="dates">
-                        {{ form_label(form.dateDebut, 'Date de publication') }} : {{ form_widget(form.dateDebut, {'attr' : {'class' : 'calendrier'}}) }} {{ form_label(form.dateFin, 'au') }} : {{ form_widget(form.dateFin, {'attr' : {'class' : 'calendrier'}}) }}
+                        {{ form_label(form.dateDebut, 'date_publication'|trans) }} : {{ form_widget(form.dateDebut, {'attr' : {'class' : 'calendrier'}}) }} {{ form_label(form.dateFin, 'date_publication2'|trans) }} : {{ form_widget(form.dateFin, {'attr' : {'class' : 'calendrier'}}) }}
                         <span class="erreur">{{ form_errors(form.dateDebut) }}</span> <span class="erreur">{{ form_errors(form.dateFin) }}</span>
                     </div>
 
                     {% if questionType.id == 3 %}
                         <div id="notation">
-                            {{ form_label(form.dateDebut, 'Bornes de notation (incluses)') }} : {{ form_widget(form.valeurMin) }} {{ form_label(form.dateDebut, 'à') }} {{ form_widget(form.valeurMax) }}
+                            {{ form_label(form.dateDebut, 'notation'|trans) }} : {{ form_widget(form.valeurMin) }} {{ form_label(form.dateDebut, 'notation2'|trans) }} {{ form_widget(form.valeurMax) }}
                             <span class="erreur">{{ form_errors(form.valeurMin) }}</span> <span class="erreur">{{ form_errors(form.valeurMax) }}</span>
                         </div>
                     {% endif %}
@@ -133,7 +133,7 @@
                     {{ form_widget(form.reponses) }}
 
                     {% if questionType.id != 4 %}
-                        <div id="ajout_reponse">Pour ajouter une réponse, <a href="#" id="lien_ajout_reponse">cliquez ici</a></div>
+                        <div id="ajout_reponse">{% trans %}ajout_reponse{% endtrans %} <a href="#" id="lien_ajout_reponse">{% trans %}ajout_reponse2{% endtrans %}</a></div>
                     {% endif  %}
 
                     <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button>
@@ -145,6 +145,11 @@
 {% endblock %}
 
 {% block extranet_javascripts %}
+    {% javascripts
+    'bundles/fianetsceau/js/extranet/questionnaires.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
     <script type="text/javascript">
         var parametresCalendriers = { firstDay: 1, minDate: 1};
         afficherCalendrier('fianet_sceaubundle_question_perso_dateDebut', '{{ app.request.locale  }}', parametresCalendriers);
@@ -193,7 +198,7 @@
                     if ($('#fianet_sceaubundle_question_perso_questionType').val() != 4) {
                         var img = "{{ asset('bundles/fianetsceau/images/extranet/supprimer.png') }}";
 
-                        var deleteLink = $('<a href="#" class="pointer"><img src="'+ img +'" width="20" height="20" title="Supprimer la réponse" alt="Supprimer" class="supprimer"/></a>');
+                        var deleteLink = $('<a href="#" class="pointer"><img src="'+ img +'" width="20" height="20" title="{% trans from 'commun'%}commun_supprimer{% endtrans %}" alt="{% trans from 'commun'%}commun_supprimer{% endtrans %}" class="supprimer"/></a>');
 
                         prototype.children('div').children('div').first().append(deleteLink);
 

@@ -214,13 +214,13 @@ class QuestionnaireRepository extends EntityRepository
         );
 
         if ($questionnaireType->getParametrage()['recommandation']['question_id']) {
-            $qb->addSelect('qr_reco.note AS recommandation', 'r_reco.valeurMax AS recommandationValeurMax')
+            $qb->addSelect('qr_reco.note AS recommandation', 'quest_reco.valeurMax AS recommandationValeurMax')
                 ->leftJoin(
                     'q.questionnaireReponses',
                     'qr_reco',
                     'WITH',
                     'qr_reco.question = :qid_reco'
-                )->leftJoin('qr_reco.reponse', 'r_reco')
+                )->leftJoin('qr_reco.question', 'quest_reco')
                 ->setParameter('qid_reco', $questionnaireType->getParametrage()['recommandation']['question_id']);
 
             if ($tri == 4) {

@@ -264,8 +264,8 @@ class QuestionnairesController extends Controller
     /**
      * Affichage la page de création de question personnalisée.
      *
-     * @Route("/questionnaires/questions-personnalisées", name="extranet_questionnaires_questions_personnalisees")
-     * @Route("/questionnaires/questions-personnalisées/{id}",
+     * @Route("/questionnaires/questions-personnalisees", name="extranet_questionnaires_questions_personnalisees")
+     * @Route("/questionnaires/questions-personnalisees/{id}",
      *     name="extranet_questionnaires_questions_personnalisees_question_type", options={"expose"=true})
      * @Method({"GET", "POST"})
      *

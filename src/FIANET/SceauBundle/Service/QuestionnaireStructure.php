@@ -46,7 +46,6 @@ class QuestionnaireStructure
         foreach ($question->getReponses() as $reponse) {
             $reponse->setLibelleCourt($reponse->getLibelle());
             $reponse->setOrdre($ordre);
-            //$reponse->setPrecision(false); // TODO à revoir
             $reponse->setActif(true);
 
             $ordre += 10;

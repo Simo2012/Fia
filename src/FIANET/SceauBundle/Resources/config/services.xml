@@ -37,7 +37,7 @@
 
         <!-- Formulaire -->
         <service id="fianet_sceau.form.type.question_perso" class="FIANET\SceauBundle\Form\Type\QuestionPersoType">
-            <argument type="service" id="translator" />
+            <argument type="service" id="fianet_sceau.outils.string" />
             <tag name="form.type" alias="fianet_sceaubundle_question_perso" />
         </service>
 
@@ -95,6 +95,11 @@
         <service id="fianet_sceau.extranet.user_provider" class="FIANET\SceauBundle\Security\Extranet\User\WebserviceUserProvider">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="session"/>
+        </service>
+
+        <!-- Autres -->
+        <service id="fianet_sceau.outils.string" class="FIANET\SceauBundle\Service\OutilsString">
+            <argument type="service" id="translator"/>
         </service>
 
     </services>

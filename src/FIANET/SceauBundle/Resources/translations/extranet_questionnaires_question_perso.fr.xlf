@@ -12,7 +12,7 @@
             </trans-unit>
             <trans-unit id="2">
                 <source>frise1</source>
-                <target><![CDATA[Création des questions<br />personnalisés]]></target>
+                <target>Création des questions personnalisés></target>
             </trans-unit>
             <trans-unit id="3">
                 <source>frise2</source>
@@ -37,6 +37,50 @@
             <trans-unit id="8">
                 <source>titre2_page</source>
                 <target>Liste des questions en attente de validation</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>libelle</source>
+                <target>Libellé</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>type</source>
+                <target>Type</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>reponses</source>
+                <target>Liste des réponses</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>date_debut</source>
+                <target>Date de début</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>date_fin</source>
+                <target>Date de fin</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>date_publication</source>
+                <target>Date de publication</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>date_publication2</source>
+                <target>au</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>notation</source>
+                <target>Bornes de notation (incluses)</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>notation2</source>
+                <target>à</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>ajout_reponse</source>
+                <target>Pour ajouter une réponse,</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>ajout_reponse2</source>
+                <target>cliquez-ici</target>
             </trans-unit>
         </body>
     </file>

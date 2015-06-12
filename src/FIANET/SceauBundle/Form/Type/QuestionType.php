@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Form\Type;
 
 use Collator;
+use FIANET\SceauBundle\Service\OutilsString;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -10,18 +11,17 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Translation\Translator;
 
 class QuestionType extends AbstractType
 {
-    protected $translator;
+    protected $outilsString;
 
     /**
-     * @param Translator $translator Instance de Translator
+     * @param OutilsString $outilsString Instance de OutilsString
      */
-    public function __construct($translator)
+    public function __construct(OutilsString $outilsString)
     {
-        $this->translator = $translator;
+        $this->outilsString = $outilsString;
     }
 
     /**
@@ -72,17 +72,9 @@ class QuestionType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        // TODO : créer un service
-        $collator = new Collator($this->translator->getLocale());
-
-        usort(
+        $this->outilsString->trierListeStringsSelonLocale(
             $view->children['questionType']->vars['choices'],
-            function ($a, $b) use ($collator) {
-                return $collator->compare(
-                    $this->translator->trans($a->label, array(), 'questionType'),
-                    $this->translator->trans($b->label, array(), 'questionType')
-                );
-            }
+            'questionType'
         );
     }
 
