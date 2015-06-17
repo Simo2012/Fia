@@ -17,10 +17,12 @@ class QuestionPersoValidator extends ConstraintValidator
     }
 
     /**
-     * Vérifie que la création d'une question personnalisée respecte les régles de gestion.
+     * Vérifie que la création d'une question personnalisée respecte les différentes régles de gestion.
+     * Si on a bien la date de début et la date de fin, on teste si :
      * 1) Date de début < Date de fin
      * 2) Date de début doit être au minimum égale à J+1
      * 3) Pas plus de 2 questions sur une même période.
+     * 4) Pour les choix multiples, seulement une demande de précision au maximum.
      *
      * TODO : il faut rajouter les contrôles sur les options et date de garantie
      *
@@ -31,25 +33,41 @@ class QuestionPersoValidator extends ConstraintValidator
      */
     public function validate($question, Constraint $constraint)
     {
-        if ($question->getDateFin() && ($question->getDateDebut() > $question->getDateFin())) {
-            $this->buildViolation('constraints.question_perso.date_debut_gt_date_fin')->addViolation();
-            return false;
+        if ($question->getDateDebut() && $question->getDateFin()) {
+            if ($question->getDateDebut() > $question->getDateFin()) {
+                $this->buildViolation('constraints.question_perso.date_debut_gt_date_fin')->addViolation();
+                return false;
+
+            } else {
+                $demain = new \DateTime('tomorrow');
+                if ($question->getDateDebut() < $demain) {
+                    $this->buildViolation('constraints.question_perso.date_debut_demain')->addViolation();
+                    return false;
+
+                } else {
+                    $nb = $this->em->getRepository('FIANETSceauBundle:Question')->nbQuestionPersoPourUnePeriode(
+                        $question->getSite(),
+                        $question->getQuestionnaireType(),
+                        $question->getDateDebut(),
+                        $question->getDateFin()
+                    );
+                    if ($nb >= 2) {
+                        $this->buildViolation('constraints.question_perso.quotas')->addViolation();
+                        return false;
+                    }
+                }
+            }
         }
 
-        $demain = new \DateTime('tomorrow');
-        if ($question->getDateDebut() < $demain) {
-            $this->buildViolation('constraints.question_perso.date_debut_demain')->addViolation();
-            return false;
+        $nbPrecision = 0;
+        foreach ($question->getReponses() as $reponse) {
+            if ($reponse->getPrecision()) {
+                $nbPrecision++;
+            }
         }
+        if ($nbPrecision > 1) {
+            $this->buildViolation('constraints.question_perso.nb_precision')->addViolation();
 
-        $nb = $this->em->getRepository('FIANETSceauBundle:Question')->nbQuestionPersoPourUnePeriode(
-            $question->getSite(),
-            $question->getQuestionnaireType(),
-            $question->getDateDebut(),
-            $question->getDateFin()
-        );
-        if ($nb >= 2) {
-            $this->buildViolation('constraints.question_perso.quotas')->addViolation();
             return false;
         }
 

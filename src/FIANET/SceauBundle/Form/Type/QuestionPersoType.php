@@ -81,7 +81,6 @@ class QuestionPersoType extends QuestionType
                         'reponses',
                         'collection',
                         array(
-                            'label' => ' ',
                             'type' => new ReponsePersoType($question->getQuestionType()->getId()),
                             'allow_add' => true,
                             'by_reference' => false

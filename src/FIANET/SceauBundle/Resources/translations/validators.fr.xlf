@@ -126,6 +126,22 @@
                 <source>constraints.question_perso.quotas</source>
                 <target>Vous ne pouvez avoir qu'au maximum 2 questions sur une période.</target>
             </trans-unit>
+            <trans-unit id="32">
+                <source>constraints.question_perso.nb_precision</source>
+                <target>Vous ne pouvez sélectionner qu'un champ de texte libre au maximum.</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>constraints.question_perso</source>
+                <target>La question personnalisée est invalide.</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>constraints.question</source>
+                <target>La question est invalide.</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>constraints.question.notation</source>
+                <target>Les bornes de notation sont obligatoires.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

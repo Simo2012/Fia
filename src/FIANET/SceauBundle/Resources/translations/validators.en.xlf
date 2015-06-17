@@ -126,6 +126,22 @@
                 <source>constraints.question_perso.quotas</source>
                 <target>You can only have at most 2 questions over.</target>
             </trans-unit>
+            <trans-unit id="32">
+                <source>constraints.question_perso.nb_precision</source>
+                <target>You can select only one free text field up.</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>constraints.question_perso</source>
+                <target>Customized question is invalid.</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>constraints.question</source>
+                <target>Question is invalid.</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>constraints.question.notation</source>
+                <target>Scoring terminals are required.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

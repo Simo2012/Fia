@@ -82,6 +82,18 @@
                 <source>ajout_reponse2</source>
                 <target>click here</target>
             </trans-unit>
+            <trans-unit id="20">
+                <source>libelle_commentaire</source>
+                <target>Wording of the text field</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>numero_reponse</source>
+                <target>Response n°</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>ajout_precision</source>
+                <target>Add a text field to specify the answer</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

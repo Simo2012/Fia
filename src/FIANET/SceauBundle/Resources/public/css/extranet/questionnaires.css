@@ -64,6 +64,10 @@
     width: 50%;
 }
 
+#form_question_perso .libelle-reponse {
+    width: 40%;
+}
+
 #form_question_perso #notation div {
     display: inline-block;
 }
@@ -83,4 +87,13 @@
 #form_question_perso .supprimer {
     vertical-align: text-bottom;
     margin-left: 5px;
+}
+
+#question-perso .erreur {
+    margin-left: 10px;
+}
+
+#question-perso .bloc-erreur {
+    margin-left: 20px;
+    margin-top: 20px;
 }

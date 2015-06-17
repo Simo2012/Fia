@@ -82,6 +82,18 @@
                 <source>ajout_reponse2</source>
                 <target>cliquez-ici</target>
             </trans-unit>
+            <trans-unit id="20">
+                <source>libelle_commentaire</source>
+                <target>Libellé du champ de texte</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>numero_reponse</source>
+                <target>Réponse n°</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>ajout_precision</source>
+                <target>Ajouter un champ de texte pour préciser la réponse</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

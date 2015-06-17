@@ -327,7 +327,12 @@ class QuestionnairesController extends Controller
             array(
                 'form' => $form->createView(),
                 'questionType' => $questionType,
-                'questionsEnAttenteDeValidation' => $questionsEnAttenteDeValidation
+                'questionsEnAttenteDeValidation' => $questionsEnAttenteDeValidation,
+                'urlRedirection' => $this->generateUrl(
+                    'extranet_questionnaires_questions_personnalisees_question_type',
+                    array('id' => ($questionnaireType) ? $questionnaireType->getId() : null),
+                    true
+                )
             )
         );
     }

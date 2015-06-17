@@ -88,5 +88,7 @@ FIANET\SceauBundle\Entity\Question:
                 message: "constraints.question.date_invalide"
                 groups: [perso]
     constraints:
+        - FIANET\SceauBundle\Validator\Constraints\QuestionGlobale:
+            groups: [globale, perso]
         - FIANET\SceauBundle\Validator\Constraints\QuestionPerso:
             groups: [perso]

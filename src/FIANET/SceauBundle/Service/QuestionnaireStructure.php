@@ -48,6 +48,10 @@ class QuestionnaireStructure
             $reponse->setOrdre($ordre);
             $reponse->setActif(true);
 
+            if ($question->getQuestionType()->getId() != QuestionType::CHOIX_MULTIPLE) {
+                $reponse->setPrecision(false);
+            }
+
             $ordre += 10;
         }
     }
