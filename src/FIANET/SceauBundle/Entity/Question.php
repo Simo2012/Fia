@@ -110,10 +110,10 @@ class Question
     /**
      * @var QuestionnaireType
      *
-     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireType", inversedBy="questions")
-     * @ORM\JoinColumn(name="questionnaireType_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireType", inversedBy="questions")
+     * @ORM\JoinTable(name="QuestionnaireType_Question")
      */
-    private $questionnaireType;
+    private $questionnaireTypes;
 
     /**
      * @var QuestionType
@@ -191,6 +191,7 @@ class Question
         $this->reponses = new ArrayCollection();
         $this->livraisonTypes = new ArrayCollection();
         $this->notationLibelles = new ArrayCollection();
+        $this->questionnaireReponses = new ArrayCollection();
     }
 
 
@@ -366,30 +367,6 @@ class Question
     public function getQuestionType()
     {
         return $this->questionType;
-    }
-
-    /**
-     * Set questionnaireType
-     *
-     * @param QuestionnaireType $questionnaireType
-     *
-     * @return Question
-     */
-    public function setQuestionnaireType(QuestionnaireType $questionnaireType)
-    {
-        $this->questionnaireType = $questionnaireType;
-
-        return $this;
-    }
-
-    /**
-     * Get questionnaireType
-     *
-     * @return QuestionnaireType
-     */
-    public function getQuestionnaireType()
-    {
-        return $this->questionnaireType;
     }
 
     /**
@@ -741,5 +718,39 @@ class Question
     public function getSite()
     {
         return $this->site;
+    }
+
+    /**
+     * Add questionnaireType
+     *
+     * @param QuestionnaireType $questionnaireType
+     *
+     * @return Question
+     */
+    public function addQuestionnaireType(QuestionnaireType $questionnaireType)
+    {
+        $this->questionnaireTypes[] = $questionnaireType;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionnaireType
+     *
+     * @param QuestionnaireType $questionnaireType
+     */
+    public function removeQuestionnaireType(QuestionnaireType $questionnaireType)
+    {
+        $this->questionnaireTypes->removeElement($questionnaireType);
+    }
+
+    /**
+     * Get questionnaireTypes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionnaireTypes()
+    {
+        return $this->questionnaireTypes;
     }
 }

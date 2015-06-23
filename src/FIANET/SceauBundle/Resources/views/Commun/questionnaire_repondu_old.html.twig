@@ -1,0 +1,99 @@
+{% trans_default_domain 'commun' %}
+
+{% if questionnaireRepondu is not null %}
+    <h2>{{ 'commun_date_reponse'|trans }} - {{ 'commun_le'|trans }} {{ questionnaireRepondu_dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaireRepondu_dateReponse|localizeddate('none', 'short') }} -</h2>
+
+    {# Todo : Récupération des questions/réponses à compléter #}
+    {% if questionnaireRepondu_listeQuestionsReponses is not null %}
+
+        {% for questionReponse in questionnaireRepondu_listeQuestionsReponses %}
+
+            {% if questionReponse['cacher'] == false %}
+                <p class="question">
+                {{ questionReponse['question'].libelle|raw }}
+                
+                {# {{ questionReponse['question'].id }} #}       
+                {# ToDo : à gérer selon les interfaces utilisateur (Extranet, BO, FIA-NET.com, etc. #}
+                {#
+                {% if questionReponse['commentairePrincipal'] == true and commentairePrincipal is defined %}
+                    {% if questionnaireLieSuivant == false %}
+                        {% if droitDeReponse == false %}
+                        - {{ 'pour_utiliser_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|replace({"##URL##" : path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaireRepondu.id, 'qrid': questionReponse['question'].id}) })|raw }}
+                        {% endif %}       
+                    {% endif %}
+                {% endif %}
+                #}
+                </p>
+
+                {% set questionType = questionReponse.question.questionType.id %}
+
+                {% if questionReponse['questionRepondue'] == false %}
+
+                    <p class="reponse">{{ 'questionnaire_question_pas_de_reponse'|trans({}, 'commun_questionnaires_repondus') }}</p>
+
+                {% else %}
+
+                    {% for questionReponseRepondu in questionReponse['reponses'] %}
+
+                        {% if questionType != 5 and questionReponseRepondu.questionnairereponses[0] is defined %}
+                        
+                            {% if questionType == 1 %}  {# commentaire #}
+                                {% if questionReponse['commentairePrincipal'] == true %}
+                                    <p class="question">{{ 'questionnaire_libelle_commentaire_principal'|trans({}, 'commun_questionnaires_repondus') }}</p>
+                                    <div class="area"><div>{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}</div></div>
+                                {% else %}
+                                    <p class="reponse">{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}</p>   
+                                {% endif %}
+                            {% elseif questionType == 2 %}  {# choix unique #}
+                                <p class="reponse">{{ questionReponseRepondu.libelle|raw }}
+                                    {% if questionReponseRepondu.precision == true and questionReponseRepondu.questionnairereponses[0] is defined %}
+                                        {% if questionReponseRepondu.questionnairereponses[0].commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}
+                                        {% endif %}                                
+                                    {% endif %}                        
+                                </p>
+                            {% elseif questionType == 3 %}  {# multichoix #} 
+                                <p class="reponse">
+                                    - {{ questionReponseRepondu.libelle|raw }}
+                                    {% if questionReponseRepondu.precision == true and questionReponseRepondu.questionnairereponses[0] is defined %}
+                                        {% if questionReponseRepondu.questionnairereponses[0].commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}
+                                        {% endif %}                                
+                                    {% endif %} 
+                                </p>
+                            {% elseif questionType == 4 %}  {# menu déroulant #}     
+                                <p class="reponse">{{ questionReponseRepondu.libelle|raw }}
+                                    {% if questionReponseRepondu.precision == true and questionReponseRepondu.questionnairereponses[0] is defined %}
+                                        {% if questionReponseRepondu.questionnairereponses[0].commentaire|length > 0 %}
+                                            <br />{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}
+                                        {% endif %}                                
+                                    {% endif %}                               
+                                </p>
+                            {% endif %}
+                           
+                        {% elseif questionType == 5 %}  {# notation #} 
+                            <p class="reponse">
+                                {% if questionReponseRepondu.questionnairereponses[0] is not defined %}
+                                <span class="colorNC">{{ 'questionnaire_reponse_non_communiquee'|trans({}, 'commun_questionnaires_repondus') }}</span>
+                                {% else %}
+                                <span class="color{{ questionReponseRepondu.questionnairereponses[0].note|round(0, 'floor') }}">{{ questionReponseRepondu.questionnairereponses[0].note|round(0, 'floor') }}/{{ questionReponseRepondu.valeurmax|round(0, 'floor') }}</span>
+                                {% endif %}
+                                   {{ questionReponseRepondu.libelle|raw }}
+                                
+                                {% if questionReponseRepondu.precision == true and questionReponseRepondu.questionnairereponses[0] is not null %}
+                                    {% if questionReponseRepondu.questionnairereponses[0].commentaire|length > 0 %}
+                                        <br />{{ questionReponseRepondu.questionnairereponses[0].commentaire|raw }}
+                                    {% endif %}                                
+                                {% endif %}
+                            </p>
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% endif %}
+            
+            {% endif %}
+           
+        {% endfor %}
+    {% endif %}
+{% endif %}

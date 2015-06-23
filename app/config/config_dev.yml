@@ -49,11 +49,11 @@ assetic:
 
 doctrine:
     dbal:
-        host:  127.0.0.1
-        port: 5432
+        host:  loki
+        port: 5439
         dbname: sceau
-        user: sceau
-        password: sceau
+        user: sceau_user
+        password: hello
 
 bazinga_faker:
     orm: doctrine

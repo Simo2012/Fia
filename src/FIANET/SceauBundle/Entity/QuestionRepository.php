@@ -15,20 +15,20 @@ class QuestionRepository extends EntityRepository
      *
      * @return Question[]
      */
-    public function getAllQuestionsOrdered(QuestionnaireType $questionnaireType)
-    {
-        /* ToDo : à revoir pour gestion : sous-questions, questions cachées, questions personnalisées, langues, etc. */
-        
-        $qb = $this->createQueryBuilder('q');
-
-        $qb->where('q.questionnaireType=:id')
-            ->andWhere($qb->expr()->eq('q.questionStatut', 1))
-            ->setParameter('id', $questionnaireType->getId())
-            ->orderBy('q.ordre', 'ASC')
-            ->addOrderBy('q.page', 'ASC');
-        
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
-    }
+//    public function getAllQuestionsOrdered(QuestionnaireType $questionnaireType)
+//    {
+//        /* ToDo : à revoir pour gestion : sous-questions, questions cachées, questions personnalisées, langues, etc. */
+//
+//        $qb = $this->createQueryBuilder('q');
+//
+//        $qb->where('q.questionnaireType=:id')
+//            ->andWhere($qb->expr()->eq('q.questionStatut', 1))
+//            ->setParameter('id', $questionnaireType->getId())
+//            ->orderBy('q.ordre', 'ASC')
+//            ->addOrderBy('q.page', 'ASC');
+//
+//        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
+//    }
 
     /**
      * Récupère l'ordre maximal des questions pour un type de questionnaire et un site.
@@ -44,7 +44,7 @@ class QuestionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('q');
 
         $qb->select('COALESCE(MAX(q.ordre), 0)')
-            ->where('q.questionnaireType = :qtid')
+            ->innerJoin('q.questionnaireTypes', 'questionnaireTypes', 'WITH', 'questionnaireTypes.id = :qtid')
             ->setParameter('qtid', $questionnaireType->getId())
             ->andWhere(
                 $qb->expr()->orX(
@@ -76,8 +76,9 @@ class QuestionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('q');
 
         $qb->select('COUNT(q.id)')
+            ->innerJoin('q.questionnaireTypes', 'questionnaireTypes', 'WITH', 'questionnaireTypes.id = :qtid')
+            ->setParameter('qtid', $questionnaireType->getId())
             ->andWhere($qb->expr()->eq('q.site', $site->getId()))
-            ->andWhere($qb->expr()->eq('q.questionnaireType', $questionnaireType->getId()))
             ->andWhere('q.dateDebut <= :dateFin')
             ->setParameter('dateDebut', $dateDebut)
             ->andWhere('q.dateFin >= :dateDebut')
@@ -109,8 +110,9 @@ class QuestionRepository extends EntityRepository
             ->addSelect('r')
             ->innerJoin('q.questionType', 'qt')
             ->addSelect('qt')
+            ->innerJoin('q.questionnaireTypes', 'questionnaireTypes', 'WITH', 'questionnaireTypes.id = :qtid')
+            ->setParameter('qtid', $questionnaireType->getId())
             ->andWhere($qb->expr()->eq('q.site', $site->getId()))
-            ->andWhere($qb->expr()->eq('q.questionnaireType', $questionnaireType->getId()))
             ->andWhere($qb->expr()->eq('q.questionStatut', QuestionStatut::EN_ATTENTE_DE_VALIDATION))
             ->orderBy('q.dateDebut', 'ASC')
             ->addOrderBy('r.ordre', 'ASC');

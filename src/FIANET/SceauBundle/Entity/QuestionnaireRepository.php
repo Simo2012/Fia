@@ -245,6 +245,93 @@ class QuestionnaireRepository extends EntityRepository
     }
 
     /**
+     * Rajoute les restrictions nécessaires pour sélectionner pour un site et pour un type de questionnaire :
+     * - les questions globales illimitées
+     * - les questions globales limitées dans le temps
+     * - les questions personnalisées.
+     * Le QueryBuilder passé en argument doit contenir un alias "question" de l'entité Question.
+     *
+     * @param QueryBuilder $qb Instance de QueryBuilder
+     * @param Site $site Instance de Site
+     *
+     * @return QueryBuilder
+     */
+    private function restrictionsQuestionsGlobalesPersos(QueryBuilder $qb, Site $site)
+    {
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->andX(
+                    'question.site IS NULL',
+                    $qb->expr()->orX(
+                        'question.dateDebut IS NULL',
+                        $qb->expr()->andX(
+                            'question.dateDebut <= CURRENT_DATE()',
+                            'question.dateFin >= CURRENT_DATE()'
+                        )
+                    )
+                ),
+                $qb->expr()->andX(
+                    'question.site = :sid',
+                    'question.dateDebut <= CURRENT_DATE()',
+                    'question.dateFin >= CURRENT_DATE()'
+                )
+            )
+        )->setParameter('sid', $site->getId())
+        ->andWhere($qb->expr()->eq('question.questionStatut', QuestionStatut::ACTIVEE));
+
+        return $qb;
+    }
+
+    /**
+     * Retourne l'ensemble de la structure d'un questionnaire d'un site avec les réponses répondues par l'internaute.
+     *
+     * @param Site $site Instance de Site
+     * @param int $questionnaire_id Identifiant du questionnaire
+     *
+     * @return Questionnaire
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function structureQuestionnaireAvecReponses($site, $questionnaire_id)
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb->innerJoin('q.site', 's')
+            ->addSelect('s')
+            ->leftJoin('q.sousSite', 'ss')
+            ->addSelect('ss')
+            ->leftJoin('q.commande', 'c')
+            ->addSelect('c')
+            ->leftJoin('q.membre', 'm')
+            ->addSelect('m')
+            ->innerJoin('q.questionnaireType', 'qt')
+            ->addSelect('qt')
+            ->innerJoin('qt.questions', 'question')
+            ->addSelect('question')
+            ->innerJoin('question.questionType', 'questionType')
+            ->addSelect('questionType')
+            ->innerJoin('question.reponses', 'r')
+            ->addSelect('r')
+            ->leftJoin('r.questionnaireReponses', 'qr', 'WITH', 'qr.questionnaire = q.id')
+            ->addSelect('qr')
+            ->leftJoin('qr.droitDeReponses', 'ddr', 'WITH', 'ddr.actif = true')
+            ->addSelect('ddr')
+            ->leftJoin('q.questionnaireLie', 'ql')
+            ->addSelect('ql')
+            ->where('q.id = :id')
+            ->setParameter('id', $questionnaire_id)
+            ->andWhere($qb->expr()->eq('r.reponseStatut', ReponseStatut::ACTIVEE))
+            ->orderBy('question.ordre', 'ASC')
+            ->addOrderBy('r.ordre', 'ASC');
+
+        $qb = $this->restrictionsQuestionsGlobalesPersos($qb, $site);
+
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(300)
+            ->getSingleResult(); // TODO vérifier le cache et tester les perfs
+    }
+
+    /**
      * Retourne les informations générales liées au questionnaire répondu (informations sur la commande, le membre,
      * le site, l'éventuel commentaire principal, l'éventuel droit de réponse lié au commentaire principal)
      *
@@ -253,12 +340,8 @@ class QuestionnaireRepository extends EntityRepository
      *
      * @return Questionnaire[]
      */
-    public function infosGeneralesQuestionnaire(
-        Questionnaire $questionnaire,
-        QuestionnaireType $questionnaireType
-    ) {
-        $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;        
-        
+    public function infosGeneralesQuestionnaire(Questionnaire $questionnaire, QuestionnaireType $questionnaireType)
+    {
         $qb = $this->createQueryBuilder('q');
         
         $qb->leftJoin('q.commande', 'c')
@@ -283,14 +366,13 @@ class QuestionnaireRepository extends EntityRepository
             ->addSelect('s')
             ->addSelect('qr_com')
             ->addSelect('ddr')
-            ->setParameter('qid_com', $commentairePrincipal);
+            ->setParameter('qid_com', $questionnaireType->getParametrage()['commentairePrincipal']);
         
         $qb->where('q.id=:id')
            ->setParameter('id', $questionnaire->getId());
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
-    
     
     /**
      * Retourne les informations du questionnaire répondu
@@ -463,10 +545,10 @@ class QuestionnaireRepository extends EntityRepository
 
         return $qb->getQuery()->useQueryCache(true)->getResult();
     }
-    
+
     /**
      * Retourne le questionnaire répondu suivant ou précédent répondant à certains critères
-     * 
+     *
      * @param Site $site Instance de Site
      * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
      * @param string $dateDebut Date de début de la période (peut être vide)
@@ -476,7 +558,7 @@ class QuestionnaireRepository extends EntityRepository
      * @param LivraisonType $livraisonType Instance de LivraisonType. Vaut null si aucun filtre souhaité.
      * @param Questionnaire $questionnaire Instance de Questionnaire
      * @param int $tri Numéro du tri à appliquer
-     * @param $suivant Boolean vaut 1 pour avoir le questionnaire suivant, 0 avoir pour le questionnaire précédent 
+     * @param $suivant Boolean vaut 1 pour avoir le questionnaire suivant, 0 avoir pour le questionnaire précédent
      *
      * @return Questionnaire[]|null instance de questionnaire trouvé ou null si pas de questionnaire trouvé
      */
@@ -492,9 +574,8 @@ class QuestionnaireRepository extends EntityRepository
         $tri,
         $suivant
     ) {
-        $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;
-        $indicateur = isset($questionnaireType->getParametrage()['indicateur']['question_id']) ? $questionnaireType->getParametrage()['indicateur']['question_id'] : null;
-        
+        /***************************** TODO : Duplication de code, il faut mixer avec la requête qui existe déjà sinon c'est une galère à maintenir **************************************/
+
         $qb = $this->createQueryBuilder('q')
             ->leftJoin('q.commande', 'c')
             ->leftJoin('q.membre', 'm')
@@ -511,7 +592,7 @@ class QuestionnaireRepository extends EntityRepository
                 'qr_ind.question = :qid_ind'
             )
             ->leftJoin('qr_ind.reponse', 'r_ind')
-            ->setParameter('qid_com', $commentairePrincipal)
+            ->setParameter('qid_com', $questionnaireType->getParametrage()['commentairePrincipal'])
             ->setParameter('qid_ind', $questionnaireType->getParametrage()['indicateur']['question_id'])
             ->setMaxResults(1);
 
@@ -529,15 +610,15 @@ class QuestionnaireRepository extends EntityRepository
             $listeReponsesIndicateurs,
             $livraisonType
         );
-        
+
         if ($questionnaireType->getParametrage()['recommandation']['question_id']) {
             $qb->leftJoin(
-                    'q.questionnaireReponses',
-                    'qr_reco',
-                    'WITH',
-                    'qr_reco.question = :qid_reco'
-                )->leftJoin('qr_reco.reponse', 'r_reco')
-                ->setParameter('qid_reco', $questionnaireType->getParametrage()['recommandation']['question_id']);
+                'q.questionnaireReponses',
+                'qr_reco',
+                'WITH',
+                'qr_reco.question = :qid_reco'
+            )->leftJoin('qr_reco.reponse', 'r_reco')
+            ->setParameter('qid_reco', $questionnaireType->getParametrage()['recommandation']['question_id']);
         }
 
         $dateReponse = $questionnaire->getDateReponse();
@@ -558,10 +639,10 @@ class QuestionnaireRepository extends EntityRepository
                     $qb->orderBy('c.date', 'DESC');
                 } else {
                     $qb->andWhere('c.date > :dateCommande')
-                        ->setParameter('dateCommande', $dateCommande); 
+                        ->setParameter('dateCommande', $dateCommande);
                     $qb->orderBy('c.date', 'ASC');
                 }
-            } else {   
+            } else {
                 if ($suivant) {
                     $qb->andWhere('q.dateReponse < :dateReponse')
                         ->setParameter('dateReponse', $dateReponse);
@@ -569,10 +650,10 @@ class QuestionnaireRepository extends EntityRepository
                     $qb->addOrderBy('q.dateReponse', 'DESC');
                 } else {
                     $qb->andWhere('q.dateReponse > :dateReponse')
-                        ->setParameter('dateReponse', $dateReponse); 
+                        ->setParameter('dateReponse', $dateReponse);
                     $qb->orderBy('c.date', 'ASC');
                     $qb->addOrderBy('q.dateReponse', 'ASC');
-                }             
+                }
             }
         } elseif ($tri == 1) {
             if ($dateCommande != null) {
@@ -582,7 +663,7 @@ class QuestionnaireRepository extends EntityRepository
                     $qb->orderBy('c.date', 'ASC');
                 } else {
                     $qb->andWhere('c.date < :dateCommande')
-                        ->setParameter('dateCommande', $dateCommande); 
+                        ->setParameter('dateCommande', $dateCommande);
                     $qb->orderBy('c.date', 'DESC');
                 }
             } else {
@@ -593,10 +674,10 @@ class QuestionnaireRepository extends EntityRepository
                     $qb->addOrderBy('q.dateReponse', 'DESC');
                 } else {
                     $qb->andWhere('q.dateReponse > :dateReponse')
-                        ->setParameter('dateReponse', $dateReponse); 
+                        ->setParameter('dateReponse', $dateReponse);
                     $qb->orderBy('c.date', 'ASC');
                     $qb->addOrderBy('q.dateReponse', 'ASC');
-                }  
+                }
             }
         } elseif ($tri == 2 or $tri == 4) { /* ToDo : à revoir si la MOA décide que la pagination doit se faire également sur le tri d'indice de recommandation (tri vaut 4) */
             if ($suivant) {
@@ -621,6 +702,5 @@ class QuestionnaireRepository extends EntityRepository
         }
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
-    } 
-    
+    }
 }

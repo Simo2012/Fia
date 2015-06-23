@@ -33,7 +33,7 @@ class QuestionnaireStructure
     private function completerDonneesQuestionPerso(Question $question)
     {
         $ordreMax = $this->em->getRepository('FIANETSceauBundle:Question')
-            ->maxOrdre($question->getSite(), $question->getQuestionnaireType());
+            ->maxOrdre($question->getSite(), $question->getQuestionnaireTypes()[0]);
         $question->setOrdre($ordreMax + 10);
         $question->setLibelleCourt($question->getLibelle());
         $question->setCache(false);
@@ -46,7 +46,9 @@ class QuestionnaireStructure
         foreach ($question->getReponses() as $reponse) {
             $reponse->setLibelleCourt($reponse->getLibelle());
             $reponse->setOrdre($ordre);
-            $reponse->setActif(true);
+            $reponse->setReponseStatut(
+                $this->em->getRepository('FIANETSceauBundle:ReponseStatut')->activee()
+            );
 
             if ($question->getQuestionType()->getId() != QuestionType::CHOIX_MULTIPLE) {
                 $reponse->setPrecision(false);

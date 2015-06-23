@@ -24,27 +24,15 @@
             </trans-unit>
             <trans-unit id="6">
                 <source>questionnaire_non_envoye</source>
-                <target>
-                    <![CDATA[
-                        This questionnaire has not been, or could not be sent to the user. Sending scheduled for ##DATE_ENVOI##.
-                    ]]>
-                </target>            
+                <target>This questionnaire has not been, or could not be sent to the user. Sending scheduled for %date_envoi%.</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>questionnaire_envoye_non_repondu</source>
-                <target>
-                    <![CDATA[
-                        The questionnaire was sent on ##DATE_ENVOI##, but the user has not responded yet.
-                    ]]>
-                </target>   
+                <target>The questionnaire was sent on %date_envoi%, but the user has not responded yet.</target>
             </trans-unit>                  
             <trans-unit id="8">
                 <source>questionnaire_envoye_delai_depasse</source>
-                <target>
-                    <![CDATA[
-                        The questionnaire was sent on ##DATE_ENVOI##, but the deadline to respond is exceeded.
-                    ]]>
-                </target>      
+                <target>The questionnaire was sent on %date_envoi%, but the deadline to respond is exceeded.</target>
             </trans-unit> 
             <trans-unit id="9">
                 <source>questionnaire_libelle_commentaire_principal</source>

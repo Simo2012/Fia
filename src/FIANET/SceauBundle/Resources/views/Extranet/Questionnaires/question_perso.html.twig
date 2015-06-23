@@ -117,7 +117,7 @@
                 </div>
             {% endif %}
 
-            {{ form_start(form, {'attr' : {'id': 'form_question_perso', 'novalidate': 'novalidate'}}) }}
+            {{ form_start(form, {'attr' : {'id': 'form_question_perso'}}) }}
 
                 <h2>Question</h2>
                 <div>{{ form_label(form.questionType, 'type'|trans) }} : {{ form_widget(form.questionType, {'attr' : {'onchange' : 'changerTypeQuestion(this.value);'}} ) }}</div>

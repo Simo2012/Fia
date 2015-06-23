@@ -12,11 +12,7 @@
             </trans-unit>
             <trans-unit id="2">
                 <source>repondez_directement</source>
-                <target>
-                    <![CDATA[
-                        With the « Right of Reply », reply directly to comments from your customers !
-                    ]]>
-                </target>            
+                <target>With the « Right of Reply », reply directly to comments from your customers !</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>detail_questionnaire_bloc_droit_de_reponse</source>

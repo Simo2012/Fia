@@ -30,13 +30,6 @@ class QuestionnaireType
     private $libelle;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="nbJoursPourRepondre", type="smallint")
-     */
-    private $nbJoursPourRepondre;
-
-    /**
      * @var array
      *
      * @ORM\Column(name="parametrage", type="json_array")
@@ -55,7 +48,7 @@ class QuestionnaireType
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\Question", mappedBy="questionnaireType")
+     * @ORM\ManyToMany(targetEntity="FIANET\SceauBundle\Entity\Question", mappedBy="questionnaireTypes")
      */
     private $questions;
 
@@ -113,29 +106,6 @@ class QuestionnaireType
     public function getLibelle()
     {
         return $this->libelle;
-    }
-
-    /**
-     * Set nbJoursPourRepondre
-     *
-     * @param integer $nbJoursPourRepondre
-     * @return QuestionnaireType
-     */
-    public function setNbJoursPourRepondre($nbJoursPourRepondre)
-    {
-        $this->nbJoursPourRepondre = $nbJoursPourRepondre;
-
-        return $this;
-    }
-
-    /**
-     * Get nbJoursPourRepondre
-     *
-     * @return integer
-     */
-    public function getNbJoursPourRepondre()
-    {
-        return $this->nbJoursPourRepondre;
     }
 
     /**

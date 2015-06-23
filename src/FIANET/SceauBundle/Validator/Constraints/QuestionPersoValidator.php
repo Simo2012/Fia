@@ -47,7 +47,7 @@ class QuestionPersoValidator extends ConstraintValidator
                 } else {
                     $nb = $this->em->getRepository('FIANETSceauBundle:Question')->nbQuestionPersoPourUnePeriode(
                         $question->getSite(),
-                        $question->getQuestionnaireType(),
+                        $question->getQuestionnaireTypes()[0],
                         $question->getDateDebut(),
                         $question->getDateFin()
                     );

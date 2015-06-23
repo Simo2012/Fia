@@ -50,13 +50,6 @@ class Reponse
      */
     private $precision;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="actif", type="boolean")
-     */
-    private $actif;
-
 
     /**
      * @var Question
@@ -72,11 +65,21 @@ class Reponse
      * @ORM\OneToMany(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireReponse", mappedBy="reponse")
      */
     private $questionnaireReponses;
-    
+
+    /**
+     * @var ReponseStatut
+     *
+     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\ReponseStatut")
+     * @ORM\JoinColumn(name="reponseStatut_id", referencedColumnName="id", nullable=false)
+     */
+    private $reponseStatut;
+
+
     public function __construct()
     {
         $this->questionnaireReponses = new ArrayCollection();
     }
+
 
     /**
      * Get id
@@ -184,30 +187,6 @@ class Reponse
     }
 
     /**
-     * Set actif
-     *
-     * @param boolean $actif
-     *
-     * @return Reponse
-     */
-    public function setActif($actif)
-    {
-        $this->actif = $actif;
-
-        return $this;
-    }
-
-    /**
-     * Get actif
-     *
-     * @return boolean
-     */
-    public function getActif()
-    {
-        return $this->actif;
-    }
-
-    /**
      * Set question
      *
      * @param Question $question
@@ -263,5 +242,29 @@ class Reponse
     public function getQuestionnaireReponses()
     {
         return $this->questionnaireReponses;
+    }
+
+    /**
+     * Set reponseStatut
+     *
+     * @param ReponseStatut $reponseStatut
+     *
+     * @return Reponse
+     */
+    public function setReponseStatut(ReponseStatut $reponseStatut)
+    {
+        $this->reponseStatut = $reponseStatut;
+
+        return $this;
+    }
+
+    /**
+     * Get reponseStatut
+     *
+     * @return ReponseStatut
+     */
+    public function getReponseStatut()
+    {
+        return $this->reponseStatut;
     }
 }

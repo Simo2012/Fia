@@ -21,9 +21,17 @@
                 -
             {% endif %}
         </td>
-        {% if parametrageRecommendation.question_id is not null %}<td>{{ questionnaire.recommandation|round(1) }} / {{ questionnaire.recommandationValeurMax|round(1) }}</td>{% endif %}
+        {% if parametrageRecommendation.question_id is not null %}
+            <td>
+                {% if questionnaire.recommandation is not null %}
+                    {{ questionnaire.recommandation|round(1) }} / {{ questionnaire.recommandationValeurMax|round(1) }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        {% endif %}
         <td>
-            <a href="{{ path('extranet_questionnaires_detail_questionnaire', {'id': questionnaire.id}) }}">
+            <a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': questionnaire.id}) }}">
                 <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_detail.png') }}" width="12" height="17" title="{% trans from 'extranet_questionnaires_questionnaires' %}details_questionnaire{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}details_questionnaire{% endtrans %}" />
             </a>
         </td>
