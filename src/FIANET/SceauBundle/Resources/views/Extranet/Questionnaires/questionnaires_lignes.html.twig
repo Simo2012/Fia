@@ -13,7 +13,7 @@
         </td>
         <td>
             {% if questionnaire.commentaire is not empty %}
-                {{ questionnaire.commentaire | truncate(100, true, '') }} {% if  questionnaire.commentaire|length > 100 %}<a href="{{ path('extranet_questionnaires_detail_questionnaire', {'id': questionnaire.id}) }}">[...]</a>{% endif %}
+                {{ questionnaire.commentaire | truncate(100, true, '') }} {% if  questionnaire.commentaire|length > 100 %}<a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': questionnaire.id}) }}">[...]</a>{% endif %}
                 <a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': questionnaire.commentaireID}) }}" class="fleche-droit-reponse">
                     <img src="{{ asset('bundles/fianetsceau/images/extranet/fleche_grise.png') }}" width="18" height="17" title="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" />
                 </a>

@@ -654,15 +654,17 @@ class QuestionnairesController extends Controller
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
 
-        $questionnaireRepondu = $this->get('fianet_sceau.questionnaire_repondu');
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
 
-        /* TODO : à vérifier */
-        if (!$questionnaireRepondu->coherenceArgumentsDetailsQuestionnaire($site, $questionnaire_id)) {
-            throw new Exception('Questionnaire invalide');
+        if (!$this->getDoctrine()->getManager()->getRepository('FIANETSceauBundle:Questionnaire')
+            ->verifierExistenceEtLiaisonAvecSite($questionnaire_id, $site)) {
+            throw new Exception($this->get('translator')->trans('questionnaire_invalide', array(), 'erreurs'));
         }
 
-        $questionnaires = $questionnaireRepondu->recupStructureQuestionnaireAvecReponses($site, $questionnaire_id);
+        $questionnaires = $this->get('fianet_sceau.questionnaire_repondu')
+            ->recupStructureQuestionnaireAvecReponses($site, $questionnaire_id);
+
+        /* TODO : rajouter la pagination */
 
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:detail_questionnaire.html.twig',
@@ -674,138 +676,6 @@ class QuestionnairesController extends Controller
         );
     }
 
-    /**
-     * Affiche la page de détail d'un questionnaire (avis)
-     *
-     * @Route("/questionnaires/detail-questionnaireOLD/{id}", requirements={"id" = "\d+"},
-     *     name="extranet_questionnaires_detail_questionnaireOLD")
-     * @Method({"GET", "POST"})
-     *
-     * @param Request $request Instance de Request
-     * @param int $id Identifiant du questionnaire
-     *
-     * @return Response Instance de Response
-     *
-     * @throws Exception
-     */
-//    public function detailQuestionnaireActionOLD(Request $request, $id)
-//    {
-//        $menu = $this->get('fianet_sceau.extranet.menu');
-//        $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
-//
-//        $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
-//
-//        if (!$this->get('fianet_sceau.questionnaire_repondu')->coherenceArgumentsDetailsQuestionnaire($site, $id)) {
-//            throw new Exception('Questionnaire invalide');
-//        }
-//
-//        $em = $this->getDoctrine()->getManager();
-//
-//        $questionnaire_param = $em->getRepository('FIANETSceauBundle:Questionnaire')->find($id);
-//        $questionnaireType_param = $questionnaire_param->getQuestionnaireType();
-//
-//        /* On récupère les éventuels paramètres de recherche sauvegardés dans les cookies. */
-//        $dateDebut = $request->cookies->get('questionnaires_dateDebut');
-//        $dateFin = $request->cookies->get('questionnaires_dateFin');
-//        $recherche = $request->cookies->get('questionnaires_recherche');
-//        $indicateurs = ($request->cookies->get('questionnaires_indicateurs')) ?
-//            explode('-', $request->cookies->get('questionnaires_indicateurs')) : array();
-//        $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
-//                ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType_param, $indicateurs);
-//
-//        if ($questionnaireType_param->getParametrage()['livraison']) {
-//            if ($request->cookies->get('questionnaires_livraison')) {
-//                $livraisonType = $this->getDoctrine()->getRepository('FIANETSceauBundle:LivraisonType')
-//                    ->find($request->cookies->get('questionnaires_livraison'));
-//            } else {
-//                $livraisonType = null;
-//            }
-//        } else {
-//            $livraisonType = null;
-//        }
-//        $tri = ($request->cookies->get('questionnaires_tri')) ? $request->cookies->get('questionnaires_tri') : 2;
-//
-//        /* ToDo : on devra ajouter/gérer le filtre avec les litiges dans un prochain lot */
-//        $navigation = $this->get('fianet_sceau.questionnaire_repondu')->getNavigation(
-//            $site,
-//            $questionnaireType_param,
-//            $dateDebut,
-//            $dateFin,
-//            $recherche,
-//            $listeReponsesIndicateurs,
-//            $livraisonType,
-//            $questionnaire_param,
-//            $tri
-//        );
-//
-//        $questionnaire = $this->get('fianet_sceau.questionnaire_repondu')
-//            ->getQuestionnairePrincipal($questionnaire_param);
-//        $questionnaireType = $questionnaire->getQuestionnaireType();
-//
-//        // On récupère toutes les informations générales liées au questionnaire
-//        $infosGeneralesQuestionnaire = $em->getRepository('FIANETSceauBundle:Questionnaire')
-//                    ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
-//
-//        // On récupère toutes les informations liées au questionnaire répondu
-//        // 1. Gestion du titre de bloc selon le type du questionnaire
-//        $questionnaireTypeLibelle = $this->get('fianet_sceau.questionnaire_repondu')
-//            ->getLibelleQuestionnaireTypeRepondu($questionnaireType);
-//
-//        // 2. Récupération des questions et réponses (questions communes, questions personnalisées, etc.)
-//        $questionnaireListeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')
-//            ->getAllQuestionsReponses($questionnaire, $questionnaireType);
-//
-//        // 3. On récupère les données du questionnaire lié si ce dernier existe
-//        $questionnaireSuivant = false;
-//        $questionnaireLieSuivant = null;
-//        $questionnaireLieSuivantType = null;
-//        $questionnaireLieSuivantTypeLibelle = null;
-//        $questionnaireLieSuivantListeQuestionsReponses = null;
-//        $infosGeneralesQuestionnaireLieSuivant = null;
-//        $questionnaireLieSuivantMsg = array();
-//
-//        if ($questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant()) {
-//            $questionnaireSuivant = true;
-//            $questionnaireLieSuivantType = $questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant();
-//            $questionnaireLieSuivant = $this->get('fianet_sceau.questionnaire_repondu')
-//                ->getQuestionnaireLieSuivant($questionnaire);
-//
-//            $questionnaireLieSuivantTypeLibelle = $this->get('fianet_sceau.questionnaire_repondu')
-//                ->getLibelleQuestionnaireTypeRepondu($questionnaireLieSuivantType);
-//
-//            if ($questionnaireLieSuivant) {
-//                $questionnaireLieSuivantListeQuestionsReponses = $this->get('fianet_sceau.questionnaire_repondu')
-//                    ->getAllQuestionsReponses($questionnaireLieSuivant, $questionnaireLieSuivantType);
-//                $infosGeneralesQuestionnaireLieSuivant = $em->getRepository('FIANETSceauBundle:Questionnaire')
-//                    ->infosGeneralesQuestionnaire($questionnaireLieSuivant, $questionnaireLieSuivantType);
-//            } else {
-//                $questionnaireLieSuivantMsg = $this->get('fianet_sceau.questionnaire_repondu')
-//                    ->getMsgQuestionnaireLieSuivant($questionnaire);
-//            }
-//
-//        }
-//
-//        $parametrageIndicateur = (isset($questionnaireType->getParametrage()['indicateur'])) ?
-//            $questionnaireType->getParametrage()['indicateur'] : null;
-//
-//        return $this->render(
-//            'FIANETSceauBundle:Extranet/Questionnaires:detail_questionnaire.html.twig',
-//            array(
-//                'questionnaire' => $infosGeneralesQuestionnaire,
-//                'questionnaireTypeLibelle' => $questionnaireTypeLibelle,
-//                'questionnaireListeQuestionsReponses' => $questionnaireListeQuestionsReponses,
-//                'questionnaireSuivant' => $questionnaireSuivant,
-//                'questionnaireLieSuivant' => $infosGeneralesQuestionnaireLieSuivant,
-//                'questionnaireLieSuivantTypeLibelle' => $questionnaireLieSuivantTypeLibelle,
-//                'questionnaireLieSuivantListeQuestionsReponses' => $questionnaireLieSuivantListeQuestionsReponses,
-//                'questionnaireLieSuivantMsg' => $questionnaireLieSuivantMsg,
-//                'navigation' => $navigation,
-//                'parametrageIndicateur' => $parametrageIndicateur,
-//                'urlRedirection' => $this->generateUrl('extranet_questionnaires_questionnaires', array(), true)
-//            )
-//        );
-//    }
-    
     /**
      * Affiche la page avec le formulaire de droit de réponse pour ajout
      *

@@ -16,7 +16,7 @@
 
 {% block extranet_body %}
         {# ToDo : il faudra gérer l'affichage prénom+nom ou adresse e-mail selon le statut du membre - à voir dans le lot lié aux membres #}
-        <h1>{{ 'commun_avis_de'|trans }} {% if questionnaire1.membre.prenom is not empty %}{{ questionnaire1.membre.prenom |capitalize }}{% endif %} {% if questionnaire1.membre.nom is not empty %}{{ questionnaire1.membre.nom |upper }}{% endif %}
+        <h1>{% trans %}commun_avis_de{% endtrans %} {% if questionnaire1.membre.prenom is not empty %}{{ questionnaire1.membre.prenom|capitalize }}{% endif %} {% if questionnaire1.membre.nom is not empty %}{{ questionnaire1.membre.nom |upper }}{% endif %}
             <span>
                 {# navigation #}
             </span>
@@ -25,26 +25,26 @@
         {% if questionnaire1.commande is not null %}
         <div class="block-total">
             <div class="block-total-part1">
-                <h2>{{ 'commun_commande_informations'|trans }} {% if questionnaire1.commande.reference is not empty %}{{ questionnaire1.commande.reference }}{% endif %} {{ 'commun_du'|trans }} {% if questionnaire1.commande.date is not empty %}{{ questionnaire1.commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}{% endif %}</h2>
-                <dt>&nbsp;&nbsp;{% if questionnaire1.commande.prenom is not empty %}{% if questionnaire1.commande.prenom is not empty %}{{ questionnaire1.commande.prenom |capitalize }}{% endif %} {% if questionnaire1.commande.nom is not empty %}{{ questionnaire1.commande.nom |upper }}{% endif %}{% endif %}</dt>
+                <h2>{% trans %}commun_commande_informations{% endtrans %} {{ questionnaire1.commande.reference }} {% trans %}commun_du{% endtrans %} {{ questionnaire1.commande.date|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}</h2>
+                <dt>&nbsp;&nbsp;{% if questionnaire1.commande.prenom is not empty %}{% if questionnaire1.commande.prenom is not empty %}{{ questionnaire1.commande.prenom |capitalize }}{% endif %} {{ questionnaire1.commande.nom |upper }}{% endif %}</dt>
                 <hr />
-                <dt>&nbsp;&nbsp;{% if questionnaire1.commande.email is not empty %}{{ questionnaire1.commande.email }}{% endif %}</dt>
+                <dt>&nbsp;&nbsp;{{ questionnaire1.commande.email }}</dt>
                 <hr />
-                <dd>{{ 'commun_commande_date'|trans }} :</dd>
-                <dt>{% if questionnaire1.commande.date is not empty %}{{ questionnaire1.commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}{% endif %}</dt>
+                <dd>{% trans %}commun_commande_date{% endtrans %} :</dd>
+                <dt>{{ questionnaire1.commande.date|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}</dt>
                 <hr />        
-                <dd>{{ 'commun_questionnaire_envoye_par'|trans }} :</dd>
-                <dt>{% if questionnaire1.site.administrationType.id == 1 %}{{ 'commun_marchand'|trans }}{% else %}FIA-NET{% endif %}</dt> {# ToDo : à revoir quand on fera les demandes de questionnaires via Espace Membre + peut être formulation de "Marchand" à revoir #}
+                <dd>{% trans %}commun_questionnaire_envoye_par{% endtrans %} :</dd>
+                <dt>{% if questionnaire1.site.administrationType.id == 1 %}{% trans %}commun_marchand{% endtrans %}{% else %}FIA-NET{% endif %}</dt> {# ToDo : à revoir quand on fera les demandes de questionnaires via Espace Membre + peut être formulation de "Marchand" à revoir #}
             </div>
             <div class="block-total-part2">
                 <h2>&nbsp;</h2>
-                <dd>{{ 'commun_membre_pseudo'|trans }} :</dd>
+                <dd>{% trans %}commun_membre_pseudo{% endtrans %} :</dd>
                 <dt>{% if questionnaire1.membre.pseudo is not empty %}{{ questionnaire1.membre.pseudo }}{% endif %}</dt>
                 <hr />
-                <dd>{{ 'commun_commande_montant'|trans }} :</dd>
-                <dt>{% if questionnaire1.commande.montant is not empty %}{{ questionnaire1.commande.montant }} &euro;  {% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}</dt>
+                <dd>{% trans %}commun_commande_montant{% endtrans %} :</dd>
+                <dt>{% if questionnaire1.commande.montant is not empty %}{{ questionnaire1.commande.montant }} &euro;{% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}</dt>
                 <hr />
-                <dd>{{ 'commun_commande_site'|trans }} :</dd>
+                <dd>{% trans %}commun_commande_site{% endtrans %} :</dd>
                 <dt>
                 {% if questionnaire1.site is not null %}
                     {% if questionnaire1.site.nom is not empty %}{{ questionnaire1.site.nom }} {% endif %}
@@ -69,7 +69,7 @@
                 </div>
                 {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traduit / ! \ Réfléchir au process #}
                 <p class="reponse">
-                    {{ 'detail_questionnaire_bloc_droit_de_reponse'|trans({}, 'extranet_droit_de_reponse')|raw }}
+                    {% filter raw %}{% trans from 'extranet_droit_de_reponse' %}detail_questionnaire_bloc_droit_de_reponse{% endtrans %}{% endfilter %}
                 </p>
             </div>
         </div>

@@ -37,13 +37,6 @@ class Question
     private $libelleCourt;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="texteSupp", type="string", length=255, nullable=true)
-     */
-    private $texteSupp;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="ordre", type="smallint")
@@ -250,29 +243,6 @@ class Question
     public function getLibelleCourt()
     {
         return $this->libelleCourt;
-    }
-
-    /**
-     * Set texteSupp
-     *
-     * @param string $texteSupp
-     * @return Question
-     */
-    public function setTexteSupp($texteSupp)
-    {
-        $this->texteSupp = $texteSupp;
-
-        return $this;
-    }
-
-    /**
-     * Get texteSupp
-     *
-     * @return string
-     */
-    public function getTexteSupp()
-    {
-        return $this->texteSupp;
     }
 
     /**

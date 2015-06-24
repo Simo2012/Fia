@@ -249,7 +249,8 @@ class QuestionnaireRepository extends EntityRepository
      * - les questions globales illimitées
      * - les questions globales limitées dans le temps
      * - les questions personnalisées.
-     * Le QueryBuilder passé en argument doit contenir un alias "question" de l'entité Question.
+     * Le QueryBuilder passé en argument doit contenir un alias "q" pour l'entité Questionnaire et un alias "question"
+     * pour l'entité Question.
      *
      * @param QueryBuilder $qb Instance de QueryBuilder
      * @param Site $site Instance de Site
@@ -265,15 +266,15 @@ class QuestionnaireRepository extends EntityRepository
                     $qb->expr()->orX(
                         'question.dateDebut IS NULL',
                         $qb->expr()->andX(
-                            'question.dateDebut <= CURRENT_DATE()',
-                            'question.dateFin >= CURRENT_DATE()'
+                            'question.dateDebut <= q.dateReponse',
+                            'question.dateFin >= q.dateReponse'
                         )
                     )
                 ),
                 $qb->expr()->andX(
                     'question.site = :sid',
-                    'question.dateDebut <= CURRENT_DATE()',
-                    'question.dateFin >= CURRENT_DATE()'
+                    'question.dateDebut <= q.dateReponse',
+                    'question.dateFin >= q.dateReponse'
                 )
             )
         )->setParameter('sid', $site->getId())
@@ -371,29 +372,7 @@ class QuestionnaireRepository extends EntityRepository
         $qb->where('q.id=:id')
            ->setParameter('id', $questionnaire->getId());
         
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
-    }
-    
-    /**
-     * Retourne les informations du questionnaire répondu
-     *
-     * @param Questionnaire $questionnaire Instance de Questionnaire
-     *
-     * @return Questionnaire[]
-     */
-    public function infosDetailsQuestionnaire(
-        Questionnaire $questionnaire
-    ) {
-        $qb = $this->createQueryBuilder('q');
-         
-        $qb
-            ->leftJoin('q.site', 's')
-            ->addSelect('s')
-            ->where('q.id=:id')
-            ->setParameter('id', $questionnaire->getId())
-            ->andWhere('q.dateReponse IS NOT NULL');
-
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
+        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult(); // TODO vérifier le cache
     }
 
     /**
@@ -574,7 +553,8 @@ class QuestionnaireRepository extends EntityRepository
         $tri,
         $suivant
     ) {
-        /***************************** TODO : Duplication de code, il faut mixer avec la requête qui existe déjà sinon c'est une galère à maintenir **************************************/
+        /***************************** TODO : Duplication de code, il faut mixer avec la requête qui existe déjà
+         * sinon c'est une galère à maintenir **************************************/
 
         $qb = $this->createQueryBuilder('q')
             ->leftJoin('q.commande', 'c')
@@ -629,7 +609,8 @@ class QuestionnaireRepository extends EntityRepository
             $dateCommande = null;
         }
         
-        /* ToDo : à revoir lorsqu'on fera le lot des questionnaires hors flux XML (gestion lorsqu'il n'y a pas de date de commande) */
+        /* ToDo : à revoir lorsqu'on fera le lot des questionnaires hors flux XML (gestion lorsqu'il n'y a pas de
+         date de commande) */
         
         if ($tri == 0) {
             if ($dateCommande != null) {
@@ -679,17 +660,21 @@ class QuestionnaireRepository extends EntityRepository
                     $qb->addOrderBy('q.dateReponse', 'ASC');
                 }
             }
-        } elseif ($tri == 2 or $tri == 4) { /* ToDo : à revoir si la MOA décide que la pagination doit se faire également sur le tri d'indice de recommandation (tri vaut 4) */
+        } elseif ($tri == 2 or $tri == 4) {
+         /* ToDo : à revoir si la MOA décide que la pagination doit se faire également sur le tri d'indice de
+          recommandation (tri vaut 4) */
             if ($suivant) {
                 $qb->andWhere('q.dateReponse < :dateReponse')
                     ->setParameter('dateReponse', $dateReponse);
                 $qb->orderBy('q.dateReponse', 'DESC');
             } else {
                 $qb->andWhere('q.dateReponse > :dateReponse')
-                    ->setParameter('dateReponse', $dateReponse); 
+                    ->setParameter('dateReponse', $dateReponse);
                 $qb->orderBy('q.dateReponse', 'ASC');
             }
-        } elseif ($tri == 3 or $tri == 5) { /* ToDo : à revoir si la MOA décide que la pagination doit se faire également sur le tri d'indice de recommandation (tri vaut 5) */
+        } elseif ($tri == 3 or $tri == 5) {
+        /* ToDo : à revoir si la MOA décide que la pagination doit se faire également sur le tri d'indice de
+         recommandation (tri vaut 5) */
             if ($suivant) {
                 $qb->andWhere('q.dateReponse > :dateReponse')
                     ->setParameter('dateReponse', $dateReponse);
@@ -702,5 +687,28 @@ class QuestionnaireRepository extends EntityRepository
         }
         
         return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
+    }
+
+    /**
+     * Permet de savoir si un questionnaire actif existe bien à partir de son identifiant et s'il est bien relié au site
+     * passé en argument.
+     *
+     * @param int $questionnaire_id Identifiant du questionnaire
+     * @param Site $site Instance de Site
+     *
+     * @return array Si ok retourne un tableau conteant "1" sinon retourne un tableau vide
+     */
+    public function verifierExistenceEtLiaisonAvecSite($questionnaire_id, Site $site)
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb->select('1')
+            ->innerJoin('q.site', 's', 'WITH', 's.id = :sid')
+            ->setParameter('sid', $site->getId())
+            ->where('q.id = :id')
+            ->setParameter('id', $questionnaire_id)
+            ->andWhere('q.actif = true');
+
+        return $qb->getQuery()->useQueryCache(true)->getScalarResult();
     }
 }

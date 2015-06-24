@@ -17,10 +17,7 @@ class QuestionnaireRepondu
     {
         $this->em = $em;
     }
-
-    /************* TODO : contrôler la logique de la succession des fonctions verifier...().
-     * Ne peut-on pas fusionner le tout ? *****************/
-
+    
     /**
      * Méthode qui permet de savoir si un Questionnaire existe bien et qu'il est actif
      *
@@ -113,6 +110,7 @@ class QuestionnaireRepondu
      */
     public function coherenceArgumentsDroitDeReponse(Site $site, $questionnaire_id, $questionnaireReponse_id)
     {
+        /* TODO : optimiser la vérification du droit de réponse (trop de requêtes) */
         if ($this->verifierValiditeQuestionnaire($questionnaire_id)) {
             $questionnaire = $this->em
                 ->getRepository('FIANETSceauBundle:Questionnaire')
@@ -165,122 +163,6 @@ class QuestionnaireRepondu
     }
 
     /**
-     * Méthode qui permet de savoir si les arguments donnés pour l'appel d'affichage des détails d'un questionnaire
-     * sont cohérents.
-     *
-     * @param Site $site Instance de Site
-     * @param integer $questionnaire_id Identifiant du Questionnaire
-     *
-     * @return Boolean true s'il y a cohérence
-     */
-    public function coherenceArgumentsDetailsQuestionnaire(Site $site, $questionnaire_id)
-    {
-        if ($this->verifierValiditeQuestionnaire($questionnaire_id)) {
-            $questionnaire = $this->em
-                ->getRepository('FIANETSceauBundle:Questionnaire')
-                ->find($questionnaire_id);
-
-            if ($this->coherenceQuestionnaireVsSite($questionnaire, $site)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Méthode qui permet de retourner toutes les questions d'un questionnaire répondu
-     *
-     * @param Questionnaire $questionnaire Instance de Questionnaire
-     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
-     *
-     * @return Array $listeQuestionsReponses tableau contenant l'ensemble des questions et réponses du questionnaire
-     *
-     * @throw Exception Le QuestionnaireType ne possède pas de question
-     */
-//    public function getAllQuestionsReponses(Questionnaire $questionnaire, QuestionnaireType $questionnaireType)
-//    {
-//
-//        $oQuestions = $this->em->getRepository('FIANETSceauBundle:Question')->getAllQuestionsOrdered($questionnaireType);
-//
-//        if (!$oQuestions) {
-//            throw new Exception('Le type de questionnaire n°' . $questionnaireType->getId() . ' ne possède pas de question');
-//        }
-//
-//        $listeQuestionsReponses = array();
-//
-//        $i = 0;
-//
-//        foreach ($oQuestions as $question) {
-//            $listeQuestionsReponses[$i]['question'] = $question;
-//
-//            $commentairePrincipal = isset($questionnaireType->getParametrage()['commentairePrincipal']) ? $questionnaireType->getParametrage()['commentairePrincipal'] : null;
-//
-//            $listeQuestionsReponses[$i]['commentairePrincipal'] = ($commentairePrincipal != null && $question->getId() == $commentairePrincipal) ? true : false;
-//
-//            $listeQuestionsReponses[$i]['questionPrimaire'] = $question->getQuestionPrimaire();
-//            $listeQuestionsReponses[$i]['questionsSecondaires'] = $question->getQuestionsSecondaires();
-//
-//            $listeQuestionsReponses[$i]['cacher'] = false;
-//
-//            $influenceFianet = isset($questionnaireType->getParametrage()['influenceFianet']) ? $questionnaireType->getParametrage()['influenceFianet'] : null;
-//
-//            /* ToDo : condition à revoir car la question sur l'influence de FIA-NET devrait peut-être être visible sur d'autres interfaces (à voir selon les specs des autres lots...) */
-//            if ($influenceFianet != null && $question->getId() == $influenceFianet) {
-//                $listeQuestionsReponses[$i]['cacher'] = true;
-//            } else {
-//
-//                $listeQuestionsReponses[$i]['reponses'] = $this->getListeReponses($questionnaire, $question);
-//
-//                $nbReponses = 0;
-//                foreach ($listeQuestionsReponses[$i]['reponses'] as $reponse) {
-//                    if (is_object($reponse->getQuestionnaireReponses()[0])) {
-//                        $nbReponses++;
-//                    }
-//                }
-//
-//                /* Si la question n'est pas cachée par défaut et que l'internaute n'y a pas répondu; on indique le message "Pas de réponse à cette question" */
-//                if ($question->getCache() == false && $nbReponses == 0) {
-//                    $listeQuestionsReponses[$i]['questionRepondue'] = false;
-//                } else {
-//                    $listeQuestionsReponses[$i]['questionRepondue'] = true;
-//
-//                    if ($question->getCache() == true) {
-//
-//                        /* Si la question ou réponse liée a été répondue on affichera la question étudiée */
-//                        $listeQuestionsReponses[$i]['cacher'] = true;
-//                        $reponseLieeRepondue = null;
-//                        $questionLieeRepondue = null;
-//
-//                        if ($question->getVisible()['reponse_id'] && is_numeric($question->getVisible()['reponse_id'])) {
-//                            $reponseLieeRepondue = $this->em
-//                                ->getRepository('FIANETSceauBundle:QuestionnaireReponse')
-//                                ->findOneBy(array('reponse' => $question->getVisible()['reponse_id'], 'questionnaire' => $questionnaire));
-//
-//                            if ($reponseLieeRepondue != null) $listeQuestionsReponses[$i]['cacher'] = false;
-//                        } else {
-//                            if ($question->getVisible()['question_id'] && is_numeric($question->getVisible()['question_id'])) {
-//                                $questionLieeRepondue = $this->em
-//                                    ->getRepository('FIANETSceauBundle:QuestionnaireReponse')
-//                                    ->findOneBy(array('question' => $question->getVisible()['question_id'], 'questionnaire' => $questionnaire));
-//
-//                                if ($questionLieeRepondue != null) $listeQuestionsReponses[$i]['cacher'] = false;
-//                            }
-//                        }
-//
-//                    }
-//
-//                }
-//
-//            }
-//
-//            $i++;
-//        }
-//
-//        return $listeQuestionsReponses;
-//    }
-
-    /**
      * Retourne un tableau contenant le questionnaire suivant et/ou précédent à afficher selon certains critères
      *
      * @param Site $site Instance de Site
@@ -308,6 +190,7 @@ class QuestionnaireRepondu
     ) {
         $navigation = array();
 
+        /* TODO : à revoir */
         $navigation['precedent'] = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
             ->getQuestionnaireReponduNavigation(
                 $site,
@@ -355,6 +238,36 @@ class QuestionnaireRepondu
     }
 
     /**
+     * Cette méthode autorise l'affichage des questions cachées si les questions et réponses dont elles dépendent ont
+     * été répondues. La structure du questionnaire passé en argument est directement modifiée.
+     *
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     */
+    private function gestionAffichageQuestionCachee(Questionnaire $questionnaire)
+    {
+        $questions = $questionnaire->getQuestionnaireType()->getQuestions();
+
+        foreach ($questions as &$question) {
+            if ($question->getCache()) {
+                foreach ($questions as $questionATester) {
+                    if ($questionATester->getId() == $question->getVisible()['question_id']) {
+                        foreach ($questionATester->getReponses() as $reponse) {
+                            if (in_array($reponse->getId(), $question->getVisible()['reponse_id'])
+                                && count($reponse->getQuestionnaireReponses()) != 0
+                            ) {
+                                $question->setCache(false);
+                                break;
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Retourne l'ensemble de la structure d'un questionnaire avec ses réponses répondues. Si ce questionnaire est lié à
      * un 2ème questionnaire, il est également récupéré.
      *
@@ -395,8 +308,11 @@ class QuestionnaireRepondu
                 ->structureQuestionnaireAvecReponses($site, $questionnaire2_id);
         }
 
+        $this->gestionAffichageQuestionCachee($questionnaire1);
         $this->remplacerVariablesDansLibelles($questionnaire1);
+
         if ($questionnaire2) {
+            $this->gestionAffichageQuestionCachee($questionnaire2);
             $this->remplacerVariablesDansLibelles($questionnaire2);
         }
 

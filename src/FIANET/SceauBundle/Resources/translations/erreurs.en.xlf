@@ -10,6 +10,10 @@
                 <source>probleme_technique</source>
                 <target>A technical problem has occured. Thanks for re-trying or contacting the technical service if the problem persists.</target>
             </trans-unit>
+            <trans-unit id="2">
+                <source>questionnaire_invalide</source>
+                <target>Questionnaire is not valid.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
