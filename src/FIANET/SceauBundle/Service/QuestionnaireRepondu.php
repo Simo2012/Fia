@@ -123,7 +123,6 @@ class QuestionnaireRepondu
                         ->find($questionnaireReponse_id);
 
                     if ($this->coherenceQuestionnaireVsQuestionnaireReponse($questionnaire, $questionnaireReponse)) {
-                        dump($questionnaire_id);
                         return true;
                     }
                 }

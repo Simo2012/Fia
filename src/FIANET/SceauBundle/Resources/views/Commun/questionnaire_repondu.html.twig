@@ -1,6 +1,17 @@
 {% trans_default_domain 'commun' %}
 
+{% import _self as macros %}
+
 {% set commentairePrincipal = null %} {# Permet de récupérer le commentaire principal où un droit de réponse a été exercé #}
+
+{% macro afficherCommentaire(question, idCommentairePrincipal) %}
+    {% if question.id == idCommentairePrincipal %}
+        <p class="question">{% trans from 'commun_questionnaires_repondus' %}questionnaire_libelle_commentaire_principal{% endtrans %}</p>
+        <div class="area"><div>{{ question.reponses[0].questionnaireReponses[0].commentaire }}</div></div>
+    {% else %}
+        <p class="reponse">{{ question.reponses[0].questionnaireReponses[0].commentaire }}</p>
+    {% endif %}
+{% endmacro %}
 
 <h2>{% trans %}commun_date_reponse{% endtrans %} - {% trans %}commun_le{% endtrans %} {{ questionnaire.dateReponse|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire.dateReponse|localizeddate('none', 'short') }}</h2>
 
@@ -48,19 +59,27 @@
         {% elseif question.questionType.id == 4 %}
             {% if question.reponses[0].questionnaireReponses is not empty %}
                 {% set questionRepondue = true %}
-
                 {% if question.id == questionnaire.questionnaireType.parametrage.commentairePrincipal %}
                     {% set commentairePrincipal = question.reponses[0].questionnaireReponses[0] %}
-
-                    <p class="question">{% trans from 'commun_questionnaires_repondus' %}questionnaire_libelle_commentaire_principal{% endtrans %}</p>
-                    <div class="area"><div>{{ question.reponses[0].questionnaireReponses[0].commentaire }}</div></div>
-                {% else %}
-                    <p class="reponse">{{ question.reponses[0].questionnaireReponses[0].commentaire }}</p>
                 {% endif %}
+
+                {{ macros.afficherCommentaire(question, questionnaire.questionnaireType.parametrage.commentairePrincipal) }}
+            {% endif %}
+
+        {# etoile + commentaire #}
+        {% elseif question.questionType.id == 6 %}
+            {% if question.reponses[0].questionnaireReponses is not empty %}
+                {% set questionRepondue = true %}
+                {% if question.id == questionnaire.questionnaireType.parametrage.commentairePrincipal %}
+                    {% set commentairePrincipal = question.reponses[0].questionnaireReponses[0] %}
+                {% endif %}
+
+                <p class="reponse">
+                    {{ question.reponses[0].libelle }} : {{ question.reponses[0].questionnaireReponses[0].note|round(1) }}/{{ question.valeurmax|round(0) }}
+                </p>
+                {{ macros.afficherCommentaire(question, questionnaire.questionnaireType.parametrage.commentairePrincipal) }}
             {% endif %}
         {% endif %}
-
-        {# TODO : etoile #}
 
         {% if questionRepondue == false %}
             <p class="reponse">{% trans from 'commun_questionnaires_repondus' %}questionnaire_question_pas_de_reponse{% endtrans %}</p>

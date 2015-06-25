@@ -1,11 +1,11 @@
 {% trans_default_domain 'notes' %}
 
-{% if indicateurReponseID is not empty %}
-    {% if indicateurReponseID in parametrageIndicateur.vert %}
+{% if parametrage.indicateur.type == 'reponse_id' and indicateurReponseID is not empty %}
+    {% if indicateurReponseID in parametrage.indicateur.vert %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-vert.png' %}
         <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_vert{% endtrans %}" title="{% trans %}notes_indicateur_vert{% endtrans %}" />
         {% endimage %}
-    {% elseif indicateurReponseID in parametrageIndicateur.jaune%}
+    {% elseif indicateurReponseID in parametrage.indicateur.jaune %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-jaune.png' %}
         <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
         {% endimage %}
@@ -14,12 +14,12 @@
         <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_rouge{% endtrans %}" title="{% trans %}notes_indicateur_rouge{% endtrans %}" />
         {% endimage %}
     {% endif %}
-{% elseif indicateurNote is not empty %}
-    {% if indicateurNote >= indicateurNote.vert.min %}
+{% elseif parametrage.indicateur.type == 'note' and indicateurNote is not empty %}
+    {% if indicateurNote >= parametrage.indicateur.vert.min %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-vert.png' %}
         <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_vert{% endtrans %}" title="{% trans %}notes_indicateur_vert{% endtrans %}" />
         {% endimage %}
-    {% elseif indicateurNote >= parametrageIndicateur.jaune.min %}
+    {% elseif indicateurNote >= parametrage.indicateur.jaune.min %}
         {% image '@FIANETSceauBundle/Resources/public/images/indicateur-jaune.png' %}
         <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
         {% endimage %}

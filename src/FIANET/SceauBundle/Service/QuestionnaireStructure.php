@@ -2,15 +2,10 @@
 
 namespace FIANET\SceauBundle\Service;
 
-use DateTime;
+use DateInterval;
 use Doctrine\ORM\EntityManager;
-use Exception;
-use FIANET\SceauBundle\Entity\Langue;
 use FIANET\SceauBundle\Entity\Question;
-use FIANET\SceauBundle\Entity\QuestionnaireType;
 use FIANET\SceauBundle\Entity\QuestionType;
-use FIANET\SceauBundle\Entity\Relance;
-use FIANET\SceauBundle\Entity\Site;
 
 /**
  * Service qui permet de gérer les structures des types de questionnaire (création de questions/réponses, etc).
@@ -40,6 +35,7 @@ class QuestionnaireStructure
         $question->setQuestionStatut(
             $this->em->getRepository('FIANETSceauBundle:QuestionStatut')->enAttenteValidation()
         );
+        $question->setDateFin($question->getDateFin()->add(new DateInterval('P1D')));
         $question->setPage(1); // TODO : à revoir si on conserve cette info
 
         $ordre = 0;

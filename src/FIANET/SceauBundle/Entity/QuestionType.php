@@ -17,6 +17,7 @@ class QuestionType
     const NOTATION = 3;
     const COMMENTAIRE = 4;
     const ETOILE = 5;
+    const ETOILE_COMMENTAIRE = 6;
 
     /**
      * @var integer

@@ -25,7 +25,7 @@
         {% if questionnaire1.commande is not null %}
         <div class="block-total">
             <div class="block-total-part1">
-                <h2>{% trans %}commun_commande_informations{% endtrans %} {{ questionnaire1.commande.reference }} {% trans %}commun_du{% endtrans %} {{ questionnaire1.commande.date|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}</h2>
+                <h2>{% trans %}commun_commande_informations{% endtrans %} {% if questionnaire1.commande.reference is not empty %}{{ questionnaire1.commande.reference }}{% endif %} {% trans %}commun_du{% endtrans %} {{ questionnaire1.commande.date|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}</h2>
                 <dt>&nbsp;&nbsp;{% if questionnaire1.commande.prenom is not empty %}{% if questionnaire1.commande.prenom is not empty %}{{ questionnaire1.commande.prenom |capitalize }}{% endif %} {{ questionnaire1.commande.nom |upper }}{% endif %}</dt>
                 <hr />
                 <dt>&nbsp;&nbsp;{{ questionnaire1.commande.email }}</dt>
@@ -38,20 +38,22 @@
             </div>
             <div class="block-total-part2">
                 <h2>&nbsp;</h2>
-                <dd>{% trans %}commun_membre_pseudo{% endtrans %} :</dd>
-                <dt>{% if questionnaire1.membre.pseudo is not empty %}{{ questionnaire1.membre.pseudo }}{% endif %}</dt>
-                <hr />
-                <dd>{% trans %}commun_commande_montant{% endtrans %} :</dd>
-                <dt>{% if questionnaire1.commande.montant is not empty %}{{ questionnaire1.commande.montant }} &euro;{% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}</dt>
+                {% if questionnaire1.membre.pseudo is not empty %}
+                    <dd>{% trans %}commun_membre_pseudo{% endtrans %} :</dd>
+                    <dt>{{ questionnaire1.membre.pseudo }}</dt>
+                {% endif %}
+                {% if questionnaire1.commande.montant is not empty %}
+                    <hr />
+                    <dd>{% trans %}commun_commande_montant{% endtrans %} :</dd>
+                    <dt>{{ questionnaire1.commande.montant }} &euro; {# ToDo : on devra éventuellement gérer les devises pour les montants #}</dt>
+                {% endif %}
                 <hr />
                 <dd>{% trans %}commun_commande_site{% endtrans %} :</dd>
                 <dt>
-                {% if questionnaire1.site is not null %}
-                    {% if questionnaire1.site.nom is not empty %}{{ questionnaire1.site.nom }} {% endif %}
-                {% endif %}
-                {% if questionnaire1.sousSite is not null %}
-                    - {% if questionnaire1.sousSite.nom is not empty %}{{ questionnaire1.sousSite.nom }} {% endif %}
-                {% endif %} 
+                    {{ questionnaire1.site.nom }}
+                    {% if questionnaire1.sousSite is not null %}
+                        - {% if questionnaire1.sousSite.nom is not empty %}{{ questionnaire1.sousSite.nom }} {% endif %}
+                    {% endif %}
                 </dt>            
             </div>
         </div>
@@ -63,16 +65,18 @@
             {% include 'FIANETSceauBundle:Commun:questionnaire_repondu.html.twig' with {'questionnaire': questionnaire1, 'afficherDroitDeReponse': true} only %}
         </div>
 
-        <div class="block-total-part3">
-            <div class="block-info-rep">
-                <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59" />
+        {% if parametrage.droitDeReponse %}
+            <div class="block-total-part3">
+                <div class="block-info-rep">
+                    <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59" />
+                    </div>
+                    {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traduit / ! \ Réfléchir au process #}
+                    <p class="reponse">
+                        {% filter raw %}{% trans from 'extranet_droit_de_reponse' %}detail_questionnaire_bloc_droit_de_reponse{% endtrans %}{% endfilter %}
+                    </p>
                 </div>
-                {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traduit / ! \ Réfléchir au process #}
-                <p class="reponse">
-                    {% filter raw %}{% trans from 'extranet_droit_de_reponse' %}detail_questionnaire_bloc_droit_de_reponse{% endtrans %}{% endfilter %}
-                </p>
             </div>
-        </div>
+        {% endif %}
     </div>
 
     {% if questionnaire2 %}

@@ -53,7 +53,7 @@
                 
                 <div class="block-total-part1-2b">
                     <h2>{{ 'commun_questionnaire_commentaire'|trans }}</h2>
-                    <p>{{ include('FIANETSceauBundle:Extranet/Commun:indicateur.html.twig', {'indicateurReponseID': infosGeneralesQuestionnaire[0].questionnaireReponses[0].reponse.id, 'indicateurNote': null}) }}&nbsp;&nbsp;{% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }}</p>
+                    <p>{% include 'FIANETSceauBundle:Extranet/Commun:indicateur.html.twig' with {'parametrage': parametrage, 'indicateurReponseID': infosGeneralesQuestionnaire[0].questionnaireReponses[0].reponse.id, 'indicateurNote': null} only %}&nbsp;&nbsp;{% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }}</p>
                     <br />
                     <br />
                     <p class="commentaire">{{ questionnaireReponse.commentaire|raw }}</p>

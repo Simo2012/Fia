@@ -8,10 +8,9 @@ use Exception;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
 use FIANET\SceauBundle\Entity\Langue;
 use FIANET\SceauBundle\Entity\Question;
+use FIANET\SceauBundle\Entity\QuestionType;
 use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
-use FIANET\SceauBundle\Form\Type\QuestionPersoType;
-use FIANET\SceauBundle\Form\Type\QuestionType;
 use FIANET\SceauBundle\Form\Type\RelanceType;
 use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
 use FIANET\SceauBundle\Form\Type\SelectLangueType;
@@ -106,7 +105,7 @@ class QuestionnairesController extends Controller
             $site = $request->getSession()->get('siteSelectionne');
 
             $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
-                ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
+                ->listeReponsesIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
 
             $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->nbTotalQuestionnaires(
@@ -152,10 +151,7 @@ class QuestionnairesController extends Controller
                 'recherche' => $recherche,
                 'indicateurs' => implode('-', $indicateurs),
                 'livraison' => $livraison,
-                'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
-                'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation'],
-                'parametrageLibelleCommandeDate' => $questionnaireType->getParametrage()['libelleCommandeDate'],
-                'parametrageLivraison' => $questionnaireType->getParametrage()['livraison'],
+                'parametrage' => $questionnaireType->getParametrage(),
                 'urlRedirection' => $this->generateUrl('extranet_questionnaires_questionnaires', array(), true)
             )
         );
@@ -225,7 +221,7 @@ class QuestionnairesController extends Controller
             }
 
             $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
-                ->getReponsesIDIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
+                ->listeReponsesIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
 
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->listeQuestionnaires(
@@ -246,8 +242,7 @@ class QuestionnairesController extends Controller
                 array(
                     'questionnaires' => $questionnaires,
                     'offset' => $request->request->get('offset', 0),
-                    'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
-                    'parametrageRecommendation' => $questionnaireType->getParametrage()['recommandation']
+                    'parametrage' => $questionnaireType->getParametrage()
                 )
             );
 
@@ -270,11 +265,11 @@ class QuestionnairesController extends Controller
      * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
-     * @param \FIANET\SceauBundle\Entity\QuestionType $questionType
+     * @param QuestionType $questionType
      *
      * @return RedirectResponse|Response Instance de Response ou RedirectResponse
      */
-    public function questionPersoAction(Request $request, \FIANET\SceauBundle\Entity\QuestionType $questionType = null)
+    public function questionPersoAction(Request $request, QuestionType $questionType = null)
     {
         $elementMenu = $this->get('fianet_sceau.extranet.menu')
             ->getChild('questionnaires')->getChild('questionnaires.questions_personnalisees');
@@ -671,6 +666,7 @@ class QuestionnairesController extends Controller
             array(
                 'questionnaire1' => $questionnaires['questionnaire1'],
                 'questionnaire2' => $questionnaires['questionnaire2'],
+                'parametrage' => $questionnaires['questionnaire1']->getQuestionnaireType()->getParametrage(),
                 'urlRedirection' => $this->generateUrl('extranet_questionnaires_questionnaires')
             )
         );
@@ -715,18 +711,14 @@ class QuestionnairesController extends Controller
         $droitDeReponse = new DroitDeReponse();
         $formBuilder = $this->get('form.factory')->createBuilder('form', $droitDeReponse);
 
-        $formBuilder
-                ->add('commentaire', 'textarea', array(
-                    'trim' => true))
-                ->add('valider', 'submit')
-        ;
+        $formBuilder->add('commentaire', 'textarea', array('trim' => true))
+                ->add('valider', 'submit');
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
-        $em = $this->getDoctrine()->getManager();
-        
-        // ToDo : il faudra effectuer des checks complets de saisie par la suite (trim, nombre de caractères minimum, mots interdits, mots longs, caractères répétés, etc.)
+        // ToDo : il faudra effectuer des checks complets de saisie par la suite (trim, nombre de caractères minimum,
+        // mots interdits, mots longs, caractères répétés, etc.)
         if ($form->isValid()) {
             $droitDeReponse->setQuestionnaireReponse($questionnaireReponse);
 
@@ -752,7 +744,7 @@ class QuestionnairesController extends Controller
                 'form' => $form->createView(),
                 'infosGeneralesQuestionnaire' => $infosGeneralesQuestionnaire,
                 'questionnaireReponse' => $questionnaireReponse,
-                'parametrageIndicateur' => $questionnaireType->getParametrage()['indicateur'],
+                'parametrage' => $questionnaireType->getParametrage(),
                 'urlRedirection' => $this->generateUrl(
                     'extranet_questionnaires_detail_questionnaire',
                     array('questionnaire_id' => $qid)

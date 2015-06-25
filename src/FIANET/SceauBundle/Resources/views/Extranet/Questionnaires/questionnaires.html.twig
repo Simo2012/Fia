@@ -45,7 +45,7 @@
                         <button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
                     </li><br />
                     <br />
-                    {% if not parametrageLivraison %}
+                    {% if not parametrage.livraison %}
                         {% do  form.livraison.setRendered %}
                     {% else %}
                         <li>
@@ -96,7 +96,7 @@
             <tr>
                 <th>{% trans from 'notes' %}notes_indicateur{% endtrans %}</th>
                 <th>
-                    {{ parametrageLibelleCommandeDate|trans({}, 'commun') }}
+                    {{ parametrage.libelleCommandeDate|trans({}, 'commun') }}
                     {% if tri == 1 %}
                         <a onclick="selectTriQuestionnaires(0);" class="pointeur">
                             <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_trie_asc.png') }}" width="12" height="8" title="{% trans %}tri_croissant{% endtrans %}" alt="{% trans %}tri_croissant{% endtrans %}" />
@@ -125,7 +125,7 @@
                 <th>
                     {% trans from 'commun' %}commun_verbatim{% endtrans %}
                 </th>
-                {% if parametrageRecommendation.question_id is not null %}
+                {% if parametrage.recommandation is not null %}
                     <th>
                         {% trans from 'notes' %}notes_indice_recommandation{% endtrans %}
                         {% if tri == 5 %}
@@ -141,7 +141,7 @@
                 {% endif %}
                 <th>{% trans from 'commun' %}commun_details{% endtrans %}</th>
             </tr>
-            {{ include('FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig', {'questionnaires': questionnaires, 'parametrageIndicateur': parametrageIndicateur, 'parametrageRecommendation': parametrageRecommendation}) }}
+            {% include 'FIANETSceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig' %}
         </table>
 
         <div id="chargement"><img src="{{ asset('bundles/fianetsceau/images/ajax-loader.gif') }}" alt="{% trans from 'commun' %}commun_chargement{% endtrans %}" /></div>

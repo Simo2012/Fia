@@ -46,7 +46,7 @@ class QuestionnaireRepository extends EntityRepository
 
         if ($dateFin != '') {
             $qb->andWhere('q.dateReponse <= :dateFin')
-                ->setParameter('dateFin', $dateFin);
+                ->setParameter('dateFin', date('Y-m-d', strtotime($dateFin . ' + 1 day')));
         }
 
         // TODO il faudra éventuellement indexer ces colonnes, sinon ça risque de bouffer un max de ressource
@@ -62,14 +62,37 @@ class QuestionnaireRepository extends EntityRepository
         }
 
         if ($listeReponsesIndicateurs['reponses']) {
-            if ($listeReponsesIndicateurs['nullable']) {
-                $qb->andWhere($qb->expr()->orX(
-                    $qb->expr()->in('r_ind.id', $listeReponsesIndicateurs['reponses']),
-                    'r_ind.id IS NULL'
-                ));
+            if ($questionnaireType->getParametrage()['indicateur']['type'] == 'reponse_id') {
+                if ($listeReponsesIndicateurs['nullable']) {
+                    $qb->andWhere($qb->expr()->orX(
+                        $qb->expr()->in('r_ind.id', $listeReponsesIndicateurs['reponses']),
+                        'r_ind.id IS NULL'
+                    ));
+
+                } else {
+                    $qb->andWhere($qb->expr()->in('r_ind.id', $listeReponsesIndicateurs['reponses']));
+                }
 
             } else {
-                $qb->andWhere($qb->expr()->in('r_ind.id', $listeReponsesIndicateurs['reponses']));
+                $filtresNote = '';
+                for ($i = 0; $i < count($listeReponsesIndicateurs['reponses']); $i++) {
+                    if ($i != 0) {
+                        $filtresNote .= 'OR ';
+                    }
+
+                    $filtresNote .= '(qr_ind.note >=' . $listeReponsesIndicateurs['reponses'][$i]['min'] .
+                        ' AND qr_ind.note <= ' . $listeReponsesIndicateurs['reponses'][$i]['max'] . ')';
+                }
+
+                if ($listeReponsesIndicateurs['nullable']) {
+                    $qb->andWhere($qb->expr()->orX(
+                        $qb->expr()->andX($filtresNote),
+                        'r_ind.id IS NULL'
+                    ));
+
+                } else {
+                    $qb->andWhere($filtresNote);
+                }
             }
 
         } elseif ($listeReponsesIndicateurs['nullable']) {

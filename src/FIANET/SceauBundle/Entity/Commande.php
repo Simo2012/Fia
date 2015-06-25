@@ -53,7 +53,7 @@ class Commande
     /**
      * @var string
      *
-     * @ORM\Column(name="reference", type="string", length=50)
+     * @ORM\Column(name="reference", type="string", length=50, nullable=true)
      */
     private $reference;
 

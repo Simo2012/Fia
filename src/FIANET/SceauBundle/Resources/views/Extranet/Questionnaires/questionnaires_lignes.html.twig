@@ -1,7 +1,7 @@
 {% for questionnaire in questionnaires %}
     <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
         <td>
-            {{ include('FIANETSceauBundle:Extranet/Commun:indicateur.html.twig', {'indicateurReponseID': questionnaire.indicateurReponseID, 'indicateurNote': questionnaire.indicateurNote}) }}
+             {% include 'FIANETSceauBundle:Extranet/Commun:indicateur.html.twig' with {'parametrage': parametrage, 'indicateurReponseID': questionnaire.indicateurReponseID, 'indicateurNote': questionnaire.indicateurNote} only %}
         </td>
         <td>{{ questionnaire.dateCommande|localizeddate('short', 'none') }}</td>
         <td>{{ questionnaire.dateReponse|localizeddate('short', 'none') }}</td>
@@ -14,14 +14,17 @@
         <td>
             {% if questionnaire.commentaire is not empty %}
                 {{ questionnaire.commentaire | truncate(100, true, '') }} {% if  questionnaire.commentaire|length > 100 %}<a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': questionnaire.id}) }}">[...]</a>{% endif %}
-                <a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': questionnaire.commentaireID}) }}" class="fleche-droit-reponse">
-                    <img src="{{ asset('bundles/fianetsceau/images/extranet/fleche_grise.png') }}" width="18" height="17" title="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" />
-                </a>
+
+                {% if parametrage.droitDeReponse %}
+                    <a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': questionnaire.commentaireID}) }}" class="fleche-droit-reponse">
+                        <img src="{{ asset('bundles/fianetsceau/images/extranet/fleche_grise.png') }}" width="18" height="17" title="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" />
+                    </a>
+                {% endif %}
             {% else %}
                 -
             {% endif %}
         </td>
-        {% if parametrageRecommendation.question_id is not null %}
+        {% if parametrage.recommandation is not null %}
             <td>
                 {% if questionnaire.recommandation is not null %}
                     {{ questionnaire.recommandation|round(1) }} / {{ questionnaire.recommandationValeurMax|round(1) }}
