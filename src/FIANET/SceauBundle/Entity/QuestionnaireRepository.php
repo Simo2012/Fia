@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
 class QuestionnaireRepository extends EntityRepository
@@ -351,7 +352,9 @@ class QuestionnaireRepository extends EntityRepository
 
         $qb = $this->restrictionsQuestionsGlobalesPersos($qb, $site);
 
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(300)
+        return $qb->getQuery()
+            ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
+            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(300)
             ->getSingleResult(); // TODO vérifier le cache et tester les perfs
     }
 

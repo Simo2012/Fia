@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use DateTime;
+use Doctrine\ORM\Query;
 
 class SocieteRepository extends EntityRepository
 {
@@ -21,21 +22,24 @@ class SocieteRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('so');
 
-        $qb->addSelect('si')
-            ->addSelect('siqp')
-            ->addSelect('qt')
-            ->addSelect('ads')
-            ->join('so.sites', 'si')
+        $qb->join('so.sites', 'si')
+            ->addSelect('si')
             ->join('si.administrationType', 'ads')
+            ->addSelect('ads')
             ->join('si.questionnairePersonnalisations', 'siqp')
+            ->addSelect('siqp')
             ->join('siqp.questionnaireType', 'qt')
+            ->addSelect('qt')
             ->where('so.id = :id')
             ->setParameter('id', $id)
-            ->andwhere('siqp.dateDebut < :dateDuJour')
-            ->andWhere('siqp.dateFin IS NULL OR siqp.dateFin > :dateDuJour')
-            ->setParameter('dateDuJour', new DateTime())
-            ->orderBy('si.nom', 'ASC');
+            ->andwhere('siqp.dateDebut <= CURRENT_DATE()')
+            ->andWhere('siqp.dateFin IS NULL OR siqp.dateFin > CURRENT_DATE()')
+            ->orderBy('si.nom', 'ASC')
+            ->addOrderBy('qt.libelle', 'ASC');
 
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleResult();
+        return $qb->getQuery()
+            ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
+            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
+            ->getSingleResult();
     }
 }

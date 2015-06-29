@@ -4,14 +4,17 @@ namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 
 /**
  * Reponse
  *
  * @ORM\Table(name="Reponse")
  * @ORM\Entity(repositoryClass="FIANET\SceauBundle\Entity\ReponseRepository")
+ * @Gedmo\TranslationEntity(class="FIANET\SceauBundle\Entity\Traduction\ReponseTraduction")
  */
-class Reponse
+class Reponse implements Translatable
 {
     /**
      * @var integer
@@ -26,6 +29,7 @@ class Reponse
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=255)
+     * @Gedmo\Translatable
      */
     private $libelle;
 
@@ -73,6 +77,15 @@ class Reponse
      * @ORM\JoinColumn(name="reponseStatut_id", referencedColumnName="id", nullable=false)
      */
     private $reponseStatut;
+
+
+    /**
+     * Post locale
+     * Used locale to override Translation listener's locale
+     *
+     * @Gedmo\Locale
+     */
+    protected $locale;
 
 
     public function __construct()
@@ -266,5 +279,16 @@ class Reponse
     public function getReponseStatut()
     {
         return $this->reponseStatut;
+    }
+
+
+    /**
+     * Sets translatable locale
+     *
+     * @param string $locale
+     */
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
     }
 }

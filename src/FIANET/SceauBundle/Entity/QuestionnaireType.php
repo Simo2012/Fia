@@ -4,14 +4,17 @@ namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 
 /**
  * QuestionnaireType
  *
  * @ORM\Table(name="QuestionnaireType")
  * @ORM\Entity(repositoryClass="FIANET\SceauBundle\Entity\QuestionnaireTypeRepository")
+ * @Gedmo\TranslationEntity(class="FIANET\SceauBundle\Entity\Traduction\QuestionnaireTypeTraduction")
  */
-class QuestionnaireType
+class QuestionnaireType implements Translatable
 {
     /**
      * @var integer
@@ -26,6 +29,7 @@ class QuestionnaireType
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=50)
+     * @Gedmo\Translatable
      */
     private $libelle;
 
@@ -67,6 +71,15 @@ class QuestionnaireType
      * @ORM\JoinColumn(name="delaiReception_id", referencedColumnName="id", nullable=false)
      */
     private $delaiReception;
+
+
+    /**
+     * Post locale
+     * Used locale to override Translation listener's locale
+     *
+     * @Gedmo\Locale
+     */
+    protected $locale;
 
 
     public function __construct()
@@ -235,5 +248,16 @@ class QuestionnaireType
     public function getDelaiReception()
     {
         return $this->delaiReception;
+    }
+
+
+    /**
+     * Sets translatable locale
+     *
+     * @param string $locale
+     */
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
     }
 }

@@ -19,7 +19,6 @@ class AppKernel extends Kernel
             new FIANET\SceauBundle\FIANETSceauBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 

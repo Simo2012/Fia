@@ -1,0 +1,26 @@
+# services to handle doctrine extensions
+services:
+    # KernelRequest listener
+    extension.listener:
+        class: FIANET\SceauBundle\Listener\DoctrineExtensionListener
+        calls:
+            - [ setContainer, [ @service_container ] ]
+        tags:
+            # translatable sets locale after router processing
+            - { name: kernel.event_listener, event: kernel.request, method: onLateKernelRequest, priority: -10 }
+
+    gedmo.listener.translatable:
+        class: Gedmo\Translatable\TranslatableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setDefaultLocale, [ %locale% ] ]
+            - [ setTranslationFallback, [ true ] ]
+
+    gedmo.listener.sluggable:
+        class: Gedmo\Sluggable\SluggableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ @annotation_reader ] ]

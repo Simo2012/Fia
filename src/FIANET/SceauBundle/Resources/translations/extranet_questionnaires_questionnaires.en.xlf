@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="0">
                 <source>titre_page</source>
-                <target>liste des questionnaires</target>
+                <target>Questionnaires list</target>
             </trans-unit>
             <trans-unit id="1">
                 <source>recherche_placeholder</source>

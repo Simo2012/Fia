@@ -4,6 +4,7 @@ imports:
     - { resource: extranet.yml }
     - { resource: moteur.yml }
     - { resource: emails.yml }
+    - { resource: doctrine_extensions.yml }
 
 framework:
     #esi:             ~
@@ -65,13 +66,13 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
-
-# Doctrine extensions
-stof_doctrine_extensions:
-    default_locale: fr
-    orm:
-        default:
-             sluggable: true
+        mappings:
+            # Doctrine extensions
+            translatable:
+                type: annotation
+                alias: Gedmo
+                prefix: Gedmo\Translatable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity/MappedSuperclass"
 
 # Swiftmailer Configuration
 swiftmailer:
