@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 class LangueRepository extends EntityRepository
 {
@@ -46,5 +47,21 @@ class LangueRepository extends EntityRepository
         return $qb->getQuery()
             ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
             ->getSingleResult();
+    }
+
+    /**
+     * Retourne un QueryBuilder qui permet de récupérer les langues qui sont destinées à être affichées dans
+     * une liste déroulante, par ordre alphabétique.
+     *
+     * @return QueryBuilder
+     */
+    public function menuDeroulant()
+    {
+        $qb = $this->createQueryBuilder('l');
+
+        $qb->setCacheable(true);
+        $qb->setLifetime(86400);
+
+        return $qb;
     }
 }

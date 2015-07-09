@@ -2,12 +2,25 @@
 
 namespace FIANET\SceauBundle\Form\Type;
 
-use FIANET\SceauBundle\Validator\Constraints\SiteId;
+use FIANET\SceauBundle\Entity\LangueRepository;
+use FIANET\SceauBundle\Service\OutilsString;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 class SelectLangueType extends AbstractType
 {
+    protected $outilsString;
+
+    /**
+     * @param OutilsString $outilsString Instance de OutilsString
+     */
+    public function __construct(OutilsString $outilsString)
+    {
+        $this->outilsString = $outilsString;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -19,9 +32,21 @@ class SelectLangueType extends AbstractType
                 'entity',
                 array(
                     'class' => 'FIANETSceauBundle:Langue',
-                    'property' => 'libelle'
+                    'property' => 'libelle',
+                    'query_builder' => function(LangueRepository $lr) {
+                        return $lr->menuDeroulant();
+                    },
+                    'translation_domain' => 'langues'
                 )
             );
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $this->outilsString->trierListeStringsSelonLocale(
+            $view->children['langue']->vars['choices'],
+            'langues'
+        );
     }
 
     /**
@@ -29,6 +54,6 @@ class SelectLangueType extends AbstractType
      */
     public function getName()
     {
-        return 'select_langue';
+        return 'fianet_sceaubundle_select_langue';
     }
 }

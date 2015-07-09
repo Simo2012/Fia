@@ -17,7 +17,7 @@
             </select>
         </div>
 
-        {{ render(controller('FIANETSceauBundle:Extranet/Commun:listeQuestionnaireType', { 'id':  app.session.get('siteSelectionne').id, '_locale': app.request.locale })) }}
+        {{ render(controller('FIANETSceauBundle:Extranet/Commun:listeQuestionnaireType', { 'id':  app.session.get('siteSelectionne').id})) }}
     </div>
     <div id="news">
         <h6>NEWS</h6>

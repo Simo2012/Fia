@@ -50,7 +50,8 @@ class WebserviceUserProvider implements UserProviderInterface
             $utilisateur = new Utilisateur($login, $motDePasse, null, $groupes, $nom, $prenom);
 
             // TODO : c'est temporaire -> mettre son ID en fonction de ses données de test
-            $societe = $this->em->getRepository('FIANETSceauBundle:Societe')->infosSocieteEtSitesLies(1);
+            $societe = $this->em->getRepository('FIANETSceauBundle:Societe')
+                ->infosSocieteEtSitesLies(1, $this->session->get('_locale'));
             $utilisateur->setSociete($societe);
 
             $sites = $societe->getSites();
