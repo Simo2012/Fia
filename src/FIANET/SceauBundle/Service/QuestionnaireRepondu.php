@@ -267,6 +267,57 @@ class QuestionnaireRepondu
     }
 
     /**
+     * Cette méthode regarde si la commande liée au questionnaire posséde des types de livraison. Si oui, alors
+     * elle supprime les questions qui ne sont pas liées à ces types de livraisons. La structure du questionnaire
+     * passé en argument est directement modifiée.
+     *
+     * L'algo :
+     * 1) Si la commande n'est pas liée à un(des) type(s) de livraison, on supprime la question si :
+     *     Elle est reliée à au moins un type de livraison et que celui ci n'est pas le mode de livraison "Aucun".
+     * 2) Si la commande est liée à un(des) type(s) de livraison, on supprime la question si :
+     *     La question possède un(des) type(s) de livraison et que ceux-ci ne sont pas présents dans les types de
+     *     livraisons de la commande.
+     *
+     * @param Questionnaire $questionnaire Instance de Questionnaire
+     */
+    private function gestionAffichageModeLivraison(Questionnaire $questionnaire)
+    {
+        $questions = $questionnaire->getQuestionnaireType()->getQuestions();
+
+        if ($questionnaire->getCommande()) {
+            $commandeLivraisonTypes = $questionnaire->getCommande()->getLivraisonTypes();
+        } else {
+            $commandeLivraisonTypes = null;
+        }
+
+        $livraisonTypeAucun = $this->em->getRepository('FIANETSceauBundle:LivraisonType')->aucun();
+        foreach ($questions as $question) {
+            if ($commandeLivraisonTypes->isEmpty()) {
+                if (!$question->getLivraisonTypes()->isEmpty()
+                    && !$question->getLivraisonTypes()->contains($livraisonTypeAucun)
+                ) {
+                    $questions->removeElement($question);
+                }
+
+            } elseif (!$question->getLivraisonTypes()->isEmpty()) {
+                $suppression = true;
+                foreach ($commandeLivraisonTypes as $livraisonType) {
+                    if ($question->getLivraisonTypes()->contains($livraisonType)) {
+                        $suppression = false;
+                        break;
+                    }
+                }
+
+                if ($suppression) {
+                    $questions->removeElement($question);
+                }
+            }
+
+        }
+
+    }
+
+    /**
      * Retourne l'ensemble de la structure d'un questionnaire avec ses réponses répondues. Si ce questionnaire est lié à
      * un 2ème questionnaire, il est également récupéré.
      *
@@ -311,6 +362,7 @@ class QuestionnaireRepondu
         $this->remplacerVariablesDansLibelles($questionnaire1);
 
         if ($questionnaire2) {
+            $this->gestionAffichageModeLivraison($questionnaire2);
             $this->gestionAffichageQuestionCachee($questionnaire2);
             $this->remplacerVariablesDansLibelles($questionnaire2);
         }

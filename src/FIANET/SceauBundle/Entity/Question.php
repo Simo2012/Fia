@@ -150,7 +150,7 @@ class Question implements Translatable
      *      joinColumns={@ORM\JoinColumn(name="question_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="livraisonType_id", referencedColumnName="id")}
      *      )
-     **/
+     */
     private $livraisonTypes;
 
     /**

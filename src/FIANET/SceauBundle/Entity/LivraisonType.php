@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LivraisonType
 {
+    const AUCUN = 0;
+
     /**
      * @var integer
      *
@@ -28,6 +30,12 @@ class LivraisonType
      */
     private $libelle;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="affichage", type="boolean", options={"default" = true})
+     */
+    private $affichage;
 
     /**
      * Get id
@@ -61,5 +69,29 @@ class LivraisonType
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set affichage
+     *
+     * @param boolean $affichage
+     *
+     * @return LivraisonType
+     */
+    public function setAffichage($affichage)
+    {
+        $this->affichage = $affichage;
+
+        return $this;
+    }
+
+    /**
+     * Get affichage
+     *
+     * @return boolean
+     */
+    public function getAffichage()
+    {
+        return $this->affichage;
     }
 }

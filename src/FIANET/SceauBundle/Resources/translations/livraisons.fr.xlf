@@ -26,6 +26,10 @@
                 <source>livraisons_colis_prive</source>
                 <target>Colis privé</target>
             </trans-unit>
+            <trans-unit id="6">
+                <source>livraisons_aucun</source>
+                <target>Aucun</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

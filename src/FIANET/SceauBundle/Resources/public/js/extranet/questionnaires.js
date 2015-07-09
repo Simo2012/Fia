@@ -54,12 +54,12 @@ function paquetQuestionnairesSuivants(texteFin, nbQuestionnairesMax, dateDebut, 
 }
 
 function selectTriQuestionnaires(numTri) {
-    $('#questionnaires_liste_tri').val(numTri);
+    $('#fianet_sceaubundle_questionnaires_liste_tri').val(numTri);
     $('form').submit();
 }
 
 function selectIndicateur(numIndicateur, imageIndicateur) {
-    var checkbox = document.getElementById('questionnaires_liste_indicateurs_' + numIndicateur);
+    var checkbox = document.getElementById('fianet_sceaubundle_questionnaires_liste_indicateurs_' + numIndicateur);
 
     if (checkbox.checked) {
         imageIndicateur.className = 'indicateur-non-selectionne';
@@ -71,5 +71,5 @@ function selectIndicateur(numIndicateur, imageIndicateur) {
 }
 
 function decocherRetenir() {
-    document.getElementById('questionnaires_liste_retenir').checked = false;
+    document.getElementById('fianet_sceaubundle_questionnaires_liste_retenir').checked = false;
 }

@@ -12,7 +12,6 @@ use FIANET\SceauBundle\Entity\QuestionType;
 use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\Type\RelanceType;
-use FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType;
 use FIANET\SceauBundle\Form\Type\SelectLangueType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -45,7 +44,7 @@ class QuestionnairesController extends Controller
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
 
-        $form = $this->createForm(new QuestionnairesListeType(), null);
+        $form = $this->createForm('fianet_sceaubundle_questionnaires_liste', null);
         $form->handleRequest($request);
 
         if (!$form->isSubmitted()) {
@@ -363,7 +362,7 @@ class QuestionnairesController extends Controller
         $datePeriode = $this->get('fianet_sceau.relance')->calculerPeriode();
         $nbQuestionnairesMax = $this->container->getParameter('nb_relances_max');
 
-        $form = $this->createForm(new SelectLangueType());
+        $form = $this->createForm('fianet_sceaubundle_select_langue');
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {

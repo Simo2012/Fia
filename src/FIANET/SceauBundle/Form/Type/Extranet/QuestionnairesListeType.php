@@ -2,13 +2,27 @@
 
 namespace FIANET\SceauBundle\Form\Type\Extranet;
 
+use FIANET\SceauBundle\Entity\LivraisonTypeRepository;
+use FIANET\SceauBundle\Service\OutilsString;
 use IntlDateFormatter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraints\Date;
 
 class QuestionnairesListeType extends AbstractType
 {
+    protected $outilsString;
+
+    /**
+     * @param OutilsString $outilsString Instance de OutilsString
+     */
+    public function __construct(OutilsString $outilsString)
+    {
+        $this->outilsString = $outilsString;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -53,6 +67,9 @@ class QuestionnairesListeType extends AbstractType
                     'class' => 'FIANETSceauBundle:LivraisonType',
                     'property' => 'libelle',
                     'empty_value' => 'livraisons_tous',
+                    'query_builder' => function(LivraisonTypeRepository $ltr) {
+                        return $ltr->menuDeroulant();
+                    },
                     'required' => false,
                     'translation_domain' => 'livraisons'
                 )
@@ -82,11 +99,20 @@ class QuestionnairesListeType extends AbstractType
             ->setMethod('POST');
     }
 
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $this->outilsString->trierListeStringsSelonLocale(
+            $view->children['livraison']->vars['choices'],
+            'livraisons'
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'questionnaires_liste';
+        return 'fianet_sceaubundle_questionnaires_liste';
     }
 }

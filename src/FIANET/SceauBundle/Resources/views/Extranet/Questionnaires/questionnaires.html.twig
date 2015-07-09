@@ -71,14 +71,14 @@
                     </li>
                     <br />
                     <li>
-                        <label for="questionnaires_liste_litige">{% trans %}litige_en_cours{% endtrans %}</label> : {{ form_widget(form.litige) }}
+                        <label for="fianet_sceaubundle_questionnaires_liste_litige">{% trans %}litige_en_cours{% endtrans %}</label> : {{ form_widget(form.litige) }}
                     </li>
                     <li>
                         <button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
                     </li>
                     <br />
                     <li>
-                        <label for="questionnaires_liste_retenir">{% trans %}retenir_parametre{% endtrans %}</label> : {{ form_widget(form.retenir) }}
+                        <label for="fianet_sceaubundle_questionnaires_liste_retenir">{% trans %}retenir_parametre{% endtrans %}</label> : {{ form_widget(form.retenir) }}
                     </li>
                     <li>
                         <button type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
@@ -159,8 +159,8 @@
         decocherRetenir();
 
         var parametresCalendriers = { firstDay: 1 };
-        afficherCalendrier('questionnaires_liste_dateDebut', '{{ app.request.locale  }}', parametresCalendriers);
-        afficherCalendrier('questionnaires_liste_dateFin', '{{ app.request.locale  }}', parametresCalendriers);
+        afficherCalendrier('fianet_sceaubundle_questionnaires_liste_dateDebut', '{{ app.request.locale  }}', parametresCalendriers);
+        afficherCalendrier('fianet_sceaubundle_questionnaires_liste_dateFin', '{{ app.request.locale  }}', parametresCalendriers);
 
         creerTooltipLivraison('{% spaceless %}{{ 'tooltip_livraison'|trans|replace({"'" : "\\'" })|replace({"##LIEN##" : asset('documents/dispo_techniques_flux_xml.pdf') })|raw }}{% endspaceless %}');
 
