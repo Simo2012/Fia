@@ -162,66 +162,6 @@ class QuestionnaireRepondu
     }
 
     /**
-     * Retourne un tableau contenant le questionnaire suivant et/ou précédent à afficher selon certains critères
-     *
-     * @param Site $site Instance de Site
-     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
-     * @param string $dateDebut Date de début de la période (peut être vide)
-     * @param string $dateFin Date de fin de la période (peut être vide)
-     * @param string $recherche Recherche de l'utilisateur (N°commande, Email, etc)
-     * @param array $listeReponsesIndicateurs Tableau contenant les réponses des indicateurs à filtrer. Peut être vide.
-     * @param LivraisonType $livraisonType Instance de LivraisonType. Vaut null si aucun filtre souhaité.
-     * @param Questionnaire $questionnaire Instance de Questionnaire
-     * @param int $tri Numéro du tri à appliquer
-     *
-     * @return array Tableau avec des instances de Questionnaire ou valeurs null
-     */
-    public function getNavigation(
-        Site $site,
-        QuestionnaireType $questionnaireType,
-        $dateDebut,
-        $dateFin,
-        $recherche,
-        $listeReponsesIndicateurs,
-        $livraisonType,
-        $questionnaire,
-        $tri
-    ) {
-        $navigation = array();
-
-        /* TODO : à revoir */
-        $navigation['precedent'] = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
-            ->getQuestionnaireReponduNavigation(
-                $site,
-                $questionnaireType,
-                $dateDebut,
-                $dateFin,
-                $recherche,
-                $listeReponsesIndicateurs,
-                $livraisonType,
-                $questionnaire,
-                $tri,
-                0
-            );
-
-        $navigation['suivant'] = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
-            ->getQuestionnaireReponduNavigation(
-                $site,
-                $questionnaireType,
-                $dateDebut,
-                $dateFin,
-                $recherche,
-                $listeReponsesIndicateurs,
-                $livraisonType,
-                $questionnaire,
-                $tri,
-                1
-            );
-
-        return $navigation;
-    }
-
-    /**
      * Remplace les variables contenus dans les libellés des questions par leurs valeurs.
      * Exemple : NOM_SITE => Cdiscount
      *
@@ -354,8 +294,12 @@ class QuestionnaireRepondu
             $questionnaire2_id = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
                 ->findBy(array('questionnaireLie' => $questionnaireDemande));
 
-            $questionnaire2 = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
-                ->structureQuestionnaireAvecReponses($site, $questionnaire2_id);
+            if ($questionnaire2_id) {
+                $questionnaire2 = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
+                    ->structureQuestionnaireAvecReponses($site, $questionnaire2_id);
+            } else {
+                $questionnaire2 = null;
+            }
         }
 
         $this->gestionAffichageQuestionCachee($questionnaire1);

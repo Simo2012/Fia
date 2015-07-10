@@ -18,7 +18,15 @@
         {# ToDo : il faudra gérer l'affichage prénom+nom ou adresse e-mail selon le statut du membre - à voir dans le lot lié aux membres #}
         <h1>{% trans %}commun_avis_de{% endtrans %} {% if questionnaire1.membre.prenom is not empty %}{{ questionnaire1.membre.prenom|capitalize }}{% endif %} {% if questionnaire1.membre.nom is not empty %}{{ questionnaire1.membre.nom |upper }}{% endif %}
             <span>
-                {# navigation #}
+                {% if boutons.precedent %}
+                    <a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': boutons.precedent.id, 'position': position-1 }) }}"><button><<</button></a>&nbsp;
+                {% endif %}
+
+                <a href="{{ path('extranet_questionnaires_questionnaires') }}"><button>{{ 'commun_questionnaires'|trans }}</button></a>
+
+                {% if boutons.suivant %}
+                    <a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': boutons.suivant.id, 'position': position+1 }) }}"><button>>></button></a>&nbsp;
+                {% endif %}
             </span>
         </h1>
         
@@ -65,7 +73,7 @@
             {% include 'FIANETSceauBundle:Commun:questionnaire_repondu.html.twig' with {'questionnaire': questionnaire1, 'afficherDroitDeReponse': true} only %}
         </div>
 
-        {% if parametrage.droitDeReponse %}
+        {% if questionnaire1.questionnaireType.parametrage.droitDeReponse %}
             <div class="block-total-part3">
                 <div class="block-info-rep">
                     <div class="btn-droit-reponse"><img src="{{ asset('bundles/fianetsceau/images/extranet/droit-reponse.png') }}" width="59" height="59" />

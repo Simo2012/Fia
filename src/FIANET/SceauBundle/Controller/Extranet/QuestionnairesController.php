@@ -130,6 +130,21 @@ class QuestionnairesController extends Controller
                     $nbQuestionnairesMax,
                     $tri
                 );
+
+            /* Sauvegarde en session des filtres de recherche pour la page détail d'un questionnaire */
+            $session = $request->getSession();
+            $session->set('detail_questionnaires_tri', $tri);
+            $session->set('detail_questionnaires_dateDebut', $dateDebut);
+            $session->set('detail_questionnaires_dateFin', $dateFin);
+            $session->set('detail_questionnaires_indicateurs', implode('-', $indicateurs));
+            $session->set('detail_questionnaires_recherche', $recherche);
+            $session->set('detail_questionnaires_litige', $litige);
+            if ($questionnaireType->getParametrage()['livraison']) {
+                if ($livraisonType) {
+                    $session->set('detail_questionnaires_livraison', $livraisonType->getId());
+                }
+            }
+
         } else {
             /* Formulaire soumis et non valide */
             $nbTotalQuestionnaires = 0;
@@ -632,23 +647,26 @@ class QuestionnairesController extends Controller
     /**
      * Affiche la page de détail d'un questionnaire (avis)
      *
-     * @Route("/questionnaires/detail-questionnaire/{questionnaire_id}", requirements={"id" = "\d+"},
+     * @Route("/questionnaires/detail-questionnaire/{questionnaire_id}/{position}",
+     *     requirements={"questionnaire_id" = "\d+", "position" = "\d+"},
      *     name="extranet_questionnaires_detail_questionnaire")
      * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
      * @param int $questionnaire_id Identifiant du questionnaire
+     * @param int $position Position du questionnaire dans le listing filtré et trié
      *
      * @return Response Instance de Response
      *
      * @throws Exception
      */
-    public function detailQuestionnaireAction(Request $request, $questionnaire_id)
+    public function detailQuestionnaireAction(Request $request, $questionnaire_id, $position)
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
 
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
+        $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
 
         if (!$this->getDoctrine()->getManager()->getRepository('FIANETSceauBundle:Questionnaire')
             ->verifierExistenceEtLiaisonAvecSite($questionnaire_id, $site)) {
@@ -658,14 +676,60 @@ class QuestionnairesController extends Controller
         $questionnaires = $this->get('fianet_sceau.questionnaire_repondu')
             ->recupStructureQuestionnaireAvecReponses($site, $questionnaire_id);
 
-        /* TODO : rajouter la pagination */
+        $session = $request->getSession();
+        $tri = $session->get('detail_questionnaires_tri');
+        $dateDebut = $session->get('detail_questionnaires_dateDebut');
+        $dateFin = $session->get('detail_questionnaires_dateFin');
+        $indicateurs = ($session->get('detail_questionnaires_indicateurs')) ?
+            explode('-', $session->get('detail_questionnaires_indicateurs')) : array();
+        $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
+            ->listeReponsesIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
+        $recherche = $session->get('detail_questionnaires_recherche');
+        $litige = $session->get('detail_questionnaires_litige');
+        if ($questionnaireType->getParametrage()['livraison']) {
+            if ($session->get('detail_questionnaires_livraison')) {
+                $livraisonType = $this->getDoctrine()->getRepository('FIANETSceauBundle:LivraisonType')
+                    ->find($session->get('detail_questionnaires_livraison'));
+            } else {
+                $livraisonType = null;
+            }
+        } else {
+            $livraisonType = null;
+        }
+
+        $pagination = $this->getDoctrine()->getManager()->getRepository('FIANETSceauBundle:Questionnaire')
+            ->questionnairesSuivantEtPrecedent(
+                $site,
+                $questionnaireType,
+                $dateDebut,
+                $dateFin,
+                $recherche,
+                $listeReponsesIndicateurs,
+                $livraisonType,
+                $tri,
+                $position
+            );
+
+        if (count($pagination) > 1) {
+            if ($pagination[0]['id'] == $questionnaire_id) {
+                $boutons = array('precedent' => null, 'suivant' => $pagination[1]);
+            } elseif (!isset($pagination[2]['id'])) {
+                $boutons = array('precedent' => $pagination[0], 'suivant' => null);
+            } else {
+                $boutons = array('precedent' => $pagination[0], 'suivant' => $pagination[2]);
+            }
+
+        } else {
+            $boutons = array('precedent' => null, 'suivant' => null);
+        }
 
         return $this->render(
             'FIANETSceauBundle:Extranet/Questionnaires:detail_questionnaire.html.twig',
             array(
                 'questionnaire1' => $questionnaires['questionnaire1'],
                 'questionnaire2' => $questionnaires['questionnaire2'],
-                'parametrage' => $questionnaires['questionnaire1']->getQuestionnaireType()->getParametrage(),
+                'boutons' => $boutons,
+                'position' => $position,
                 'urlRedirection' => $this->generateUrl('extranet_questionnaires_questionnaires')
             )
         );
