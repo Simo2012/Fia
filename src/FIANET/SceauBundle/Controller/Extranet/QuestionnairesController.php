@@ -2,8 +2,6 @@
 
 namespace FIANET\SceauBundle\Controller\Extranet;
 
-use DateInterval;
-use DateTime;
 use Exception;
 use FIANET\SceauBundle\Entity\DroitDeReponse;
 use FIANET\SceauBundle\Entity\Langue;
@@ -12,9 +10,7 @@ use FIANET\SceauBundle\Entity\QuestionType;
 use FIANET\SceauBundle\Entity\Relance;
 use FIANET\SceauBundle\Exception\Extranet\AccesInterditException;
 use FIANET\SceauBundle\Form\Type\RelanceType;
-use FIANET\SceauBundle\Form\Type\SelectLangueType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,34 +45,18 @@ class QuestionnairesController extends Controller
 
         if (!$form->isSubmitted()) {
             /* Affichage de la page sans soumission du formulaire : on récupère les éventuels paramètres de
-            recherche sauvegardés dans les cookies. */
-            $tri = 2;
-            $dateDebut = $request->cookies->get('questionnaires_dateDebut');
-            $form->get('dateDebut')->setData($dateDebut);
-            $dateFin = $request->cookies->get('questionnaires_dateFin');
-            $form->get('dateFin')->setData($dateFin);
-            $indicateurs = ($request->cookies->get('questionnaires_indicateurs')) ?
-                explode('-', $request->cookies->get('questionnaires_indicateurs')) : array();
-            $form->get('indicateurs')->setData($indicateurs);
-            $recherche = $request->cookies->get('questionnaires_recherche');
-            $form->get('recherche')->setData($recherche);
-            $litige = $request->cookies->get('questionnaires_litige') ? true : null;
-            $form->get('litige')->setData($litige);
+            recherche sauvegardés dans les cookies ou en session si on provient de la page détail. */
+            $donnees = $this->get('fianet_sceau.extranet.donnees_request')
+                ->recupDonneesRequestQuest($request, $questionnaireType, 0);
+
+            $form->get('dateDebut')->setData($donnees['dateDebut']);
+            $form->get('dateFin')->setData($donnees['dateFin']);
+            $form->get('indicateurs')->setData($donnees['indicateurs']);
+            $form->get('recherche')->setData($donnees['recherche']);
+            $form->get('litige')->setData($donnees['litige']);
 
             if ($questionnaireType->getParametrage()['livraison']) {
-                if ($request->cookies->get('questionnaires_livraison')) {
-                    $livraisonType = $this->getDoctrine()->getRepository('FIANETSceauBundle:LivraisonType')
-                        ->find($request->cookies->get('questionnaires_livraison'));
-                    $livraison = $livraisonType->getId();
-
-                    $form->get('livraison')->setData($livraisonType);
-                } else {
-                    $livraisonType = null;
-                    $livraison = '';
-                }
-            } else {
-                $livraisonType = null;
-                $livraison = '';
+                $form->get('livraison')->setData($donnees['livraisonType']);
             }
 
             $retenir = false;
@@ -84,16 +64,16 @@ class QuestionnairesController extends Controller
         } else {
             /* Soumission du formulaire */
             $donneesForm = $form->getData();
-            $tri = is_numeric($donneesForm['tri']) ? $donneesForm['tri'] : 2;
-            $dateDebut = (isset($donneesForm['dateDebut'])) ? $donneesForm['dateDebut'] : '';
-            $dateFin = (isset($donneesForm['dateFin'])) ? $donneesForm['dateFin'] : '';
-            $indicateurs = (isset($donneesForm['indicateurs'])) ? $donneesForm['indicateurs'] : array();
-            $recherche = (isset($donneesForm['recherche'])) ? $donneesForm['recherche'] : '';
-            $litige = $donneesForm['litige'] ? true : null;
+            $donnees['tri'] = is_numeric($donneesForm['tri']) ? $donneesForm['tri'] : 2;
+            $donnees['dateDebut'] = (isset($donneesForm['dateDebut'])) ? $donneesForm['dateDebut'] : '';
+            $donnees['dateFin'] = (isset($donneesForm['dateFin'])) ? $donneesForm['dateFin'] : '';
+            $donnees['indicateurs'] = (isset($donneesForm['indicateurs'])) ? $donneesForm['indicateurs'] : array();
+            $donnees['recherche'] = (isset($donneesForm['recherche'])) ? $donneesForm['recherche'] : '';
+            $donnees['litige'] = $donneesForm['litige'] ? true : null;
 
-            $livraisonType = $questionnaireType->getParametrage()['livraison'] ?
+            $donnees['livraisonType'] = $questionnaireType->getParametrage()['livraison'] ?
                 $donneesForm['livraison'] : null;
-            $livraison = $livraisonType ? $livraisonType->getId() : '';
+            $donnees['livraison'] = $donnees['livraisonType'] ? $donnees['livraisonType']->getId() : '';
 
             $retenir = $donneesForm['retenir'];
         }
@@ -103,47 +83,48 @@ class QuestionnairesController extends Controller
 
             $site = $request->getSession()->get('siteSelectionne');
 
-            $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
-                ->listeReponsesIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
+            $donnees['listeReponsesIndicateurs'] = $this->get('fianet_sceau.notes')
+                ->listeReponsesIndicateursPourQuestionnaireType($questionnaireType, $donnees['indicateurs']);
 
             $nbTotalQuestionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->nbTotalQuestionnaires(
                     $site,
                     $questionnaireType,
-                    $dateDebut,
-                    $dateFin,
-                    $recherche,
-                    $listeReponsesIndicateurs,
-                    $livraisonType
+                    $donnees['dateDebut'],
+                    $donnees['dateFin'],
+                    $donnees['recherche'],
+                    $donnees['listeReponsesIndicateurs'],
+                    $donnees['livraisonType']
                 );
 
             $questionnaires = $this->getDoctrine()->getRepository('FIANETSceauBundle:Questionnaire')
                 ->listeQuestionnaires(
                     $site,
                     $questionnaireType,
-                    $dateDebut,
-                    $dateFin,
-                    $recherche,
-                    $listeReponsesIndicateurs,
-                    $livraisonType,
+                    $donnees['dateDebut'],
+                    $donnees['dateFin'],
+                    $donnees['recherche'],
+                    $donnees['listeReponsesIndicateurs'],
+                    $donnees['livraisonType'],
                     0,
                     $nbQuestionnairesMax,
-                    $tri
+                    $donnees['tri']
                 );
 
-            /* Sauvegarde en session des filtres de recherche pour la page détail d'un questionnaire */
-            $session = $request->getSession();
-            $session->set('detail_questionnaires_tri', $tri);
-            $session->set('detail_questionnaires_dateDebut', $dateDebut);
-            $session->set('detail_questionnaires_dateFin', $dateFin);
-            $session->set('detail_questionnaires_indicateurs', implode('-', $indicateurs));
-            $session->set('detail_questionnaires_recherche', $recherche);
-            $session->set('detail_questionnaires_litige', $litige);
-            if ($questionnaireType->getParametrage()['livraison']) {
-                if ($livraisonType) {
-                    $session->set('detail_questionnaires_livraison', $livraisonType->getId());
-                }
-            }
+            /* Sauvegarde en session des paramètres de recherche pour la page détail d'un questionnaire */
+            $this->get('fianet_sceau.extranet.donnees_request')->sauvegardeDonneesSessionQuest(
+                $request,
+                $questionnaireType,
+                array(
+                    'tri' =>  $donnees['tri'],
+                    'dateDebut' => $donnees['dateDebut'],
+                    'dateFin' => $donnees['dateFin'],
+                    'indicateurs' => $donnees['indicateurs'],
+                    'recherche' => $donnees['recherche'],
+                    'litige' => $donnees['litige'],
+                    'livraisonType' => $donnees['livraisonType']
+                )
+            );
 
         } else {
             /* Formulaire soumis et non valide */
@@ -159,12 +140,12 @@ class QuestionnairesController extends Controller
                 'nbQuestionnairesMax' => $nbQuestionnairesMax,
                 'form' => $form->createView(),
                 'offset' => 0,
-                'dateDebut' => $dateDebut,
-                'dateFin' => $dateFin,
-                'tri' => $tri,
-                'recherche' => $recherche,
-                'indicateurs' => implode('-', $indicateurs),
-                'livraison' => $livraison,
+                'dateDebut' => $donnees['dateDebut'],
+                'dateFin' => $donnees['dateFin'],
+                'tri' =>  $donnees['tri'],
+                'recherche' => $donnees['recherche'],
+                'indicateurs' => implode('-', $donnees['indicateurs']),
+                'livraison' => $donnees['livraison'],
                 'parametrage' => $questionnaireType->getParametrage(),
                 'urlRedirection' => $this->generateUrl('extranet_questionnaires_questionnaires', array(), true)
             )
@@ -172,37 +153,22 @@ class QuestionnairesController extends Controller
 
         /* Sauvegarde des paramètres de recherche */
         if ($retenir) {
-            $dateExpiration = new DateTime();
-            $dateExpiration->add(new DateInterval('P6M'));
-
-            $reponse->headers->setCookie(new Cookie('questionnaires_dateDebut', $dateDebut, $dateExpiration));
-            $reponse->headers->setCookie(new Cookie('questionnaires_dateFin', $dateFin, $dateExpiration));
-            $reponse->headers->setCookie(
-                new Cookie(
-                    'questionnaires_indicateurs',
-                    implode('-', $indicateurs),
-                    $dateExpiration
+            $this->get('fianet_sceau.extranet.donnees_request')->sauvegardeDonneesCookieQuest(
+                $reponse,
+                $questionnaireType,
+                array(
+                    'tri' =>  $donnees['tri'],
+                    'dateDebut' => $donnees['dateDebut'],
+                    'dateFin' => $donnees['dateFin'],
+                    'indicateurs' => $donnees['indicateurs'],
+                    'recherche' => $donnees['recherche'],
+                    'litige' => $donnees['litige'],
+                    'livraisonType' => $donnees['livraisonType']
                 )
             );
-            $reponse->headers->setCookie(new Cookie('questionnaires_recherche', $recherche, $dateExpiration));
-            $reponse->headers->setCookie(new Cookie('questionnaires_litige', $litige, $dateExpiration));
-
-            if ($questionnaireType->getParametrage()['livraison']) {
-                if ($livraisonType) {
-                    $reponse->headers->setCookie(
-                        new Cookie(
-                            'questionnaires_livraison',
-                            $livraisonType->getId(),
-                            $dateExpiration
-                        )
-                    );
-                } else {
-                    $reponse->headers->clearCookie('questionnaires_livraison');
-                }
-            }
-            
-            $reponse->headers->setCookie(new Cookie('questionnaires_tri', $tri, $dateExpiration));
         }
+
+        $request->getSession()->set('detail_questionnaires', 0);
 
         return $reponse;
     }
@@ -676,37 +642,20 @@ class QuestionnairesController extends Controller
         $questionnaires = $this->get('fianet_sceau.questionnaire_repondu')
             ->recupStructureQuestionnaireAvecReponses($site, $questionnaire_id);
 
-        $session = $request->getSession();
-        $tri = $session->get('detail_questionnaires_tri');
-        $dateDebut = $session->get('detail_questionnaires_dateDebut');
-        $dateFin = $session->get('detail_questionnaires_dateFin');
-        $indicateurs = ($session->get('detail_questionnaires_indicateurs')) ?
-            explode('-', $session->get('detail_questionnaires_indicateurs')) : array();
-        $listeReponsesIndicateurs = $this->get('fianet_sceau.notes')
-            ->listeReponsesIndicateursPourQuestionnaireType($questionnaireType, $indicateurs);
-        $recherche = $session->get('detail_questionnaires_recherche');
-        $litige = $session->get('detail_questionnaires_litige');
-        if ($questionnaireType->getParametrage()['livraison']) {
-            if ($session->get('detail_questionnaires_livraison')) {
-                $livraisonType = $this->getDoctrine()->getRepository('FIANETSceauBundle:LivraisonType')
-                    ->find($session->get('detail_questionnaires_livraison'));
-            } else {
-                $livraisonType = null;
-            }
-        } else {
-            $livraisonType = null;
-        }
+        $donneesRequest = $this->get('fianet_sceau.extranet.donnees_request')
+            ->recupDonneesRequestQuest($request, $questionnaireType, 1);
+        $request->getSession()->set('detail_questionnaires', 1);
 
         $pagination = $this->getDoctrine()->getManager()->getRepository('FIANETSceauBundle:Questionnaire')
             ->questionnairesSuivantEtPrecedent(
                 $site,
                 $questionnaireType,
-                $dateDebut,
-                $dateFin,
-                $recherche,
-                $listeReponsesIndicateurs,
-                $livraisonType,
-                $tri,
+                $donneesRequest['dateDebut'],
+                $donneesRequest['dateFin'],
+                $donneesRequest['recherche'],
+                $donneesRequest['listeReponsesIndicateurs'],
+                $donneesRequest['livraisonType'],
+                $donneesRequest['tri'],
                 $position
             );
 

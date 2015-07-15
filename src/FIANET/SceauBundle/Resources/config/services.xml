@@ -109,6 +109,11 @@
             <argument type="service" id="session"/>
         </service>
 
+        <service id="fianet_sceau.extranet.donnees_request" class="FIANET\SceauBundle\Service\Extranet\DonneesRequest">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="fianet_sceau.notes"/>
+        </service>
+
         <service id="fianet_sceau.form.type.extranet.questionnaires_liste" class="FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType">
             <argument type="service" id="fianet_sceau.outils.string" />
             <tag name="form.type" alias="fianet_sceaubundle_questionnaires_liste" />

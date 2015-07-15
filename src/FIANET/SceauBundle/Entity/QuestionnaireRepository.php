@@ -253,7 +253,7 @@ class QuestionnaireRepository extends EntityRepository
         $qb = $this->createQueryBuilder('q')
             ->select('COUNT(q.id)');
 
-        $qb = $this->jointuresListingQuestionnaires($qb, $questionnaireType);
+        $qb = $this->jointuresListingQuestionnaires($qb, $questionnaireType, $livraisonType);
 
         $qb = $this->restrictionsListeQuestionnaires(
             $qb,
