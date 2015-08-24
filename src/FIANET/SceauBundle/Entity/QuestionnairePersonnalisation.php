@@ -107,6 +107,14 @@ class QuestionnairePersonnalisation
      */
     private $versions;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToOne(targetEntity="FIANET\SceauBundle\Entity\CommandeCSVParametrage")
+     * @ORM\JoinColumn(name="commandeCSVParametrage_id", referencedColumnName="id", nullable=true)
+     */
+    private $commandeCSVParametrage;
+
 
     public function __construct()
     {
@@ -394,5 +402,29 @@ class QuestionnairePersonnalisation
     public function getQuestionnaireType()
     {
         return $this->questionnaireType;
+    }
+
+    /**
+     * Set commandeCSVParametrage
+     *
+     * @param CommandeCSVParametrage $commandeCSVParametrage
+     *
+     * @return QuestionnairePersonnalisation
+     */
+    public function setCommandeCSVParametrage(CommandeCSVParametrage $commandeCSVParametrage = null)
+    {
+        $this->commandeCSVParametrage = $commandeCSVParametrage;
+
+        return $this;
+    }
+
+    /**
+     * Get commandeCSVParametrage
+     *
+     * @return CommandeCSVParametrage
+     */
+    public function getCommandeCSVParametrage()
+    {
+        return $this->commandeCSVParametrage;
     }
 }

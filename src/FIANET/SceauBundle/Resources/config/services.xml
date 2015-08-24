@@ -76,13 +76,6 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument>%relance_delai_jours%</argument>
         </service>
-        <!--<service id="fianet_sceau.import_csv" class="FIANET\SceauBundle\Service\ImportCSV">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="validator"/>
-            <argument type="service" id="monolog.logger"/>
-            <tag name="monolog.logger" channel="import_csv" />
-            <argument>%path_stockage_csv%</argument>
-        </service>-->
 
         <!-- Extranet -->
         <service id="fianet_sceau.extranet.menu_builder" class="FIANET\SceauBundle\Service\Extranet\MenuBuilder">            

@@ -74,7 +74,7 @@ class Commande
     /**
      * @var array
      *
-     * @ORM\Column(name="donnees", type="json_array", nullable=true)
+     * @ORM\Column(name="donnees", type="jsonb_array", nullable=true)
      */
     private $donnees;
 
@@ -102,14 +102,6 @@ class Commande
      * @ORM\JoinColumn(name="flux_id", referencedColumnName="id", nullable=true)
      */
     private $flux;
-
-    /**
-     * @var QuestionnaireType
-     *
-     * @ORM\ManyToOne(targetEntity="FIANET\SceauBundle\Entity\QuestionnaireType")
-     * @ORM\JoinColumn(name="questionnaireType_id", referencedColumnName="id", nullable=false)
-     */
-    private $questionnaireType;
 
     /**
      * @var Langue
@@ -513,29 +505,5 @@ class Commande
     public function getProduits()
     {
         return $this->produits;
-    }
-
-    /**
-     * Set questionnaireType
-     *
-     * @param QuestionnaireType $questionnaireType
-     *
-     * @return Commande
-     */
-    public function setQuestionnaireType(QuestionnaireType $questionnaireType)
-    {
-        $this->questionnaireType = $questionnaireType;
-
-        return $this;
-    }
-
-    /**
-     * Get questionnaireType
-     *
-     * @return QuestionnaireType
-     */
-    public function getQuestionnaireType()
-    {
-        return $this->questionnaireType;
     }
 }

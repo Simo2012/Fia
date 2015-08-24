@@ -36,7 +36,7 @@ class QuestionnaireType implements Translatable
     /**
      * @var array
      *
-     * @ORM\Column(name="parametrage", type="json_array")
+     * @ORM\Column(name="parametrage", type="jsonb_array")
      */
     private $parametrage;
 

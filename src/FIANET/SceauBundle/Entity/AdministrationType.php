@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AdministrationType
 {
+    const LIEN_DIRECT = 1;
+    const VIA_CERTISSIM = 2;
+    const FLUX_XML = 3;
+    const CSV_AUTO = 4;
+    const CSV_MANUEL = 5;
+
     /**
      * @var integer
      *

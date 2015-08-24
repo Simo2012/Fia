@@ -78,14 +78,14 @@ class Question implements Translatable
     /**
      * @var array
      *
-     * @ORM\Column(name="visible", type="json_array", nullable=true)
+     * @ORM\Column(name="visible", type="jsonb_array", nullable=true)
      */
     private $visible;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="obligatoire", type="json_array", nullable=true)
+     * @ORM\Column(name="obligatoire", type="jsonb_array", nullable=true)
      */
     private $obligatoire;
 

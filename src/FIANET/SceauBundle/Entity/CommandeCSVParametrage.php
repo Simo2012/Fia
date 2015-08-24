@@ -25,16 +25,37 @@ class CommandeCSVParametrage
     /**
      * @var string
      *
+     * @ORM\Column(name="dossierStockage", type="string", length=255)
+     */
+    private $dossierStockage;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="separateur", type="string", length=5)
      */
     private $separateur;
 
     /**
-     * @var integer
+     * @var array
      *
-     * @ORM\Column(name="nbJoursUnicite", type="smallint", nullable=true)
+     * @ORM\Column(name="correspondances", type="jsonb_array", nullable=true)
      */
-    private $nbJoursUnicite;
+    private $correspondances;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="unicite", type="jsonb_array", nullable=true)
+     */
+    private $unicite;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="sousSiteActif", type="boolean", options={"default"=false})
+     */
+    private $sousSiteActif;
 
 
     /**
@@ -90,30 +111,6 @@ class CommandeCSVParametrage
     }
 
     /**
-     * Set nbJoursUnicite
-     *
-     * @param integer $nbJoursUnicite
-     *
-     * @return CommandeCSVParametrage
-     */
-    public function setNbJoursUnicite($nbJoursUnicite)
-    {
-        $this->nbJoursUnicite = $nbJoursUnicite;
-
-        return $this;
-    }
-
-    /**
-     * Get nbJoursUnicite
-     *
-     * @return integer
-     */
-    public function getNbJoursUnicite()
-    {
-        return $this->nbJoursUnicite;
-    }
-
-    /**
      * Add commandeCSVColonne
      *
      * @param CommandeCSVColonne $commandeCSVColonne
@@ -140,10 +137,106 @@ class CommandeCSVParametrage
     /**
      * Get commandeCSVColonnes
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getCommandeCSVColonnes()
     {
         return $this->commandeCSVColonnes;
+    }
+
+    /**
+     * Set correspondances
+     *
+     * @param array $correspondances
+     *
+     * @return CommandeCSVParametrage
+     */
+    public function setCorrespondances($correspondances)
+    {
+        $this->correspondances = $correspondances;
+
+        return $this;
+    }
+
+    /**
+     * Get correspondances
+     *
+     * @return array
+     */
+    public function getCorrespondances()
+    {
+        return $this->correspondances;
+    }
+
+    /**
+     * Set dossierStockage
+     *
+     * @param string $dossierStockage
+     *
+     * @return CommandeCSVParametrage
+     */
+    public function setDossierStockage($dossierStockage)
+    {
+        $this->dossierStockage = $dossierStockage;
+
+        return $this;
+    }
+
+    /**
+     * Get dossierStockage
+     *
+     * @return string
+     */
+    public function getDossierStockage()
+    {
+        return $this->dossierStockage;
+    }
+
+    /**
+     * Set unicite
+     *
+     * @param array $unicite
+     *
+     * @return CommandeCSVParametrage
+     */
+    public function setUnicite($unicite)
+    {
+        $this->unicite = $unicite;
+
+        return $this;
+    }
+
+    /**
+     * Get unicite
+     *
+     * @return array
+     */
+    public function getUnicite()
+    {
+        return $this->unicite;
+    }
+
+    /**
+     * Set sousSiteActif
+     *
+     * @param boolean $sousSiteActif
+     *
+     * @return CommandeCSVParametrage
+     */
+    public function setSousSiteActif($sousSiteActif)
+    {
+        $this->sousSiteActif = $sousSiteActif;
+
+        return $this;
+    }
+
+    /**
+     * Get sousSiteActif
+     *
+     * @return boolean
+     */
+    public function getSousSiteActif()
+    {
+        return $this->sousSiteActif;
     }
 }

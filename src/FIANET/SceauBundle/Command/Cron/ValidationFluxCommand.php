@@ -1,28 +1,41 @@
 <?php
 namespace FIANET\SceauBundle\Command\Cron;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use FIANET\SceauBundle\Exception\FluxException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use FIANET\SceauBundle\Service\GestionFlux;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ValidationFluxCommand extends ContainerAwareCommand
+class ValidationFluxCommand extends Command
 {
+    private $em;
+    private $gf;
+
+    public function __construct(ObjectManager $em, GestionFlux $gf)
+    {
+        parent::__construct();
+
+        $this->em = $em;
+        $this->gf = $gf;
+    }
+
     protected function configure()
     {
         $this
             ->setName('fianet:cron:validation-flux')
-            ->setDescription('Valide ou non les flux XML des marchands et genere un questionnaire si la reponse est positive.')
-            ->addArgument('nbMaxFlux', InputArgument::REQUIRED, 'Nombre maximum de flux traites a chaque execution de la commande')
+            ->setDescription('Valide ou non les flux XML des marchands et génère un questionnaire pour chaque flux valide.')
+            ->addArgument('nbMaxFlux', InputArgument::REQUIRED, 'Nombre maximum de flux traités à chaque exécution de la commande')
             ->setHelp(<<<EOT
-<info>fianet:cron:validation-flux</info> permet de valider ou ou non les flux XML des marchands et genere un questionnaire si la reponse est positive.
+<info>%command.name%</info> permet de valider ou non les flux XML des marchands et génère un questionnaire pour chaque flux valide.
 
 Il est obligatoire de preciser le nombre maximum de flux que la commande doit traiter.
 
 Exemple d'utilisation :
 
-<info>php app/console fianet:cron:validation-flux 400</info>
+<info>php %command.full_name% 400</info>
 EOT
             );
     }
@@ -37,27 +50,23 @@ EOT
             return 1;
         }
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-
-        $fluxNonTraites = $em->getRepository('FIANETSceauBundle:Flux')->fluxNonTraites($nbMaxFlux);
+        $fluxNonTraites = $this->em->getRepository('FIANETSceauBundle:Flux')->fluxNonTraites($nbMaxFlux);
 
         if (!empty($fluxNonTraites)) {
-            $fluxStatutEnCours = $em->getRepository('FIANETSceauBundle:FluxStatut')->enCoursDeTraitement();
-            $fluxStatutValide = $em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtValide();
-            $fluxStatutNonValide = $em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtInvalide();
+            $fluxStatutEnCours = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->enCoursDeTraitement();
+            $fluxStatutValide = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtValide();
+            $fluxStatutNonValide = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtInvalide();
 
             /* On change le statut des flux -> en cours de traitement */
             foreach ($fluxNonTraites as $fluxNonTraite) {
                 $fluxNonTraite->setFluxStatut($fluxStatutEnCours);
             }
-            $em->flush();
+            $this->em->flush();
 
             /* On lance la validation du contenu des flux */
-            $gestionFlux = $this->getContainer()->get('fianet_sceau.flux');
-
             foreach ($fluxNonTraites as $fluxNonTraite) {
                 try {
-                    $gestionFlux->validerContenu($fluxNonTraite);
+                    $this->gf->validerContenu($fluxNonTraite);
 
                     $fluxNonTraite->setFluxStatut($fluxStatutValide);
 
@@ -66,7 +75,9 @@ EOT
                     $fluxNonTraite->setLibelleErreur($e->getMessage());
                 }
             }
-            $em->flush();
+            $this->em->flush();
+
+            $output->writeln('<info>La validation est terminée !</info>');
 
             return 0;
 

@@ -1,14 +1,24 @@
 <?php
 namespace FIANET\SceauBundle\Command\Webservice;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Routing\RouterInterface;
 
-class SendRatingCommand extends ContainerAwareCommand
+class SendRatingCommand extends Command
 {
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        parent::__construct();
+
+        $this->router = $router;
+    }
+
     protected function configure()
     {
         $this
@@ -16,19 +26,19 @@ class SendRatingCommand extends ContainerAwareCommand
             ->setDescription('Permet de simuler l\'envoi d\'un flux XML pour un site')
             ->addArgument('site_id', InputArgument::REQUIRED, 'Identifiant du site')
             ->addArgument('xml', InputArgument::REQUIRED, 'Flux XML de la commande')
-            ->addOption('checksum', null, InputOption::VALUE_REQUIRED, 'Hash MD5 du XML. Si non definie, le checksum sera genere automatiquement.')
+            ->addOption('checksum', null, InputOption::VALUE_REQUIRED, 'Hash MD5 du XML. Si non définie, le checksum sera généré automatiquement.')
             ->setHelp(<<<EOT
-<info>fianet:webservice:send-rating:test</info> permet de simuler l'envoi d'un flux XML par un site.
+<info>%command.name%</info> permet de simuler l'envoi d'un flux XML par un site.
 
-Il est obligatoire de preciser l'identifiant du site et le flux XML. Optionnellement, il est possible de donner directement le checksum. S'il est absent, la commande le genere automatiquement.
+Il est obligatoire de préciser l'identifiant du site et le flux XML. Optionnellement, il est possible de donner directement le checksum. S'il est absent, la commande le génère automatiquement.
 
 Exemple d'utilisation :
 
-<info>php app/console fianet:webservice:send-rating:test 6607 "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><control>...</control>"</info>
+<info>php %command.full_name% 6607 "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><control>...</control>"</info>
 
 ou
 
-<info>php app/console fianet:webservice:send-rating:test 6607 "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><control>...</control>" --checksum=78b8ee77dc6ac513a1c68ef5c06185a6</info>
+<info>php %command.full_name% 6607 "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><control>...</control>" --checksum=78b8ee77dc6ac513a1c68ef5c06185a6</info>
 EOT
             );
     }
@@ -52,7 +62,7 @@ EOT
             return 1;
         }
 
-        $ch = curl_init($this->getContainer()->get('router')->generate('ws_send_rating', array(), true));
+        $ch = curl_init($this->router->generate('ws_send_rating', array(), true));
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POST, true);

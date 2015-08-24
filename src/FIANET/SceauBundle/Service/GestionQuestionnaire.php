@@ -5,10 +5,12 @@ use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use FIANET\SceauBundle\Entity\Commande;
+use FIANET\SceauBundle\Entity\CommandeCSVParametrage;
 use FIANET\SceauBundle\Entity\Flux;
 use FIANET\SceauBundle\Entity\Questionnaire;
-use FIANET\SceauBundle\Entity\QuestionnaireType;
 use FIANET\SceauBundle\Entity\QuestionnairePersonnalisation;
+use FIANET\SceauBundle\Entity\Site;
+use FIANET\SceauBundle\Entity\SousSite;
 use SimpleXMLElement;
 
 class GestionQuestionnaire
@@ -42,27 +44,25 @@ class GestionQuestionnaire
      * 2) Si le site a personnalisé le délai d'envoi : on ajoute ce délai à la date du jour.
      * 3) Dans tous les autres cas : on ajoute le délai par défaut en fonction du type de questionnaire.
      *
-     * @param QuestionnairePersonnalisation $questionnairePersonnalisation Instance de QuestionnairePersonnalisation
-     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     * @param QuestionnairePersonnalisation $questionnairePerso Instance de QuestionnairePersonnalisation
      * @param Commande $commande Instance de Commande
      *
      * @return DateTime Retourne la date d'envoi du questionnaire
      */
-    private function fixerDateEnvoi(
-        QuestionnairePersonnalisation $questionnairePersonnalisation,
-        QuestionnaireType $questionnaireType,
-        Commande $commande
-    ) {
+    private function fixerDateEnvoi(QuestionnairePersonnalisation $questionnairePerso, Commande $commande)
+    {
         $dateEnvoi = new DateTime();
 
         if ($commande->getDateUtilisation()) {
             $dateEnvoi->add(new DateInterval($this->delaiEnvoiDateUtilisation));
 
-        } elseif ($questionnairePersonnalisation->getDelaiEnvoi()) {
-            $dateEnvoi->add($this->intervalleDelaiEnvoi($questionnairePersonnalisation->getDelaiEnvoi()->getNbJours()));
+        } elseif ($questionnairePerso->getDelaiEnvoi()) {
+            $dateEnvoi->add($this->intervalleDelaiEnvoi($questionnairePerso->getDelaiEnvoi()->getNbJours()));
 
         } else {
-            $dateEnvoi->add($this->intervalleDelaiEnvoi($questionnaireType->getDelaiEnvoi()->getNbJours()));
+            $dateEnvoi->add(
+                $this->intervalleDelaiEnvoi($questionnairePerso->getQuestionnaireType()->getDelaiEnvoi()->getNbJours())
+            );
         }
 
         return $dateEnvoi;
@@ -71,11 +71,12 @@ class GestionQuestionnaire
     /**
      * Crée une instance de Commande à partir du flux XML envoyé par le marchand.
      *
+     * @param Flux $flux Instance de Flux
      * @param string $xml XML de la commande
      *
      * @return Commande Instance de Commande
      */
-    private function creerCommandeLieeAuFlux($xml)
+    private function creerCommandeViaFlux(Flux $flux, $xml)
     {
         $commande = new Commande();
         $commande->setEmail($xml->utilisateur->email->__toString());
@@ -105,28 +106,127 @@ class GestionQuestionnaire
             }
         }
         $commande->setLangue($langue);
+        $commande->setSite($flux->getSite());
+        $commande->setFlux($flux);
 
         return $commande;
     }
 
     /**
-     * Génère un questionnaire à partir d'un flux.
+     * Crée une instance de Commande à partir d'une ligne d'un fichier CSV envoyé par le marchand.
+     * Seuls le prénom et le montant peuvent être null.
+     *
+     * @param Site $site Instance de Site
+     * @param CommandeCSVParametrage $commandeCSVParametrage Instance de CommandeCSVParametrage
+     * @param array $ligne Tableau contenant l'ensemble des colonnes de la ligne
+     * @param SousSite|null $sousSite Instance de SousSite. Peut être null.
+     *
+     * @return Commande Instance de Commande
+     */
+    private function creerCommandeViaCSV(
+        Site $site,
+        CommandeCSVParametrage $commandeCSVParametrage,
+        $ligne,
+        SousSite $sousSite = null
+    ) {
+        $correspondances = $commandeCSVParametrage->getCorrespondances();
+
+        $commande = new Commande();
+        $commande->setEmail($ligne[$correspondances['email']]);
+        if ($correspondances['prenom']) {
+            $commande->setPrenom($ligne[$correspondances['prenom']]);
+        }
+        $commande->setNom($ligne[$correspondances['nom']]);
+
+        if (strpos($ligne[$correspondances['date']], '-') !== false) {
+            $commande->setDate(new DateTime($ligne[$correspondances['date']]));
+        } else {
+            /* Date francophone */
+            $date = DateTime::createFromFormat('d/m/Y', $ligne[$correspondances['date']]);
+            $date->setTime(0, 0, 0);
+            $commande->setDate($date);
+        }
+
+        $commande->setReference($ligne[$correspondances['reference']]);
+        if ($correspondances['montant']) {
+            $commande->setMontant($ligne[$correspondances['montant']]);
+        }
+
+        $commande->setLangue(
+            $this->em->getRepository('FIANETSceauBundle:Langue')->langueViaCode($this->codeLangueParDefaut)
+        );
+
+        $commande->setSite($site);
+        if ($sousSite) {
+            $commande->setSousSite($sousSite);
+        }
+
+        $listeColonnes = [];
+        foreach ($commandeCSVParametrage->getCommandeCSVColonnes() as $commandeCSVColonne) {
+            $listeColonnes[] = $commandeCSVColonne->getLibelle();
+        }
+
+        $json = [];
+        $nbColonnes = count($ligne);
+        for ($i = 0; $i < $nbColonnes; $i++) {
+            $json[$listeColonnes[$i]] = $ligne[$i];
+        }
+        $commande->setDonnees($json);
+
+        return $commande;
+    }
+
+    /**
+     * Insére un questionnaire en base de données.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnairePersonnalisation $questionnairePerso Instance de QuestionnairePersonnalisation
+     * @param Commande|null $commande Instance de Commande. Peut être null si mode d'administration "lien dans email"
+     * @param SousSite|null $sousSite Instance de SousSite. Peut être null.
+     */
+    private function creerQuestionnaire(
+        Site $site,
+        QuestionnairePersonnalisation $questionnairePerso,
+        Commande $commande = null,
+        SousSite $sousSite = null
+    ) {
+        $questionnaire = new Questionnaire();
+        $questionnaire->setCommande($commande);
+        if ($sousSite) {
+            $questionnaire->setSousSite($sousSite);
+        }
+        $questionnaire->setSite($site);
+        $questionnaire->setLangue($commande->getLangue());
+        $questionnaire->setQuestionnaireType($questionnairePerso->getQuestionnaireType());
+        $questionnaire->setEmail($commande->getEmail());
+        $questionnaire->setDateInsertion(new DateTime());
+        $questionnaire->setDatePrevEnvoi(
+            $this->fixerDateEnvoi($questionnairePerso, $commande)
+        );
+        $questionnaire->setActif(true);
+
+        $this->em->persist($questionnaire);
+        $this->em->flush($questionnaire);
+    }
+
+    /**
+     * Génère un questionnaire à partir d'un flux XML.
      *
      * @param Flux $flux Instance de flux
      * @param SimpleXMLElement $xml Instance de SimpleXMLElement contenant l'XML de la commande
      */
     public function genererQuestionnaireViaFlux(Flux $flux, SimpleXMLElement $xml)
     {
-        $questionnairePersonnalisation = null;
+        $questionnairePerso = null;
         $questionnaireType = null;
-        $questionnairePersonnalisations = $flux->getSite()->getQuestionnairePersonnalisations();
+        $questionnairePersos = $flux->getSite()->getQuestionnairePersonnalisations();
 
         if (!$xml->questionnaire) {
             $i = 0;
             while (!$questionnaireType) {
-                if ($questionnairePersonnalisations[$i]->getPrincipal() === true) {
-                    $questionnairePersonnalisation = $questionnairePersonnalisations[$i];
-                    $questionnaireType = $questionnairePersonnalisations[$i]->getQuestionnaireType();
+                if ($questionnairePersos[$i]->getPrincipal() === true) {
+                    $questionnairePerso = $questionnairePersos[$i];
+                    $questionnaireType = $questionnairePersos[$i]->getQuestionnaireType();
                 }
                 $i++;
             }
@@ -135,26 +235,32 @@ class GestionQuestionnaire
             questionnaire. Si oui, le QuestionnaireType sera égal au questionnaire indiqué. */
         }
 
-        $commande = $this->creerCommandeLieeAuFlux($xml);
-        $commande->setSite($flux->getSite());
-        $commande->setQuestionnaireType($questionnaireType);
-        if ($flux) {
-            $commande->setFlux($flux);
-        }
+        $commande = $this->creerCommandeViaFlux($flux, $xml);
 
-        $questionnaire = new Questionnaire();
-        $questionnaire->setCommande($commande);
-        $questionnaire->setSite($flux->getSite());
-        $questionnaire->setLangue($commande->getLangue());
-        $questionnaire->setQuestionnaireType($questionnaireType);
-        $questionnaire->setEmail($commande->getEmail());
-        $questionnaire->setDateInsertion(new DateTime());
-        $questionnaire->setDatePrevEnvoi(
-            $this->fixerDateEnvoi($questionnairePersonnalisation, $questionnaireType, $commande)
+        $this->creerQuestionnaire($flux->getSite(), $questionnairePerso, $commande);
+    }
+
+    /**
+     * Génère un questionnaire à partir d'une ligne d'un fichier CSV.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnairePersonnalisation $questionnairePerso Instance de QuestionnairePersonnalisation
+     * @param array $ligne Tableau comportant les différentes données de la ligne
+     * @param SousSite|null $sousSite Instance de SousSite. Peut être null.
+     */
+    public function genererQuestionnaireViaCSV(
+        Site $site,
+        QuestionnairePersonnalisation $questionnairePerso,
+        $ligne,
+        SousSite $sousSite = null
+    ) {
+        $commande = $this->creerCommandeViaCSV(
+            $site,
+            $questionnairePerso->getCommandeCSVParametrage(),
+            $ligne,
+            $sousSite
         );
-        $questionnaire->setActif(true);
 
-        $this->em->persist($questionnaire);
-        $this->em->flush();
+        $this->creerQuestionnaire($site, $questionnairePerso, $commande, $sousSite);
     }
 }

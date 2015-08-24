@@ -38,7 +38,7 @@ class CommandeCSVColonne
     /**
      * @var array
      *
-     * @ORM\Column(name="correspondance", type="json_array")
+     * @ORM\Column(name="parametrage", type="jsonb_array")
      */
     private $parametrage;
 
