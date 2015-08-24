@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Service;
 
 use Collator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Service contenant des outils qui permettent de manipuler des chaines de caractères.
@@ -12,7 +13,7 @@ class OutilsString
     private $translator;
     private $collator;
 
-    public function __construct($translator)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
         $this->collator = new Collator($this->translator->getLocale());

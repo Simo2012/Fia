@@ -2,7 +2,6 @@
 
 namespace FIANET\SceauBundle\Form\Type;
 
-use Collator;
 use FIANET\SceauBundle\Service\OutilsString;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,23 +9,19 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class QuestionType extends AbstractType
 {
     protected $outilsString;
 
-    /**
-     * @param OutilsString $outilsString Instance de OutilsString
-     */
     public function __construct(OutilsString $outilsString)
     {
         $this->outilsString = $outilsString;
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -70,6 +65,9 @@ class QuestionType extends AbstractType
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $this->outilsString->trierListeStringsSelonLocale(
@@ -79,9 +77,9 @@ class QuestionType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @inheritdoc
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'FIANET\SceauBundle\Entity\Question',
@@ -91,7 +89,7 @@ class QuestionType extends AbstractType
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {

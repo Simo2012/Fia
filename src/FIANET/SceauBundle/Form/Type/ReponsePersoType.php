@@ -3,7 +3,7 @@
 namespace FIANET\SceauBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ReponsePersoType extends ReponseType
 {
@@ -13,8 +13,7 @@ class ReponsePersoType extends ReponseType
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -27,9 +26,9 @@ class ReponsePersoType extends ReponseType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'FIANET\SceauBundle\Entity\Reponse',
@@ -38,7 +37,7 @@ class ReponsePersoType extends ReponseType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

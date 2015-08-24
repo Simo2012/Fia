@@ -14,8 +14,8 @@
             <ul class="error_list">
                 {% for error in errors %}
                     <li >{{error.message }}</li>
-                    {% endfor %}  
-                </u>
+                {% endfor %}
+            </ul>
         </div>
     {% endif %}
 {% endblock %}
@@ -66,7 +66,7 @@
             
             <div class="block-total">
                 <h2>{{ 'commun_droit_de_reponse'|trans }} ({{ nbCaracteresMax }} {{ 'commun_nb_caracteres_max'|trans }})</h2>
-                <dd>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</dt>
+                <dd>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</dd>
                 <br />
                 <div class="Totalook">
                     <div id="laCharte">{{ 'commun_charte_commercant'|trans|raw}}</div>

@@ -13,9 +13,6 @@ class SelectLangueType extends AbstractType
 {
     protected $outilsString;
 
-    /**
-     * @param OutilsString $outilsString Instance de OutilsString
-     */
     public function __construct(OutilsString $outilsString)
     {
         $this->outilsString = $outilsString;
@@ -32,15 +29,19 @@ class SelectLangueType extends AbstractType
                 'entity',
                 array(
                     'class' => 'FIANETSceauBundle:Langue',
-                    'property' => 'libelle',
+                    'choice_label' => 'libelle',
                     'query_builder' => function(LangueRepository $lr) {
                         return $lr->menuDeroulant();
                     },
-                    'translation_domain' => 'langues'
+                    'translation_domain' => 'langues',
+                    'choice_translation_domain' => 'langues'
                 )
             );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $this->outilsString->trierListeStringsSelonLocale(

@@ -88,7 +88,6 @@
 
         <service id="fianet_sceau.extranet.menu_acces" class="FIANET\SceauBundle\Service\Extranet\MenuAcces">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="security.context"/>
         </service>
 
         <service id="fianet_sceau.extranet.menu" class="Knp\Menu\MenuItem" scope="request">

@@ -2,20 +2,18 @@
 
 namespace FIANET\SceauBundle\Form\Type;
 
-use Collator;
 use FIANET\SceauBundle\Entity\QuestionTypeRepository;
 use IntlDateFormatter;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Date;
 
 class QuestionPersoType extends QuestionType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -52,9 +50,10 @@ class QuestionPersoType extends QuestionType
                 'entity',
                 array(
                     'class' => 'FIANETSceauBundle:QuestionType',
-                    'property' => 'libelle',
+                    'choice_label' => 'libelle',
                     'empty_value' => 'choisir_valeur',
                     'translation_domain' => 'questionType',
+                    'choice_translation_domain' => 'questionType',
                     'required' => true,
                     'query_builder' => function (QuestionTypeRepository $repo) {
                         return $repo->typesPersonnalisablesQueryBuilder();
@@ -92,9 +91,9 @@ class QuestionPersoType extends QuestionType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @inheritdoc
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'FIANET\SceauBundle\Entity\Question',
@@ -104,7 +103,7 @@ class QuestionPersoType extends QuestionType
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {

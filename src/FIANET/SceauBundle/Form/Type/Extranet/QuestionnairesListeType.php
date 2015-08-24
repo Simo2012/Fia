@@ -15,9 +15,6 @@ class QuestionnairesListeType extends AbstractType
 {
     protected $outilsString;
 
-    /**
-     * @param OutilsString $outilsString Instance de OutilsString
-     */
     public function __construct(OutilsString $outilsString)
     {
         $this->outilsString = $outilsString;
@@ -55,7 +52,7 @@ class QuestionnairesListeType extends AbstractType
                 'indicateurs',
                 'choice',
                 array(
-                    'choices' => array('vert' => ' ', 'jaune' => ' ', 'rouge' => ' ', 'gris' => ' '),
+                    'choices' => ['vert' => 'vert', 'jaune' => 'jaune', 'rouge' => 'rouge', 'gris' => 'gris'],
                     'multiple' => true,
                     'expanded' => true
                 )
@@ -65,13 +62,14 @@ class QuestionnairesListeType extends AbstractType
                 'entity',
                 array(
                     'class' => 'FIANETSceauBundle:LivraisonType',
-                    'property' => 'libelle',
+                    'choice_label' => 'libelle',
                     'empty_value' => 'livraisons_tous',
                     'query_builder' => function(LivraisonTypeRepository $ltr) {
                         return $ltr->menuDeroulant();
                     },
                     'required' => false,
-                    'translation_domain' => 'livraisons'
+                    'translation_domain' => 'livraisons',
+                    'choice_translation_domain' => 'livraisons'
                 )
             )
             ->add(
@@ -99,7 +97,9 @@ class QuestionnairesListeType extends AbstractType
             ->setMethod('POST');
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $this->outilsString->trierListeStringsSelonLocale(

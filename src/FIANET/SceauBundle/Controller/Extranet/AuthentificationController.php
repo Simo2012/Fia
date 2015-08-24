@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\SecurityContext;
 
 class AuthentificationController extends Controller
 {
@@ -17,25 +16,16 @@ class AuthentificationController extends Controller
      *
      * @Route("/login", name="extranet_utilisateur_login")
      *
-     * @param Request $request Instance de Request
-     *
      * @return Response Instance de Response
      */
-    public function loginAction(Request $request)
+    public function loginAction()
     {
-        $session = $request->getSession();
-        // get the login error if there is one
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } else {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
-        }
-        return $this->render('FIANETSceauBundle:Extranet:login_form.html.twig', array(
-            // last username entered by the user
-            'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-            'error' => $error,
-        ));
+        $helper = $this->get('security.authentication_utils');
+
+        return $this->render(
+            'FIANETSceauBundle:Extranet:login_form.html.twig',
+            ['last_username' => $helper->getLastUsername(), 'error' => $helper->getLastAuthenticationError()]
+        );
     }
 
     /**
