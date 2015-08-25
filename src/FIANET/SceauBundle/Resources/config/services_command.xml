@@ -16,7 +16,7 @@
             <tag name="console.command" />
         </service>
 
-        <service id="fianet_sceau.import_csv" class="FIANET\SceauBundle\Service\ImportCSV" public="false">
+        <service id="fianet_sceau.import_csv" class="FIANET\SceauBundle\Service\ImportCSV">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="database_connection"/>
             <argument type="service" id="validator"/>

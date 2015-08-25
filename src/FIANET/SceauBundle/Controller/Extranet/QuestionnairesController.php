@@ -615,18 +615,20 @@ class QuestionnairesController extends Controller
      *
      * @Route("/questionnaires/detail-questionnaire/{questionnaire_id}/{position}",
      *     requirements={"questionnaire_id" = "\d+", "position" = "\d+"},
+     *     name="extranet_questionnaires_detail_questionnaire_pagine")
+     * @Route("/questionnaires/detail-questionnaire/{questionnaire_id}", requirements={"questionnaire_id" = "\d+"},
      *     name="extranet_questionnaires_detail_questionnaire")
      * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
      * @param int $questionnaire_id Identifiant du questionnaire
-     * @param int $position Position du questionnaire dans le listing filtré et trié
+     * @param int|null $position Position du questionnaire dans le listing filtré et trié
      *
      * @return Response Instance de Response
      *
      * @throws Exception
      */
-    public function detailQuestionnaireAction(Request $request, $questionnaire_id, $position)
+    public function detailQuestionnaireAction(Request $request, $questionnaire_id, $position = null)
     {
         $menu = $this->get('fianet_sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
@@ -646,26 +648,31 @@ class QuestionnairesController extends Controller
             ->recupDonneesRequestQuest($request, $questionnaireType, 1);
         $request->getSession()->set('detail_questionnaires', 1);
 
-        $pagination = $this->getDoctrine()->getManager()->getRepository('FIANETSceauBundle:Questionnaire')
-            ->questionnairesSuivantEtPrecedent(
-                $site,
-                $questionnaireType,
-                $donneesRequest['dateDebut'],
-                $donneesRequest['dateFin'],
-                $donneesRequest['recherche'],
-                $donneesRequest['listeReponsesIndicateurs'],
-                $donneesRequest['livraisonType'],
-                $donneesRequest['tri'],
-                $position
-            );
+        if ($position !== null) {
+            $pagination = $this->getDoctrine()->getManager()->getRepository('FIANETSceauBundle:Questionnaire')
+                ->questionnairesSuivantEtPrecedent(
+                    $site,
+                    $questionnaireType,
+                    $donneesRequest['dateDebut'],
+                    $donneesRequest['dateFin'],
+                    $donneesRequest['recherche'],
+                    $donneesRequest['listeReponsesIndicateurs'],
+                    $donneesRequest['livraisonType'],
+                    $donneesRequest['tri'],
+                    $position
+                );
 
-        if (count($pagination) > 1) {
-            if ($pagination[0]['id'] == $questionnaire_id) {
-                $boutons = array('precedent' => null, 'suivant' => $pagination[1]);
-            } elseif (!isset($pagination[2]['id'])) {
-                $boutons = array('precedent' => $pagination[0], 'suivant' => null);
+            if (count($pagination) > 1) {
+                if ($pagination[0]['id'] == $questionnaire_id) {
+                    $boutons = array('precedent' => null, 'suivant' => $pagination[1]);
+                } elseif (!isset($pagination[2]['id'])) {
+                    $boutons = array('precedent' => $pagination[0], 'suivant' => null);
+                } else {
+                    $boutons = array('precedent' => $pagination[0], 'suivant' => $pagination[2]);
+                }
+
             } else {
-                $boutons = array('precedent' => $pagination[0], 'suivant' => $pagination[2]);
+                $boutons = array('precedent' => null, 'suivant' => null);
             }
 
         } else {

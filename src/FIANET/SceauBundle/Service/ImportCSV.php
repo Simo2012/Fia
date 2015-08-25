@@ -8,6 +8,7 @@ use FIANET\SceauBundle\Entity\QuestionnairePersonnalisation;
 use FIANET\SceauBundle\Entity\Site;
 use FIANET\SceauBundle\Entity\SousSite;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Email;
@@ -109,12 +110,10 @@ class ImportCSV
                             );
                             break;
                         case 'enum':
-                            if (!in_array($colonne, $parametrage["liste"])) {
-                                $listeViolation[0] = 'Elément inexistant';
-
-                            } else {
-                                $listeViolation = [];
-                            }
+                            $listeViolation = $this->validator->validate(
+                                $colonne,
+                                new Choice(['choices' => ['O', 'N']])
+                            );
                             break;
                         default:
                             $listeViolation = [];

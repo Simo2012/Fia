@@ -13,7 +13,7 @@
         </td>
         <td>
             {% if questionnaire.commentaire is not empty %}
-                {{ questionnaire.commentaire | truncate(100, true, '') }} {% if  questionnaire.commentaire|length > 100 %}<a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': questionnaire.id, 'position': offset + loop.index0}) }}">[...]</a>{% endif %}
+                {{ questionnaire.commentaire | truncate(100, true, '') }} {% if  questionnaire.commentaire|length > 100 %}<a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': questionnaire.id, 'position': offset + loop.index0}) }}">[...]</a>{% endif %}
 
                 {% if parametrage.droitDeReponse %}
                     <a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': questionnaire.commentaireID}) }}" class="fleche-droit-reponse">
@@ -34,7 +34,7 @@
             </td>
         {% endif %}
         <td>
-            <a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': questionnaire.id, 'position': offset + loop.index0}) }}">
+            <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': questionnaire.id, 'position': offset + loop.index0}) }}">
                 <img src="{{ asset('bundles/fianetsceau/images/extranet/picto_detail.png') }}" width="12" height="17" title="{% trans from 'extranet_questionnaires_questionnaires' %}details_questionnaire{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}details_questionnaire{% endtrans %}" />
             </a>
         </td>

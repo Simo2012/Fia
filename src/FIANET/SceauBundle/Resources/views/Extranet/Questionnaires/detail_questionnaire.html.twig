@@ -19,13 +19,13 @@
         <h1>{% trans %}commun_avis_de{% endtrans %} {% if questionnaire1.membre.prenom is not empty %}{{ questionnaire1.membre.prenom|capitalize }}{% endif %} {% if questionnaire1.membre.nom is not empty %}{{ questionnaire1.membre.nom |upper }}{% endif %}
             <span>
                 {% if boutons.precedent %}
-                    <a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': boutons.precedent.id, 'position': position-1 }) }}"><button><<</button></a>&nbsp;
+                    <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.precedent.id, 'position': position-1 }) }}"><button><<</button></a>&nbsp;
                 {% endif %}
 
                 <a href="{{ path('extranet_questionnaires_questionnaires') }}"><button>{{ 'commun_questionnaires'|trans }}</button></a>
 
                 {% if boutons.suivant %}
-                    <a href="{{ path('extranet_questionnaires_detail_questionnaire', {'questionnaire_id': boutons.suivant.id, 'position': position+1 }) }}"><button>>></button></a>&nbsp;
+                    <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.suivant.id, 'position': position+1 }) }}"><button>>></button></a>&nbsp;
                 {% endif %}
             </span>
         </h1>
