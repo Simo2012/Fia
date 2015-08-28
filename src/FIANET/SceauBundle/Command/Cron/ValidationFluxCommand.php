@@ -2,8 +2,10 @@
 namespace FIANET\SceauBundle\Command\Cron;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Exception;
 use FIANET\SceauBundle\Exception\FluxException;
 use FIANET\SceauBundle\Service\GestionFlux;
+use FIANET\SceauBundle\Service\GestionQuestionnaire;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,13 +15,15 @@ class ValidationFluxCommand extends Command
 {
     private $em;
     private $gf;
+    private $gq;
 
-    public function __construct(ObjectManager $em, GestionFlux $gf)
+    public function __construct(ObjectManager $em, GestionFlux $gf, GestionQuestionnaire $gq)
     {
         parent::__construct();
 
         $this->em = $em;
         $this->gf = $gf;
+        $this->gq = $gq;
     }
 
     protected function configure()
@@ -53,6 +57,7 @@ EOT
         $fluxNonTraites = $this->em->getRepository('FIANETSceauBundle:Flux')->fluxNonTraites($nbMaxFlux);
 
         if (!empty($fluxNonTraites)) {
+            $fluxStatutATraiter = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->aTraiter();
             $fluxStatutEnCours = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->enCoursDeTraitement();
             $fluxStatutValide = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtValide();
             $fluxStatutNonValide = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtInvalide();
@@ -67,12 +72,18 @@ EOT
             foreach ($fluxNonTraites as $fluxNonTraite) {
                 try {
                     $this->gf->validerContenu($fluxNonTraite);
+                    $this->gq->genererQuestionnaireViaFlux($fluxNonTraite);
 
                     $fluxNonTraite->setFluxStatut($fluxStatutValide);
 
                 } catch (FluxException $e) {
                     $fluxNonTraite->setFluxStatut($fluxStatutNonValide);
                     $fluxNonTraite->setLibelleErreur($e->getMessage());
+
+                } catch (Exception $e) {
+                    $fluxNonTraite->setFluxStatut($fluxStatutATraiter);
+                    $output->writeln('<error>La validation du flux ' . $fluxNonTraite->getId() .
+                        ' a échoué : ' . $e->getMessage() . '</error>');
                 }
             }
             $this->em->flush();

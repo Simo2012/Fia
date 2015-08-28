@@ -32,7 +32,7 @@ class FluxRepository extends EntityRepository
             ))
             ->setParameter('a_traiter', 1)
             ->setParameter('en_cours', 2)
-            ->andWhere('qp.principal=true') // TODO : pourquoi ?
+            ->andWhere('qp.principal=true') // TODO : mettren en place une pagination pour pouvoir supprimer cette ligne
             ->andWhere($qb->expr()->orX(
                 $qb->expr()->isNull('qp.dateFin'),
                 $qb->expr()->gt('qp.dateFin', ':today')

@@ -18,7 +18,7 @@ class FluxChecksumValidator extends ConstraintValidator
     public function validate($flux, Constraint $constraint)
     {
         if ($flux->getChecksum() != md5($flux->getXml())) {
-            $this->buildViolation($constraint->message)->addViolation();
+            $this->context->addViolation($constraint->message);
         }
     }
 }

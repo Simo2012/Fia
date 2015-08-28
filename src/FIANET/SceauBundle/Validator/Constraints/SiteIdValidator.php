@@ -2,7 +2,7 @@
 
 namespace FIANET\SceauBundle\Validator\Constraints;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -10,7 +10,7 @@ class SiteIdValidator extends ConstraintValidator
 {
     private $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct(ObjectManager $em)
     {
         $this->em = $em;
     }
@@ -36,7 +36,7 @@ class SiteIdValidator extends ConstraintValidator
         }
 
         if ($siteIdIncorrect) {
-            $this->buildViolation($constraint->message)->addViolation();
+            $this->context->addViolation($constraint->message);
         }
     }
 }

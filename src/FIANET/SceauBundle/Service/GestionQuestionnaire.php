@@ -210,13 +210,13 @@ class GestionQuestionnaire
     }
 
     /**
-     * Génère un questionnaire à partir d'un flux XML.
+     * Génère un questionnaire à partir d'un flux XML. Attention : le flux passé en argument doit avoir été validé.
      *
      * @param Flux $flux Instance de flux
-     * @param SimpleXMLElement $xml Instance de SimpleXMLElement contenant l'XML de la commande
      */
-    public function genererQuestionnaireViaFlux(Flux $flux, SimpleXMLElement $xml)
+    public function genererQuestionnaireViaFlux(Flux $flux)
     {
+        $xml = new SimpleXMLElement($flux->getXml());
         $questionnairePerso = null;
         $questionnaireType = null;
         $questionnairePersos = $flux->getSite()->getQuestionnairePersonnalisations();

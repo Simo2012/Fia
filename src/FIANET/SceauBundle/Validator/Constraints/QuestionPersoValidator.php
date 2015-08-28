@@ -2,7 +2,7 @@
 
 namespace FIANET\SceauBundle\Validator\Constraints;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use FIANET\SceauBundle\Entity\Question;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -11,7 +11,7 @@ class QuestionPersoValidator extends ConstraintValidator
 {
     private $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct(ObjectManager $em)
     {
         $this->em = $em;
     }
@@ -35,13 +35,13 @@ class QuestionPersoValidator extends ConstraintValidator
     {
         if ($question->getDateDebut() && $question->getDateFin()) {
             if ($question->getDateDebut() > $question->getDateFin()) {
-                $this->buildViolation('constraints.question_perso.date_debut_gt_date_fin')->addViolation();
+                $this->context->addViolation('constraints.question_perso.date_debut_gt_date_fin');
                 return false;
 
             } else {
                 $demain = new \DateTime('tomorrow');
                 if ($question->getDateDebut() < $demain) {
-                    $this->buildViolation('constraints.question_perso.date_debut_demain')->addViolation();
+                    $this->context->addViolation('constraints.question_perso.date_debut_demain');
                     return false;
 
                 } else {
@@ -52,7 +52,7 @@ class QuestionPersoValidator extends ConstraintValidator
                         $question->getDateFin()
                     );
                     if ($nb >= 2) {
-                        $this->buildViolation('constraints.question_perso.quotas')->addViolation();
+                        $this->context->addViolation('constraints.question_perso.quotas');
                         return false;
                     }
                 }
@@ -66,7 +66,7 @@ class QuestionPersoValidator extends ConstraintValidator
             }
         }
         if ($nbPrecision > 1) {
-            $this->buildViolation('constraints.question_perso.nb_precision')->addViolation();
+            $this->context->addViolation('constraints.question_perso.nb_precision');
 
             return false;
         }

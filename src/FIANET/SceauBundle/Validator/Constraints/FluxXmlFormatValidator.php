@@ -5,8 +5,8 @@ namespace FIANET\SceauBundle\Validator\Constraints;
 use DOMDocument;
 use Exception;
 use FIANET\SceauBundle\Entity\Flux;
-use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -15,7 +15,7 @@ class FluxXmlFormatValidator extends ConstraintValidator
     private $router;
     private $templating;
 
-    public function __construct(Router $router, TwigEngine $templating)
+    public function __construct(Router $router, EngineInterface $templating)
     {
         $this->router = $router;
         $this->templating = $templating;
@@ -62,14 +62,14 @@ class FluxXmlFormatValidator extends ConstraintValidator
             
             if ($doc->loadXML($flux->getXml())) {
                 if (!$doc->schemaValidateSource($schema)) {
-                    $this->buildViolation($this->getPremierMessageErreur($constraint))->addViolation();
+                    $this->context->addViolation($this->getPremierMessageErreur($constraint));
                 }
             } else {
-                $this->buildViolation($constraint->message)->addViolation();
+                $this->context->addViolation($constraint->message);
             }
 
         } catch (Exception $e) {
-            $this->buildViolation('constraints.erreur_interne')->addViolation();
+            $this->context->addViolation('constraints.erreur_interne');
         }
     }
 }

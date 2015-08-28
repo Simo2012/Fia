@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FluxStatut
 {
+    const FLUX_A_TRAITER = 1;
+    const FLUX_EN_COURS_DE_TRAITEMENT = 2;
+    const FLUX_VALIDE = 3;
+    const FLUX_INVALIDE = 4;
+
     /**
      * @var integer
      *

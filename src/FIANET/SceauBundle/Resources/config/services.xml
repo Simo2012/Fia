@@ -20,7 +20,6 @@
         <service id="fianet_sceau.validator.flux_xml_contenu" class="FIANET\SceauBundle\Validator\Constraints\FluxXmlContenuValidator">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="fianet_sceau.flux" />
-            <argument type="service" id="fianet_sceau.questionnaire" />
             <argument>%flux_delai_max_commande%</argument>
             <tag name="validator.constraint_validator" alias="validator.flux_xml_contenu" />
         </service>

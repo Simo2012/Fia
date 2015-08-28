@@ -4,11 +4,10 @@ namespace FIANET\SceauBundle\Validator\Constraints;
 
 use DateInterval;
 use DateTime;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Exception;
 use FIANET\SceauBundle\Entity\Flux;
 use FIANET\SceauBundle\Service\GestionFlux;
-use FIANET\SceauBundle\Service\GestionQuestionnaire;
 use SimpleXMLElement;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -17,18 +16,12 @@ class FluxXmlContenuValidator extends ConstraintValidator
 {
     private $em;
     private $gestionFlux;
-    private $gestionQuestionnaire;
     private $delaiMaxCommande;
 
-    public function __construct(
-        EntityManager $em,
-        GestionFlux $gestionFlux,
-        GestionQuestionnaire $gestionQuestionnaire,
-        $delaiMaxCommande
-    ) {
+    public function __construct(ObjectManager $em, GestionFlux $gestionFlux, $delaiMaxCommande)
+    {
         $this->em = $em;
         $this->gestionFlux = $gestionFlux;
-        $this->gestionQuestionnaire = $gestionQuestionnaire;
         $this->delaiMaxCommande = $delaiMaxCommande;
     }
 
@@ -47,7 +40,7 @@ class FluxXmlContenuValidator extends ConstraintValidator
 
             if ($dateCommande > $dateActuelle) {
                 /* Date futuriste */
-                $this->buildViolation('constraints.flux_timestamp_futuriste')->addViolation();
+                $this->context->addViolation('constraints.flux_timestamp_futuriste');
                 return false;
 
             } else {
@@ -56,7 +49,7 @@ class FluxXmlContenuValidator extends ConstraintValidator
                 $dateLimite->sub(new DateInterval($this->delaiMaxCommande));
 
                 if ($dateCommande < $dateLimite) {
-                    $this->buildViolation('constraints.flux_timestamp_trop_ancien')->addViolation();
+                    $this->context->addViolation('constraints.flux_timestamp_trop_ancien');
                     return false;
 
                 } else {
@@ -65,7 +58,7 @@ class FluxXmlContenuValidator extends ConstraintValidator
             }
         } catch (Exception $e) {
             /* Date invalide */
-            $this->buildViolation('constraints.flux_timestamp_incorrect')->addViolation();
+            $this->context->addViolation('constraints.flux_timestamp_incorrect');
             return false;
         }
     }
@@ -86,7 +79,7 @@ class FluxXmlContenuValidator extends ConstraintValidator
 
             if ($dateUtilisation < $dateActuelle) {
                 /* Date dans le passé */
-                $this->buildViolation('constraints.flux_dateutilisation_passe')->addViolation();
+                $this->context->addViolation('constraints.flux_dateutilisation_passe');
                 return false;
 
             } else {
@@ -94,21 +87,22 @@ class FluxXmlContenuValidator extends ConstraintValidator
             }
         } catch (Exception $e) {
             /* Date invalide */
-            $this->buildViolation('constraints.flux_dateutilisation_incorrect')->addViolation();
+            $this->context->addViolation('constraints.flux_dateutilisation_incorrect');
             return false;
         }
     }
 
     /**
-     * Vérifie le contenu du XML d'un flux.
-     * Si le flux n'est pas valide, la première erreur rencontrée est renvoyée.
-     * Si le flux est valide, une demande au service de génération de questionnaire est effectuée.
+     * Vérifie le contenu du XML d'un flux. Si le flux n'est pas valide, la première erreur rencontrée est renvoyée.
+     * Dans l'ordre, on teste :
+     * - Format XML
+     * - Crypt correct
+     * - Identifiant du site fourni en POST à la réception et celui contenu dans le XML sont cohérents
+     * - Validité date de commande
+     * - Validité date d'utilisation
      *
      * @param Flux $flux Instance de Flux
-     *
      * @param Constraint $constraint Instance de FluxXmlContenu
-     *
-     * @return bool true Si valide retourne true sinon false
      */
     public function validate($flux, Constraint $constraint)
     {
@@ -117,56 +111,36 @@ class FluxXmlContenuValidator extends ConstraintValidator
         try {
             $xml = new SimpleXMLElement($flux->getXml());
 
-        } catch (Exception $e) {
-            /* Normalement ce cas n'arrrive pas : le format est vérifié à l'étape précédente */
-            $this->buildViolation('constraints.erreur_interne')->addViolation();
+            /* Vérification du crypt */
+            $cryptAttendu = $this->gestionFlux->getCrypt(
+                $flux->getSite()->getClePriveeSceau(),
+                $xml->infocommande->refid,
+                $xml->infocommande->ip['timestamp'],
+                $xml->utilisateur->email
+            );
 
-            return false;
-        }
+            if ($xml->crypt == $cryptAttendu) {
+                $site = $flux->getSite();
 
-        /* Vérification du crypt */
-        $cryptAttendu = $this->gestionFlux->getCrypt(
-            $flux->getSite()->getClePriveeSceau(),
-            $xml->infocommande->refid,
-            $xml->infocommande->ip['timestamp'],
-            $xml->utilisateur->email
-        );
+                if ($xml->infocommande->siteid == $site->getId()) {
 
-        if ($xml->crypt == $cryptAttendu) {
-            $site = $flux->getSite();
+                    if ($this->verifierValiditeDateCommande($xml->infocommande->ip['timestamp'])) {
 
-            if ($xml->infocommande->siteid == $site->getId()) {
-                /* L'identifiant du site fourni en POST et celui contenu dans le XML sont cohérents */
-
-                if ($this->verifierValiditeDateCommande($xml->infocommande->ip['timestamp'])) {
-                    /* La date de commande est valide */
-
-                    if ($xml->infocommande->dateutilisation) {
-                        if ($this->verifierValiditeDateUtilisation($xml->infocommande->dateutilisation->__toString())) {
-                            /* Présence d'une date d'utilisation valide */
-
-                            $this->gestionQuestionnaire->genererQuestionnaireViaFlux($flux, $xml);
-                        } else {
-                            return false;
+                        if ($xml->infocommande->dateutilisation) {
+                            $this->verifierValiditeDateUtilisation($xml->infocommande->dateutilisation->__toString());
                         }
-
-                    } else {
-                        $this->gestionQuestionnaire->genererQuestionnaireViaFlux($flux, $xml);
                     }
                 } else {
-                    return false;
+                    $this->context->addViolation('constraints.flux_siteid_incorrect');
                 }
+
             } else {
-                $this->buildViolation('constraints.flux_siteid_incorrect')->addViolation();
-
-                return false;
+                $this->context->addViolation('constraints.flux_crypt_incorrect');
             }
-        } else {
-            $this->buildViolation('constraints.flux_crypt_incorrect')->addViolation();
 
-            return false;
+        } catch (Exception $e) {
+            /* Normalement ce cas n'arrive pas : le format du XML est vérifié à l'étape de réception */
+            $this->context->addViolation('constraints.erreur_interne');
         }
-
-        return true;
     }
 }

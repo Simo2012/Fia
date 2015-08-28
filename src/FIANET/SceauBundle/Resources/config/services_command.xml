@@ -13,6 +13,7 @@
         <service id="fianet_sceau.command.validation_flux" class="FIANET\SceauBundle\Command\Cron\ValidationFluxCommand">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="fianet_sceau.flux" />
+            <argument type="service" id="fianet_sceau.questionnaire" />
             <tag name="console.command" />
         </service>
 

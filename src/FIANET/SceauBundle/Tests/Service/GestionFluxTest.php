@@ -1,543 +1,692 @@
 <?php
 namespace FIANET\SceauBundle\Tests\Service;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Routing\Router;
+use FIANET\SceauBundle\Entity\AdministrationType;
+use FIANET\SceauBundle\Entity\Flux;
+use FIANET\SceauBundle\Service\GestionFlux;
+use FIANET\SceauBundle\Entity\FluxStatut;
+use ReflectionClass;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class GestionFluxTest extends WebTestCase
+class GestionFluxTest extends KernelTestCase
 {
-    private $client;
-    private $url;
-    private $siteIDFluxXML = 1;
-    private $siteIDNonAutorise = 66;
+    private $container;
+    private $gestionFlux;
+    private $translator;
+    private $validator;
+    private $site;
+    private $fluxOk;
+    private $fluxStatutATraiter;
+    private $fluxStatutEnCoursDeTraitement;
 
     public function __construct()
     {
-        $this->client = static::createClient();
-        $this->url = '/webservice/fr/send_rating';
+        static::bootKernel();
+
+        $this->container = static::$kernel->getContainer();
+        $this->validator = $this->container->get('validator');
+        $this->translator = $this->container->get('translator');
+
+        $this->fluxStatutEnCoursDeTraitement = $this->getMock('\FIANET\SceauBundle\Entity\FluxStatut');
+        $this->fluxStatutEnCoursDeTraitement->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(FluxStatut::FLUX_EN_COURS_DE_TRAITEMENT));
+
+        $this->fluxStatutATraiter = $this->getMock('\FIANET\SceauBundle\Entity\FluxStatut');
+        $this->fluxStatutATraiter->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(FluxStatut::FLUX_A_TRAITER));
+
+        /* Initialisation d'un site qui peut envoyer des flux */
+        $administrationType = $this->getMock('\FIANET\SceauBundle\Entity\AdministrationType');
+        $administrationType->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(AdministrationType::FLUX_XML));
+
+        $this->site = $this->getMockBuilder('\FIANET\SceauBundle\Entity\Site')
+            ->setMethods(['getId', 'getAdministrationType', 'getClePriveeSceau'])
+            ->getMock();
+        $this->site->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(42));
+        $this->site->expects($this->any())
+            ->method('getAdministrationType')
+            ->will($this->returnValue($administrationType));
+        $this->site->expects($this->any())
+            ->method('getClePriveeSceau')
+            ->will($this->returnValue('123456789azerty'));
+
+        $repository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->setMethods(['find', 'aTraiter'])
+            ->getMock();
+        $repository->expects($this->any())
+            ->method('find')
+            ->will($this->returnValue($this->site));
+        $repository->expects($this->any())
+            ->method('aTraiter')
+            ->will($this->returnValue($this->fluxStatutATraiter));
+
+        $em = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->any())
+            ->method('getRepository')
+            ->will($this->returnValue($repository));
+
+        $this->gestionFlux = new GestionFlux($em, $this->validator, $this->translator);
+
+        /* Initialisation données correctes pour les flux */
+        $this->fluxOk['refid'] = uniqid('', true);
+        $date = new \DateTime();
+        $this->fluxOk['timestamp'] = $date->format('Y-m-d h:i:s');
+        $this->fluxOk['email'] = 'jp.martini@wanadoo.fr';
+        $this->fluxOk['crypt'] = $this->container->get('fianet_sceau.flux')
+            ->getCrypt(
+                $this->site->getClePriveeSceau(),
+                $this->fluxOk['refid'],
+                $this->fluxOk['timestamp'],
+                $this->fluxOk['email']
+            );
     }
 
     /**
-     * On appelle le webservice avec la méthode GET : code HTTP 405 -> Method not alllowed
+     * Permet d'appeler la méthode privée validerReception() de la classe GestionFlux.
+     *
+     * @param string $xmlInfo XML à passer à la méthode de validation
+     *
+     * @return Flux Instance de Flux
      */
-    public function testMauvaiseMethode()
+    private function validerReception($xmlInfo)
     {
-        $this->client->request('GET', $this->url);
+        $this->reflector = new ReflectionClass($this->gestionFlux);
+        $validerReception = $this->reflector->getMethod('validerReception');
+        $validerReception->setAccessible(true);
 
-        $this->assertEquals(405, $this->client->getResponse()->getStatusCode());
+        return $validerReception
+            ->invokeArgs($this->gestionFlux, [$this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1']);
+
     }
 
+    /******************* Tests pour la validation du format *******************/
+
     /**
-     * On appelle le webservice sans aucun paramètre : XML avec message KO
+     * On appelle le service avec que des données vides => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage Le paramètre SiteID est obligatoire.
      */
     public function testSansParametres()
     {
-        $xml = $this->client->request('POST', $this->url);
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer(null, null, null, '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice sans le paramètre SiteID : XML avec message KO
+     * On appelle le service sans l'identifiant du site => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage Le paramètre SiteID est obligatoire.
      */
     public function testSansSiteID()
     {
-        $xml = $this->client->request('POST', $this->url, array(
-            'XMLInfo' => '<control></control>', 'CheckSum' => md5('<control></control>')
-        ));
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer(null, '<control></control>', md5('<control></control>'), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice sans le paramètre XMLInfo : XML avec message KO
+     * On appelle le service sans le XML => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage Le paramètre XMLInfo est obligatoire.
      */
     public function testSansXMLInfo()
     {
-        $xml = $this->client->request('POST', $this->url, array(
-            'SiteID' => $this->siteIDFluxXML, 'CheckSum' => md5(uniqid('xml'))
-        ));
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), null, md5(uniqid('', true)), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice sans le paramètre CheckSum : XML avec message KO
+     * On appelle le service sans le checksum => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage Le paramètre CheckSum est obligatoire.
      */
     public function testSansCheckSum()
     {
-        $xml = $this->client->request('POST', $this->url, array(
-            'SiteID' => $this->siteIDFluxXML, 'XMLInfo' => uniqid('xml')));
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), '<control></control>', null, '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice avec un site qui n'a pas le bon type d'administration : XML avec message KO
+     * On appelle le service avec un site qui n'a pas le bon type d'administration => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage Ce site n'est pas autorisé à poster des flux.
      */
     public function testSiteMauvaiseAdministration()
     {
-        $xmlInfo = uniqid('xml');
-        $xml = $this->client->request('POST', $this->url, array(
-            'SiteID' => $this->siteIDNonAutorise, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo)));
+        $administrationType = $this->getMock('\FIANET\SceauBundle\Entity\AdministrationType');
+        $administrationType->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(AdministrationType::VIA_CERTISSIM));
 
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+        $site = $this->getMock('\FIANET\SceauBundle\Entity\Site');
+        $site->expects($this->once())
+            ->method('getAdministrationType')
+            ->will($this->returnValue($administrationType));
 
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $siteRepository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $siteRepository->expects($this->once())
+            ->method('find')
+            ->will($this->returnValue($site));
+
+        $em = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($siteRepository));
+
+        $gestionFlux = new GestionFlux($em, $this->validator, $this->translator);
+        $xmlInfo = uniqid('', true);
+        $gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice avec un site inexistant : XML avec message KO
+     * On appelle le service avec un site inexistant => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage Site inexistant ou ne disposant pas des droits d'accès.
      */
     public function testSiteInexistant()
     {
-        $xmlInfo = uniqid('xml');
-        $xml = $this->client->request('POST', $this->url, array(
-            'SiteID' => 999999999, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo)));
+        $siteRepository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $siteRepository->expects($this->once())
+            ->method('find')
+            ->will($this->returnValue(null));
 
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+        $em = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($siteRepository));
 
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $gestionFlux = new GestionFlux($em, $this->validator, $this->translator);
+        $xmlInfo = uniqid('', true);
+        $gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
+
     }
 
     /**
-     * On appelle le webservice avec un checksum invalide : XML avec message KO
+     * On appelle le service avec un checksum invalide => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage Le checksum est incorrect.
      */
     public function testChecksumInvalide()
     {
-        $xmlInfo = uniqid('xml');
-        $xml = $this->client->request('POST', $this->url, array(
-            'SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => 'incorrect'));
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), uniqid('', true), 'incorrect', '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice avec un flux déjà envoyé : XML avec message KO
-     */
-    public function testFluxDejaEnvoye()
-    {
-        $xmlInfo = '<control>reçu</control>';
-
-        /* 1er envoi */
-        $client = static::createClient();
-        $client->request('POST', $this->url, array(
-            'SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo)));
-
-        /* 2ème envoi */
-        $xml = $this->client->request('POST', $this->url, array(
-            'SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo)));
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
-    }
-
-
-    /**
-     * On appelle le webservice avec un nom d'utilisateur trop long : XML avec message KO
+     * On appelle le service avec un flux dont le nom de l'utilisateur trop long => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessageRegExp |(.*)Element 'nom': \[facet 'maxLength'\](.*)|
      */
     public function testNomTropLong()
     {
-        $this->client->request('GET', '/'); // GET pour initialiser le container
-
-        $container = $this->client->getContainer();
-        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
-            ->find($this->siteIDFluxXML);
-
-        $refid = uniqid('xml');
-        $timestamp = '2015-04-02 23:43';
-        $email = 'cricri.martini@wanadoo.fr';
-        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
-
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <control><utilisateur>
             <nom titre="2">MARTINIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD</nom>
-            <prenom>CRISTIANE</prenom><email>' . $email . '</email></utilisateur>
-            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
-            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip>
-            </infocommande><crypt>' . $crypt . '</crypt></control>';
+            <prenom>CRISTIANE</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice avec un flux bien formé mais dont la date de commande est incorrecte :
-     * XML avec message KO
+     * On appelle le service avec un flux dont la date de commande est incorrecte => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessageRegExp |(.*)Element 'ip', attribute 'timestamp': \[facet 'pattern'\](.*)|
+     *
      */
     public function testDateIncorrecte()
     {
-        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
-            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
-            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
-            <email><![CDATA[missy_girl56@hotmail.fr]]></email></utilisateur>
-            <infocommande><refid><![CDATA[' . uniqid('xml') . ']]></refid>
-            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
-            <ip timestamp="2014-07-15T12:10:37"><![CDATA[82.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
-            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
-            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
-            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
-            <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
-            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur>
+            <nom titre="2">MARTINI</nom>
+            <prenom>CRISTIANE</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="2015-21-04">83.112.81.91</ip>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice avec un flux bien formé mais dont l'email est incorrect : XML avec message KO
+     * On appelle le service avec un flux dont l'email est incorrect => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessageRegExp |(.*)Element 'email': \[facet 'pattern'\](.*)|
      */
     public function testEmailIncorrect()
     {
-        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
-            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
-            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
-            <email><![CDATA[missy_girl56hotmail.fr]]></email></utilisateur><infocommande>
-            <refid><![CDATA[' . uniqid('xml') . ']]></refid>
-            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
-            <ip timestamp="2014-07-15 12:10:37"><![CDATA[82.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
-            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
-            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
-            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
-            <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
-            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur>
+            <nom titre="2">MARTINI</nom>
+            <prenom>CRISTIANE</prenom><email>martin.crisgmail.com</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice avec un flux bien formé mais dont ip est incorrecte : XML avec message KO
+     * On appelle le service avec un flux dont l'IP est incorrecte => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessageRegExp |(.*)Element 'ip': \[facet 'pattern'\](.*)|
      */
     public function testIPIncorrect()
     {
-        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
-            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
-            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
-            <email><![CDATA[cricri.martini@wanadoo.fr]]></email></utilisateur><infocommande>
-            <refid><![CDATA[' . uniqid('xml') . ']]></refid>
-            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[33.50]]></montant>
-            <ip timestamp="2014-07-15 12:10:37"><![CDATA[.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
-            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
-            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
-            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
-            <montant><![CDATA[28.5]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
-            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur>
+            <nom titre="2">MARTINI</nom>
+            <prenom>CRISTIANE</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">112.81.91</ip>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice avec un flux bien formé mais dont le montant est incorrect : XML avec message KO
+     * On appelle le service avec un flux dont le montant est incorrect => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessageRegExp |(.*)Element 'montant': '(.*)' is not a valid value(.*)|
      */
     public function testMontantIncorrect()
     {
-        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
-            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
-            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
-            <email><![CDATA[cricri.martini@wanadoo.fr]]></email></utilisateur><infocommande>
-            <refid><![CDATA[' . uniqid('xml') . ']]></refid>
-            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[0]]></montant>
-            <ip timestamp="2014-07-15 12:10:37"><![CDATA[185.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
-            <produits><urlwebservice><![CDATA[http://www.vitalco.com/modules/fianetsceau/commentsmanager.php?token=7]]>
-            </urlwebservice><produit><codeean><![CDATA[3401597785115]]></codeean><id><![CDATA[33]]></id>
-            <categorie><![CDATA[239]]></categorie><libelle><![CDATA[Piment Brûleur ]]></libelle>
-            <montant><![CDATA[25.50]]></montant></produit></produits></infocommande><paiement><type><![CDATA[2]]></type>
-            </paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur>
+            <nom titre="2">MARTINI</nom>
+            <prenom>CRISTIANE</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313e.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice avec un flux bien formé mais dont la date d'utilisation est incorrecte :
-     * XML avec message KO
+     * On appelle le service avec un flux dont la date d'utilisation est incorrecte => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessageRegExp |(.*)Element 'dateutilisation': \[facet 'pattern'\](.*)|
      */
     public function testDateUtilisationIncorrect()
     {
-        $xmlInfo = '<?xml version="1.0" encoding="UTF-8"?>
-            <control fianetmodule="api_prestashop_sceau" version="4.5" sceaumodule="2.8"><utilisateur><nom titre="2">
-            <![CDATA[TREGUIER]]></nom><prenom><![CDATA[Aline]]></prenom>
-            <email><![CDATA[cricri.martini@wanadoo.fr]]></email></utilisateur><infocommande>
-            <refid><![CDATA[' . uniqid('xml') . ']]></refid>
-            <siteid><![CDATA[' . $this->siteIDFluxXML . ']]></siteid><montant devise="EUR"><![CDATA[20.50]]></montant>
-            <ip timestamp="2014-07-15 12:10:37"><![CDATA[185.66.246.23]]></ip><langue><![CDATA[fr]]></langue>
-            <dateutilisation>2014-45</dateutilisation></infocommande>
-            <paiement><type><![CDATA[2]]></type></paiement><crypt>d7c5485c8721a04092acdff3172cce32</crypt></control>';
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur>
+            <nom titre="2">MARTINI</nom>
+            <prenom>CRISTIANE</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <dateutilisation>2014-45</dateutilisation>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
     }
 
     /**
-     * On appelle le webservice correctement avec un flux minimal : XML avec message OK
+     * On appelle le service correctement avec un flux minimal => on récupère une instance de Flux.
      */
     public function testBaseCorrect()
     {
-        $this->client->request('GET', '/'); // GET pour initialiser le container
-
-        $container = $this->client->getContainer();
-        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
-            ->find($this->siteIDFluxXML);
-
-        $refid = uniqid('xml');
-        $timestamp = '2015-04-02 23:43';
-        $email = 'cricri.martini@wanadoo.fr';
-        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
-
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CRISTIANE</prenom>
-            <email>' . $email . '</email></utilisateur>
-            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
-            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip>
-            </infocommande><crypt>' . $crypt . '</crypt></control>';
+            <control><utilisateur>
+            <nom titre="1">MARTINI</nom>
+            <prenom>JEAN</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
+        $flux = $this->validerReception($xmlInfo);
 
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('OK', $xml->filterXPath('//result')->attr('type'));
+        $this->assertTrue($flux instanceof Flux);
     }
 
     /**
-     * On appelle le webservice correctement avec une date d'utilisation : XML avec message OK
+     * On appelle le service correctement avec un flux complexe : on récupère une instance de Flux.
      */
-    public function testDateUtilisationCorrect()
+    public function testComplexeCorrect()
     {
-        $this->client->request('GET', '/'); // GET pour initialiser le container
-
-        $container = $this->client->getContainer();
-        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
-            ->find($this->siteIDFluxXML);
-
-        $refid = uniqid('xml');
-        $timestamp = '2015-04-02 23:43';
-        $email = 'cricri.martini@wanadoo.fr';
-        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
-
-        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CRISTIANE</prenom>
-            <email>' . $email . '</email></utilisateur>
-            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
-            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip>
-            <dateutilisation>2015-04-10</dateutilisation>
-            </infocommande><crypt>' . $crypt . '</crypt></control>';
-
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('OK', $xml->filterXPath('//result')->attr('type'));
-    }
-
-
-    /**
-     * On appelle le webservice correctement avec une langue : XML avec message OK
-     */
-    public function testLangueCorrect()
-    {
-        $this->client->request('GET', '/'); // GET pour initialiser le container
-
-        $container = $this->client->getContainer();
-        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
-            ->find($this->siteIDFluxXML);
-
-        $refid = uniqid('xml');
-        $timestamp = '2015-04-02 23:43';
-        $email = 'cricri.martini@wanadoo.fr';
-        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
-
-        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CRISTIANE</prenom>
-            <email>' . $email . '</email></utilisateur>
-            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
-            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip>
-            <langue>es</langue>
-            </infocommande><crypt>' . $crypt . '</crypt></control>';
-
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('OK', $xml->filterXPath('//result')->attr('type'));
-    }
-
-    /**
-     * On appelle le webservice correctement : XML avec message OK
-     */
-    public function testCorrect()
-    {
-        $this->client->request('GET', '/'); // GET pour initialiser le container
-
-        $container = $this->client->getContainer();
-        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
-            ->find($this->siteIDFluxXML);
-
-        $refid = uniqid('xml');
-        $timestamp = '2015-04-02 23:43';
-        $email = 'cricri.martini@wanadoo.fr';
-        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
-
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
-            <email>' . $email . '</email></utilisateur>
-            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
-            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip><produits>
-            <produit><codeean></codeean><id>0335991</id><categorie>70</categorie>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><codeean>34578787878</codeean><id>0335991</id><categorie>70</categorie>
             <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant>
             <image>http://photos.maty.com/0335991/V1/400/bracelet-or-750-topaze-bleue-traitee.jpeg</image></produit>
             </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
-            <crypt>' . $crypt . '</crypt></control>';
+            <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
+        $flux = $this->validerReception($xmlInfo);
 
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('OK', $xml->filterXPath('//result')->attr('type'));
+        $this->assertTrue($flux instanceof Flux);
     }
 
+    /**
+     * On appelle le service correctement avec une date d'utilisation => on récupère une instance de Flux.
+     */
+    public function testDateUtilisationCorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur>
+            <nom titre="2">MARTINI</nom>
+            <prenom>CRISTIANE</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <dateutilisation>2015-04-10</dateutilisation>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $flux = $this->validerReception($xmlInfo);
+
+        $this->assertTrue($flux instanceof Flux);
+    }
 
     /**
-     * On appelle le webservice correctement avec 1 produit sans les balises facultatives : XML avec message OK
+     * On appelle le service correctement avec une langue => on récupère une instance de Flux.
+     */
+    public function testLangueCorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur>
+            <nom titre="2">MARTINI</nom>
+            <prenom>CRISTIANE</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <langue>es</langue>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $flux = $this->validerReception($xmlInfo);
+
+        $this->assertTrue($flux instanceof Flux);
+    }
+
+    /**
+     * On appelle le service correctement avec 1 produit sans les balises facultatives :
+     * on récupère une instance de Flux.
      */
     public function testProduitsSansBalisesFacultatives()
     {
-        $this->client->request('GET', '/'); // GET pour initialiser le container
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
-        $container = $this->client->getContainer();
-        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
-            ->find($this->siteIDFluxXML);
+        $flux = $this->validerReception($xmlInfo);
 
-        $refid = uniqid('xml');
-        $timestamp = '2015-04-02 23:43';
-        $email = 'cricri.martini@wanadoo.fr';
-        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
+        $this->assertTrue($flux instanceof Flux);
+    }
+
+    /**
+     * On appelle le service avec 1 produit dont il manque une balise obligatoire => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessageRegExp |(.*)Element 'produit': Missing child element(.*)|
+     */
+    public function testProduitsIncorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
+    }
+
+    /******************* Tests pour la validation du contenu *******************/
+
+    /**
+     * Permet de créer une instance de Flux pour les tests.
+     *
+     * @param string $xmlInfo XML à valider
+     * @param string $checksum MD5 du XML
+     * @param string $ip IP de l'utilisateur
+     *
+     * @return Flux Instance de Flux
+     */
+    private function creerInstanceFlux($xmlInfo, $checksum, $ip)
+    {
+        $flux = new Flux();
+        $flux->setXml($xmlInfo);
+        $flux->setChecksum($checksum);
+        $flux->setDateInsertion(new \DateTime());
+        $flux->setIp($ip);
+        $flux->setFluxStatut($this->fluxStatutEnCoursDeTraitement);
+        $flux->setSite($this->site);
+
+        return $flux;
+    }
+
+    /**
+     * On valide un flux dont le crypt est incorrect => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage La valeur de la balise crypt est incorrecte.
+     */
+    public function testCryptIncorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
+            <crypt>mauvais_crypt</crypt></control>';
+
+        $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
+    }
+
+    /**
+     * On valide un flux dont l'identifiant du site est différent de l'identifiant de site donné lors de l'étape
+     * précedente (réception du flux) => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage La valeur de la balise siteid est incorrecte.
+     */
+    public function testSiteIdDifferent()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>99997845545</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
+    }
+
+    /**
+     * On valide un flux dont la date de commande n'existe pas => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage La valeur de l'attribut timestamp est incorrecte.
+     */
+    public function testDateCommandeInexistante()
+    {
+        $timestamp = '2015-13-07 15:12:47';
+        $crypt = $this->container->get('fianet_sceau.flux')
+            ->getCrypt(
+                $this->site->getClePriveeSceau(),
+                $this->fluxOk['refid'],
+                $timestamp,
+                $this->fluxOk['email']
+            );
 
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
-            <email>' . $email . '</email></utilisateur>
-            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
-            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip><produits>
-            <produit><id>0335991</id><categorie>70</categorie>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="'. $timestamp .'">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
             <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
             </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
             <crypt>' . $crypt . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
-
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
-
-        $this->assertEquals('OK', $xml->filterXPath('//result')->attr('type'));
+        $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
     }
 
     /**
-     * On appelle le webservice avec 1 produit dont il manque une balise obligatoire : XML avec message KO
+     * On valide un flux dont la date de commande est dans le futur => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage La valeur de l'attribut timestamp est supérieure à la date du jour.
      */
-    public function testProduitsIncorrect()
+    public function testDateCommandeFuturiste()
     {
-        $this->client->request('GET', '/'); // GET pour initialiser le container
-
-        $container = $this->client->getContainer();
-        $site = $container->get('doctrine.orm.entity_manager')->getRepository('FIANETSceauBundle:Site')
-            ->find($this->siteIDFluxXML);
-
-        $refid = uniqid('xml');
-        $timestamp = '2015-04-02 23:43';
-        $email = 'cricri.martini@wanadoo.fr';
-        $crypt = $container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
+        $timestamp = '2050-01-07 15:12:47';
+        $crypt = $this->container->get('fianet_sceau.flux')
+            ->getCrypt(
+                $this->site->getClePriveeSceau(),
+                $this->fluxOk['refid'],
+                $timestamp,
+                $this->fluxOk['email']
+            );
 
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
-            <email>' . $email . '</email></utilisateur>
-            <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
-            <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip><produits>
-            <produit><id>0335991</id><categorie>70</categorie>
-            <montant>313.8</montant></produit>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="'. $timestamp .'">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
             </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
             <crypt>' . $crypt . '</crypt></control>';
 
-        $xml = $this->client->request(
-            'POST',
-            $this->url,
-            array('SiteID' => $this->siteIDFluxXML, 'XMLInfo' => $xmlInfo, 'CheckSum' => md5($xmlInfo))
-        );
+        $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
+    }
 
-        $this->assertTrue($this->client->getResponse()->headers->contains('Content-Type', 'application/xml'));
+    /**
+     * On valide un flux dont la date de commande est trop ancienne => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage La valeur de l'attribut timestamp est trop ancienne.
+     */
+    public function testDateCommandeTropAncienne()
+    {
+        $timestamp = '2000-01-07 15:12:47';
+        $crypt = $this->container->get('fianet_sceau.flux')
+            ->getCrypt(
+                $this->site->getClePriveeSceau(),
+                $this->fluxOk['refid'],
+                $timestamp,
+                $this->fluxOk['email']
+            );
 
-        $this->assertEquals('KO', $xml->filterXPath('//result')->attr('type'));
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="'. $timestamp .'">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $crypt . '</crypt></control>';
+
+        $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
+    }
+
+    /**
+     * On valide un flux dont la date d'utilisation n'existe pas => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage La valeur de la balise dateutilisation est incorrecte.
+     */
+    public function testDateUtilisationInexistante()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison>
+            <dateutilisation>2015-01-32</dateutilisation></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
+    }
+
+    /**
+     * On valide un flux dont la date d'utilisation est déjà passé => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage La valeur de la balise dateutilisation est antérieure à la date du jour.
+     */
+    public function testDateUtilisationPassee()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison>
+            <dateutilisation>2015-01-07</dateutilisation></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
+    }
+
+    /**
+     * On valide un flux correct => aucune exception
+     */
+    public function testContenuOK()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        try {
+            $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
+            $this->assertTrue(true);
+
+        } catch (\Exception $e) {
+            $this->fail();
+        }
     }
 }

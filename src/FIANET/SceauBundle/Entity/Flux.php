@@ -260,14 +260,12 @@ class Flux implements GroupSequenceProviderInterface
      */
     public function getGroupSequence()
     {
-        $groupSequence = array();
-
-        if ($this->fluxStatut->getId() == 1) {
-            $groupSequence[] = 'reception';
-            $groupSequence[] = 'reception2';
+        if ($this->fluxStatut->getId() == FluxStatut::FLUX_A_TRAITER) {
+            $groupSequence = ['reception1', 'reception2', 'reception3', 'reception4', 'reception5', 'reception6',
+                'reception7', 'reception8'];
 
         } else {
-            $groupSequence[] = 'validation';
+            $groupSequence = ['validation'];
         }
 
         return $groupSequence;

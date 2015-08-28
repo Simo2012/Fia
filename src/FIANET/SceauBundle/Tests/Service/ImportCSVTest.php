@@ -99,14 +99,26 @@ class ImportCSVTest extends KernelTestCase
     }
 
     /**
+     * Permet d'appeler la méthode privée validerLigne() de la classe ImportCSV.
+     *
+     * @param array $colonnes Tableau contenant les valeurs de chaque colonne de la ligne
+     *
+     * @return bool true si la ligne est valide sinon false
+     */
+    private function validerLigne($colonnes)
+    {
+        $validerLigne = $this->reflector->getMethod('validerLigne');
+        $validerLigne->setAccessible(true);
+
+        return $validerLigne->invokeArgs($this->importCsv, $colonnes);
+    }
+
+    /**
      * Ligne parfaite => valide
      */
     public function testLigneCompleteValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '2015-07-30', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13:45:12', 5 => 'N', 6 => '30/07/2015', 7 => 'Delaporte', 8 => 'Sébastien',
                 9 => '4241', 10 => 'Foteam'], 1]
@@ -120,10 +132,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testLigneIncompleteValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '2015-07-30', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13:45:12', 5 => 'N', 6 => '30/07/2015', 7 => 'Delaporte', 8 => '',
                 9 => '', 10 => ''], 1]
@@ -137,10 +146,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testDonneeObligatoireManquante()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13:45:12', 5 => 'N', 6 => '30/07/2015', 7 => 'Delaporte', 8 => 'Sébastien',
                 9 => '4241', 10 => 'Foteam'], 1]
@@ -154,10 +160,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testNbColonneNonValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '2015-07-30', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13:45:12', 5 => 'N', 6 => '30/07/2015', 7 => 'Delaporte',
                 8 => '4241', 9 => 'Foteam'], 1]
@@ -171,10 +174,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testEmailNonValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '2015-07-30', 2 => 'sdsite3gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13:45:12', 5 => 'N', 6 => '30/07/2015', 7 => 'Delaporte', 8 => 'Sébastien',
                 9 => '4241', 10 => 'Foteam'], 1]
@@ -188,10 +188,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testDateNonValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '201507-30', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13:45:12', 5 => 'N', 6 => '30/07/2015', 7 => 'Delaporte', 8 => 'Sébastien',
                 9 => '4241', 10 => 'Foteam'], 1]
@@ -206,10 +203,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testDatetimeNonValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '2015-07-30', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 45:45:12',
                 4 => '13:45:12', 5 => 'N', 6 => '30/07/2015', 7 => 'Delaporte', 8 => 'Sébastien',
                 9 => '4241', 10 => 'Foteam'], 1]
@@ -223,10 +217,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testTimeNonValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '2015-07-30', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13::12', 5 => 'N', 6 => '30/07/2015', 7 => 'Delaporte', 8 => 'Sébastien',
                 9 => '4241', 10 => 'Foteam'], 1]
@@ -240,10 +231,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testRegexNonValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '2015-07-30', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13:45:12', 5 => 'N', 6 => '30-07-2015', 7 => 'Delaporte', 8 => 'Sébastien',
                 9 => '4241', 10 => 'Foteam'], 1]
@@ -257,10 +245,7 @@ class ImportCSVTest extends KernelTestCase
      */
     public function testEnumNonValide()
     {
-        $validerLigne = $this->reflector->getMethod('validerLigne');
-        $validerLigne->setAccessible(true);
-        $result = $validerLigne->invokeArgs(
-            $this->importCsv,
+        $result = $this->validerLigne(
             [[0 => '432694288', 1 => '2015-07-30', 2 => 'sdsite3@gmail.com', 3 => '2015-08-07 13:45:12',
                 4 => '13:45:12', 5 => 'Oui', 6 => '30/07/2015', 7 => 'Delaporte', 8 => 'Sébastien',
                 9 => '4241', 10 => 'Foteam'], 1]

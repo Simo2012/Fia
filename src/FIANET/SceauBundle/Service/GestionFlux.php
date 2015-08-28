@@ -1,11 +1,12 @@
 <?php
 namespace FIANET\SceauBundle\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
+use FIANET\SceauBundle\Entity\AdministrationType;
 use FIANET\SceauBundle\Entity\Flux;
 use FIANET\SceauBundle\Exception\FluxException;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Validator\Validator\RecursiveValidator;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GestionFlux
 {
@@ -13,7 +14,7 @@ class GestionFlux
     private $validator;
     private $translator;
 
-    public function __construct(EntityManager $em, RecursiveValidator $validator, TranslatorInterface $translator)
+    public function __construct(ObjectManager $em, ValidatorInterface $validator, TranslatorInterface $translator)
     {
         $this->em = $em;
         $this->validator = $validator;
@@ -32,7 +33,7 @@ class GestionFlux
      *
      * @throws FluxException En cas de flux invalide ou si le site n'est pas autorisé à poster
      */
-    public function validerReception($site_id, $xmlInfo, $checksum, $ip)
+    private function validerReception($site_id, $xmlInfo, $checksum, $ip)
     {
         if (!is_numeric($site_id)) {
             throw new FluxException($this->translator->trans('flux_siteid_absent', array(), 'flux'));
@@ -45,7 +46,7 @@ class GestionFlux
             throw new FluxException($this->translator->trans('flux_site_inexistant_ou_sans_garantie', array(), 'flux'));
         }
 
-        if ($site->getAdministrationType()->getId() !== 3) {
+        if ($site->getAdministrationType()->getId() !== AdministrationType::FLUX_XML) {
             throw new FluxException($this->translator->trans('flux_site_non_autorise', array(), 'flux'));
         }
 
@@ -57,7 +58,7 @@ class GestionFlux
         $flux->setFluxStatut($this->em->getRepository('FIANETSceauBundle:FluxStatut')->aTraiter());
         $flux->setSite($site);
 
-        $listeErreurs = $this->validator->validate($flux, array(), array('reception, reception2'));
+        $listeErreurs = $this->validator->validate($flux);
 
         if (count($listeErreurs) == 0) {
             return $flux;
@@ -74,8 +75,6 @@ class GestionFlux
      * @param string $checksum Checksum (provenant du paramètre POST CheckSum)
      * @param string $ip IP du client
      *
-     * @return Flux Instance de flux s'il est valide
-     *
      * @throws FluxException En cas de flux invalide ou si le site n'est pas autorisé à poster
      */
     public function inserer($site_id, $xmlInfo, $checksum, $ip)
@@ -84,8 +83,6 @@ class GestionFlux
 
         $this->em->persist($flux);
         $this->em->flush();
-
-        return $flux;
     }
 
     /**
@@ -97,7 +94,7 @@ class GestionFlux
      */
     public function validerContenu(Flux $flux)
     {
-        $listeErreurs = $this->validator->validate($flux, array(), array('validation'));
+        $listeErreurs = $this->validator->validate($flux);
 
         if (count($listeErreurs) != 0) {
             throw new FluxException($listeErreurs->get(0)->getMessage());

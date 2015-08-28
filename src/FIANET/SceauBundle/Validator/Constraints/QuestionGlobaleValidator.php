@@ -2,7 +2,7 @@
 
 namespace FIANET\SceauBundle\Validator\Constraints;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use FIANET\SceauBundle\Entity\Question;
 use FIANET\SceauBundle\Entity\QuestionType;
 use Symfony\Component\Validator\Constraint;
@@ -12,7 +12,7 @@ class QuestionGlobaleValidator extends ConstraintValidator
 {
     private $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct(ObjectManager $em)
     {
         $this->em = $em;
     }
@@ -28,7 +28,7 @@ class QuestionGlobaleValidator extends ConstraintValidator
     {
         if ($question->getQuestionType()->getId() == QuestionType::NOTATION &&
             ($question->getValeurMin() == '' || $question->getValeurMax() == '')) {
-            $this->buildViolation('constraints.question.notation')->addViolation();
+            $this->context->addViolation('constraints.question.notation');
         }
     }
 }

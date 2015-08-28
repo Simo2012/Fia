@@ -18,30 +18,31 @@ FIANET\SceauBundle\Entity\Flux:
         xml:
             - NotNull:
                 message: "constraints.flux_xml_not_null"
-                groups: [reception]
+                groups: [reception1]
             - NotBlank:
                 message: "constraints.flux_xml_not_blank"
-                groups: [reception]
-        checksum:
-            - NotNull:
-                message: "constraints.flux_checksum_not_null"
-                groups: [reception]
-            - NotBlank:
-                message: "constraints.flux_checksum_not_blank"
-                groups: [reception]
+                groups: [reception2]
         ip:
             - Ip:
                 message: "constraints.flux_ip"
-                groups: [reception]              
+                groups: [reception3]
+        checksum:
+            - NotNull:
+                message: "constraints.flux_checksum_not_null"
+                groups: [reception4]
+            - NotBlank:
+                message: "constraints.flux_checksum_not_blank"
+                groups: [reception5]
+
     constraints:
         - FIANET\SceauBundle\Validator\Constraints\FluxChecksum:
-            groups: [reception]
+            groups: [reception6]
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: checksum
             message: "constraints.flux_xml_doublon"
-            groups: [reception]
+            groups: [reception7]
         - FIANET\SceauBundle\Validator\Constraints\FluxXmlFormat:
-            groups: [reception2]
+            groups: [reception8]
         - FIANET\SceauBundle\Validator\Constraints\FluxXmlContenu:
             groups: [validation]
 

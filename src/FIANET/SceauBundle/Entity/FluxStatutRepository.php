@@ -37,7 +37,7 @@ class FluxStatutRepository extends EntityRepository
      */
     public function aTraiter()
     {
-        return $this->getStatut(1);
+        return $this->getStatut(FluxStatut::FLUX_A_TRAITER);
     }
 
     /**
@@ -50,7 +50,7 @@ class FluxStatutRepository extends EntityRepository
      */
     public function enCoursDeTraitement()
     {
-        return $this->getStatut(2);
+        return $this->getStatut(FluxStatut::FLUX_EN_COURS_DE_TRAITEMENT);
     }
 
     /**
@@ -63,7 +63,7 @@ class FluxStatutRepository extends EntityRepository
      */
     public function traiteEtValide()
     {
-        return $this->getStatut(3);
+        return $this->getStatut(FluxStatut::FLUX_VALIDE);
     }
 
     /**
@@ -76,6 +76,6 @@ class FluxStatutRepository extends EntityRepository
      */
     public function traiteEtInvalide()
     {
-        return $this->getStatut(4);
+        return $this->getStatut(FluxStatut::FLUX_INVALIDE);
     }
 }
