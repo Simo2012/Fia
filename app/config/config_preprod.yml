@@ -2,16 +2,8 @@ imports:
     - { resource: config.yml }
 
 framework:
-    router:
-        resource: "%kernel.root_dir%/config/routing_dev.yml"
-        strict_requirements: true
-    profiler: { only_exceptions: false }
     validation:
         cache: apc
-
-web_profiler:
-    toolbar: true
-    intercept_redirects: false
 
 doctrine:
     orm:
@@ -19,7 +11,7 @@ doctrine:
         result_cache_driver: apc
         query_cache_driver: apc
     dbal:
-        host:  loki
+        host: loki
         port: 5439
         dbname: sceau
         user: sceau_user
