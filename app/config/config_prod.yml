@@ -5,8 +5,21 @@ framework:
     validation:
         cache: apc
 
-doctrine:
-    orm:
-        metadata_cache_driver: apc
-        result_cache_driver: apc
-        query_cache_driver: apc
+# Memcached Configuration
+lsw_memcache:
+    session:
+        pool: default
+    pools:
+        default:
+            servers:
+              - { host: 10.199.54.106, tcp_port: 11211 }
+    doctrine:
+        metadata_cache:
+            pool: default
+            entity_manager: default
+        result_cache:
+            pool: default
+            entity_manager: default
+        query_cache:
+            pool: default
+            entity_manager: default

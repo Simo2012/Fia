@@ -93,6 +93,7 @@ services:
         tags:
             - { name: twig.extension }
 
+# Monolog Configuration
 monolog:
     handlers:
         main:
@@ -115,3 +116,22 @@ monolog:
             max_files: 30
             path: "%kernel.logs_dir%/import_csv.%kernel.environment%.log"
             level: debug
+
+# Memcached Configuration
+lsw_memcache:
+    session:
+        pool: default
+    pools:
+        default:
+            servers:
+              - { host: 10.199.54.106, tcp_port: 11211 }
+    doctrine:
+        metadata_cache:
+            pool: default
+            entity_manager: default
+        result_cache:
+            pool: default
+            entity_manager: default
+        query_cache:
+            pool: default
+            entity_manager: default

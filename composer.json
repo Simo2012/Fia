@@ -26,7 +26,8 @@
         "components/jqueryui": "~1.11",
         "willdurand/faker-bundle": "@stable",
         "friendsofsymfony/jsrouting-bundle": "~1.5",
-        "symfony/finder": "~2.6"
+        "symfony/finder": "~2.6",
+        "leaseweb/memcache-bundle": "~2.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
