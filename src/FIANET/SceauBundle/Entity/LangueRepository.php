@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use FIANET\SceauBundle\Cache\Cache;
 
 class LangueRepository extends EntityRepository
 {
@@ -23,9 +24,7 @@ class LangueRepository extends EntityRepository
             ->where('l.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
-            ->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
     }
 
     /**
@@ -44,14 +43,12 @@ class LangueRepository extends EntityRepository
             ->where('l.code = :code')
             ->setParameter('code', $code);
 
-        return $qb->getQuery()
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
-            ->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
     }
 
     /**
      * Retourne un QueryBuilder qui permet de récupérer les langues qui sont destinées à être affichées dans
-     * une liste déroulante, par ordre alphabétique.
+     * une liste déroulante. Le résultat est en cache pendant 1 jour.
      *
      * @return QueryBuilder
      */
@@ -59,8 +56,8 @@ class LangueRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('l');
 
-        $qb->setCacheable(true);
-        $qb->setLifetime(86400);
+        $qb->setCacheable(true)
+            ->setLifetime(Cache::LIFETIME_1J);
 
         return $qb;
     }

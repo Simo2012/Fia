@@ -67,6 +67,7 @@
         </service>
         <service id="fianet_sceau.questionnaire_repondu" class="FIANET\SceauBundle\Service\QuestionnaireRepondu">
             <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="session"/>
         </service>
         <service id="fianet_sceau.questionnaire_structure" class="FIANET\SceauBundle\Service\QuestionnaireStructure">
             <argument type="service" id="doctrine.orm.entity_manager"/>

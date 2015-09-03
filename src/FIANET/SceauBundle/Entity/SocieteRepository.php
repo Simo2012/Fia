@@ -5,6 +5,8 @@ namespace FIANET\SceauBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use DateTime;
 use Doctrine\ORM\Query;
+use FIANET\SceauBundle\Cache\Cache;
+use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
 use Gedmo\Translatable\TranslatableListener;
 
 class SocieteRepository extends EntityRepository
@@ -40,9 +42,11 @@ class SocieteRepository extends EntityRepository
             ->addOrderBy('qt.libelle', 'ASC');
 
         return $qb->getQuery()
+            ->useQueryCache(false) // sinon exécute X requêtes pour récupérer les traduction après la 1ère mise en cache
             ->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale)
+            ->setHint(TranslatableListener::HINT_FALLBACK, 1)
             ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
+            ->useResultCache(true, Cache::LIFETIME_1J)
             ->getSingleResult();
     }
 }

@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use FIANET\SceauBundle\Cache\Cache;
 
 class QuestionTypeRepository extends EntityRepository
 {
@@ -18,8 +19,8 @@ class QuestionTypeRepository extends EntityRepository
         $qb = $this->createQueryBuilder('qt')
             ->where('qt.personnalisable = true');
 
-        $qb->setCacheable(true);
-        $qb->setLifetime(86400); // TODO vérifier le cache
+        $qb->setCacheable(true)
+            ->setLifetime(Cache::LIFETIME_1J);
 
         return $qb;
     }

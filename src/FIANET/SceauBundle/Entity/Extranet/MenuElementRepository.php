@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Entity\Extranet;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use FIANET\SceauBundle\Cache\Cache;
 use FIANET\SceauBundle\Entity\Site;
 
 class MenuElementRepository extends EntityRepository
@@ -39,6 +40,6 @@ class MenuElementRepository extends EntityRepository
             ->orderBy('mep.ordre', 'ASC')
             ->addOrderBy('mef.ordre', 'ASC');
 
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getResult();
     }
 }

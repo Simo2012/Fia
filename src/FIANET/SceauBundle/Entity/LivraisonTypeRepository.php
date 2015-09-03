@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use FIANET\SceauBundle\Cache\Cache;
 
 class LivraisonTypeRepository extends EntityRepository
 {
@@ -23,9 +24,7 @@ class LivraisonTypeRepository extends EntityRepository
             ->where('lt.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
-            ->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
     }
 
     /**
@@ -38,12 +37,12 @@ class LivraisonTypeRepository extends EntityRepository
      */
     public function aucun()
     {
-        return $this->getLivraisonType(0);
+        return $this->getLivraisonType(LivraisonType::AUCUN);
     }
 
     /**
      * Retourne un QueryBuilder qui permet de récupérer les types de livraison qui sont destinés à être affichés dans
-     * une liste déroulante, par ordre alphabétique.
+     * une liste déroulante. Le résultat est en cache pendant 1 jour.
      *
      * @return QueryBuilder
      */
@@ -52,8 +51,8 @@ class LivraisonTypeRepository extends EntityRepository
         $qb = $this->createQueryBuilder('lt')
             ->where('lt.affichage = true');
 
-        $qb->setCacheable(true);
-        $qb->setLifetime(86400);
+        $qb->setCacheable(true)
+            ->setLifetime(Cache::LIFETIME_1J);
 
         return $qb;
     }

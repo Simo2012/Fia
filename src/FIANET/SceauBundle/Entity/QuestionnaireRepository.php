@@ -5,6 +5,8 @@ namespace FIANET\SceauBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use FIANET\SceauBundle\Cache\Cache;
+use Gedmo\Translatable\TranslatableListener;
 
 class QuestionnaireRepository extends EntityRepository
 {
@@ -266,7 +268,7 @@ class QuestionnaireRepository extends EntityRepository
             $livraisonType
         );
 
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_5M)->getSingleScalarResult();
     }
 
     /**
@@ -335,8 +337,7 @@ class QuestionnaireRepository extends EntityRepository
         $qb->setFirstResult($premierQuestionnaire)
             ->setMaxResults($nbQuestionnaires);
 
-        // TODO : étudier le cache
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_5M)->getArrayResult();
     }
 
     /**
@@ -392,8 +393,7 @@ class QuestionnaireRepository extends EntityRepository
         $qb->setFirstResult($position < 0 ? 0 : $position)
             ->setMaxResults(3); // précédent + actuel + suivant
 
-        // TODO : étudier le cache
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getArrayResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_5M)->getArrayResult();
     }
 
     /**
@@ -440,13 +440,14 @@ class QuestionnaireRepository extends EntityRepository
      *
      * @param Site $site Instance de Site
      * @param int $questionnaire_id Identifiant du questionnaire
+     * @param  string $locale Locale de la requête
      *
      * @return Questionnaire
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function structureQuestionnaireAvecReponses($site, $questionnaire_id)
+    public function structureQuestionnaireAvecReponses($site, $questionnaire_id, $locale)
     {
         $qb = $this->createQueryBuilder('q');
 
@@ -485,9 +486,11 @@ class QuestionnaireRepository extends EntityRepository
         $qb = $this->restrictionsQuestionsGlobalesPersos($qb, $site);
 
         return $qb->getQuery()
+            ->useQueryCache(false) // sinon exécute X requêtes pour récupérer les traduction après la 1ère mise en cache
+            ->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale)
+            ->setHint(TranslatableListener::HINT_FALLBACK, 1)
             ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(300)
-            ->getSingleResult(); // TODO vérifier le cache et tester les perfs
+            ->getSingleResult();
     }
 
     /**
@@ -530,7 +533,7 @@ class QuestionnaireRepository extends EntityRepository
         $qb->where('q.id=:id')
            ->setParameter('id', $questionnaire->getId());
         
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult(); // TODO vérifier le cache
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -602,7 +605,7 @@ class QuestionnaireRepository extends EntityRepository
             $langue_id
         );
 
-        return $qb->getQuery()->useQueryCache(true)->getSingleScalarResult();
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -647,7 +650,7 @@ class QuestionnaireRepository extends EntityRepository
 
         $qb->addOrderBy('q.dateEnvoi', 'DESC');
 
-        return $qb->getQuery()->useQueryCache(true)->getArrayResult();
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**
@@ -680,7 +683,7 @@ class QuestionnaireRepository extends EntityRepository
             $langue_id
         );
 
-        return $qb->getQuery()->useQueryCache(true)->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -703,6 +706,6 @@ class QuestionnaireRepository extends EntityRepository
             ->setParameter('id', $questionnaire_id)
             ->andWhere('q.actif = true');
 
-        return $qb->getQuery()->useQueryCache(true)->getScalarResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getScalarResult();
     }
 }

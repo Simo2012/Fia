@@ -19,18 +19,19 @@ class RelanceRepository extends EntityRepository
      */
     public function relanceValidee(Site $site, QuestionnaireType $questionnaireType, Langue $langue)
     {
-        $qb = $this->createQueryBuilder('r')
-            ->andWhere('r.site = :sid')
+        $qb = $this->createQueryBuilder('r');
+
+        $qb->andWhere('r.site = :sid')
             ->setParameter('sid', $site->getId())
             ->andWhere('r.questionnaireType = :qtid')
             ->setParameter('qtid', $questionnaireType->getId())
             ->andWhere('r.langue = :lid')
             ->setParameter('lid', $langue->getId())
-            ->andWhere('r.relanceStatut = 1')
+            ->andWhere($qb->expr()->eq('r.relanceStatut', RelanceStatut::VALIDEE))
             ->orderBy('r.date', 'DESC')
             ->setMaxResults(1);
 
-        return $qb->getQuery()->useQueryCache(true)->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -46,15 +47,16 @@ class RelanceRepository extends EntityRepository
      */
     public function relanceEnAttenteValidation(Site $site, QuestionnaireType $questionnaireType, Langue $langue)
     {
-        $qb = $this->createQueryBuilder('r')
-            ->andWhere('r.site = :sid')
+        $qb = $this->createQueryBuilder('r');
+
+        $qb->andWhere('r.site = :sid')
             ->setParameter('sid', $site->getId())
             ->andWhere('r.questionnaireType = :qtid')
             ->setParameter('qtid', $questionnaireType->getId())
             ->andWhere('r.langue = :lid')
             ->setParameter('lid', $langue->getId())
-            ->andWhere('r.relanceStatut = 0');
+            ->andWhere($qb->expr()->eq('r.relanceStatut', RelanceStatut::EN_ATTENTE_DE_VALIDATION));
 
-        return $qb->getQuery()->useQueryCache(true)->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

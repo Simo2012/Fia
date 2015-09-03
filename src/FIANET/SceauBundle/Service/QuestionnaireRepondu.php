@@ -3,19 +3,20 @@
 namespace FIANET\SceauBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use FIANET\SceauBundle\Entity\LivraisonType;
 use FIANET\SceauBundle\Entity\Questionnaire;
 use FIANET\SceauBundle\Entity\QuestionnaireReponse;
-use FIANET\SceauBundle\Entity\QuestionnaireType;
 use FIANET\SceauBundle\Entity\Site;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class QuestionnaireRepondu
 {
     private $em;
+    private $session;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, SessionInterface $session)
     {
         $this->em = $em;
+        $this->session = $session;
     }
     
     /**
@@ -274,12 +275,16 @@ class QuestionnaireRepondu
     public function recupStructureQuestionnaireAvecReponses(Site $site, $questionnaire_id)
     {
         $questionnaireDemande = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
-            ->structureQuestionnaireAvecReponses($site, $questionnaire_id);
+            ->structureQuestionnaireAvecReponses($site, $questionnaire_id, $this->session->get('_locale'));
 
         if ($questionnaireDemande->getQuestionnaireLie() != null) {
             /* C'est un Q2 : on récupère les infos du premier questionnaire lié */
             $questionnaire1 = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
-                ->structureQuestionnaireAvecReponses($site, $questionnaireDemande->getQuestionnaireLie()->getId());
+                ->structureQuestionnaireAvecReponses(
+                    $site,
+                    $questionnaireDemande->getQuestionnaireLie()->getId(),
+                    $this->session->get('_locale')
+                );
             $questionnaire2 = $questionnaireDemande;
 
         } elseif ($questionnaireDemande->getQuestionnaireType()->getQuestionnaireTypeSuivant() == null) {
@@ -296,7 +301,7 @@ class QuestionnaireRepondu
 
             if ($questionnaire2_id) {
                 $questionnaire2 = $this->em->getRepository('FIANETSceauBundle:Questionnaire')
-                    ->structureQuestionnaireAvecReponses($site, $questionnaire2_id);
+                    ->structureQuestionnaireAvecReponses($site, $questionnaire2_id, $this->session->get('_locale'));
             } else {
                 $questionnaire2 = null;
             }

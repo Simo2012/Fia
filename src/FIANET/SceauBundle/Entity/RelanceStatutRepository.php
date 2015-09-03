@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use FIANET\SceauBundle\Cache\Cache;
 
 class RelanceStatutRepository extends EntityRepository
 {
@@ -22,9 +23,7 @@ class RelanceStatutRepository extends EntityRepository
             ->where('rs.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
-            ->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
     }
 
     /**
@@ -37,7 +36,7 @@ class RelanceStatutRepository extends EntityRepository
      */
     public function enAttenteDeValidation()
     {
-        return $this->getStatut(0);
+        return $this->getStatut(RelanceStatut::EN_ATTENTE_DE_VALIDATION);
     }
 
     /**
@@ -50,6 +49,6 @@ class RelanceStatutRepository extends EntityRepository
      */
     public function validee()
     {
-        return $this->getStatut(1);
+        return $this->getStatut(RelanceStatut::VALIDEE);
     }
 }

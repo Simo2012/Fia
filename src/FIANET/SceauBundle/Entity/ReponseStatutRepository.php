@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use FIANET\SceauBundle\Cache\Cache;
 
 class ReponseStatutRepository extends EntityRepository
 {
@@ -22,9 +23,7 @@ class ReponseStatutRepository extends EntityRepository
             ->where('rs.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
-            ->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
     }
 
     /**
@@ -37,7 +36,7 @@ class ReponseStatutRepository extends EntityRepository
      */
     public function desactivee()
     {
-        return $this->getStatut(0);
+        return $this->getStatut(ReponseStatut::DESACTIVEE);
     }
 
     /**
@@ -50,6 +49,6 @@ class ReponseStatutRepository extends EntityRepository
      */
     public function activee()
     {
-        return $this->getStatut(1);
+        return $this->getStatut(ReponseStatut::ACTIVEE);
     }
 }

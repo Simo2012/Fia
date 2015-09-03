@@ -9,28 +9,6 @@ use Doctrine\ORM\Query\Expr;
 class QuestionRepository extends EntityRepository
 {
     /**
-     * Récupère l'ensemble des questions d'un questionnaireType de manière ordonnée
-     *
-     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
-     *
-     * @return Question[]
-     */
-//    public function getAllQuestionsOrdered(QuestionnaireType $questionnaireType)
-//    {
-//        /* ToDo : à revoir pour gestion : sous-questions, questions cachées, questions personnalisées, langues, etc. */
-//
-//        $qb = $this->createQueryBuilder('q');
-//
-//        $qb->where('q.questionnaireType=:id')
-//            ->andWhere($qb->expr()->eq('q.questionStatut', 1))
-//            ->setParameter('id', $questionnaireType->getId())
-//            ->orderBy('q.ordre', 'ASC')
-//            ->addOrderBy('q.page', 'ASC');
-//
-//        return $qb->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
-//    }
-
-    /**
      * Récupère l'ordre maximal des questions pour un type de questionnaire et un site.
      * Les questions personnalisées du site sont prises en compte.
      *
@@ -53,7 +31,7 @@ class QuestionRepository extends EntityRepository
                 )
             );
 
-        return $qb->getQuery()->useQueryCache(true)->getSingleScalarResult();
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -90,7 +68,7 @@ class QuestionRepository extends EntityRepository
                 )
             );
 
-        return $qb->getQuery()->useQueryCache(true)->getSingleScalarResult();
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -117,6 +95,6 @@ class QuestionRepository extends EntityRepository
             ->orderBy('q.dateDebut', 'ASC')
             ->addOrderBy('r.ordre', 'ASC');
 
-        return $qb->getQuery()->useQueryCache(true)->getResult();
+        return $qb->getQuery()->getResult();
     }
 }

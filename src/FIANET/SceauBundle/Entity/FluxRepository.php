@@ -27,12 +27,10 @@ class FluxRepository extends EntityRepository
             ->innerJoin('f.site', 's')
             ->innerJoin('s.questionnairePersonnalisations', 'qp')
             ->where($qb->expr()->orX(
-                $qb->expr()->eq('fs.id', ':a_traiter'),
-                $qb->expr()->eq('fs.id', ':en_cours')
+                $qb->expr()->eq('fs.id', FluxStatut::FLUX_A_TRAITER),
+                $qb->expr()->eq('fs.id', FluxStatut::FLUX_EN_COURS_DE_TRAITEMENT) // TODO à enlever : il faut faire un rollback dans la commande en "A traiter"
             ))
-            ->setParameter('a_traiter', 1)
-            ->setParameter('en_cours', 2)
-            ->andWhere('qp.principal=true') // TODO : mettren en place une pagination pour pouvoir supprimer cette ligne
+            ->andWhere('qp.principal=true') // TODO : mettre en place une pagination pour pouvoir supprimer cette ligne
             ->andWhere($qb->expr()->orX(
                 $qb->expr()->isNull('qp.dateFin'),
                 $qb->expr()->gt('qp.dateFin', ':today')
@@ -41,6 +39,6 @@ class FluxRepository extends EntityRepository
             ->orderBy('f.id', 'ASC')
             ->setMaxResults($nbMaxFlux);
 
-        return $qb->getQuery()->useQueryCache(true)->getResult();
+        return $qb->getQuery()->getResult();
     }
 }

@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class RelanceStatut
 {
+    const EN_ATTENTE_DE_VALIDATION = 0;
+    const VALIDEE = 1;
+
     /**
      * @var integer
      *

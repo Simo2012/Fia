@@ -4,6 +4,7 @@ namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use FIANET\SceauBundle\Cache\Cache;
 
 class SiteRepository extends EntityRepository
 {
@@ -40,6 +41,6 @@ class SiteRepository extends EntityRepository
             ->addOrderBy('qp.id', 'ASC')
             ->addOrderBy('ccc.position', 'ASC');
 
-        return $qb->getQuery()->useQueryCache(true)->useResultCache(true, 3600)->getOneOrNullResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getOneOrNullResult();
     }
 }

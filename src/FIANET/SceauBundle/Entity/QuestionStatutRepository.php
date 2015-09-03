@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use FIANET\SceauBundle\Cache\Cache;
 
 class QuestionStatutRepository extends EntityRepository
 {
@@ -22,9 +23,7 @@ class QuestionStatutRepository extends EntityRepository
             ->where('fs.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
-            ->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
     }
 
     /**
@@ -37,7 +36,7 @@ class QuestionStatutRepository extends EntityRepository
      */
     public function desactivee()
     {
-        return $this->getStatut(0);
+        return $this->getStatut(QuestionStatut::DESACTIVEE);
     }
 
     /**
@@ -50,7 +49,7 @@ class QuestionStatutRepository extends EntityRepository
      */
     public function activee()
     {
-        return $this->getStatut(1);
+        return $this->getStatut(QuestionStatut::ACTIVEE);
     }
 
     /**
@@ -63,7 +62,7 @@ class QuestionStatutRepository extends EntityRepository
      */
     public function enAttenteValidation()
     {
-        return $this->getStatut(2);
+        return $this->getStatut(QuestionStatut::EN_ATTENTE_DE_VALIDATION);
     }
 
     /**
@@ -76,6 +75,6 @@ class QuestionStatutRepository extends EntityRepository
      */
     public function refusee()
     {
-        return $this->getStatut(3);
+        return $this->getStatut(QuestionStatut::REFUSEE);
     }
 }

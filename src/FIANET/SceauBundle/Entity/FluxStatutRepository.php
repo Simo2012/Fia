@@ -3,6 +3,7 @@
 namespace FIANET\SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use FIANET\SceauBundle\Cache\Cache;
 
 class FluxStatutRepository extends EntityRepository
 {
@@ -22,9 +23,7 @@ class FluxStatutRepository extends EntityRepository
             ->where('fs.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()
-            ->useQueryCache(true)->useResultCache(true)->setResultCacheLifetime(86400)
-            ->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
     }
 
     /**
