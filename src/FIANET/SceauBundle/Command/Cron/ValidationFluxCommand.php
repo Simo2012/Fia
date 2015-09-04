@@ -44,6 +44,12 @@ EOT
             );
     }
 
+    /**
+     * @inheritdoc
+     *
+     * On récupère dans un premier temps uniquement les identifiants des flux car on doit faire ensuite un update sur
+     * ces flux. Si on récupère directement les objets Flux grâce à un paginator, l'update "casse" le paginator.
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $nbMaxFlux = $input->getArgument('nbMaxFlux');
@@ -54,21 +60,16 @@ EOT
             return 1;
         }
 
-        $fluxNonTraites = $this->em->getRepository('FIANETSceauBundle:Flux')->fluxNonTraites($nbMaxFlux);
+        $listeIdFlux = $this->em->getRepository('FIANETSceauBundle:Flux')->listeIdFluxNonTraites($nbMaxFlux);
 
-        if (!empty($fluxNonTraites)) {
+        if (!empty($listeIdFlux)) {
             $fluxStatutATraiter = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->aTraiter();
-            $fluxStatutEnCours = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->enCoursDeTraitement();
             $fluxStatutValide = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtValide();
             $fluxStatutNonValide = $this->em->getRepository('FIANETSceauBundle:FluxStatut')->traiteEtInvalide();
 
-            /* On change le statut des flux -> en cours de traitement */
-            foreach ($fluxNonTraites as $fluxNonTraite) {
-                $fluxNonTraite->setFluxStatut($fluxStatutEnCours);
-            }
-            $this->em->flush();
+            $this->em->getRepository('FIANETSceauBundle:Flux')->updateEnCoursDeTraitement($listeIdFlux);
+            $fluxNonTraites = $this->em->getRepository('FIANETSceauBundle:Flux')->listeFluxParId($listeIdFlux);
 
-            /* On lance la validation du contenu des flux */
             foreach ($fluxNonTraites as $fluxNonTraite) {
                 try {
                     $this->gf->validerContenu($fluxNonTraite);
