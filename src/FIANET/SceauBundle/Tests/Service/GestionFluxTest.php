@@ -19,6 +19,9 @@ class GestionFluxTest extends KernelTestCase
     private $fluxStatutATraiter;
     private $fluxStatutEnCoursDeTraitement;
 
+    const SITE_ID = 42;
+    const QUESTIONNAIRE_TYPE_ID = 10;
+
     public function __construct()
     {
         static::bootKernel();
@@ -44,17 +47,28 @@ class GestionFluxTest extends KernelTestCase
             ->will($this->returnValue(AdministrationType::FLUX_XML));
 
         $this->site = $this->getMockBuilder('\FIANET\SceauBundle\Entity\Site')
-            ->setMethods(['getId', 'getAdministrationType', 'getClePriveeSceau'])
+            ->setMethods(['getId', 'getAdministrationType', 'getClePriveeSceau', 'getQuestionnairePersonnalisations'])
             ->getMock();
         $this->site->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(42));
+            ->will($this->returnValue(self::SITE_ID));
         $this->site->expects($this->any())
             ->method('getAdministrationType')
             ->will($this->returnValue($administrationType));
         $this->site->expects($this->any())
             ->method('getClePriveeSceau')
             ->will($this->returnValue('123456789azerty'));
+        $questionnaireType = $this->getMock('\FIANET\SceauBundle\Entity\QuestionnaireType');
+        $questionnaireType->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(self::QUESTIONNAIRE_TYPE_ID));
+        $questionnairePersonnalisation = $this->getMock('\FIANET\SceauBundle\Entity\QuestionnairePersonnalisation');
+        $questionnairePersonnalisation->expects($this->any())
+            ->method('getQuestionnaireType')
+            ->will($this->returnValue($questionnaireType));
+        $this->site->expects($this->any())
+            ->method('getQuestionnairePersonnalisations')
+            ->will($this->returnValue([0 => $questionnairePersonnalisation]));
 
         $repository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
@@ -424,8 +438,8 @@ class GestionFluxTest extends KernelTestCase
     }
 
     /**
-     * On appelle le service correctement avec 1 produit sans les balises facultatives :
-     * on récupère une instance de Flux.
+     * On appelle le service correctement avec 1 produit sans les balises facultatives => on récupère une instance
+     * de Flux.
      */
     public function testProduitsSansBalisesFacultatives()
     {
@@ -463,6 +477,43 @@ class GestionFluxTest extends KernelTestCase
             <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
 
         $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
+    }
+
+    /**
+     * On appelle le service avec une balise questionnaire non numérique => exception
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessageRegExp |(.*)is not a valid value of the atomic type 'xs:unsignedShort'(.*)|
+     */
+    public function testQuestionnaireIncorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><questionnaire>un-quest</questionnaire><utilisateur>
+            <nom titre="1">MARTINI</nom>
+            <prenom>JEAN</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $this->gestionFlux->inserer($this->site->getId(), $xmlInfo, md5($xmlInfo), '127.0.0.1');
+    }
+
+    /**
+     * On appelle le service avec une balise questionnaire dont le format est correct => on récupère une instance
+     * de Flux.
+     */
+    public function testQuestionnaireCorrect()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><questionnaire>10</questionnaire><utilisateur>
+            <nom titre="1">CORENTIN</nom>
+            <prenom>PIERRE</prenom><email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            </infocommande><crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $flux = $this->validerReception($xmlInfo);
+
+        $this->assertTrue($flux instanceof Flux);
     }
 
     /******************* Tests pour la validation du contenu *******************/
@@ -667,12 +718,36 @@ class GestionFluxTest extends KernelTestCase
     }
 
     /**
+     * On valide un flux dont le questionnaire donné ne peut être utilisé par le site => exception
+     *
+     * @expectedException FIANET\SceauBundle\Exception\FluxException
+     * @expectedExceptionMessage Vous n'êtes pas autorisé à utiliser ce type de questionnaire.
+     */
+    public function testQuestionnaireNonAutorise()
+    {
+        $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <control><questionnaire>7</questionnaire>
+            <utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <email>' . $this->fluxOk['email'] . '</email></utilisateur>
+            <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
+            <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>
+            <produits><produit><id>0335991</id><categorie>70</categorie>
+            <libelle>Bracelet or 750 topaze bleue traité</libelle><montant>313.8</montant></produit>
+            </produits><typeLivraison>1-2</typeLivraison></infocommande><paiement><type>5</type></paiement>
+            <crypt>' . $this->fluxOk['crypt'] . '</crypt></control>';
+
+        $this->gestionFlux->validerContenu($this->creerInstanceFlux($xmlInfo, md5($xmlInfo), '127.0.0.1'));
+    }
+
+    /**
      * On valide un flux correct => aucune exception
      */
     public function testContenuOK()
     {
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
+            <control><questionnaire>'.
+            $this->site->getQuestionnairePersonnalisations()[0]->getQuestionnaireType()->getId() .'</questionnaire>
+            <utilisateur><nom titre="2">MARTINI</nom><prenom>CHRISTIANE</prenom>
             <email>' . $this->fluxOk['email'] . '</email></utilisateur>
             <infocommande><siteid>' . $this->site->getId() . '</siteid><refid>' . $this->fluxOk['refid'] . '</refid>
             <montant devise="EUR">313.8</montant><ip timestamp="' . $this->fluxOk['timestamp'] . '">83.112.81.91</ip>

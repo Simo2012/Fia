@@ -11,6 +11,9 @@ class WebserviceControllerTest extends WebTestCase
     private $urlSendRating;
     private $urlSendRatingSchema;
 
+    const SITE_ID = 1;
+    const QUESTIONNAIRE_TYPE_ID = 10;
+
     public function __construct()
     {
         $this->client = static::createClient();
@@ -49,16 +52,19 @@ class WebserviceControllerTest extends WebTestCase
      */
     public function testSendRatingBonnesDonnees()
     {
-        /* Ce test se base sur des données en base, il faut éventuellement modifier l'ID ci-dessous */
-        $site = $this->container->get('doctrine')->getManager()->getRepository('FIANETSceauBundle:Site')->find(1);
+        /* Ce test se base sur des données en base, il faut éventuellement modifier les ID */
+        $site = $this->container->get('doctrine')->getManager()
+            ->getRepository('FIANETSceauBundle:Site')->find(self::SITE_ID);
         $refid = uniqid('', true);
         $date = new \DateTime();
         $timestamp = $date->format('Y-m-d h:i:s');
         $email = 'cricri.martini' . rand() . '@wanadoo.fr';
-        $crypt = $this->container->get('fianet_sceau.flux')->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
+        $crypt = $this->container->get('fianet_sceau.flux')
+            ->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
 
         $xmlInfo = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            <control><utilisateur><nom titre="2">MARTINI</nom><prenom>CRISTIANE</prenom>
+            <control><questionnaire>' . self::QUESTIONNAIRE_TYPE_ID . '</questionnaire>
+            <utilisateur><nom titre="2">MARTINI</nom><prenom>CRISTIANE</prenom>
             <email>' . $email . '</email></utilisateur>
             <infocommande><siteid>' . $site->getId() . '</siteid><refid>' . $refid . '</refid>
             <montant devise="EUR">313.8</montant><ip timestamp="' . $timestamp . '">83.112.81.91</ip>

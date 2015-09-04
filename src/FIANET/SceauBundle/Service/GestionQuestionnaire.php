@@ -210,6 +210,32 @@ class GestionQuestionnaire
     }
 
     /**
+     * Retourne l'instance de QuestionnairePersonnalisation dont le QuestionaireType a pour identifiant $id.
+     * Si aucun identifiant n'est donné, alors retourne le QuestionnairePersonnalisation "principal".
+     *
+     * @param QuestionnairePersonnalisation[] $questionnairePersos Tableau d'instance de QuestionnairePersonnalisation
+     * @param int|null $id Identifiant. Doit valoir null si on veut récupérer le type de questionnaire principal.
+     *
+     * @return QuestionnairePersonnalisation
+     */
+    private function recupQuestPersoParQuestTypeId($questionnairePersos, $id = null)
+    {
+        $questionnairePerso = null;
+
+        $i = 0;
+        while (!$questionnairePerso) {
+            if (($id && $questionnairePersos[$i]->getQuestionnaireType()->getId() == $id)
+                || (!$id && $questionnairePersos[$i]->getPrincipal() == true)
+            ) {
+                $questionnairePerso = $questionnairePersos[$i];
+            }
+            $i++;
+        }
+
+        return $questionnairePerso;
+    }
+
+    /**
      * Génère un questionnaire à partir d'un flux XML. Attention : le flux passé en argument doit avoir été validé.
      *
      * @param Flux $flux Instance de flux
@@ -217,22 +243,15 @@ class GestionQuestionnaire
     public function genererQuestionnaireViaFlux(Flux $flux)
     {
         $xml = new SimpleXMLElement($flux->getXml());
-        $questionnairePerso = null;
-        $questionnaireType = null;
         $questionnairePersos = $flux->getSite()->getQuestionnairePersonnalisations();
 
         if (!$xml->questionnaire) {
-            $i = 0;
-            while (!$questionnaireType) {
-                if ($questionnairePersos[$i]->getPrincipal() === true) {
-                    $questionnairePerso = $questionnairePersos[$i];
-                    $questionnaireType = $questionnairePersos[$i]->getQuestionnaireType();
-                }
-                $i++;
-            }
+            /* Récupération du type de questionnaire principal */
+            $questionnairePerso = $this->recupQuestPersoParQuestTypeId($questionnairePersos);
+
         } else {
-            /* TODO : si une balise questionnaire est présente, il faut vérifier que le site puisse utiliser ce
-            questionnaire. Si oui, le QuestionnaireType sera égal au questionnaire indiqué. */
+            /* Récupération du type de questionnaire indiqué */
+            $questionnairePerso = $this->recupQuestPersoParQuestTypeId($questionnairePersos, $xml->questionnaire);
         }
 
         $commande = $this->creerCommandeViaFlux($flux, $xml);

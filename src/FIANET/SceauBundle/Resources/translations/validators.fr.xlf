@@ -142,6 +142,10 @@
                 <source>constraints.question.notation</source>
                 <target>Les bornes de notation sont obligatoires.</target>
             </trans-unit>
+            <trans-unit id="36">
+                <source>constraints.flux_questionnaire_incorrect</source>
+                <target>Vous n'êtes pas autorisé à utiliser ce type de questionnaire.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

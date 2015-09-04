@@ -142,6 +142,10 @@
                 <source>constraints.question.notation</source>
                 <target>Scoring terminals are required.</target>
             </trans-unit>
+            <trans-unit id="36">
+                <source>constraints.flux_questionnaire_incorrect</source>
+                <target>You do not have the permission to use this questionnaire type.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
