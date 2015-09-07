@@ -23,7 +23,7 @@ class RelanceStatutRepository extends EntityRepository
             ->where('rs.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J, "relanceStatut_$id")->getSingleResult();
     }
 
     /**

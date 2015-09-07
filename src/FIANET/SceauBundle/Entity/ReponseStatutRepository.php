@@ -23,7 +23,7 @@ class ReponseStatutRepository extends EntityRepository
             ->where('rs.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J, "reponseStatut_$id")->getSingleResult();
     }
 
     /**

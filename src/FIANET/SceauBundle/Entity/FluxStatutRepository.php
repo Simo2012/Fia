@@ -8,7 +8,7 @@ use FIANET\SceauBundle\Cache\Cache;
 class FluxStatutRepository extends EntityRepository
 {
     /**
-     * Récupère le statut  correspondant à l'identifiant donné. Le résultat est en cache pendant 1 jour.
+     * Récupère le statut correspondant à l'identifiant donné. Le résultat est en cache pendant 1 jour.
      *
      * @param integer $id Identifiant du statut
      *
@@ -23,7 +23,7 @@ class FluxStatutRepository extends EntityRepository
             ->where('fs.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J, "fluxStatut_$id")->getSingleResult();
     }
 
     /**

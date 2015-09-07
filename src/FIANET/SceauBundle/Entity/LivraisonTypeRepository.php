@@ -24,7 +24,7 @@ class LivraisonTypeRepository extends EntityRepository
             ->where('lt.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J, "livraisonType_$id")->getSingleResult();
     }
 
     /**

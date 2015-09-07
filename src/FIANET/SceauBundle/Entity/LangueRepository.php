@@ -24,7 +24,7 @@ class LangueRepository extends EntityRepository
             ->where('l.id = :id')
             ->setParameter('id', $id);
 
-        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J, "langue_$id")->getSingleResult();
     }
 
     /**
@@ -43,7 +43,7 @@ class LangueRepository extends EntityRepository
             ->where('l.code = :code')
             ->setParameter('code', $code);
 
-        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getSingleResult();
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J, "langue_$code")->getSingleResult();
     }
 
     /**
