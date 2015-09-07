@@ -5,54 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-
         <!-- Général -->
-        <!-- Validator -->
-        <service id="fianet_sceau.validator.site_id" class="FIANET\SceauBundle\Validator\Constraints\SiteIdValidator">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <tag name="validator.constraint_validator" alias="validator.site_id" />
-        </service>
-        <service id="fianet_sceau.validator.flux_xml_format" class="FIANET\SceauBundle\Validator\Constraints\FluxXmlFormatValidator">
-            <argument type="service" id="router" />
-            <argument type="service" id="templating" />
-            <tag name="validator.constraint_validator" alias="validator.flux_xml_format" />
-        </service>
-        <service id="fianet_sceau.validator.flux_xml_contenu" class="FIANET\SceauBundle\Validator\Constraints\FluxXmlContenuValidator">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="fianet_sceau.flux" />
-            <argument>%flux_delai_max_commande%</argument>
-            <tag name="validator.constraint_validator" alias="validator.flux_xml_contenu" />
-        </service>
-        <service id="fianet_sceau.validator.question_globale" class="FIANET\SceauBundle\Validator\Constraints\QuestionGlobaleValidator">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <tag name="validator.constraint_validator" alias="validator.question_globale" />
-        </service>
-        <service id="fianet_sceau.validator.question_perso" class="FIANET\SceauBundle\Validator\Constraints\QuestionPersoValidator">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <tag name="validator.constraint_validator" alias="validator.question_perso" />
-        </service>
-
-        <!-- Listener -->
-        <service id="fianet_sceau.kernel.listener.exception" class="FIANET\SceauBundle\Listener\ExceptionListener">
-            <argument type="service" id="templating" />
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
-        </service>
-        <service id="fianet_sceau.kernel.subscriber.locale" class="FIANET\SceauBundle\Listener\LocaleListener">
-            <argument>%locale%</argument>
-            <tag name="kernel.event_subscriber" />
-        </service>
-
-        <!-- Formulaire -->
-        <service id="fianet_sceau.form.type.question_perso" class="FIANET\SceauBundle\Form\Type\QuestionPersoType">
-            <argument type="service" id="fianet_sceau.outils.string" />
-            <tag name="form.type" alias="fianet_sceaubundle_question_perso" />
-        </service>
-        <service id="fianet_sceau.form.type.select_langue" class="FIANET\SceauBundle\Form\Type\SelectLangueType">
-            <argument type="service" id="fianet_sceau.outils.string" />
-            <tag name="form.type" alias="fianet_sceaubundle_select_langue" />
-        </service>
-
-        <!-- Métier -->
         <service id="fianet_sceau.flux" class="FIANET\SceauBundle\Service\GestionFlux">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="validator" />
@@ -75,6 +28,9 @@
         <service id="fianet_sceau.relance" class="FIANET\SceauBundle\Service\GestionRelance">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument>%relance_delai_jours%</argument>
+        </service>
+        <service id="fianet_sceau.outils.string" class="FIANET\SceauBundle\Service\OutilsString">
+            <argument type="service" id="translator"/>
         </service>
 
         <!-- Extranet -->
@@ -105,17 +61,6 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="fianet_sceau.notes"/>
         </service>
-
-        <service id="fianet_sceau.form.type.extranet.questionnaires_liste" class="FIANET\SceauBundle\Form\Type\Extranet\QuestionnairesListeType">
-            <argument type="service" id="fianet_sceau.outils.string" />
-            <tag name="form.type" alias="fianet_sceaubundle_questionnaires_liste" />
-        </service>
-
-        <!-- Autres -->
-        <service id="fianet_sceau.outils.string" class="FIANET\SceauBundle\Service\OutilsString">
-            <argument type="service" id="translator"/>
-        </service>
-
     </services>
 
 </container>

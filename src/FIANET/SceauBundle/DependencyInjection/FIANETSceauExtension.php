@@ -25,5 +25,8 @@ class FIANETSceauExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
         $loader->load('services_command.xml');
+        $loader->load('services_form.xml');
+        $loader->load('services_listener.xml');
+        $loader->load('services_validator.xml');
     }
 }
