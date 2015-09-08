@@ -1,0 +1,264 @@
+{% extends 'SceauBundle:Extranet:extranet.html.twig' %}
+
+{% trans_default_domain 'extranet_questionnaires_question_perso' %}
+
+{% block title %}
+    {{ parent() }} : {% trans %}title_page{% endtrans %}
+{% endblock %}
+
+{% block extranet_stylesheets %}
+    {% stylesheets
+    'bundles/sceau/css/extranet/questionnaires.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block extranet_body %}
+    <div class="content">
+        <div class="block-message">
+            {% for messageSucces in app.session.flashbag.get('creation_succes') %}
+                <p class="succes">{{ messageSucces }}</p>
+            {% endfor %}
+            {% for messageErreur in app.session.flashbag.get('creation_erreur') %}
+                <p class="erreur">{{ messageErreur }}</p>
+            {% endfor %}
+        </div>
+
+        <h1>{% trans %}titre_page{% endtrans %}</h1>
+
+        <div class="block-total">
+            <div class="block-total-part1-2">
+                <ul>
+                    <li>
+                        {% trans %}frise1{% endtrans %}<br/>
+                        <img src="{{ asset('bundles/sceau/images/extranet/picto-quest-create.png') }}" width="66" height="54" alt=""/>
+                    </li>
+                    <li class="arrow">
+                        <img src="{{ asset('bundles/sceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/>
+                    </li>
+                    <li>
+                        {% trans %}frise2{% endtrans %}<br/>
+                        <img src="{{ asset('bundles/sceau/images/extranet/picto-quest-valid.png') }}" width="82" height="55" alt=""/>
+                    </li>
+                    <li class="arrow">
+                        <img src="{{ asset('bundles/sceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/>
+                    </li>
+                    <li>
+                        {% trans %}frise3{% endtrans %}<br/>
+                        <img src="{{ asset('bundles/sceau/images/extranet/picto-quest-online.png') }}" width="89" height="54" alt=""/>
+                    </li>
+                    <li class="arrow">
+                        <img src="{{ asset('bundles/sceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/>
+                    </li>
+                    <li>
+                        {% trans %}frise4{% endtrans %}<br/>
+                        <img src="{{ asset('bundles/sceau/images/extranet/picto-quest-stat.png') }}" width="92" height="54" alt=""/>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="block-total-part3">
+                <div class="block-info-comp">
+                    <p>
+                        <strong>
+                            Profitez de nos questionnaires de satisfaction pour solliciter l'avis de vos clients sur
+                            un élément spécifique : une opération promotionnelle, un service spécifique, une refonte de
+                            votre site, une nouvelle mise en avant de vos produits… Tous ces évènements peuvent être la
+                            source de retours précis et qualitatifs sur vos actions.<br/>
+                            <br/>
+                            Vous pouvez ajouter deux questions par questionnaire envoyé, post-achat ou post-livraison en
+                            choisissant la date qui convient le mieux. Ciblez ainsi le moment le plus opportun pour
+                            communiquer avec vos clients. Les questions seront ajoutées à la fin du
+                            questionnaire.
+                        </strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {% if questionsEnAttenteDeValidation is not empty %}
+            <h1>{% trans %}titre2_page{% endtrans %}</h1>
+
+            <div class="block-total">
+                <table width="100%" cellspacing="0" cellpadding="0" border="0" class="gen" >
+                    <tr>
+                        <th>{% trans %}libelle{% endtrans %}</th>
+                        <th>{% trans %}type{% endtrans %}</th>
+                        <th>{% trans %}reponses{% endtrans %}</th>
+                        <th>{% trans %}date_debut{% endtrans %}</th>
+                        <th>{% trans %}date_fin{% endtrans %}</th>
+                    </tr>
+                    {% for question in questionsEnAttenteDeValidation %}
+                        <tr {% if loop.index0 is even %}class="alt"{% endif %}>
+                            <td>{{ question.libelle }}</td>
+                            <td>{{ question.questionType.libelle|trans({}, 'questionType') }}</td>
+                            <td>
+                                {% for reponse in question.reponses %}
+                                    {{ loop.index }} ) {{ reponse.libelle }}<br />
+                                {% endfor %}
+                            </td>
+                            <td>{{ question.dateDebut|localizeddate('short', 'none') }}</td>
+                            <td>{{ question.dateFin|localizeddate('short', 'none') }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <h1>{% trans %}titre3_page{% endtrans %}</h1>
+
+        <div id="question-perso" class="block-total align-gauche">
+            {% if form.vars.errors %}
+                <div class="bloc-erreur erreur">
+                    {% for error in form.vars.errors %}
+                        {{ error.message }}<br />
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {{ form_start(form, {'attr' : {'id': 'form_question_perso'}}) }}
+
+                <h2>Question</h2>
+                <div>{{ form_label(form.questionType, 'type'|trans) }} : {{ form_widget(form.questionType, {'attr' : {'onchange' : 'changerTypeQuestion(this.value);'}} ) }}</div>
+
+                {% if questionType is not null %}
+                    <div>
+                        {{ form_label(form.libelle, 'libelle'|trans) }} : {{ form_widget(form.libelle) }} <span class="erreur">{{ form_errors(form.libelle) }}</span>
+                    </div>
+
+                    <div id="dates">
+                        {{ form_label(form.dateDebut, 'date_publication'|trans) }} : {{ form_widget(form.dateDebut, {'attr' : {'class' : 'calendrier'}}) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span> {{ form_label(form.dateFin, 'date_publication2'|trans) }} : {{ form_widget(form.dateFin, {'attr' : {'class' : 'calendrier'}}) }}<span class="erreur">{{ form_errors(form.dateFin) }}</span>
+                    </div>
+
+                    {% if questionType.id == 3 %}
+                        <div id="notation">
+                            {{ form_label(form.dateDebut, 'notation'|trans) }} : {{ form_widget(form.valeurMin) }} <span class="erreur">{{ form_errors(form.valeurMin) }}</span> {{ form_label(form.dateDebut, 'notation2'|trans) }} {{ form_widget(form.valeurMax) }}<span class="erreur">{{ form_errors(form.valeurMax) }}</span>
+                        </div>
+                    {% endif %}
+                    <br />
+                    <h2>Liste des réponses</h2>
+                    {% do form.reponses.setRendered %} {# on affiche manuellement le formulaire des réponses #}
+                    <div id="sceaubundle_question_perso_reponses">
+                        {% for reponse in form.reponses %}
+                            {% set idReponse = 'sceaubundle_question_perso_reponses_' ~ loop.index0 %}
+
+                            <div id="{{ idReponse }}">
+                                {% if questionType.id != 4 %}
+                                    {% trans %}numero_reponse{% endtrans %}{{ loop.index }}<br />
+                                    <label for="{{ idReponse ~ '_libelle' }}">{% trans %}libelle{% endtrans %} : </label>
+                                {% else %}
+                                    <label for="{{ idReponse ~ '_libelle' }}">{% trans %}libelle_commentaire{% endtrans %} : </label>
+                                {% endif %}
+                                {{ form_widget(reponse.libelle) }}<span class="erreur">{{ form_errors(reponse.libelle) }}</span>
+
+                                {% if questionType.id == 2 %}
+                                    <br />
+                                    <label for="{{ idReponse ~ '_precision' }} ">{% trans %}ajout_precision{% endtrans %}</label> : {{ form_widget(reponse.precision) }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if questionType.id != 4 %}
+                        <div id="ajout_reponse">{% trans %}ajout_reponse{% endtrans %} <a href="#" id="lien_ajout_reponse">{% trans %}ajout_reponse2{% endtrans %}</a></div>
+                    {% endif  %}
+
+                    <button type="submit">{% trans from 'commun' %}commun_valider{% endtrans %}</button>
+                {% endif %}
+            {{ form_end(form) }}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block extranet_javascripts %}
+    {% javascripts
+    'bundles/sceau/js/extranet/questionnaires.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        var parametresCalendriers = { firstDay: 1, minDate: 1};
+        afficherCalendrier('sceaubundle_question_perso_dateDebut', '{{ app.request.locale  }}', parametresCalendriers);
+        afficherCalendrier('sceaubundle_question_perso_dateFin', '{{ app.request.locale  }}', parametresCalendriers);
+
+        {% if questionType is not null %}
+            $(document).ready(function() {
+                var container = $('div#sceaubundle_question_perso_reponses');
+
+                $('#lien_ajout_reponse').click(function(e) {
+                    ajoutReponse(container);
+                    e.preventDefault();
+                    return false;
+                });
+
+                {# Au chargement de la page il faut soit ajouter une première réponse vide (le formulaire est vide de réponse à la base), soit afficher tous les liens de suppression (formulaire rempli) #}
+                var index = container.find(':input').length;
+                if (index == 0) {
+                    ajoutReponse(container);
+                } else {
+                    container.children('div').each(function() {
+                        ajoutLienSuppression($(this));
+                    });
+                }
+
+                function ajoutReponse(container) {
+                    var questionType = '{{ questionType.id }}';
+
+                    var libelleReponse = '';
+                    if (questionType != '4') {
+                        libelleReponse = '{% trans %}numero_reponse{% endtrans %}' + (index+1) + '<br />';
+                    }
+
+                    var libelle = '';
+                    if (questionType == '4') {
+                        libelle = '{% trans %}libelle_commentaire{% endtrans %} : ';
+                    } else {
+                        libelle = '{% trans %}libelle{% endtrans %} : ';
+                    }
+
+                    var idReponse = 'sceaubundle_question_perso_reponses_'+ index;
+                    var options = '';
+                    if (questionType == '2') {
+                        options = '<br /><label for="'+ idReponse +'"_precision">{% trans %}ajout_precision{% endtrans %} : </label><input id="'+ idReponse +'"_precision" name="sceaubundle_question_perso[reponses]['+ index +'][precision]" value="1" type="checkbox">';
+                    }
+
+                    var prototype = $('<div id="'+ idReponse +'">'+ libelleReponse +'<label for="'+ idReponse +'_libelle">'+ libelle +'</label><input id="'+ idReponse +'_libelle" name="sceaubundle_question_perso[reponses]['+ index +'][libelle]" required="required" class="libelle-reponse" type="text">'+ options +'</div>');
+
+                    ajoutLienSuppression(prototype);
+                    container.append(prototype);
+
+                    index++;
+                }
+
+                function ajoutLienSuppression(prototype) {
+                    {# Le lien de suppression n'est pas affiché pour les commentaires car il n'y a au mini et au maxi une réponse #}
+                    if ('{{ questionType.id }}' != '4') {
+                        var img = "{{ asset('bundles/sceau/images/extranet/supprimer.png') }}";
+
+                        var deleteLink = $('<a href="#" class="pointer"><img src="'+ img +'" width="20" height="20" title="{% trans from 'commun'%}commun_supprimer{% endtrans %}" alt="{% trans from 'commun'%}commun_supprimer{% endtrans %}" class="supprimer"/></a>');
+
+                        prototype.children('.libelle-reponse').after(deleteLink);
+
+                        deleteLink.click(function (e) {
+                            prototype.remove();
+                            e.preventDefault();
+                            return false;
+                        });
+                    }
+                }
+            });
+        {% endif %}
+
+        function changerTypeQuestion(questionType) {
+            afficherMasque();
+
+            document.location.href = Routing.generate(
+                    'extranet_questionnaires_questions_personnalisees_question_type',
+                    { _locale : '{{ app.request.locale }}', id: questionType },
+                    true
+            );
+        }
+    </script>
+{% endblock %}

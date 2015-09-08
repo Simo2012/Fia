@@ -1,0 +1,208 @@
+@charset "utf-8";
+/* CSS Document */
+
+nav {
+    display: block;
+    margin: 2px;
+    padding: 0;
+}
+
+nav ul {
+    display: inline-block;
+    clear: both;
+    width: 100%;
+    line-height: 62px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: url(../../images/extranet/nav_back-search.png) repeat-x;
+    border-radius: 2px;
+    position: relative;
+    z-index: 10;
+}
+
+nav ul li {
+    float: left;
+}
+
+nav ul li a {
+    text-decoration: none;
+}
+
+nav ul li.search {
+    width: auto;
+    padding: 0 15px 0 15px;
+}
+
+nav ul li input[type=text] {
+    width: 285px;
+    height: 29px;
+    font-size: 10px;
+    font-style: oblique;
+    vertical-align: middle;
+}
+
+nav ul li.search button {
+    display: inline-block;
+    position: absolute;
+    padding: 2px 3px;
+    margin-left: -35px;
+    margin-top: 20px;
+    line-height: normal;
+}
+
+nav ul li.search button:hover {
+    padding: 3px;
+}
+
+nav ul li.end {
+    float: right;
+}
+
+nav ul li ul.ssmenu {
+    display: none;
+    clear: both;
+    width: 100%;
+    line-height: 41px;
+    padding: 0;
+    list-style: none;
+    background: #323744;
+    border-radius: 2px;
+    position: absolute;
+    z-index: -1;
+    margin: -4px 0 0;
+    left: 0;
+}
+
+nav ul li.active ul.ssmenu {
+    display: inline-block;
+}
+
+nav ul li ul.ssmenu li {
+    float: left;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+nav ul li ul.ssmenu li.logo {
+    float: left;
+    width: 70px;
+    background: url(../../images/extranet/jauge.png) no-repeat center 10px;
+}
+
+nav ul li ul.ssmenu li a {
+    display: inline-block;
+    line-height: 28px;
+    border: 1px solid #323744;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+nav ul li ul.ssmenu li a:hover, nav ul li ul.ssmenu li.active a {
+    border-radius: 2px;
+    border: 1px solid #454444;
+    background-color: #232428;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+a#accueil {
+    display: block;
+    background: url(../../images/extranet/nav_accueil.png) no-repeat left top;
+    width: 84px;
+    height: 62px;
+}
+
+a#accueil:hover, li.active a#accueil {
+    background: url(../../images/extranet/nav_accueil-on.png) no-repeat left top;
+}
+
+a#statistiques {
+    display: block;
+    background: url(../../images/extranet/nav_statistique.png) no-repeat left top;
+    width: 100px;
+    height: 62px;
+}
+
+a#statistiques:hover, li.active a#statistiques {
+    background: url(../../images/extranet/nav_statistique-on.png) no-repeat left top;
+}
+
+a#questionnaires {
+    display: block;
+    background: url(../../images/extranet/nav_questionnaire.png) no-repeat left top;
+    width: 100px;
+    height: 62px;
+}
+
+a#questionnaires:hover, li.active a#questionnaires {
+    background: url(../../images/extranet/nav_questionnaire-on.png) no-repeat left top;
+}
+
+a#echanges {
+    display: block;
+    background: url(../../images/extranet/nav_echange.png) no-repeat left top;
+    width: 100px;
+    height: 62px;
+}
+
+a#echanges:hover, li.active a#echanges {
+    background: url(../../images/extranet/nav_echange-on.png) no-repeat left top;
+}
+
+a#outils {
+    display: block;
+    background: url(../../images/extranet/nav_outils.png) no-repeat left top;
+    width: 100px;
+    height: 62px;
+}
+
+a#outils:hover, li.active a#outils {
+    background: url(../../images/extranet/nav_outils-on.png) no-repeat left top;
+}
+
+a#integration {
+    display: block;
+    background: url(../../images/extranet/nav_integration.png) no-repeat left top;
+    width: 100px;
+    height: 62px;
+}
+
+a#integration:hover, li.active a#integration {
+    background: url(../../images/extranet/nav_integration-on.png) no-repeat left top;
+}
+
+a#optimisation {
+    display: block;
+    background: url(../../images/extranet/nav_optimisation.png) no-repeat left top;
+    width: 100px;
+    height: 62px;
+}
+
+a#optimisation:hover, li.active a#optimisation {
+    background: url(../../images/extranet/nav_optimisation-on.png) no-repeat left top;
+}
+
+a#mail {
+    display: block;
+    background: url(../../images/extranet/nav_send.png) no-repeat left top;
+    width: 41px;
+    height: 30px;
+}
+
+a#mail:hover, li.active a#mail {
+    background: url(../../images/extranet/nav_send-on.png) no-repeat left top;
+}
+
+a#help {
+    display: block;
+    background: url(../../images/extranet/nav_help.png) no-repeat left top;
+    width: 41px;
+    height: 32px;
+}
+
+a#help:hover, li.active a#help {
+    background: url(../../images/extranet/nav_help-on.png) no-repeat left top;
+}

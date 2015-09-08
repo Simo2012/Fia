@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>commun_attention</source>
+                <target>Warning</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>commun_confirmation</source>
+                <target>Confirmation</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>commun_droit_de_reponse</source>
+                <target>Right of reply</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>commun_commande_informations</source>
+                <target>Ordering Information</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>commun_commande_montant</source>
+                <target>Amount of the order</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>commun_commande_date</source>
+                <target>Date of order</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>commun_commande_site</source>
+                <target>Site of order</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>commun_questionnaire_commentaire</source>
+                <target>Comment</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>commun_nb_caracteres_max</source>
+                <target>characters maximum</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>commun_droit_de_reponse_charte_1</source>
+                <target>The right of reply should be exercised in accordance with</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>commun_droit_de_reponse_charte_2</source>
+                <target>the charter</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>commun_nb_caracteres_restants</source>
+                <target>Number of remaining characters</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>commun_droit_de_reponse_informations</source>
+                <target>Please, do not publish the names of users on our interface. The right of reply is not intended to thank your customers for participating in FIA-NET satisfaction surveys. We recommend that you use the right of reply as an explanation to a notice posted and not as an overall appreciation of participation. If you want to thank your customers for their participation, please send them an e-mail.</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>commun_valider</source>
+                <target>Validate</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>commun_charte_commercant</source>
+                <target>
+                    <![CDATA[
+                        <div class="charte-commercant">
+                            <p class="bold">Welcome to Seal Charter FIA-NET Confidence!</p>
+                            <p>This Charter aims to present good practices for managing your clients questionnaires.</p>
+                            <p>The comment moderation requests or delete erroneous questionnaires are sent to FIA-NET via the extranet partner.</p>
+                            <p>The removal of questionnaires and your customers erroneous comments are processed by FIA-NET, which decides how to respond to the request.</p>
+                            <p>Comment deletion is an exceptional measure. It is highly recommended to partner resort to the use of his right of reply for clarification or specific details on the situation ascent by the user.</p>
+                            <p>The partner must always bear in mind that his explanations are primarily intended for users.</p>
+                            <ol>
+                                    <li>The partner agrees not to meet the satisfaction questionnaires FIA-NET partners, officers of the company, members of the immediate family (spouse, ascendants and direct descendants), the company's staff and if any of the parent company or its subsidiaries ;</li>
+                                    <li>The partner is invited to use the courtesy and accuracy Response Law to meet the buyers' comments ;</li>
+                                    <li>The partner must never include any personal data (eg name, last name of his client, etc.) in its response ;</li>
+                                    <li>The partner agrees to respect the graphic charter of Trust Logo namely to post good FIA-NET logo and the widget on their website.</li>
+                            </ol>
+                            <p>The partner will be informed in advance of any changes that occur in this Charter.</p>
+                        </div>
+                    ]]>                    
+                </target>
+            </trans-unit>  
+            <trans-unit id="16">
+                <source>commun_formulaire_invalide</source>
+                <target>The form can not be submitted</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>commun_formulaire_commentaire_obligatoire</source>
+                <target>The comment is required</target>
+            </trans-unit>             
+            <trans-unit id="18">
+                <source>commun_droit_de_reponse_confirm_envoi</source>
+                <target>Your message will be sent. Your customer will receive an e-mail. Your comment will be visible on www.fia-net.com.</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>commun_date_reponse_questionnaire</source>
+                <target>Date questionnaire response</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>commun_adresse_email</source>
+                <target>E-mail adress</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>commun_verbatim</source>
+                <target>Comment</target>
+            </trans-unit>
+           <trans-unit id="22">
+                <source>commun_details</source>
+                <target>Details</target>
+            </trans-unit>            
+            <trans-unit id="23">
+                <source>commun_detail_de_questionnaire</source>
+                <target>Detail of a questionnaire</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>commun_avis_de</source>
+                <target>Review from</target>
+            </trans-unit> 
+            <trans-unit id="25">
+                <source>commun_du</source>
+                <target>of</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>commun_commande_numero</source>
+                <target>Order number</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>commun_questionnaires</source>
+                <target>Questionnaires</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>commun_questionnaire_envoye_par</source>
+                <target>Questionnaire sent by</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>commun_commande_email</source>
+                <target>E-mail</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>commun_membre_pseudo</source>
+                <target>Pseudonym</target>
+            </trans-unit>              
+            <trans-unit id="31">
+                <source>commun_questionnaire_repondu</source>
+                <target>Answered questionnaire</target>
+            </trans-unit> 
+            <trans-unit id="32">
+                <source>commun_questionnaire_q1_produit</source>
+                <target>Questionnaire before delivery</target>
+            </trans-unit>  
+            <trans-unit id="33">
+                <source>commun_questionnaire_q2_produit</source>
+                <target>Questionnaire after delivery</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>commun_questionnaire_q1_service</source>
+                <target>Questionnaire after booking online</target>
+            </trans-unit>  
+            <trans-unit id="35">
+                <source>commun_questionnaire_q2_service</source>
+                <target>Questionnaire from the use of the service</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>commun_chargement</source>
+                <target>Loading</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>commun_date_reponse</source>
+                <target>Response date</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>commun_le</source>
+                <target>The</target>
+            </trans-unit>  
+            <trans-unit id="39">
+                <source>commun_a</source>
+                <target>at</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>commun_demande_succes</source>
+                <target>Your request has been taken into account.</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>commun_demande_erreur</source>
+                <target>Your request could not be considered.</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>commun_marchand</source>
+                <target>Merchant</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>commun_langue</source>
+                <target>Language</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>commun_infobulle</source>
+                <target>Tooltip</target>
+            </trans-unit>
+            <trans-unit id="45">
+                <source>commun_supprimer</source>
+                <target>Delete</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

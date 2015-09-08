@@ -1,0 +1,154 @@
+{% extends "SceauBundle:Extranet:extranet.html.twig" %}
+
+{% block title %}
+    {{ parent() }} : accueil
+{% endblock %}
+
+{% block extranet_body %}
+
+    <h1>PROFIL</h1>
+    <div class="block-total">
+        <div class="block-total-part1">
+            <h2>informationS personnelles</h2>
+            <dd>Nom :</dd>
+            <dt>Elodie DELISTE</dt>
+            <hr/>
+            <dd>Fonction :</dd>
+            <dt>Fonction</dt>
+            <hr/>
+            <dd>Numéro :</dd>
+            <dt>01 23 45 69 87</dt>
+        </div>
+        <div class="block-total-part2">
+            <h2>VOS abonnements</h2>
+            <input type="checkbox"/>
+            Abonné aux newsletters
+            <h2>VOS ALERTES</h2>
+            <input type="checkbox"/>
+            Commentaires négatifs<br/>
+            <input type="checkbox"/>
+            Commentaires neutres<br/>
+            <input type="checkbox"/>
+            Litiges
+        </div>
+        <div class="block-total-part3">
+            <h2>Dernière newsletter</h2>
+
+            <div class="block-NL">
+                {% image '@SceauBundle/Resources/public/images/extranet/camion.jpg' %}<img src="{{ asset_url }}"
+                                                                                                 width="79"
+                                                                                                 height="77"/>{% endimage %}
+
+                <p><strong>Optimiser votre stratégie de livraison<br/>
+                        avec le Sceau de Confiance FIA-NET</strong><br/>
+                    <br/>
+                    Vous le savez, la livraison d’une commande est cruciale pour l’internaute. Elle détermine sa
+                    satisfaction ainsi que ses futurs achats sur votre site. <a href="#">Lire la suite</a></p>
+            </div>
+        </div>
+    </div>
+    <h1>DROIT d’accès</h1>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gen">
+        <tbody>
+        <tr>
+            <th scope="col">PRéNOM</th>
+            <th scope="col">nom</th>
+            <th scope="col">fonction</th>
+            <th scope="col">Adresse e-mail</th>
+            <th scope="col">SITE</th>
+            <th scope="col">droit<br/>
+                D’accès
+            </th>
+            <th scope="col">STATUT</th>
+            <th scope="col">ACTIONS</th>
+        </tr>
+        <tr>
+            <td>Prénom</td>
+            <td>Nom</td>
+            <td>nom de la fonction</td>
+            <td>Lorem-ipsumdolorsit-posuerent@gmail.com</td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_map-off.png' %}<img
+                            src="{{ asset_url }}" width="19" height="19" border="0"/>{% endimage %}</a></td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_droit-off.png' %}<img
+                            src="{{ asset_url }}" width="20" height="15" border="0"/>{% endimage %}</a></td>
+            <td>administrateur</td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_modif.png' %}<img
+                            src="{{ asset_url }}" width="17" height="17" border="0"/>{% endimage %}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                        href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_poubelle.png' %}
+                    <img src="{{ asset_url }}" width="15" height="19" border="0"/>{% endimage %}</a></td>
+        </tr>
+        <tr class="alt">
+            <td>Prénom</td>
+            <td>Nom</td>
+            <td>nom de la fonction</td>
+            <td>Lorem-ipsumdolorsit-posuerent@gmail.com</td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_map-off.png' %}<img
+                            src="{{ asset_url }}" width="19" height="19" border="0"/>{% endimage %}</a></td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_droit-off.png' %}<img
+                            src="{{ asset_url }}" width="20" height="15" border="0"/>{% endimage %}</a></td>
+            <td>administrateur</td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_modif.png' %}<img
+                            src="{{ asset_url }}" width="17" height="17" border="0"/>{% endimage %}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                        href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_poubelle.png' %}
+                    <img src="{{ asset_url }}" width="15" height="19" border="0"/>{% endimage %}</a></td>
+        </tr>
+        <tr>
+            <td>Prénom</td>
+            <td>Nom</td>
+            <td>nom de la fonction</td>
+            <td>Lorem-ipsumdolorsit-posuerent@gmail.com</td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_map-off.png' %}<img
+                            src="{{ asset_url }}" width="19" height="19" border="0"/>{% endimage %}</a></td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_droit-off.png' %}<img
+                            src="{{ asset_url }}" width="20" height="15" border="0"/>{% endimage %}</a></td>
+            <td>administrateur</td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_modif.png' %}<img
+                            src="{{ asset_url }}" width="17" height="17" border="0"/>{% endimage %}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                        href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_poubelle.png' %}
+                    <img src="{{ asset_url }}" width="15" height="19" border="0"/>{% endimage %}</a></td>
+        </tr>
+        <tr class="alt">
+            <td>Prénom</td>
+            <td>Nom</td>
+            <td>nom de la fonction</td>
+            <td>Lorem-ipsumdolorsit-posuerent@gmail.com</td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_map-off.png' %}<img
+                            src="{{ asset_url }}" width="19" height="19" border="0"/>{% endimage %}</a></td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_droit-off.png' %}<img
+                            src="{{ asset_url }}" width="20" height="15" border="0"/>{% endimage %}</a></td>
+            <td>administrateur</td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_modif.png' %}<img
+                            src="{{ asset_url }}" width="17" height="17" border="0"/>{% endimage %}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                        href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_poubelle.png' %}
+                    <img src="{{ asset_url }}" width="15" height="19" border="0"/>{% endimage %}</a></td>
+        </tr>
+        <tr class="last">
+            <td>
+                <div>Prénom</div>
+            </td>
+            <td>
+                <div>Nom</div>
+            </td>
+            <td>
+                <div>nom de la fonction</div>
+            </td>
+            <td>
+                <div>Lorem-ipsumdolorsit-posuerent@gmail.com</div>
+            </td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_map-on.png' %}<img
+                            src="{{ asset_url }}" width="19" height="19" border="0"/>{% endimage %}</a></td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_droit-on.png' %}<img
+                            src="{{ asset_url }}" width="20" height="15" border="0"/>{% endimage %}</a></td>
+            <td>
+                <div>administrateur</div>
+            </td>
+            <td><a href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_valid.png' %}<img
+                            src="{{ asset_url }}" width="16" height="13" border="0"/>{% endimage %}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                        href="#">{% image '@SceauBundle/Resources/public/images/extranet/picto_refresh.png' %}<img
+                            src="{{ asset_url }}" width="16" height="16" border="0"/>{% endimage %}</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
+

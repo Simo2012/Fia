@@ -1,0 +1,17 @@
+{% trans_default_domain 'commun_questionnaires_repondus' %}
+
+{% if questionnaire.dateReponse is not null %}
+    {% include 'SceauBundle:Commun:questionnaire_repondu.html.twig' with {'questionnaire': questionnaire, 'afficherDroitDeReponse': true} only %}
+{% else %}
+    <p class="question">
+        {% if questionnaire.dateEnvoi is null %}
+            {% trans with {'%date_envoi%': questionnaire.dateEnvoi|localizeddate('short', 'none')} %}questionnaire_non_envoye{% endtrans %}
+        {% else %}
+            {% if date(questionnaire.dateEnvoi) < date('-'~ questionnaire.questionnaireType.parametrage.nbJoursPourRepondre~'days') %}
+                {% trans with {'%date_envoi%': questionnaire.dateEnvoi|localizeddate('short', 'none')} %}questionnaire_envoye_delai_depasse{% endtrans %}
+            {% else %}
+                {% trans with {'%date_envoi%': questionnaire.dateEnvoi|localizeddate('short', 'none')} %}questionnaire_envoye_non_repondu{% endtrans %}
+            {% endif %}
+        {% endif %}
+    </p>
+{% endif %}

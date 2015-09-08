@@ -1,0 +1,42 @@
+{% extends 'SceauBundle:Extranet:login.html.twig' %}
+
+{% trans_default_domain 'extranet_login' %}
+
+{% block title %}
+    Extranet : mot de passe oublié
+{% endblock %}
+
+{% if form.site_id.vars.errors is not empty %}
+    {% set classInput = 'erreur' %}
+{% else %}
+    {% set classInput = '' %}
+{% endif %}
+
+{% block extranet_login %}
+
+    <input type="text" id="username" name="_username" title="{{ 'login'|trans }}" disabled="disabled"/>
+    <br/>
+    <input type="password" id="password" name="_password" title="{{ 'mot_de_passe'|trans }}" disabled="disabled"/>
+
+    <p>{{ 'description_mdp_oublie'|trans }}</p>
+
+    {{ form_start(form) }}
+    {{ form_label(form.site_id, null, {'label': 'site_id'|trans}) }}
+    {{ form_widget(form.site_id, {'attr': {'class': classInput}}) }}
+
+    {% if form.site_id.vars.errors is not empty %}
+        <p id="erreur">
+            <img src="{{ asset('bundles/sceau/images/extranet/warning.png') }}" width="19" height="16"
+                 alt="{% trans from "commun" %}commun_attention{% endtrans %}"
+                 title="{% trans from "commun" %}commun_attention{% endtrans %}" /> {{ form.site_id.vars.errors[0].message|trans }}
+        </p>
+    {% endif %}
+
+    {{ form_widget(form.valider, {'label': 'valider'|trans}) }}
+    {{ form_end(form) }}
+
+    <form action="{{ path('extranet_utilisateur_login') }}" method="get">
+        <button type="submit">{{ 'retour'|trans }}</button>
+    </form>
+
+{% endblock %}

@@ -59,33 +59,33 @@ bazinga_faker:
     orm: doctrine
     locale: fr_FR
     entities:
-        FIANET\SceauBundle\Entity\Package:
+        SceauBundle\Entity\Package:
             number: 5
             custom_formatters:
                 libelle: {method: sentence, parameters: [2]}
                 actif: {method: boolean, parameters: [100]}
-        FIANET\SceauBundle\Entity\OptionType:
+        SceauBundle\Entity\OptionType:
             number: 5
-        FIANET\SceauBundle\Entity\Option:
+        SceauBundle\Entity\Option:
             number: 5
             custom_formatters:
                 libelle: {method: sentence, parameters: [2] }
                 actif: {method: boolean, parameters: [100]}
-        FIANET\SceauBundle\Entity\PackageOption:
+        SceauBundle\Entity\PackageOption:
             number: 5
-        FIANET\SceauBundle\Entity\Societe:
+        SceauBundle\Entity\Societe:
             number: 500
             custom_formatters:
                 libelle: {method: word }
-        FIANET\SceauBundle\Entity\SiteType:
+        SceauBundle\Entity\SiteType:
             number: 5
             custom_formatters:
                 libelle: {method: word }
-        FIANET\SceauBundle\Entity\AdministrationType:
+        SceauBundle\Entity\AdministrationType:
             number: 5
             custom_formatters:
                 libelle: {method: word }
-        FIANET\SceauBundle\Entity\Site:
+        SceauBundle\Entity\Site:
             number: 500
             custom_formatters:
                 nom: {method: word }
@@ -93,47 +93,47 @@ bazinga_faker:
                 slug: {method: slug }
                 clePrivee: {method: numerify, parameters: ['##############'] }
                 sitePrincipal: {method: null}
-        FIANET\SceauBundle\Entity\FluxStatut:
+        SceauBundle\Entity\FluxStatut:
             number: 4
             custom_formatters:
                 libelle: {method: randomElement, parameters: [ [ 'A traiter', 'En cours de traitement', 'Traité et valide', 'Traité et invalide' ] ], unique: true}
-        FIANET\SceauBundle\Entity\Flux:
+        SceauBundle\Entity\Flux:
             number: 1000
             custom_formatters:
                 checksum: {method: md5, unique: true}
                 ip:  {method: ipv4}
                 dateInsertion: {method: dateTimeThisYear}
                 libelleErreur:  {method: null}
-        FIANET\SceauBundle\Entity\DelaiEnvoi:
+        SceauBundle\Entity\DelaiEnvoi:
             number: 10
             custom_formatters:
                 nbJours: {method: numberBetween, parameters: [1,45] }
-        FIANET\SceauBundle\Entity\DelaiReception:
+        SceauBundle\Entity\DelaiReception:
             number: 10
             custom_formatters:
                 nbJours: {method: numberBetween, parameters: [1,45] }
-        FIANET\SceauBundle\Entity\QuestionnaireType:
+        SceauBundle\Entity\QuestionnaireType:
             number: 10
             custom_formatters:
                 libelle: {method: word}
                 questionnaireType: {method: null}
                 parametrage: {method: lexify, parameters: ['{???}'] }
                 nbJoursPourRepondre: {method: numberBetween, parameters: [30,90] }
-        FIANET\SceauBundle\Entity\QuestionnairePersonnalisation:
+        SceauBundle\Entity\QuestionnairePersonnalisation:
             number: 500
             custom_formatters:
                 dateDebut: {method: dateTimeThisYear}
                 dateFin:  {method: null}
-        FIANET\SceauBundle\Entity\Langue:
+        SceauBundle\Entity\Langue:
             number: 4
             custom_formatters:
                 code: {method: lexify, parameters: ['???'] }
                 libelle: {method: word}
-        FIANET\SceauBundle\Entity\QuestionType:
+        SceauBundle\Entity\QuestionType:
             number: 5
             custom_formatters:
                 libelle: {method: sentence, parameters: [2] }
-        FIANET\SceauBundle\Entity\Question:
+        SceauBundle\Entity\Question:
             number: 100
             custom_formatters:
                 libelle: {method: sentence, parameters: [2]}
@@ -147,7 +147,7 @@ bazinga_faker:
                 cache: {method: boolean, parameters: [0]}
                 visible: {method: null}
                 obligatoire: {method: boolean, parameters: [0]}
-        FIANET\SceauBundle\Entity\Reponse:
+        SceauBundle\Entity\Reponse:
             number: 250
             custom_formatters:
                 libelle: {method: sentence, parameters: [2]}
@@ -155,7 +155,7 @@ bazinga_faker:
                 ordre: {method: numberBetween, parameters: [0,200]}
                 precision: {method: boolean, parameters: [0]}
                 actif: {method: boolean, parameters: [100]}
-        FIANET\SceauBundle\Entity\Commande:
+        SceauBundle\Entity\Commande:
             number: 1000
             custom_formatters:
                 email: {method: email }
@@ -166,40 +166,40 @@ bazinga_faker:
                 montant: {method: randomFloat, parameters: [2] }
                 dateutilisation : {method: null }
                 donnees : {method: null }
-        FIANET\SceauBundle\Entity\Pays:
+        SceauBundle\Entity\Pays:
             number: 200
             custom_formatters:
                 libelle: {method: word }
-        FIANET\SceauBundle\Entity\Coordonnee:
+        SceauBundle\Entity\Coordonnee:
             number: 100
             custom_formatters:
                 adresse: {method: sentence, parameters: [2]}
                 codePostal: {method: numberBetween, parameters: [1,100000]}
                 ville: {method: word }
-        FIANET\SceauBundle\Entity\Civilite:
+        SceauBundle\Entity\Civilite:
             number: 3
             custom_formatters:
                 libelle: {method: lexify, parameters: ['???'] }         
-        FIANET\SceauBundle\Entity\Avatar:
+        SceauBundle\Entity\Avatar:
             number: 100
-        FIANET\SceauBundle\Entity\Email:
+        SceauBundle\Entity\Email:
             number: 100            
             custom_formatters:
                 email: {method: email }
                 principal: {method: boolean, parameters: [100]}
                 dateConfirmation: {method: dateTimeThisYear }                
-        FIANET\SceauBundle\Entity\MembreStatut:
+        SceauBundle\Entity\MembreStatut:
             number: 5
             custom_formatters:
                 libelle: {method: word }                
-        FIANET\SceauBundle\Entity\Membre:
+        SceauBundle\Entity\Membre:
             number: 100
             custom_formatters:
                 nom: {method: lastName }
                 prenom: {method: firstName }
                 pseudo: {method: word, unique: true }
                 dateCreation: {method: dateTimeThisYear }
-        FIANET\SceauBundle\Entity\Questionnaire:
+        SceauBundle\Entity\Questionnaire:
             number: 1000
             custom_formatters:
                 email: {method: email }
@@ -212,12 +212,12 @@ bazinga_faker:
                 dateRelance: {method: null }
                 actif: {method: boolean, parameters: [100]}
                 sousSite: {method: null }
-        FIANET\SceauBundle\Entity\QuestionnaireReponse:
+        SceauBundle\Entity\QuestionnaireReponse:
             number: 2500
             custom_formatters:
                 commentaire: {method: text, parameters: [500]}
                 note: {method: numberBetween, parameters: [1,10]}
-        FIANET\SceauBundle\Entity\DroitDeReponse:
+        SceauBundle\Entity\DroitDeReponse:
             number: 50
             custom_formatters:
                 commentaire: {method: text, parameters: [700]}

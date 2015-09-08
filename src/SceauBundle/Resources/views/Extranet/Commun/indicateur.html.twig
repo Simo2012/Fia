@@ -1,0 +1,35 @@
+{% trans_default_domain 'notes' %}
+
+{% if parametrage.indicateur.type == 'reponse_id' and indicateurReponseID is not empty %}
+    {% if indicateurReponseID in parametrage.indicateur.vert %}
+        {% image '@SceauBundle/Resources/public/images/indicateur-vert.png' %}
+        <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_vert{% endtrans %}" title="{% trans %}notes_indicateur_vert{% endtrans %}" />
+        {% endimage %}
+    {% elseif indicateurReponseID in parametrage.indicateur.jaune %}
+        {% image '@SceauBundle/Resources/public/images/indicateur-jaune.png' %}
+        <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
+        {% endimage %}
+    {% else %}
+        {% image '@SceauBundle/Resources/public/images/indicateur-rouge.png' %}
+        <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_rouge{% endtrans %}" title="{% trans %}notes_indicateur_rouge{% endtrans %}" />
+        {% endimage %}
+    {% endif %}
+{% elseif parametrage.indicateur.type == 'note' and indicateurNote is not empty %}
+    {% if indicateurNote >= parametrage.indicateur.vert.min %}
+        {% image '@SceauBundle/Resources/public/images/indicateur-vert.png' %}
+        <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_vert{% endtrans %}" title="{% trans %}notes_indicateur_vert{% endtrans %}" />
+        {% endimage %}
+    {% elseif indicateurNote >= parametrage.indicateur.jaune.min %}
+        {% image '@SceauBundle/Resources/public/images/indicateur-jaune.png' %}
+        <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_jaune{% endtrans %}"  title="{% trans %}notes_indicateur_jaune{% endtrans %}" />
+        {% endimage %}
+    {% else %}
+        {% image '@SceauBundle/Resources/public/images/indicateur-rouge.png' %}
+        <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_rouge{% endtrans %}" title="{% trans %}notes_indicateur_rouge{% endtrans %}" />
+        {% endimage %}
+    {% endif %}
+{% else %}
+    {% image '@SceauBundle/Resources/public/images/indicateur-gris.png' %}
+    <img src="{{ asset_url }}" width="16" height="19" alt="{% trans %}notes_indicateur_gris{% endtrans %}" title="{% trans %}notes_indicateur_gris{% endtrans %}" />
+    {% endimage %}
+{% endif %}

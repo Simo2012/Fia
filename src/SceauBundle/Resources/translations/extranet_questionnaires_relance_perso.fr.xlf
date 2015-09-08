@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>titre_page</source>
+                <target>Personnaliser votre relance</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>titre_paragraphe</source>
+                <target>Comment personnaliser votre e-mail de relance</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>corps_paragraphe</source>
+                <target>
+                    <![CDATA[
+                        <p>Nous vous proposons de personnaliser l'objet et le contenu de l'e-mail de relance afin d'inciter vos clients à répondre au questionnaire FIA-NET.</p>
+                        <p> En vous adressant directement à vos clients, vous engagez le dialogue et valorisez l'avis de vos clients. Vous pouvez profiter de la personnalisation pour mettre en avant votre volonté de prendre en compte les avis de vos internautes et d'améliorer vos services. La personnalisation n'est pas obligatoire.<br />
+                        Si vous décidez de modifier uniquement un paramètre, FIA-NET utilisera un texte par défaut.</p>
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>bouton_valider</source>
+                <target>Valider</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>bouton_visualiser</source>
+                <target>Visualiser</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>label_objet</source>
+                <target>Objet de l'e-mail :</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>label_corps</source>
+                <target>Contenu de l'e-mail :</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>precision_objet</source>
+                <target>255 caractères maximum, objet par défaut :</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>personnaliser_succes</source>
+                <target>Votre personnalisation a été sauvegardée avec succès.</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>personnaliser_erreur</source>
+                <target>Votre personnalisation n'a pas pu être sauvegardée.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

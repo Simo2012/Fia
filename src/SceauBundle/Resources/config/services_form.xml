@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Général -->
+        <service id="sceau.form.type.question_perso" class="SceauBundle\Form\Type\QuestionPersoType">
+            <argument type="service" id="sceau.outils.string" />
+            <tag name="form.type" alias="sceaubundle_question_perso" />
+        </service>
+        <service id="sceau.form.type.select_langue" class="SceauBundle\Form\Type\SelectLangueType">
+            <argument type="service" id="sceau.outils.string" />
+            <tag name="form.type" alias="sceaubundle_select_langue" />
+        </service>
+
+        <!-- Extranet -->
+        <service id="sceau.form.type.extranet.questionnaires_liste" class="SceauBundle\Form\Type\Extranet\QuestionnairesListeType">
+            <argument type="service" id="sceau.outils.string" />
+            <tag name="form.type" alias="sceaubundle_questionnaires_liste" />
+        </service>
+    </services>
+
+</container>

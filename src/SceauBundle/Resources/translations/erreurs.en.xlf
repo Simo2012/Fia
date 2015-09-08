@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>erreurs_mauvaise_methode_appel</source>
+                <target>Bad method request</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>probleme_technique</source>
+                <target>A technical problem has occured. Thanks for re-trying or contacting the technical service if the problem persists.</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>questionnaire_invalide</source>
+                <target>Questionnaire is not valid.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

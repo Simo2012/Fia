@@ -1,0 +1,7 @@
+<div class="select">
+    <select id="questionnaireTypeSelectionne" onchange="changerQuestionnaireType(this.value);">
+        {% for index, questionnaireType in questionnaireTypes %}
+            <option value="{{ index }}" {% if app.session.get('questionnaireTypeSelectionne').id == index %} selected="selected"{% endif %}>{{ questionnaireType.libelle }}</option>
+        {% endfor %}
+    </select>
+</div>

@@ -37,7 +37,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        ['FIANETSceauBundle']
+    bundles:        ['SceauBundle']
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -50,7 +50,7 @@ assetic:
 doctrine:
     dbal:
         types:
-            jsonb_array: FIANET\SceauBundle\Doctrine\DBAL\Types\JsonbArrayType
+            jsonb_array: SceauBundle\Doctrine\DBAL\Types\JsonbArrayType
 
         connections:
             default:

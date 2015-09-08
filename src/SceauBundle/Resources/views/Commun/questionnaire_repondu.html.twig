@@ -1,0 +1,103 @@
+{% trans_default_domain 'commun' %}
+
+{% import _self as macros %}
+
+{% set commentairePrincipal = null %} {# Permet de récupérer le commentaire principal où un droit de réponse a été exercé #}
+
+{% macro afficherCommentaire(question, idCommentairePrincipal) %}
+    {% if question.id == idCommentairePrincipal %}
+        <p class="question">{% trans from 'commun_questionnaires_repondus' %}questionnaire_libelle_commentaire_principal{% endtrans %}</p>
+        <div class="area"><div>{{ question.reponses[0].questionnaireReponses[0].commentaire }}</div></div>
+    {% else %}
+        <p class="reponse">{{ question.reponses[0].questionnaireReponses[0].commentaire }}</p>
+    {% endif %}
+{% endmacro %}
+
+<h2>{% trans %}commun_date_reponse{% endtrans %} - {% trans %}commun_le{% endtrans %} {{ questionnaire.dateReponse|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire.dateReponse|localizeddate('none', 'short') }}</h2>
+
+{% for question in questionnaire.questionnaireType.questions %}
+    {% if question.cache == false and question.id not in questionnaire.questionnaireType.parametrage.questionsFiaNet %}
+        {% set questionRepondue = false %}
+
+        <p class="question">
+            {{ question.libelle|raw }}
+        </p>
+
+        {# choix unique - choix multiple #}
+        {% if question.questionType.id in [1, 2] %}
+            <p class="reponse">
+                {% for reponse in question.reponses %}
+                    {% if reponse.questionnaireReponses is not empty %}
+                        {% set questionRepondue = true %}
+
+                        {% if question.questionType.id ==  2 %}- {% endif %}{{ reponse.libelle|raw }}
+                        {% if reponse.precision == true and reponse.questionnaireReponses[0].commentaire|length > 0 %}
+                            {{ reponse.questionnaireReponses[0].commentaire }}
+                        {% endif %}
+                        <br />
+                    {% endif %}
+                {% endfor  %}
+            </p>
+
+        {# notation #}
+        {% elseif question.questionType.id == 3 %}
+            {% set questionRepondue = true %}
+
+            <p class="reponse">
+                {% for reponse in question.reponses %}
+                    {% if reponse.questionnairereponses is empty %}
+                        <span class="colorNC">{% trans from 'commun_questionnaires_repondus' %}questionnaire_reponse_non_communiquee{% endtrans %}</span>
+                    {% else %}
+                        <span class="color{{ reponse.questionnaireReponses[0].note|round(0) }}">{{ reponse.questionnaireReponses[0].note|round(0) }}/{{ question.valeurmax|round(0) }}</span> -
+                    {% endif %}
+                    {{ reponse.libelle|raw }}
+                    <br />
+                {% endfor  %}
+            </p>
+
+        {# commentaire #}
+        {% elseif question.questionType.id == 4 %}
+            {% if question.reponses[0].questionnaireReponses is not empty %}
+                {% set questionRepondue = true %}
+                {% if question.id == questionnaire.questionnaireType.parametrage.commentairePrincipal %}
+                    {% set commentairePrincipal = question.reponses[0].questionnaireReponses[0] %}
+                {% endif %}
+
+                {{ macros.afficherCommentaire(question, questionnaire.questionnaireType.parametrage.commentairePrincipal) }}
+            {% endif %}
+
+        {# etoile + commentaire #}
+        {% elseif question.questionType.id == 6 %}
+            {% if question.reponses[0].questionnaireReponses is not empty %}
+                {% set questionRepondue = true %}
+                {% if question.id == questionnaire.questionnaireType.parametrage.commentairePrincipal %}
+                    {% set commentairePrincipal = question.reponses[0].questionnaireReponses[0] %}
+                {% endif %}
+
+                <p class="reponse">
+                    {{ question.reponses[0].libelle }} : {{ question.reponses[0].questionnaireReponses[0].note|round(1) }}/{{ question.valeurmax|round(0) }}
+                </p>
+                {{ macros.afficherCommentaire(question, questionnaire.questionnaireType.parametrage.commentairePrincipal) }}
+            {% endif %}
+        {% endif %}
+
+        {% if questionRepondue == false %}
+            <p class="reponse">{% trans from 'commun_questionnaires_repondus' %}questionnaire_question_pas_de_reponse{% endtrans %}</p>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{# Droit de réponse #}
+{% if questionnaire.questionnaireType.parametrage.droitDeReponse %}
+    {% if afficherDroitDeReponse %}
+        {% if commentairePrincipal is not null %}
+            {% if commentairePrincipal.droitDeReponses is not empty %}
+                <br />
+                <h2>{% trans %}commun_droit_de_reponse{% endtrans %} - {% trans %}commun_le{% endtrans %} {{ commentairePrincipal.droitDeReponses[0].dateInsertion|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ commentairePrincipal.droitDeReponses[0].dateInsertion|localizeddate('none', 'short') }}</h2>
+                <div class="drt-rep">{{ commentairePrincipal.droitDeReponses[0].commentaire }}</div>
+            {% else %}
+                <p>{% trans from 'extranet_droit_de_reponse'%}repondez_directement{% endtrans %} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': commentairePrincipal.id}) }}' "><img src="{{ asset('bundles/sceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {% trans from 'extranet_droit_de_reponse'%}repondez{% endtrans %}</button></p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endif %}

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>livraisons_tous</source>
+                <target>All</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>livraisons_retrait_immediat</source>
+                <target>Immediate withdrawal</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>livraisons_retrait_differe</source>
+                <target>Delayed withdrawal</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>livraisons_par_transporteur</source>
+                <target>Delivery by carrier</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>livraisons_par_magasin</source>
+                <target>Delivery by store</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>livraisons_colis_prive</source>
+                <target>Private parcels</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>livraisons_aucun</source>
+                <target>none</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>titre_page</source>
+                <target>How to do ?</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>jour_commande</source>
+                <target>Order date</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>jour_livraison</source>
+                <target>Delivery date</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>jours_plus_tard</source>
+                <target>%nbJours% days later</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>questionnaires_trouves</source>
+                <target>{0,1}%nbr% questionnaire find for week from %dateDebut% to %dateFin%|]1,Inf]%nbr% questionnaires find for week from %dateDebut% to %dateFin%</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>email</source>
+                <target>E-mail</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>date_envoi</source>
+                <target>Dispatch date</target>
+            </trans-unit>
+             <trans-unit id="7">
+                <source>parametrage_relance</source>
+                <target>Relaunch parameterization</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>renvoyer_questionnaire</source>
+                <target><![CDATA[Relaunch<br />questionnaires]]></target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>personnaliser_email</source>
+                <target><![CDATA[Personalize<br/>relaunch e-mail]]></target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>relance_auto</source>
+                <target>Automatic relaunch</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>activee</source>
+                <target>Active</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>tooltip_checkbox</source>
+                <target>
+                     <![CDATA[
+                        <h1>Automated relaunch</h1>
+                        <p>You can choose to automate the relaunch. Every Wednesday morning, users who have not responded to questionnaire will automatically receive the mail by default or one you have configured.</p>
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>email_type</source>
+                <target>See e-mail type</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>titre_email_type</source>
+                <target>E-mail type default</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>plus_de_questionnaire</source>
+                <target>There is no more questionnaires that can be relaunch</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>renvoyer_succes</source>
+                <target>Questionnaires were sent successfully.</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>renvoyer_erreur</source>
+                <target>questionnaires can not have been sent.</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>title_page</source>
+                <target>Relaunch questionnaires</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>frise_commande</source>
+                <target>Dispatch order questionnaire</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>frise_livraison</source>
+                <target>Dispatch delivery questionnaire</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>frise_relance</source>
+                <target>Dispatch relaunch questionnaire</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

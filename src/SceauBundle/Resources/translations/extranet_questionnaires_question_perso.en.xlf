@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>title_page</source>
+                <target>Your customs questions</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>titre_page</source>
+                <target>How to do ?</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>frise1</source>
+                <target>Creation of customs questions</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>frise2</source>
+                <target>Questions validation by FIA-NET</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>frise3</source>
+                <target>Publication on the questionnaires</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>frise4</source>
+                <target>Results available on statistics tab</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>titre3_page</source>
+                <target>Custom a question</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>message_succes</source>
+                <target>The question was well recorded. It will appear in questionnaires after the validation of FIA-NET.</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>titre2_page</source>
+                <target>List of questions awaiting approval</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>libelle</source>
+                <target>Wording</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>type</source>
+                <target>Type</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>reponses</source>
+                <target>Responses list</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>date_debut</source>
+                <target>Start date</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>date_fin</source>
+                <target>End date</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>date_publication</source>
+                <target>Publication date</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>date_publication2</source>
+                <target>to</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>notation</source>
+                <target>Scoring terminals (included)</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>notation2</source>
+                <target>to</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>ajout_reponse</source>
+                <target>To add a response,</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>ajout_reponse2</source>
+                <target>click here</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>libelle_commentaire</source>
+                <target>Wording of the text field</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>numero_reponse</source>
+                <target>Response n°</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>ajout_precision</source>
+                <target>Add a text field to specify the answer</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

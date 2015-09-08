@@ -1,10 +1,10 @@
 security:
     providers:
         extranet_webservice:
-            id: fianet_sceau.extranet.user_provider
+            id: sceau.extranet.user_provider
 
     encoders:
-        FIANET\SceauBundle\Entity\Extranet\Utilisateur: plaintext
+        SceauBundle\Entity\Extranet\Utilisateur: plaintext
 
     firewalls:
         dev:

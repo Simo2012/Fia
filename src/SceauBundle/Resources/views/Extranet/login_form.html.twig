@@ -1,0 +1,49 @@
+{% extends 'SceauBundle:Extranet:login.html.twig' %}
+
+{% trans_default_domain 'extranet_login' %}
+
+{% block title %}
+    Extranet : connexion
+{% endblock %}
+
+{% block extranet_login %}
+
+    <form action="{{ path('extranet_utilisateur_login_check') }}" method="post">
+
+        <input type="text" id="username" name="_username" value="{{ last_username }}" title="{{ 'login'|trans }}"
+               required="required" onfocus="if(this.value == '{{ 'login'|trans }}') { this.value = ''; }"
+               {% if error %}class="erreur" {% endif %}
+                />
+        <br/>
+        <input type="password" id="password" name="_password" title="{{ 'mot_de_passe'|trans }}"
+               required="required" onfocus="if(this.value == '{{ 'mot_de_passe'|trans }}') { this.value = ''; }"
+               {% if error %}class="erreur" {% endif %}
+                />
+
+        <p><a href="{{ path('extranet_utilisateur_mdp_oublie') }}">{{ 'mot_de_passe_oublie'|trans }}</a></p>
+
+        {% if error %}
+
+            <p id="erreur">
+                <img src="{{ asset('bundles/sceau/images/extranet/warning.png') }}" width="19" height="16"
+                     alt="{% trans from "commun" %}commun_attention{% endtrans %}"
+                     title="{% trans from "commun" %}commun_attention{% endtrans %}" /> {{ 'identifiant_incorrect'|trans }}
+            </p>
+
+        {% endif %}
+        <button type="submit">{{ 'valider'|trans }}</button>
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        if (document.forms[0].username.value == '') {
+            document.forms[0].username.value = '{{ 'login'|trans }}';
+        }
+
+        if (document.forms[0].password.value == '') {
+            document.forms[0].password.value = '{{ 'mot_de_passe'|trans }}';
+        }
+    </script>
+{% endblock %}

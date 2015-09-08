@@ -1,0 +1,103 @@
+{% extends "::base.html.twig" %}
+
+{% block icon %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/sceau/images/extranet/ico_puce_rouge.ico') }}" />
+{% endblock %}
+
+{% block title %}
+    Extranet
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {% stylesheets
+    'components/jquery-ui/themes/dark-hive/jquery-ui.min.css'
+    'components/jquery-ui/themes/dark-hive/theme.css'
+    'bundles/sceau/css/tooltipster/tooltipster.css'
+    'bundles/sceau/css/commun.css'
+    'bundles/sceau/css/extranet/externe.css'
+    'bundles/sceau/css/extranet/main.css'
+    'bundles/sceau/css/extranet/navigation.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+    {% block extranet_stylesheets %}
+    {% endblock %}
+
+{% endblock %}
+
+{% block javascripts_head %}
+    {{ parent() }}
+
+
+
+    {% block extranet_javascripts_head %}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+
+    {% include 'SceauBundle:Extranet:header.html.twig' %}
+
+    <section>
+        {% include 'SceauBundle:Extranet:navigation.html.twig' %}
+
+        <div class="content">
+            {% block extranet_body %}
+
+            {% endblock %}
+        </div>
+    </section>
+
+    {% include 'SceauBundle:Extranet:footer.html.twig' %}
+
+    <div id="masque"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    'components/jquery/jquery.min.js'
+    'components/jquery-ui/jquery-ui.min.js'
+    'components/jquery-ui/ui/datepicker.js'
+    'bundles/fosjsrouting/js/router.js'
+    'bundles/sceau/js/extranet/main.js'
+    'bundles/sceau/js/calendrier.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
+    {% if app.request.locale != 'en' %}
+        <script src="{{  asset('bundles/sceau/js/calendrier-'~ app.request.locale ~'.js') }}" type="text/javascript"></script>
+    {% endif  %}
+
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function selectionListeDeroulante(action, id) {
+            $('#masque').show();
+
+            $.get(Routing.generate(action, {id: id}, true),
+                null,
+                function (data) {
+                    document.location.href = '{% if urlRedirection is defined %}{{ urlRedirection }}{% else %}{{ url('extranet_accueil') }}{% endif %}';
+                }
+            );
+        }
+
+        function changerSite(id) {
+            selectionListeDeroulante('extranet_commun_site_selectionne', id);
+        }
+
+        function changerQuestionnaireType(id) {
+            selectionListeDeroulante('extranet_commun_questionnaire_type_selectionne', id);
+        }
+    </script>
+
+    {% block extranet_javascripts %}
+    {% endblock %}
+{% endblock %}
+
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sceau.command.send_rating_test" class="SceauBundle\Command\Webservice\SendRatingCommand">
+            <argument type="service" id="router" />
+            <tag name="console.command" />
+        </service>
+
+        <service id="sceau.command.validation_flux" class="SceauBundle\Command\Cron\ValidationFluxCommand">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="sceau.flux" />
+            <argument type="service" id="sceau.questionnaire" />
+            <tag name="console.command" />
+        </service>
+
+        <service id="sceau.import_csv" class="SceauBundle\Service\ImportCSV">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="validator"/>
+            <argument type="service" id="logger"/>
+            <argument type="service" id="sceau.questionnaire"/>
+            <tag name="monolog.logger" channel="import_csv" />
+            <argument>%path_stockage_csv%</argument>
+        </service>
+
+        <service id="sceau.command.import_csv" class="SceauBundle\Command\Cron\ChargementCSVCommand">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="sceau.import_csv" />
+            <tag name="console.command" />
+        </service>
+    </services>
+
+</container>

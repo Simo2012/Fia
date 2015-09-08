@@ -1,13 +1,13 @@
-fianet_sceau_extranet:
-    resource: "@FIANETSceauBundle/Controller/Extranet"
+sceau_extranet:
+    resource: "@SceauBundle/Controller/Extranet"
     type:     annotation
     prefix:   /extranet/{_locale}/
     defaults: { _locale: fr }
     requirements:
         _locale: fr|en
 
-fianet_sceau_webservice:
-    resource: "@FIANETSceauBundle/Controller/Webservice"
+sceau_webservice:
+    resource: "@SceauBundle/Controller/Webservice"
     type:     annotation
     prefix:   /webservice/{_locale}/
     defaults: { _locale: fr }

@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>titre_page</source>
+                <target>Questionnaires list</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>recherche_placeholder</source>
+                <target>Email, nickname, lastname, order number</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>label_recherche_date</source>
+                <target>Search by date questionnaire response</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>recherche_date_du</source>
+                <target>from</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>recherche_date_au</source>
+                <target>to</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>titre</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>libelle_bouton</source>
+                <target>GO</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>recherche_avancee</source>
+                <target>Advanced search</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>indicateur</source>
+                <target>Indicator of satisfaction</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>mode_de_livraison</source>
+                <target>Delivery method</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>recherche_contenu</source>
+                <target>Content search</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>litige_en_cours</source>
+                <target>Ongoing litigation</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>retenir_parametre</source>
+                <target>Remember those search parameters</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>questionnaires_trouves</source>
+                <target>{0,1}%nbr% questionnaire find|]1,Inf]%nbr% questionnaires find</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>plus_de_questionnaire</source>
+                <target>There is no more questionnaire.</target>
+            </trans-unit>
+            <trans-unit id="15" >
+                <source>tooltip_livraison</source>
+                <target>
+                    <![CDATA[
+                    <p>Did you know ?</p>
+                    <p>You can set your questionnaires depending on the delivery method selected by the user at the time of purchase.</p>
+                    <ol>
+                        <li>Immediate withdrawal = evaluation of the service and hospitality</li>
+                        <li>Removing = deferred assessment of the time service</li>
+                        <li>Delivery by carrier = assessment of making appointments and punctuality</li>
+                        <li>Delivery per store = assessment of making appointments and punctuality</li>
+                        <li>Private Parcels = assessment of delivery or relay point</li>
+                        <li>Multiple Delivery = issues for the different modes of delivery</li>
+                    </ol>
+                    <p>To implement this feature, you must update the XML stream by adding tags on this mode of delivery. For more information, consult <a href="#">the technical device</a>.</p>
+                    ]]>
+                </target>
+            </trans-unit>
+             <trans-unit id="16">
+                <source>details_questionnaire</source>
+                <target>See questionnaire details</target>
+            </trans-unit>
+             <trans-unit id="17">
+                <source>droit_reponse</source>
+                <target>Exercising his right of reply</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>tri_decroissant</source>
+                <target>Sort Descending</target>
+            </trans-unit>
+             <trans-unit id="19">
+                <source>tri_croissant</source>
+                <target>Sort Ascending</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

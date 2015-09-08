@@ -2,7 +2,7 @@
 services:
     # KernelRequest listener
     extension.listener:
-        class: FIANET\SceauBundle\Listener\DoctrineExtensionListener
+        class: SceauBundle\Listener\DoctrineExtensionListener
         calls:
             - [ setContainer, [ @service_container ] ]
         tags:
