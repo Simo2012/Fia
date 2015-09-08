@@ -6,7 +6,9 @@
 
     <services>
         <service id="sceau.command.send_rating_test" class="SceauBundle\Command\Webservice\SendRatingCommand">
+            <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="router" />
+            <argument type="service" id="sceau.flux" />
             <tag name="console.command" />
         </service>
 

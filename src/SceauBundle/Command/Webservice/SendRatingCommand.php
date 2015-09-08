@@ -1,22 +1,28 @@
 <?php
 namespace SceauBundle\Command\Webservice;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use SceauBundle\Exception\FluxException;
+use SceauBundle\Service\GestionFlux;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class SendRatingCommand extends Command
 {
+    private $em;
     private $router;
+    private $gestionFlux;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(ObjectManager $em, RouterInterface $router, GestionFlux $gestionFlux)
     {
         parent::__construct();
 
+        $this->em = $em;
         $this->router = $router;
+        $this->gestionFlux = $gestionFlux;
     }
 
     protected function configure()
@@ -25,20 +31,14 @@ class SendRatingCommand extends Command
             ->setName('sceau:webservice:send-rating:test')
             ->setDescription('Permet de simuler l\'envoi d\'un flux XML pour un site')
             ->addArgument('site_id', InputArgument::REQUIRED, 'Identifiant du site')
-            ->addArgument('xml', InputArgument::REQUIRED, 'Flux XML de la commande')
-            ->addOption('checksum', null, InputOption::VALUE_REQUIRED, 'Hash MD5 du XML. Si non définie, le checksum sera généré automatiquement.')
             ->setHelp(<<<EOT
 <info>%command.name%</info> permet de simuler l'envoi d'un flux XML par un site.
 
-Il est obligatoire de préciser l'identifiant du site et le flux XML. Optionnellement, il est possible de donner directement le checksum. S'il est absent, la commande le génère automatiquement.
+Il est obligatoire de préciser l'identifiant d'un site existant. Les données du flux sont générées de manière pseudo-aléatoire.
 
 Exemple d'utilisation :
 
-<info>php %command.full_name% 6607 "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><control>...</control>"</info>
-
-ou
-
-<info>php %command.full_name% 6607 "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><control>...</control>" --checksum=78b8ee77dc6ac513a1c68ef5c06185a6</info>
+<info>php %command.full_name% 6607
 EOT
             );
     }
@@ -46,43 +46,42 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $site_id = $input->getArgument('site_id');
-        $xml = $input->getArgument('xml');
-        $checksum = $input->getOption('checksum');
+        if (is_numeric($site_id)) {
+            $site = $this->em->getRepository('SceauBundle:Site')->find($site_id);
 
-        $checksumGenere = md5($xml);
+            if ($site) {
+                $now = new \DateTime();
+                $timestamp = $now->format('Y-m-d H:i:s');
+                $email = 'robert.tenaif' . rand() . '@fia-net.com';
+                $refid = uniqid('', true);
+                $ip = rand(0, 255) . '.' . rand(0, 255) . '.' . rand(0, 255) . '.' . rand(0, 255);
+                $montant = rand(1, 10000);
+                $crypt = $this->gestionFlux->getCrypt($site->getClePriveeSceau(), $refid, $timestamp, $email);
 
-        if (!$checksum) {
-            /* Checksum absent : on prend celui que l'on vient de générer */
-            $checksum = $checksumGenere;
+                $xmlInfo = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><control><utilisateur>
+                    <nom titre=\"1\">Tenaif</nom><prenom>Robert</prenom><email>$email</email></utilisateur>
+                    <infocommande><siteid>$site_id</siteid><refid>$refid</refid>
+                    <montant devise=\"EUR\">$montant</montant><ip timestamp=\"$timestamp\">$ip</ip>
+                    </infocommande><crypt>$crypt</crypt></control>";
+                $checksum = md5($xmlInfo);
 
-        } elseif ($checksum != $checksumGenere) {
-            /* Checksum présent mais invalide : on retourne un message d'erreur */
-            $output->writeln('<error>Le checksum indique est incorrect.</error>');
+                $output->writeln("<info>XML :</info>\n$xmlInfo\n");
+                $output->writeln("<info>checksum :</info>\n$checksum\n");
 
-            return 1;
-        }
+                try {
+                    $this->gestionFlux->inserer($site->getId(), $xmlInfo, $checksum, $ip);
+                    $output->writeln('<info>Un flux a été inséré pour le site ' . $site->getNom() . '</info>');
 
-        $ch = curl_init($this->router->generate('ws_send_rating', array(), true));
+                } catch (FluxException $e) {
+                    $output->writeln('<error>Erreur : ' . $e->getMessage() . '</error>');
+                }
 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POST, true);
-        $post = array(
-            "SiteID" => $site_id,
-            "XMLInfo" => $xml,
-            "CheckSum" => $checksum
-        );
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
-
-        $response = curl_exec($ch);
-        if (!curl_errno($ch)) {
-            $output->writeln("<info>$response</info>");
-
-            return 0;
+            } else {
+                $output->writeln('<error>Ce site n\'existe pas.</error>');
+            }
 
         } else {
-            $output->writeln('<error>' . curl_error($ch) . '</error>');
-
-            return 2;
+            $output->writeln('<error>Merci d\'indiquer un identifiant de site valide !</error>');
         }
     }
 }

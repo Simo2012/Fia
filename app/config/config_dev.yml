@@ -223,11 +223,4 @@ bazinga_faker:
                 commentaire: {method: text, parameters: [700]}
                 dateInsertion: {method: dateTimeThisYear }
                 dateSuppression: {method: null }
-                actif: {method: boolean, parameters: [100]}                
-                
-# Surcharge des paramètres
-parameters:
-    # Pour les lignes de commandes
-    router.request_context.host: localhost
-    router.request_context.scheme: http
-    router.request_context.base_url: /Sceau/app_dev.php
+                actif: {method: boolean, parameters: [100]}
