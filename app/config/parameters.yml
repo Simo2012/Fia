@@ -12,6 +12,4 @@ parameters:
     mailer_password: null
     locale: fr
     secret: RobertTenaif
-    router.request_context.host: www.fia-net.com
-    router.request_context.scheme: http
-    router.request_context.base_url: /
+    logger_nb_max_fichier: 30

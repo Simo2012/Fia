@@ -12,3 +12,37 @@ doctrine:
         dbname: sceau
         user: sceau_user
         password: hello
+
+# Monolog Configuration (idem à la prod)
+monolog:
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: main_handler
+            channels: [!import_csv, !validation_flux]
+        main_handler:
+            type: rotating_file
+            max_files: %logger_nb_max_fichier%
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        import_csv:
+            type: fingers_crossed
+            action_level: info
+            handler: import_csv_handler
+            channels: [import_csv]
+        import_csv_handler:
+            type: rotating_file
+            max_files: %logger_nb_max_fichier%
+            path: "%kernel.logs_dir%/import_csv.%kernel.environment%.log"
+            level: info
+        validation_flux:
+            type: fingers_crossed
+            action_level: info
+            handler: validation_flux_handler
+            channels: [validation_flux]
+        validation_flux_handler:
+            type: rotating_file
+            max_files: %logger_nb_max_fichier%
+            path: "%kernel.logs_dir%/flux.%kernel.environment%.log"
+            level: info

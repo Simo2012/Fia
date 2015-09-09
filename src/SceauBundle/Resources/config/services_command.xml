@@ -16,17 +16,9 @@
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="sceau.flux" />
             <argument type="service" id="sceau.questionnaire" />
-            <tag name="console.command" />
-        </service>
-
-        <service id="sceau.import_csv" class="SceauBundle\Service\ImportCSV">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="database_connection"/>
-            <argument type="service" id="validator"/>
             <argument type="service" id="logger"/>
-            <argument type="service" id="sceau.questionnaire"/>
-            <tag name="monolog.logger" channel="import_csv" />
-            <argument>%path_stockage_csv%</argument>
+            <tag name="monolog.logger" channel="validation_flux" />
+            <tag name="console.command" />
         </service>
 
         <service id="sceau.command.import_csv" class="SceauBundle\Command\Cron\ChargementCSVCommand">

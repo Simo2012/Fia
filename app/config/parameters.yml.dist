@@ -6,6 +6,7 @@ parameters:
     database_name: sceau
     database_user: sceau_user
     database_password: hello
+
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
@@ -14,6 +15,4 @@ parameters:
     locale: fr
     secret: RobertTenaif
 
-    router.request_context.host: www.fia-net.ccm
-    router.request_context.scheme: http
-    router.request_context.base_url: /
+    logger_nb_max_fichier: 30
