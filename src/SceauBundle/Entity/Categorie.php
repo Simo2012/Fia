@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Categorie
  *
  * @ORM\Table(name="Categorie")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\CategorieRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\CategorieRepository")
  */
 class Categorie
 {

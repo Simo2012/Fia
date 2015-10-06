@@ -2,6 +2,7 @@
 
 namespace SceauBundle\Entity;
 
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Membre
  *
  * @ORM\Table(name="Membre")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\MembreRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\MembreRepository")
  */
-class Membre
+class Membre implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer
@@ -42,6 +43,13 @@ class Membre
      * @ORM\Column(name="pseudo", type="string", length=50, unique=true)
      */
     private $pseudo;
+    
+    /**
+    * @var TrancheAge
+    * 
+    * @ORM\Column(name="trancheage", type="string", length=50, nullable=true)
+    */
+    private $trancheAge;
 
     /**
      * @var \DateTime
@@ -49,15 +57,6 @@ class Membre
      * @ORM\Column(name="dateCreation", type="datetimetz")
      */
     private $dateCreation;
-
-
-    /**
-     * @var MembreStatut
-     *
-     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\MembreStatut")
-     * @ORM\JoinColumn(name="membreStatut_id", referencedColumnName="id", nullable=false)
-     */
-    private $membreStatut;
 
     /**
      * @var ArrayCollection
@@ -104,6 +103,22 @@ class Membre
      * @ORM\JoinColumn(name="coordonnee_id", referencedColumnName="id", nullable=false)
      */
     private $coordonnee;
+    
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="password", type="string", length=100, nullable=false)
+    */
+    private $password;
+    
+    /**
+    * @var boolean
+    *
+    * @ORM\Column(name="active", type="boolean", nullable=false)
+    */
+    private $active;
+    
+    
 
     /**
      * @var ArrayCollection
@@ -118,6 +133,8 @@ class Membre
         $this->abonnements = new ArrayCollection();
         $this->emails = new ArrayCollection();
         $this->questionnaires = new ArrayCollection();
+        $this->password = 'test';
+        $this->active = true;
     }
 
 
@@ -225,30 +242,6 @@ class Membre
     public function getDateCreation()
     {
         return $this->dateCreation;
-    }
-
-    /**
-     * Set membreStatut
-     *
-     * @param MembreStatut $membreStatut
-     *
-     * @return Membre
-     */
-    public function setMembreStatut(MembreStatut $membreStatut)
-    {
-        $this->membreStatut = $membreStatut;
-
-        return $this;
-    }
-
-    /**
-     * Get membreStatut
-     *
-     * @return MembreStatut
-     */
-    public function getMembreStatut()
-    {
-        return $this->membreStatut;
     }
 
     /**
@@ -390,4 +383,131 @@ class Membre
     {
         return $this->coordonnee;
     }
+    
+    /**
+     * Get TrancheAge
+     * 
+     * @return String
+     */
+    function getTrancheAge() {
+        return $this->trancheAge;
+    }
+    
+    /**
+     * @param String $trancheAge
+     *
+     * @return Membre
+     */
+    function setTrancheAge(TrancheAge $trancheAge) {
+        $this->trancheAge = $trancheAge;
+    }
+
+    
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials() {
+        
+    }
+    
+    
+    /**
+    * Set password
+    *
+    * @param string $password
+    * @return Membre
+    */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
+    }
+    
+    /**
+    * Get password
+    *
+    * @return string
+    */
+    public function getPassword() {
+        return $this->password;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getRoles() {
+        return array('ROLE_USER');
+    }
+
+     /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+        return '';
+    }
+
+    public function getUsername() {
+        return $this->emails;
+        
+    }
+
+    public function isAccountNonExpired() {
+        return true;
+    }
+
+     /**
+     * @inheritDoc
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled() {
+        return $this->active;
+    }
+
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+        ));
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            ) = unserialize($serialized);
+    }
+    
+    /**
+    * Set active
+    *
+    * @param boolean $active
+    * @return Membre
+    */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
 }
