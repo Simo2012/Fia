@@ -27,7 +27,8 @@
         "willdurand/faker-bundle": "@stable",
         "friendsofsymfony/jsrouting-bundle": "~1.5",
         "symfony/finder": "~2.6",
-        "leaseweb/memcache-bundle": "~2.1"
+        "leaseweb/memcache-bundle": "~2.1",
+        "cmen/google-charts": "@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

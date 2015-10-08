@@ -6,6 +6,11 @@
 
 {% block extranet_body %}
 
+    <h1>Exemple de graphique</h1>
+    <div id="pieChart" style="display: inline-block;"></div>
+    <div id="geoChart" style="display: inline-block; margin-left: 10px;"></div>
+    <div id="lineChart" style="display: inline-block; margin-left: 10px;"></div>
+
     <h1>PROFIL</h1>
     <div class="block-total">
         <div class="block-total-part1">
@@ -152,3 +157,10 @@
 
 {% endblock %}
 
+{% block extranet_javascripts %}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    {{ drawChart(pieChart, 'pieChart') }}
+    {{ drawChart(geoChart, 'geoChart') }}
+    {{ drawChart(lineChart, 'lineChart') }}
+{% endblock %}
