@@ -1,0 +1,26 @@
+<h1 class="titre-espace-membre">
+    Rejoignez nous et profitez d'avantages exclusifs FIA-NET
+</h1>
+<p>
+    Renseignez vos informations personnelles, cela ne prend qu'une ou deux minutes.
+</p>
+<form name="forminscription" action="#" method="post">    
+    <input type="hidden" name="formulaireinscription" value="1">
+    <div id="inscription-formulaire">	
+        <label for="civilite_mme">{{ form_label(form.civilite) }} </label>
+        {% for child in form.civilite %}
+            {{ form_widget(child) }}              {{ form_label(child) }}
+        {% endfor %}
+         <br />
+        <label for="nom">
+            {{ form_label(form.nom) }}
+        </label> 
+            {{ form_widget(form.nom) }}  <br />
+
+        {% form_theme form 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
+
+        {{ form_widget(form.recaptcha) }}
+        <label>Avatar :</label>
+        {% include 'SceauBundle:Site/Security:avatar.html.twig' %}
+    </div>
+</form>

@@ -1,6 +1,6 @@
 <?php
 
-namespace SceauBundle\Entity;
+namespace SceauBundle\Entity\Repository;
 
 /**
  * TrancheAgeRepository

@@ -1,0 +1,24 @@
+{% macro input(locations) %}
+<div class="filariane-div">
+    <div class="filariane">
+        Vous êtes ici :
+	{% for location in locations %}
+            {% if loop.index == 1 %}
+                {{location}}
+            {% elseif loop.index == locations|length %}
+                <span class="filariane-separation">
+                    &gt;
+                </span>
+                <span class="filariane-page-actuelle">
+                    {{location}}
+                </span>
+            {% else %}
+                <span class="filariane-separation">
+                    &gt;
+                </span>
+                {{location}}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endmacro %}

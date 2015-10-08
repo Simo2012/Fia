@@ -1,0 +1,60 @@
+
+{% spaceless %}
+    <!DOCTYPE html>
+    <html lang="fr">
+        <head>
+            
+            {% include 'SceauBundle:Site/Common:header.html.twig' %}
+        </head>
+        <body class="fs">
+            <div id="container">
+                <div id="header">
+                    {% include 'SceauBundle:Site/Common:topblock.html.twig' %}
+                    {% block CONTENT %}{% endblock %}
+                    <footer>
+                        <div id="footer">
+                            {% include "SceauBundle:Site/Common:footer.html.twig" %}
+                        </div>
+                        
+                    </footer>
+                </div>
+            </div>
+        </body>
+        
+        {% block JAVASCRIPT %}
+            {% javascripts
+                'bundles/sceau/js/site/home/annuaire.js'
+                'bundles/sceau/js/site/home/mdr.js'
+                'bundles/sceau/js/site/common/jquery-1.4.2.min.js'
+                'bundles/sceau/js/site/home/XHRConnection.js'
+                'bundles/sceau/js/site/home/popup.js'
+                'bundles/sceau/js/site/home/membre.js'
+                'bundles/sceau/js/site/home/SliderSitePremium.js'
+                'bundles/sceau/js/site/common/commun.js'
+                'bundles/sceau/js/site/common/jquery-ui.js' %}
+                
+                
+                <script type="text/javascript">
+                    var popupAvatar = "";
+                    SelectAvatar(jQuery('#AvatarID').val());
+                    function showPopupAvatar()
+                        {
+                                jQuery(function() {
+                            popupAvatar = jQuery( "#avatar-popup" ).dialog({width:330});
+                        });
+                        }
+                    function SelectAvatar(num)
+                    {   
+                        tab = jQuery('#avatar_id_' + num).attr('coords').split(',');
+                        jQuery('#img_avatar').css('background-position','-' + tab[0] + 'px -' + tab[1] + 'px');
+                        jQuery('#AvatarID').val(num);
+                        if(popupAvatar)
+                            popupAvatar.dialog( "close" );
+                    }
+                </script>
+                <script src="{{ asset_url }}" type="text/javascript"></script>
+            {% endjavascripts %}  
+        {% endblock %}
+    </html>
+    
+{% endspaceless %}

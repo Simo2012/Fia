@@ -1,0 +1,25 @@
+{% macro input(title,picture, subcategories) %}
+<div class="annuaire-cat">
+    <table cellpadding="2" cellspacing="0" border="0" width="100%">
+        <tr>
+            <td valign="middle" rowspan="2" height="50px" width="54px">
+                <a href="#}">
+                    <img src="{{ asset(picture) }}" alt="{{title}}" title="{{title}}" height="50px" width="50px"/>
+                </a>
+            </td>
+            <td valign="top"  class="titre-cat">
+                <a href="#" style="font-weight: bold; text-transform: uppercase;">
+                    {{title}}
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"  class="titre-ss-cat">
+                {% for subcategory in subcategories %}
+                    <a href="#">{{subcategory.libellecourt}}, </a>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+</div>
+{% endmacro %}

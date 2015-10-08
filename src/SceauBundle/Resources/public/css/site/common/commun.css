@@ -1,0 +1,279 @@
+@charset "utf-8";
+/* CSS Document */
+
+/****************** Droit de réponse *******************/
+
+div.droit_reponse h1 {
+    background-image: url("/img/extranet/puce.png");
+    background-repeat: no-repeat;
+    color: #888468;
+    font-size: 22px;
+    margin: 0;
+    padding: 0 0 0 20px;
+}
+
+
+div.droit_reponse input, div.droit_reponse textarea {
+	font-family: "Trebuchet MS";
+	font-size: 12px;
+	padding:1px;
+	color : #737373;
+	width: 99%;
+}
+
+div.droit_reponse table.resum-cmd {
+	padding:0px;
+	width:90%;
+	border:0px;
+	border-collapse:collapse;
+	padding:0px;
+	color:#6f6f67;
+	border-spacing:0px;
+	margin: auto;
+	margin-top:25px;
+}
+
+div.droit_reponse td.resum-cmd-top-left {
+	width:10px;
+	height:10px;
+	background-image:url(/img/extranet/top_left_block.png);
+	background-position:right bottom;
+	background-repeat:no-repeat;
+	font-size:1px;
+	}
+
+div.droit_reponse td.resum-cmd-top {
+	height:10px;
+	background-image:url(/img/extranet/top_block.png);
+	background-position:bottom;
+	background-repeat:repeat-x;
+	font-size:1px;
+	}
+
+div.droit_reponse td.resum-cmd-top-right {
+	width:10px;
+	height:10px;
+	background-image:url(/img/extranet/top_right_block.png);
+	background-position:left bottom;
+	background-repeat:no-repeat;
+	font-size:1px;
+	}
+
+div.droit_reponse td.resum-cmd-left {
+	width:10px;
+	background-image:url(/img/extranet/left_block.png);
+	background-position:right;
+	background-repeat:repeat-y;
+	font-size:1px;
+	}
+
+div.droit_reponse td.resum-cmd-bottom-left {
+	width:10px;
+	height:10px;
+	background-image:url(/img/extranet/bottom_left_block.png);
+	background-position:top right;
+	background-repeat:no-repeat;
+	font-size:1px;
+	}
+
+div.droit_reponse td.resum-cmd-bottom {
+	height:10px;
+	background-image:url(/img/extranet/bottom_block.png);
+	background-repeat:repeat-x;
+	font-size:1px;
+	}
+
+div.droit_reponse td.resum-cmd-bottom-right {
+	width:10px;
+	height:10px;
+	background-image:url(/img/extranet/bottom_right_block.png);
+	background-repeat:no-repeat;
+	font-size:1px;
+	}
+
+div.droit_reponse td.resum-cmd-right {
+	width:10px;
+	background-image:url(/img/extranet/right_block.png);
+	background-repeat:repeat-y;
+	font-size:1px;
+	}
+
+
+div.droit_reponse .resum-cmd-title {
+	font-style:italic;
+	font-size:15px;
+	color:#6f6f67;
+	width:95%;
+	padding:0px;
+	margin: 0px;
+	margin-top:10px;
+	text-align: left;
+}
+
+div.droit_reponse span.redi {
+	font-size:12px;
+	color:#DC0032;
+	font-style:italic;
+	font-weight:bold;
+}
+
+div.droit_reponse span.redi2 {
+	color:#DC0032;
+	font-style:italic;
+	font-weight:bold;
+	padding: 5px;
+	font-size: 15px;
+}
+
+
+div.droit_reponse .main-com-quest-ext {
+	float:left;
+	width:1000px;
+	margin-top:20px;
+	padding-bottom:20px;
+	background-image:url(../img/com_spacer_back.png);
+	background-repeat:no-repeat;
+	background-position:bottom;
+}
+
+div.droit_reponse .main-com-quest-ext .main-com-detail-top-ext {
+	width:551px;
+	height:29px;
+	background-image:url(../img/com_main_back_quest_top.png);
+	background-repeat:no-repeat;
+}
+
+div.droit_reponse .main-com-quest-ext .main-com-detail-middle-ext {
+	width:471px;
+	margin-top:-8px;
+	padding-left:40px;
+	padding-right:40px;
+	background-image:url(../img/com_main_back_quest_middle.png);
+	background-repeat:repeat-y;
+}
+
+div.droit_reponse .main-com-quest-ext .main-com-detail-quotefincomm-ext {
+	width:471px;
+	height:12px;
+	margin-left:-40px;
+	padding-left:40px;
+	padding-right:40px;
+	background-image:url(../img/com_main_back_quest_quote_fin_comm.png);
+	background-repeat:repeat-y;
+}
+
+div.droit_reponse .main-com-quest-ext .main-com-detail-bottom-ext {
+	width:551px;
+	height:8px;
+	background-image:url(../img/com_main_back_quest_bottom1.png);
+	background-repeat:no-repeat;
+}
+
+div.droit_reponse .main-com-quest {
+	float:left;
+	width:1000px;
+	margin-top:20px;
+	padding-bottom:20px;
+	background-image:url(../img/com_spacer_back.png);
+	background-repeat:no-repeat;
+	background-position:bottom;
+}
+
+div.droit_reponse .main-com-quest .main-com-detail-top {
+	width:551px;
+	height:29px;
+	background-image:url(../img/com_main_back_quest_top.png);
+	background-repeat:no-repeat;
+}
+
+div.droit_reponse .main-com-quest .main-com-detail-middle {
+	width:471px;
+	margin-top:-8px;
+	padding-left:40px;
+	padding-right:40px;
+	background-image:url(../img/com_main_back_quest_middle.png);
+	background-repeat:repeat-y;
+}
+
+div.droit_reponse .main-com-quest .main-com-detail-quotefincomm {
+	width:471px;
+	height:12px;
+	margin-left:-40px;
+	padding-left:40px;
+	padding-right:40px;
+	background-image:url(../img/com_main_back_quest_quote_fin_comm.png);
+	background-repeat:repeat-y;
+}
+
+div.droit_reponse .main-com-quest .main-com-detail-bottom {
+	width:551px;
+	height:8px;
+	background-image:url(../img/com_main_back_quest_bottom1.png);
+	background-repeat:no-repeat;
+}
+
+div.droit_reponse .action-btn {
+	cursor:pointer;
+	margin-left:10px;
+	float:right;
+	height:22px;
+	margin-right: 10px;
+}
+
+div.droit_reponse .action-btn-left {
+	float:left;
+	height:22px;
+	width:5px;
+	background-image:url(/img/extranet/red_btn_left.png);
+	background-repeat:no-repeat;
+}
+div.droit_reponse .action-btn-center {
+	float:left;
+	height:21px;
+	background-image:url(/img/extranet/red_btn_center.png);
+	background-repeat:repeat-x;
+	padding-top:1px;
+	font-weight:bold;
+	color:#ffffff;
+}
+div.droit_reponse .action-btn-center a {
+	color: #FFFFFF;
+	text-decoration: none;
+	font-size: 14px;
+}
+div.droit_reponse .action-btn-right {
+	float:left;
+	height:22px;
+	width:5px;
+	background-position:right center;
+	background-image:url(/img/extranet/red_btn_right.png);
+	background-repeat:no-repeat;
+}
+
+/* effet bouton au passage de souris */
+div.droit_reponse .action-btn:hover .action-btn-left {
+	float:left;
+	height:22px;
+	width:5px;
+	background-image:url(/img/extranet/grey_btn_left_hover.png);
+	background-repeat:no-repeat;
+}
+div.droit_reponse .action-btn:hover .action-btn-center {
+	float:left;
+	height:21px;
+	background-image:url(/img/extranet/grey_btn_center_hover.png);
+	background-repeat:repeat-x;
+	padding-top:1px;
+	font-weight:bold;
+	color:#ffffff;
+}
+div.droit_reponse .action-btn:hover .action-btn-right {
+	float:left;
+	height:22px;
+	width:5px;
+	background-position:right center;
+	background-image:url(/img/extranet/grey_btn_right_hover.png);
+	background-repeat:no-repeat;
+}
+
+/****************** FIN Droit de réponse *******************/

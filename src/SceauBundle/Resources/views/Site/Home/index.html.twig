@@ -1,0 +1,43 @@
+{% extends 'SceauBundle:Site:layout.html.twig' %}
+{% block CONTENT %}
+        
+  
+        <div id="navbar-main">
+            {% include "SceauBundle:Site/Common:menu.html.twig" %}
+        </div>            
+        <div id="content">
+            {% if menu == 'home' %}
+                <div class="site-prem">
+                    {% include "SceauBundle:Site/Home:preniumwebsite.html.twig" %}  
+                </div>
+                <div class="annuaire-main"> 
+                    {{ include('SceauBundle:Site/Category:listcategory.html.twig', {'categories': categories}) }}
+                </div>
+                <div class='infos-HP'>
+                    {% include "SceauBundle:Site/Home:newslettre.html.twig" %}
+                </div>
+                <div class="declarer-litige">
+                    {% include "SceauBundle:Site/Home:letige.html.twig" %}
+                </div>
+                <div class='avis-conso-hier'>
+                    {% include "SceauBundle:Site/Home:stats.html.twig" %}
+                </div>
+                <div class="jeux-concours">
+                    {% include "SceauBundle:Site/Home:tombola.html.twig" %}
+                </div>
+            {% elseif menu == 'register' %}
+                {% set locations = ['Accueil','Espace membre', 'Inscription'] %}
+                {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
+                {{ forms.input(locations) }}
+                <div class="login-left">
+                    {% include "SceauBundle:Site/Security:register.html.twig" %}  
+                </div>
+            {% else %}
+                <div class='avis-conso-hier'>
+                    {% include "SceauBundle:Site/Home:stats.html.twig" %}
+                </div>
+
+            
+            {% endif %}
+        </div>
+{% endblock %}

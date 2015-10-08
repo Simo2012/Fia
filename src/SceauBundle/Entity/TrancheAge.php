@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * TrancheAge
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\TrancheAgeRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\TrancheAgeRepository")
  */
 class TrancheAge
 {

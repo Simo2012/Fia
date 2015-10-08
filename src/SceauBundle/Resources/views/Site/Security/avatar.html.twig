@@ -1,0 +1,34 @@
+<div class="choose-avatar" onclick="showPopupAvatar()">
+    <div class="title-avatar">Choisissez votre <br> avatar :</div>
+    <div id="img_avatar" class="img_avatar"></div>
+</div>
+<input type="hidden" name="AvatarID" id="AvatarID" value='{$avatarID}' >
+
+<div id="avatar-popup" title="Selectionner votre avatar">
+	<img src="{{ asset('bundles/sceau/images/site/common/icons-avatar.png') }}" alt="Planets" usemap="#map-avatar" onclick="showPopup()">
+    <map name="map-avatar">
+        <area shape="rect" id="avatar_id_1"  coords="0,0,54,54"       href="javascript:SelectAvatar(1)">
+        <area shape="rect" id="avatar_id_2"  coords="62,0,116,54"     href="javascript:SelectAvatar(2)" >
+        <area shape="rect" id="avatar_id_3"  coords="124,0,178,54"    href="javascript:SelectAvatar(3)">
+        <area shape="rect" id="avatar_id_4"  coords="186,0,239,54"    href="javascript:SelectAvatar(4)">
+        <area shape="rect" id="avatar_id_5"  coords="247,0,300,54"    href="javascript:SelectAvatar(5)">
+        
+        <area shape="rect" id="avatar_id_6"  coords="0,75,54,129"     href="javascript:SelectAvatar(6)">
+        <area shape="rect" id="avatar_id_7"  coords="62,75,116,129"   href="javascript:SelectAvatar(7)">
+        <area shape="rect" id="avatar_id_8"  coords="124,75,178,129"  href="javascript:SelectAvatar(8)">
+        <area shape="rect" id="avatar_id_9"  coords="186,75,239,129"  href="javascript:SelectAvatar(9)">
+        <area shape="rect" id="avatar_id_10" coords="247,75,300,129"  href="javascript:SelectAvatar(10)">
+        
+        <area shape="rect" id="avatar_id_11" coords="0,151,54,205"    href="javascript:SelectAvatar(11)">
+        <area shape="rect" id="avatar_id_12" coords="62,151,116,205"  href="javascript:SelectAvatar(12)">
+        <area shape="rect" id="avatar_id_13" coords="124,151,178,205" href="javascript:SelectAvatar(13)">
+        <area shape="rect" id="avatar_id_14" coords="186,151,239,205" href="javascript:SelectAvatar(14)">
+        <area shape="rect" id="avatar_id_15" coords="247,151,300,205" href="javascript:SelectAvatar(15)">
+        
+        <area shape="rect" id="avatar_id_16" coords="0,225,54,280"    href="javascript:SelectAvatar(16)">
+        <area shape="rect" id="avatar_id_17" coords="62,225,116,280"  href="javascript:SelectAvatar(17)">
+        <area shape="rect" id="avatar_id_18" coords="124,225,178,280" href="javascript:SelectAvatar(18)">
+        <area shape="rect" id="avatar_id_19" coords="186,225,239,280" href="javascript:SelectAvatar(19)">
+        <area shape="rect" id="avatar_id_20" coords="247,225,300,280" href="javascript:SelectAvatar(20)">
+    </map>
+</div>

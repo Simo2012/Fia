@@ -44,12 +44,7 @@ class Membre implements AdvancedUserInterface, \Serializable
      */
     private $pseudo;
     
-    /**
-    * @var TrancheAge
-    * 
-    * @ORM\Column(name="trancheage", type="string", length=50, nullable=true)
-    */
-    private $trancheAge;
+    
 
     /**
      * @var \DateTime
@@ -79,6 +74,17 @@ class Membre implements AdvancedUserInterface, \Serializable
      *      )
      */
     private $abonnements;
+    
+    /**
+    * @var ArrayCollection
+    * 
+    *  @ORM\ManyToMany(targetEntity="SceauBundle\Entity\TrancheAge")
+    * @ORM\JoinTable(name="Membre_TrancheAge",
+    *      joinColumns={@ORM\JoinColumn(name="membre_id", referencedColumnName="id")},
+    *      inverseJoinColumns={@ORM\JoinColumn(name="trancheage_id", referencedColumnName="id")}
+    *      )
+    */
+    private $trancheAge;
 
     /**
      * @var Avatar
@@ -89,11 +95,10 @@ class Membre implements AdvancedUserInterface, \Serializable
     private $avatar;
 
     /**
-     * @var Civilite
-     *
-     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\Civilite")
-     * @ORM\JoinColumn(name="civilite_id", referencedColumnName="id", nullable=false)
-     */
+    * @var string
+    *
+    * @ORM\Column(name="civilite", type="string", length=10, unique=true)
+    */
     private $civilite;
 
     /**
@@ -133,7 +138,6 @@ class Membre implements AdvancedUserInterface, \Serializable
         $this->abonnements = new ArrayCollection();
         $this->emails = new ArrayCollection();
         $this->questionnaires = new ArrayCollection();
-        $this->password = 'test';
         $this->active = true;
     }
 
@@ -339,7 +343,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * Set civilite
      *
-     * @param Civilite $civilite
+     * @param String $civilite
      *
      * @return Membre
      */
@@ -351,7 +355,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get civilite
+     * Get String
      *
      * @return Civilite
      */
@@ -387,14 +391,14 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * Get TrancheAge
      * 
-     * @return String
+     * @return TrancheAge
      */
     function getTrancheAge() {
         return $this->trancheAge;
     }
     
     /**
-     * @param String $trancheAge
+     * @param TrancheAge $trancheAge
      *
      * @return Membre
      */
@@ -409,7 +413,6 @@ class Membre implements AdvancedUserInterface, \Serializable
     public function eraseCredentials() {
         
     }
-    
     
     /**
     * Set password
@@ -428,7 +431,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     *
     * @return string
     */
-    public function getPassword() {
+   public function getPassword() {
         return $this->password;
     }
     
