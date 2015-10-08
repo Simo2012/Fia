@@ -29,4 +29,3 @@ security:
             logout:
                 path: extranet_utilisateur_logout
                 target: extranet_utilisateur_login
-
