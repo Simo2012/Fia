@@ -45,6 +45,7 @@ assetic:
         #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
         #yui_css:
         #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
+        
 
 # Doctrine Configuration
 doctrine:
@@ -111,3 +112,10 @@ lsw_memcache:
         query_cache:
             pool: default
             entity_manager: default
+    # Configuration Recaptch
+ewz_recaptcha:
+    public_key:  6LcSZQ4TAAAAAMx0T6IucjYMYT_QMOGc-rO9OBI6
+    private_key: 6LcSZQ4TAAAAAFvHeCmzYyt-fyod-gaJq-VetIhz
+    locale_key:  %kernel.default_locale%
+    ajax: true
+    #enabled: false
