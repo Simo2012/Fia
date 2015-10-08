@@ -28,7 +28,8 @@
         "friendsofsymfony/jsrouting-bundle": "~1.5",
         "symfony/finder": "~2.6",
         "leaseweb/memcache-bundle": "~2.1",
-        "cmen/google-charts": "@dev"
+        "cmen/google-charts": "@dev",
+        "excelwebzone/recaptcha-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
