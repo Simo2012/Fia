@@ -97,7 +97,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
     * @var string
     *
-    * @ORM\Column(name="civilite", type="string", length=10, unique=true)
+    * @ORM\Column(name="civilite", type="string", length=10)
     */
     private $civilite;
 
@@ -347,7 +347,7 @@ class Membre implements AdvancedUserInterface, \Serializable
      *
      * @return Membre
      */
-    public function setCivilite(Civilite $civilite)
+    public function setCivilite($civilite)
     {
         $this->civilite = $civilite;
 
