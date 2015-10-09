@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bd69a53592e25838871c66275a59e8b0",
+    "hash": "a552e007ade3a20e885b74e7788550d8",
     "packages": [
         {
             "name": "afarkas/html5shiv",
@@ -1119,6 +1119,48 @@
                 "orm"
             ],
             "time": "2015-08-31 12:59:39"
+        },
+        {
+            "name": "excelwebzone/recaptcha-bundle",
+            "version": "dev-master",
+            "target-dir": "EWZ/Bundle/RecaptchaBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/excelwebzone/EWZRecaptchaBundle.git",
+                "reference": "60303ddc3feec3a7a6f34fa44ed8149d48ab20bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/excelwebzone/EWZRecaptchaBundle/zipball/60303ddc3feec3a7a6f34fa44ed8149d48ab20bc",
+                "reference": "60303ddc3feec3a7a6f34fa44ed8149d48ab20bc",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/framework-bundle": "~2.4"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "EWZ\\Bundle\\RecaptchaBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael H. Arieli",
+                    "email": "excelwebzone@gmail.com",
+                    "homepage": "http://excelwebzone.com/"
+                }
+            ],
+            "description": "This bundle provides easy reCAPTCHA form field integration",
+            "homepage": "https://github.com/excelwebzone/EWZRecaptchaBundle",
+            "keywords": [
+                "recaptcha"
+            ],
+            "time": "2015-10-02 16:10:40"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -2551,7 +2593,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "willdurand/faker-bundle": 0,
-        "cmen/google-charts": 20
+        "cmen/google-charts": 20,
+        "excelwebzone/recaptcha-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
