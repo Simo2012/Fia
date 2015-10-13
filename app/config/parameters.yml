@@ -1,11 +1,11 @@
 # This file is auto-generated during the composer install
 parameters:
     database_driver: pdo_pgsql
-    database_host: loki
-    database_port: 5439
+    database_host: localhost
+    database_port: 5432
     database_name: sceau
-    database_user: sceau_user
-    database_password: hello
+    database_user: alexis
+    database_password: ~
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
