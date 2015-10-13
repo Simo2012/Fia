@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>titre_operation</source>
+                <target>Principes de fonctionnement</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>titre_operation_question1</source>
+                <target>A quoi sert le Sceau de confiance FIA-NET ?</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>titre_operation_question2</source>
+                <target>Comment sont notés les sites e-commerce ?</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>titre_operation_question3</source>
+                <target>Comment sont notés les transporteurs et les points de retrait d'un colis ?</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>titre_operation_question4</source>
+                <target>Notre interface de suivi des litiges en cas de probléme :</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>titre_operation_response1</source>
+                <target> 
+                    <![CDATA[
+                        <b>Le Sceau de Confiance FIA-NET est un sceau de transparence</b> qui vous fait bénéficier d'un service d'information unique lorsque vous achetez sur des sites détenteurs de ce sceau. Son but est de vous aider à distinguer les marchands du web les plus fiables, en affichant leurs performances, obtenues par notation de leurs clients.
+                        <br />
+                        <br />
+                        <b>Seules les personnes ayant commandé sur un site partenaire reçoivent le questionnaire de satisfaction.</b>
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>titre_operation_response2</source>
+                <target>
+					<![CDATA[
+						<b>Chaque jour, FIA-NET analyse des milliers de transactions réalisées sur les sites participants.</b>
+						<br />Nous adressons à chacun des acheteurs des questionnaires de satisfaction suite à leur achat et après la date de livraison attendue. Ces questionnaires ont pour but de mesurer les performances de nos sites E-commerce partenaires, et, en particulier, leur capacité à respecter leurs engagements en matière <b>de délais de livraison, de conformité des produits livrés, d'attributs du site...</b>
+						<br />
+						<br />
+						FIA-NET recueille les informations contenues au sein des questionnaires de satisfaction pour déterminer les différentes notes accordées aux marchands. Les informations sont réparties en 3 catégories principales : <br />
+						<ul>
+							<li>La livraison conforme ;</li>
+							<li>L'intention de rachat ;</li>
+							<li>La résolution des litiges ;</li>
+						</ul>
+						FIA-NET déterminera l' Indice de Satisfaction FIA-NET du marchand à partir des catégories précitées. L' Indice de Satisfaction FIA-NET est la moyenne des notes de livraison conforme, d'intention de rachat et de résolution des litiges sur 3 périodes (1 mois, 3 mois et 6 mois glissants).
+						<br />
+						<br />
+						<b>La note de livraison conforme mesure la capacité du marchand à livrer un bien conforme à la commande dans les délais annoncés au consommateur à la date d'achat pour chaque période de référence.</b>
+						<br />
+						<br />
+						La note d'intention de rachat correspond au pourcentage de personnes ayant répondu sur le questionnaire de suivi de livraison qu'ils rachèteraient « probablement » ou « certainement » sur le site par rapport au nombre total de réponses au questionnaire de suivi de livraison pour chaque période de référence.
+						<br />
+						<br />
+						<b>Le calcul de la note de résolution des litiges est calculé par rapport au nombre de litiges non résolus pour chaque période de référence. Chaque marchand a par défaut, une note de 10/10 qui évoluera en fonction de la solution apportée au dossier de litige.
+						Le calcul se fait sur le mois précédent glissant, avec systématiquement un décalage d'un mois. Par exemple pour le 30 juillet de l'année X, nous prendrons en compte les notes du 29 juin au 29 juillet de l'année X.</b>
+						<br />
+						<br />
+						<b>C'est grâce à vos réponses que nous attribuons un Indice de satisfaction.</b>
+						<br />
+						<br />
+						Vous retrouvez toutes ces notes sur les fiches marchand présentes sur FIA-NET.com, en cliquant sur le logo FIA-NET ou sur les widgets présents sur les sites partenaires. Les avis publiés sont lisibles sur <a href="http://www.fia-net.com" class="lien">www.fia-net.com</a> pour une durée d'un an à compter de la date de dépôt.
+						<br />
+						<br />
+						En quelques secondes, vous pouvez ainsi évaluer le niveau de qualité d'un site et acheter en vous fondant sur les témoignages de milliers d'internautes.
+						<br />
+						<br />
+						<b>Nos services sont bien sûr limités aux seuls sites auxquels nous avons délivré notre logo : pour être certain que votre site préféré fait partie de la liste des sites FIA-NET, vérifiez sa présence puis ses notes dans notre annuaire.</b>
+						<br />
+						<br />
+						Seules les personnes ayant commandé sur un site partenaire reçoivent le questionnaire de satisfaction.
+						<br />
+						<br />
+						Nota : Les services FIA-NET ne sont pas une garantie d'assurance qui vous permettrait d'être remboursé en cas de litige non résolu, faillite ou dépôt de bilan du site... FIA-NET vous fournit les informations les plus récentes possibles sur la qualité des sites : <b>c'est pourquoi il est primordial de consulter l' Indice de Satisfaction d'un site avant d'acheter</b>, mais ces dernières ne peuvent être une garantie absolue du bon déroulement de votre achat.
+						<br />
+						<br />
+						Tous les sites partenaires bénéficient <b>d'un contrat</b>, au sein duquel ils s'engagent à nous déclarer leur identité et à mettre à disposition de FIA-NET <b>un contact privilégié pour s'occuper des demandes provenant d'internautes et envoyées par FIA-NET</b>.
+						<br />Les sites partenaires s'engagent à mettre en place <b>un service clientèle pour gérer de façon privilégiée les demandes faites par des internautes ayant fait confiance à FIA-NET</b>.
+						<br />Ils  s'engagent également sur <b>la sécurisation de leurs paiements</b> en remplissant un audit déclaratif au moment de leur souscription à nos services.
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>titre_operation_response3</source>
+                <target>
+					<![CDATA[
+						Comme pour la notation des sites de e-commerce, c'est grâce aux réponses des utilisateurs du service Sceau de confiance FIA-NET que nous établissons un Indice de Satisfaction. En effet, seules les personnes ayant utilisé la solution de livraison reçoivent un questionnaire. 
+						<br />
+						<br />
+						Nous évaluons les éléments clés de la relation entre l'internaute et le point retrait ou le chauffeur :
+							<ul>
+								<li>L' indice de satisfaction globale ;
+								<li>L' indice de satisfaction sur la solution de livraison. Il correspond à l'appréciation de la qualité du commerce de proximité où l'acheteur est allé chercher son colis, dans le cadre d'une livraison en point relais ou à l'appréciation de la qualité de service du chauffeur dans le cadre d'une livraison à domicile;
+								<li>L' indice de recommandation. Il mesure l'implication de la personne dans l'utilisation du service.</li>
+							</ul>
+						</p>	
+						<h2 class="mini-titre">
+							Notre interface de suivi des litiges en cas de problème :
+						</h2>
+						<p>
+						En cas de litige, nous transmettons votre demande au e-commerçant concerné qui doit la traiter en priorité via notre interface de gestion de litiges. Un expert FIA-NET peut être sollicité afin d'éclairer chacune des parties sur ses droits et ses obligations. Nous mettons également à votre disposition, dans la rubrique « Aide à l'achat en ligne », présente au sein de votre espace membre, un rappel des points essentiels du droit de la consommation relatif à la vente à distance et un ensemble de courriers types à adresser au marchand concerné par votre dossier de litige. 
+						<br />
+						<br />
+						FIA-NET sera amenée à relancer l'e-commerçant s'il s'abstient de vous répondre et va suivre la progression du dossier et le résultat de votre démarche. 
+						<br />
+						<br />
+						Les sociétés de livraison (transporteurs) partenaires de FIA-NET ne bénéficient pas de ce service de gestion des litiges commerciaux.
+
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>titre_operation_response4</source>
+                <target>
+					<![CDATA[
+						En cas de litige, nous transmettons votre demande au e-commerçant concerné qui doit la traiter en priorité via notre interface de gestion de litiges. Un expert FIA-NET peut être sollicité afin d'éclairer chacune des parties sur ses droits et ses obligations. Nous mettons également à votre disposition, dans la rubrique « Aide à l'achat en ligne », présente au sein de votre espace membre, un rappel des points essentiels du droit de la consommation relatif à la vente à distance et un ensemble de courriers types à adresser au marchand concerné par votre dossier de litige. 
+                                                <br />
+                                                <br />
+                                                FIA-NET sera amenée à relancer l'e-commerçant s'il s'abstient de vous répondre et va suivre la progression du dossier et le résultat de votre démarche. 
+                                                <br />
+                                                <br />
+                                                Les sociétés de livraison (transporteurs) partenaires de FIA-NET ne bénéficient pas de ce service de gestion des litiges commerciaux.
+                                                </p>
+                                                <br />
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>titre_operation_faq</source>
+                <target>Vous avez des questions ? Voici nos réponses</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

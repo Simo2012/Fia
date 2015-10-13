@@ -44,7 +44,6 @@ class ApiEncryptFilter
         $lsIv = mcrypt_create_iv($liIvSize, MCRYPT_RAND);
         $liKeysize = mcrypt_get_key_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
         $lsKey = substr($this->passphrase, 0, $liKeysize);
-        var_dump($paData);
         foreach ($paData as &$lsValue) {
             if (!is_array($lsValue)) {
                 $lsValue = utf8_encode($lsValue);

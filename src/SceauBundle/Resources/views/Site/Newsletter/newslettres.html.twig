@@ -1,0 +1,51 @@
+<div class="main-nl">
+    <div class="main-nl-infos">
+        <span class="title-nl-infos">
+            Newsletter FIA-NET<br />
+	    Au coeur du e-commerce !
+	</span>
+        <br />
+	<br />
+        <strong>
+            Nouveautés, astuces, infos pratiques, palmarés des meilleurs marchands FIA-NET :
+        </strong>
+        <br />
+	<br />
+	Ne manquez rien de l'actualité du e-commerce et inscrivez-vous à la newsletter FIA-NET !
+        <br />
+	<br />
+	Pour vous envoyer des offres pertinentes et des bons plans correspondant à votre profil, nous vous demandons de renseigner ces quelques informations.
+        <div class="new-member">
+            <span>Devenez membre Fia-Net !</span><br />
+            <br />
+            Vous souhaitez bénéficier de l'ensemble des services FIA-NET comme la médiation des litiges ?<br />
+            <br />
+            <a href="#">Devenir membre FIA-NET</a>
+        </div>
+    </div>
+
+    <div class="main-nl-form">
+	{% include "SceauBundle:Site/Newsletter:registernewslettre.html.twig" %}
+    </div>
+
+    <div class="main-nl-form-bottom">
+    </div>
+
+    {% include "SceauBundle:Site/Common:dataprotection.html.twig" %}
+    {% if app.session.get('confirmation') is defined and app.session.get('confirmation') is not null %}
+        {{ include ("SceauBundle:Site/Newsletter:success-subscription.html.twig", {'user' : user}) }}
+    {% endif  %}    
+
+</div>
+
+    <div class="div-vignette-newsletter">
+        <h1 class="titre-vignette-newsletter">Archives Newsletter</h1>
+        {% dump(newsletters) %}
+        {% for newsletter in newsletters %} 
+            {% import "SceauBundle:Site/Newsletter:newslettre.html.twig" as forms %}
+            {{ forms.input(newsletter.titre, newsletter.url, newsletter.urlVignette) }}		
+        {% endfor %}
+    </div>
+    
+
+  

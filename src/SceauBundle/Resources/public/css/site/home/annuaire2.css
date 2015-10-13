@@ -17,7 +17,8 @@ body {
 body.fs {
 	background-color: #efeded;
 	//background-color:#fff5f5;
-	background: url(../../../images/site/home/fs_back.jpg) no-repeat;
+	background-image: url(../../../images/site/home/fs_back.jpg);
+        background-repeat:no-repeat;
 	/*background-image: url('../../images/site/homefs_back-noel.jpg');*/
 	background-position: 50% top;
 	//background-color:#ffffff;
@@ -157,6 +158,20 @@ margin-top: 6px;
 	margin-top: -4px;
 	margin-top: 0px\9;
 }
+.btn_site_login {
+    background: url(../../../images/site/home/login_btn_ok.png) no-repeat;
+    width: 35px;
+    height: 16px;
+    border: 0;
+}
+.btn_site_newsletter_subcribe {
+    background: url(../../../images/site/home/picto_btn_chevron.png) no-repeat;
+    font-size: 10px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #ffffff;
+    border: 0px;
+}
 .logo {
 	float: left;
 	width: 264px;
@@ -281,7 +296,6 @@ margin-top: 6px;
 	float: left;
 	width: 1000px;
 	height: 26px;
-	margin-top:10px;
 	margin-left:122px;
 	padding-left:8px;
 	padding-right:13px;
@@ -359,7 +373,7 @@ margin-top: 6px;
 	float: left;
 	width: 990px;
 	height: 30px;
-	background-image: url('../../images/site/homefilariane_back.png');
+	background-image: url(../../../images/site/home/filariane_back.png);
 	background-repeat: repeat-x;
 	line-height: 30px;
 	padding-left: 10px;
@@ -787,6 +801,16 @@ ul.popup_AFNOR_list li {
 	height: 120px;
 	margin-top: 20px;
 	background: url(../../../images/site/home/litige_back.png) no-repeat;
+}
+.langues{
+    float: right;
+    margin-top: 25px;
+    margin-right: -200px;
+    
+}
+.home-news-note{
+    color: red;
+    font-style: italic;
 }
 .declarer-litige p {
 	margin-left: 20px;
@@ -1503,6 +1527,7 @@ td.border {
 	width : 190px;
 	margin: auto;
 }
+
 .Form-contact-TxtInfo {
 	margin-top: 15px;
 }
@@ -3718,13 +3743,11 @@ button.go em.type {
 	height: 170px;
 	margin-left: 20px;
 	padding: 10px 10px 0;
-	background-image: url('../../images/site/homeinscrip_news_back.png');
-	background-repeat: no-repeat;
+	background: url(../../../images/site/home/inscrip_news_back.png) no-repeat;
 }
 .main-nl-form-bottom {
-	background-image: url('"../../images/site/homeinscrip_news_back.png"');
+	background: url(../../../images/site/home/inscrip_news_back.png) no-repeat;
 	background-position: right bottom;
-	background-repeat: no-repeat;
 	float: right;
 	height: 5px;
 	margin-right: 10px;

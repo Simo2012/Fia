@@ -10,15 +10,13 @@
             <div id="container">
                 <div id="header">
                     {% include 'SceauBundle:Site/Common:topblock.html.twig' %}
-                    {% block CONTENT %}{% endblock %}
-                    <footer>
-                        <div id="footer">
-                            {% include "SceauBundle:Site/Common:footer.html.twig" %}
-                        </div>
-                        
-                    </footer>
                 </div>
-            </div>
+                {% block CONTENT %}{% endblock %}
+                    <div id="footer">
+                        {% include "SceauBundle:Site/Common:footer.html.twig" %}
+                    </div>
+           </div>
+            
         </body>
         
         {% block JAVASCRIPT %}
@@ -31,10 +29,25 @@
                 'bundles/sceau/js/site/home/membre.js'
                 'bundles/sceau/js/site/home/SliderSitePremium.js'
                 'bundles/sceau/js/site/common/commun.js'
-                'bundles/sceau/js/site/common/jquery-ui.js' %}
-                
-                
+                'bundles/sceau/js/site/common/jquery-ui.js'
+                'bundles/sceau/js/site/common/jquery-tools.js' %}
+                <script src="{{ asset_url }}" type="text/javascript"></script>
                 <script type="text/javascript">
+                    $(function() {
+                        $("#newsletter-success-popup").overlay({
+                            effect: 'default',
+                            top: 'center',
+                            mask: {
+                                color: '#000000',
+                                loadSpeed: 200,
+                                opacity: 0.5
+                            },
+                            close: '#mon-compte-popup-close',
+                            closeOnClick: true,
+                            load: true,
+                            oneInstance: true
+                        });
+                    });
                     var popupAvatar = "";
                     SelectAvatar(jQuery('#AvatarID').val());
                     function showPopupAvatar()
@@ -51,8 +64,10 @@
                         if(popupAvatar)
                             popupAvatar.dialog( "close" );
                     }
+                    
+        
                 </script>
-                <script src="{{ asset_url }}" type="text/javascript"></script>
+               
             {% endjavascripts %}  
         {% endblock %}
     </html>

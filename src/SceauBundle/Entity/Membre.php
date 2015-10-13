@@ -78,11 +78,8 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
     * @var ArrayCollection
     * 
-    *  @ORM\ManyToMany(targetEntity="SceauBundle\Entity\TrancheAge")
-    * @ORM\JoinTable(name="Membre_TrancheAge",
-    *      joinColumns={@ORM\JoinColumn(name="membre_id", referencedColumnName="id")},
-    *      inverseJoinColumns={@ORM\JoinColumn(name="trancheage_id", referencedColumnName="id")}
-    *      )
+    * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TrancheAge")
+    * @ORM\JoinColumn(name="trancheage_id", referencedColumnName="id", nullable=true)
     */
     private $trancheAge;
 
@@ -105,7 +102,7 @@ class Membre implements AdvancedUserInterface, \Serializable
      * @var Coordonnee
      *
      * @ORM\OneToOne(targetEntity="SceauBundle\Entity\Coordonnee")
-     * @ORM\JoinColumn(name="coordonnee_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="coordonnee_id", referencedColumnName="id", nullable=true)
      */
     private $coordonnee;
     
@@ -123,6 +120,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     */
     private $active;
     
+    /**
+    * @var boolean
+    *
+    * @ORM\Column(name="newsletter", type="boolean", nullable=true)
+    */
+    private $newsletter;
+    
     
 
     /**
@@ -139,6 +143,7 @@ class Membre implements AdvancedUserInterface, \Serializable
         $this->emails = new ArrayCollection();
         $this->questionnaires = new ArrayCollection();
         $this->active = true;
+        $this->newsletter = false;
     }
 
 
@@ -363,6 +368,16 @@ class Membre implements AdvancedUserInterface, \Serializable
     {
         return $this->civilite;
     }
+    
+    /**
+     * Get Bool
+     *
+     * @return newsletter
+     */
+    public function getNewsletter()
+    {
+        return $this->newsletter;
+    }
 
     /**
      * Set coordonnee
@@ -509,6 +524,19 @@ class Membre implements AdvancedUserInterface, \Serializable
     public function setActive($active)
     {
         $this->active = $active;
+
+        return $this;
+    }
+    
+    /**
+    * Set newsletter
+    *
+    * @param boolean $newsletter
+    * @return Membre
+    */
+    public function setNewsletter($newsletter)
+    {
+        $this->newsletter = $newsletter;
 
         return $this;
     }

@@ -20,6 +20,13 @@ class Avatar
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="number", type="smallint")
+     */
+    private $number;
 
 
     /**
@@ -31,4 +38,27 @@ class Avatar
     {
         return $this->id;
     }
+    
+    /**
+     * Get number
+     *  
+     * @return Avatar
+     */
+    function getNumber() {
+        return $this->number;
+    }
+
+    /**
+    * Set Number
+    * 
+    *  @param integer $number
+    *
+    * @return Avatar
+    */
+    function setNumber($number) {
+        $this->number = $number;
+    }
+
+
+    
 }

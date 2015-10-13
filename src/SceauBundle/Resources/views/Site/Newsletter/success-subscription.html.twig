@@ -1,0 +1,21 @@
+    <div id="newsletter-success-popup">
+        <div id="newsletter-success-popup-conteneur">
+            <h2 id="newsletter-success-popup-titre">Enregistrement de votre demande</h2>
+                <p id="newsletter-success-popup-texte">
+                    Bonjour {{user.civilite}} {{user.nom}}, <br /><br />
+                    Merci de vous Votre abonné(e) à la newsletter FIA-NET.<br />
+                    Vous allez recevoir un email de confirmation.<br />
+                </p>
+                <div style="text-align:center;">
+                    <div class="btn-espace-membre-inline">
+                        <div class="btn-1-main">
+                            <a id="mon-compte-popup-close" href="{{ path('site_operation_news')}}" class="btn-1-link">
+                                <img width="6" height="10" src="{{ asset('bundles/sceau/images/site/home/picto_btn_chevron.png') }}" /> OK
+                            </a>
+                        </div>
+                        <div class="btn-1-end"></div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    {{ app.session.set('confirmation',null) }}

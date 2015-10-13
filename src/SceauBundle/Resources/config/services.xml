@@ -98,6 +98,17 @@
         </service>
         
         
+        <!-- validation Captcha -->
+        <service id="security.authentication.listener.form" class="Dmishh\Bundle\RecaptchaBundle\Security\Firewall\RecaptchaFormAuthenticationListener"
+        parent="security.authentication.listener.abstract" abstract="true"
+        >
+            <argument id="recaptcha"/>   
+        </service>
+        
+        <!-- Encoder Le mot de passe -->
+        <service id="sceau.site.user.encode.password" class="SceauBundle\Model\Common\Encoder\MembrePasswordEncoder">
+            <argument type="service" id="sceau.api.filter.Encrypt"/>
+        </service>
     </services>
 
 </container>

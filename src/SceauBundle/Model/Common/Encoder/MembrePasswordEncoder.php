@@ -1,6 +1,6 @@
 <?php
 
-namespace SceauBundle\Model\Site\User;
+namespace SceauBundle\Model\Common\Encoder;
 
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 

@@ -1,0 +1,43 @@
+<!-- _langueSwitcher.html.twig -->
+
+{# If method is not GET the langue switcher is hidden to prevent change the url on a post action #}
+{% if app.request.get('_route') and app.request.get('_method') and "GET" in app.request.get('_method').methods %}
+
+{% set actualLangue = app.request.locale %}
+
+{% set routeParams = app.request.get('_route_params') %}
+<div class="langues">
+  {% for langue in ['fr','en'] %} {# If you have a language referential you may call a controller to get all languages #}
+  <div class="langue langue-{{langue}}">
+   
+
+    {% if actualLangue == langue %}
+    <div class="langue-current langue-current-{{langue}}">
+      <div class="flag flag-{{langue}}">
+        <img src="{{ asset('bundles/sceau/images/site/common/'~langue~'.gif') }}" style="width: 15px;" alt="flag-{{langue}}"/>
+      </div>
+      <div class="iso">
+       
+      </div>
+    </div>
+    {% else %}
+
+    {% if routeParams['_locale'] is defined %}
+    {%set routeParams = routeParams|merge({'_locale': langue}) %}
+    {% endif %}
+    
+    <div class="langue-available langue-available-{{langue}}">
+      <div class="flag flag-{{langue}}">
+        <a href="{{ path(app.request.get('_route'), routeParams) }}"><img src="{{ asset('bundles/sceau/images/site/common/'~langue~'.gif') }}" alt="flag-{{langue}}" style="width: 25px;"/></a>
+      </div>
+      <div class="iso">
+        <a href="{{ path(app.request.get('_route'), routeParams) }}"></a>
+      </div>
+    </div>
+
+    {% endif %}
+  </div>
+  {% endfor %}
+  <div class="clear"></div>
+</div>
+{% endif %}

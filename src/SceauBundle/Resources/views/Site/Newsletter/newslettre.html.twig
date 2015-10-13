@@ -1,0 +1,7 @@
+{% macro input(title, urlnewsletter, urlvignette) %}
+<p style="text-align:center;">
+    <a href="{{urlnewsletter}}" target="_blank">
+        <img src="{{urlvignette}}" width="100px" height="100px" alt="{{title}}" title="{{title}}"/>
+    </a>
+</p>
+{% endmacro %}
