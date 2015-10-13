@@ -117,5 +117,4 @@ ewz_recaptcha:
     public_key:  6LcSZQ4TAAAAAMx0T6IucjYMYT_QMOGc-rO9OBI6
     private_key: 6LcSZQ4TAAAAAFvHeCmzYyt-fyod-gaJq-VetIhz
     locale_key:  %kernel.default_locale%
-    ajax: true
     #enabled: false

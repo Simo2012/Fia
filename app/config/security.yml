@@ -5,6 +5,8 @@ security:
 
     encoders:
         SceauBundle\Entity\Extranet\Utilisateur: plaintext
+        SceauBundle\Entity\Membre:
+            id: sceau.site.user.encode.password
 
     firewalls:
         dev:
@@ -29,3 +31,4 @@ security:
             logout:
                 path: extranet_utilisateur_logout
                 target: extranet_utilisateur_login
+
