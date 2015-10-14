@@ -1,0 +1,11 @@
+{% extends 'SceauBundle:Emails/Litiges/Internaute:base_internaute.html.twig' %}
+
+{% block subject %}
+	Une nouvelle étape vous attend - Litige #LITIGEID#
+{% endblock %}
+
+{% block body %}
+	#MEMBRE#&sbquo;<br /><br />
+	Nous vous informons qu&#39;une nouvelle &eacute;tape concernant votre litige n&deg;#LITIGEID# a &eacute;t&eacute; d&eacute;pos&eacute;e sur notre interface de gestion des litiges.<br /><br />
+	Nous vous invitons donc &agrave; vous connecter &agrave; votre <a target="_blank"  style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=5&xtor=EPR-5-[litige_internaute_nouvelleetape]--[Espace_membre]&url=https://www.fia-net.com/membre/">espace membre</a> &agrave; l&#39;aide de vos login/mot de passe afin de prendre connaissance de cette nouvelle &eacute;tape.
+{% endblock %}

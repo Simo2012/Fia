@@ -1,0 +1,15 @@
+{% extends 'SceauBundle:Emails/Litiges/Marchand:base_marchand.html.twig' %}
+
+{% block subject %}
+	Cl&ocirc;ture du litige #LITIGEID#
+{% endblock %}
+
+{% block body %}
+	Madame&sbquo; Monsieur&sbquo;<br /><br />
+	Nous revenons vers vous au sujet du litige n&deg;#LITIGEID#.<br /><br />
+	Nous vous informons que l&#39;expert FIA-NET a d&eacute;cid&eacute; de clore ce litige en faveur de l&#39;internaute et de le consid&eacute;rer comme non r&eacute;solu. Cette décision impactera votre note de résolution des litiges.<br /><br />
+	Vous pouvez consulter les raisons de cette d&eacute;cision dans <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=7&xtor=EPR-5-[litige_marchand_nonresoluexpert]--[Extranet_connexion]&url=https://www.fia-net.com/__extranet/">votre interface d&eacute;di&eacute;e.</a><br /><br />
+	Plus aucune action n&#39;est possible sur ce dossier.<br /><br />
+	Nous vous rappelons ci-dessous tous les &eacute;l&eacute;ments en notre possession concernant ce litige :<br /><br />
+	{% include 'SceauBundle:Emails/Litiges/Marchand:litige_marchand_references.html.twig' %}
+{% endblock %}

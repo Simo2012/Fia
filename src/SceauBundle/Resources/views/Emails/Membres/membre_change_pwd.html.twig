@@ -1,0 +1,42 @@
+{% extends 'SceauBundle:Emails\Membres:base_membre.html.twig' %}
+
+{% block title %}ESPACE MEMBRE{% endblock %}
+{% block subject %}Votre nouveau mot de passe{% endblock %}
+
+{% block body %}
+	<td colspan="4" align="left" style="line-height:normal">
+		<table width="480" align="center" border="0" cellspacing="0" cellpadding="0"  style="line-height:normal">
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+					<strong>##PRENOM##,</strong>
+					<br /><br />
+				</td>
+			</tr>
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+				Comme votre ancien mot de passe ne semblait plus vous plaire, je viens d'enregistrer le nouveau !<br /><br />
+				</td>
+			</tr>
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+					<strong>Voici un rappel de vos identifiants de connexion :</strong><br />
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
+						<tr style="line-height:normal">
+							<td width="35" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">&nbsp;</td>
+							<td width="10" height="22" valign="middle" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" /></td>
+							<td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">Identifiant : <strong>##EMAIL##</strong></td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="35" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">&nbsp;</td>
+							<td width="10" height="22" valign="middle" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" /></td>
+							<td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">Mot de passe : <strong>##PASSWORD##</strong></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr style="line-height:normal">
+				{% include 'SceauBundle:Emails/Membres:block_dont_forget.html.twig' %}
+			</tr>  
+		</table>
+	</td>
+{% endblock %}

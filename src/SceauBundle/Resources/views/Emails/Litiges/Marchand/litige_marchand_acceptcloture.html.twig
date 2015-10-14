@@ -1,0 +1,17 @@
+{% extends 'SceauBundle:Emails/Litiges/Marchand:base_marchand.html.twig' %}
+
+{% block subject %}
+	Votre client accepte votre proposition de cl&ocirc;ture du litige #LITIGEID#
+{% endblock %}
+
+{% block body %}
+	Madame&sbquo; Monsieur&sbquo;<br /><br />
+	Nous revenons vers vous au sujet du litige n&deg;#LITIGEID#.<br /><br />
+	Vous avez adress&eacute; &agrave; l&#39;internaute&sbquo; via notre interface de m&eacute;diation des litiges&sbquo; une proposition de r&egrave;glement de ce litige.<br /><br />
+	Ce dernier a r&eacute;pondu en acceptant la cl&ocirc;ture de ce litige.<br />
+	Pour consulter le d&eacute;tail de sa r&eacute;ponse&sbquo; il vous suffit de <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=7&xtor=EPR-5-[litige_marchand_acceptcloture]--[Extranet_connexion]&url=https://www.fia-net.com/__extranet/">cliquer ici</a>.<br /><br />
+	D&egrave;s lors&sbquo; nous vous informons que ce litige sera pris en compte comme  r&eacute;solu dans votre note de résolution de litiges disponible au sein de votre <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=3&xtor=EPR-5-[litige_marchand_acceptcloture]--[Fiche_marchand]&url=http://www.fia-net.com/annuaire/#SITEID#/fiche.html">fiche marchand</a>.<br /><br />
+	Plus aucune action concernant ce dossier n&#39;est d&eacute;sormais possible.<br /><br />
+	Nous vous rappelons ci-dessous tous les &eacute;l&eacute;ments en notre possession concernant ce litige :<br /><br />
+	{% include 'SceauBundle:Emails/Litiges/Marchand:litige_marchand_references.html.twig' %}
+{% endblock %}

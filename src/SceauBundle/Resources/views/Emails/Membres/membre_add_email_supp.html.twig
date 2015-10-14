@@ -1,0 +1,32 @@
+{% extends 'SceauBundle:Emails\Membres:base_membre.html.twig' %}
+
+{% block title %}ESPACE MEMBRE{% endblock %}
+{% block subject %}Ajout d'une adresse e-mail{% endblock %}
+
+{% block body %}
+	<td colspan="4" align="left" style="line-height:normal"><table width="480" align="center" border="0" cellspacing="0" cellpadding="0"  style="line-height:normal">
+		<tr style="line-height:normal">
+			<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;"><strong>##PRENOM##,</strong><br />
+			<br />Une nouvelle adresse e-mail vient d'&ecirc;tre ajout&eacute;e &agrave; votre compte !<br />&nbsp;</td>
+		</tr>
+		<tr style="line-height:normal">
+			<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+				<strong>Ne partez pas, il reste une &eacute;tape :</strong><br />
+				<em>Pour que votre compte soit d&eacute;finitivement mis &agrave; jour, cliquez sur le bouton ci-dessous (ou copiez-collez le lien dans votre navigateur) :</em>
+				<br /><br />
+				<table align="center" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
+					<tr style="line-height:normal">
+						<td align="center" style="line-height:normal"><a target="_blank"  href="##URLCONFIRMATIONMAILSUPP##" ><img src="http://www.fia-net.com/img/emails/btn_valide-info.png" width="194" height="24" alt="Je valide mes nouvels infos" border="0" /></a></td>
+					</tr>
+					<tr style="line-height:normal">
+						<td height="30" align="center" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;"><a target="_blank"  href="http://logi118.xiti.com/go.url?xts=487123&s2=5&xtor=EPR-5-[membre_add_email_supp]--[url_validation_add_email_supp]&url=##URLCONFIRMATIONMAILSUPP##"  style="line-height:normal; font-weight:bold; color:#52ae35;">##URLCONFIRMATIONMAILSUPP##</a></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr style="line-height:normal">
+			{% include 'SceauBundle:Emails/Membres:block_dont_forget.html.twig' %}
+		</tr>  
+	</table>
+	</td>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'SceauBundle:Emails/Litiges/Marchand:base_marchand.html.twig' %}
+
+{% block subject %}
+	Litige #LITIGEID# - Intervention de votre client
+{% endblock %}
+
+{% block body %}
+	Madame&sbquo; Monsieur&sbquo;<br /><br />
+	Nous revenons vers vous au sujet du litige n&deg;#LITIGEID#.<br /><br />
+	En effet&sbquo; l&#39;internaute &agrave; l&#39;origine de cette d&eacute;claration vient d&#39;ajouter une nouvelle &eacute;tape &agrave; son dossier.<br /><br />
+	Nous vous invitons &agrave; prendre connaissance de son message sur en vous connectant dans <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=7&xtor=EPR-5-[litige_marchand_reponseinternaute]--[Extranet_connexion]&url=https://www.fia-net.com/__extranet/">votre interface d&eacute;di&eacute;e.</a><br /><br />
+	Nous vous rappelons ci-dessous tous les &eacute;l&eacute;ments en notre possession concernant ce litige :<br /><br />
+	{% include 'SceauBundle:Emails/Litiges/Marchand:litige_marchand_references.html.twig' %}
+{% endblock %}
