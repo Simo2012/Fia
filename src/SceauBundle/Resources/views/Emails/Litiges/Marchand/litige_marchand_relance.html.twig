@@ -1,0 +1,20 @@
+{% extends 'SceauBundle:Emails/Litiges/Marchand:base_marchand.html.twig' %}
+
+{% block subject %}
+	Relance sur un litige
+{% endblock %}
+
+{% block body %}
+	Madame&sbquo; Monsieur&sbquo;<br /><br />
+	Nous revenons vers vous au sujet du litige n&deg;#LITIGEID#.<br /><br />
+	Nous vous avons d&eacute;j&agrave; sollicit&eacute; le #DATECONTACTMARCHAND# au sujet de ce dossier.<br /><br />
+	Selon l&#39;internaute&sbquo; le pr&eacute;sent dossier n&#39;est toujours pas r&eacute;gl&eacute;.
+	Il a donc souhait&eacute; effectuer une relance &agrave; propos de ce dernier.<br /><br />
+	Nous mettons &agrave; votre disposition une interface de gestion et une zone de dialogue vous permettant de r&eacute;pondre directement &agrave; cet internaute.
+	Vous y trouverez diff&eacute;rents outils pour acc&eacute;l&eacute;rer la r&eacute;solution de ce litige. L&#39;utilisation de cette interface permet aussi de prendre en compte plus rapidement votre avis sur ce dossier et votre capacit&eacute; de r&eacute;solution de litige.
+	Pour y acc&eacute;der&sbquo; il vous suffit de <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=7&xtor=EPR-5-[litige_marchand_relance]--[Extranet_connexion]&url=https://www.fia-net.com/__extranet/">cliquer ici</a>.<br /><br />
+	Vous disposez maintenant d&#39;un d&eacute;lai de 8 jours pour r&eacute;pondre &agrave; cet internaute ou &agrave; FIA-NET sur notre interface de gestion des litiges.
+	A d&eacute;faut&sbquo; ce litige pourra &ecirc;tre consid&eacute;r&eacute; comme non r&eacute;solu et impacter votre note de résolution de litiges disponible sur votre <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=3&xtor=EPR-5-[litige_marchand_relance]--[Fiche_marchand]&url=http://www.fia-net.com/annuaire/#SITEID#/fiche.html">fiche marchand</a>.<br /><br />
+	Nous vous transmettons ci-dessous tous les &eacute;l&eacute;ments en notre possession concernant ce litige :<br /><br />
+	{% include 'SceauBundle:Emails/Litiges/Marchand:litige_marchand_references.html.twig' %}
+{% endblock %}
