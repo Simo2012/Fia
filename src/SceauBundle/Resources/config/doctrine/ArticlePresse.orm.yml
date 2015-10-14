@@ -1,0 +1,27 @@
+SceauBundle\Entity\ArticlePresse:
+    type: entity
+    repositoryClass: SceauBundle\Entity\Repository\ArticlePresseRepository
+    table: ArticlePresse
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        title:
+            type: string
+            length: 255
+        date:
+            type: datetimetz
+        content:
+            type: text
+        source:
+            type: string
+            length: 255
+        urlSource:
+            type: string
+            length: 255
+            column: url_source
+        published:
+            type: boolean
+
+
