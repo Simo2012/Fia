@@ -6,6 +6,9 @@ imports:
     - { resource: emails.yml }
     - { resource: doctrine_extensions.yml }
 
+parameters:
+    pagination_size: 5
+
 framework:
     #esi:             ~
     translator:      { fallback: "%locale%" }
