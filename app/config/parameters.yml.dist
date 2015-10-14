@@ -16,3 +16,5 @@ parameters:
     secret: RobertTenaif
 
     logger_nb_max_fichier: 30
+    memcache_host: localhost
+    memcache_port: 11211
