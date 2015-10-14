@@ -1,3 +1,8 @@
+sceau_admin:
+    resource: "@SceauBundle/Controller/Admin"
+    type:     annotation
+    prefix:   /admin/
+
 sceau_extranet:
     resource: "@SceauBundle/Controller/Extranet"
     type:     annotation
