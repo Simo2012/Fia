@@ -43,4 +43,23 @@ class SiteRepository extends EntityRepository
 
         return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getOneOrNullResult();
     }
+
+    /**
+     * Retourne l'ensemble des sites avec pour seul questionnairePersonnalisation associé, le principal.
+     * Utiliser pour la génération des widgets.
+     *
+     * @return Site[] Une collection d'instance de Site ou une collection vide
+     */
+    public function questionnairePrincipal()
+    {
+        // TODO : rajouter le filtrage sur le type de site
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.questionnairePersonnalisations', 'qp')
+            ->where('qp.principal = :principal')
+            ->setParameter('principal', true)
+            ->getQuery()
+            ->useResultCache(true, Cache::LIFETIME_1J)
+            ->execute()
+        ;
+    }
 }

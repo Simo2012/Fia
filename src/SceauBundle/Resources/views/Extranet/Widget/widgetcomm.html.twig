@@ -1,6 +1,6 @@
 {% set static_img_path = fianet_static_site ~ '/img/widget/' %}
 
-{% if white %}
+{% if blanc %}
     {% set xiti              = 'fond_blanc' %}
     {% set site_img          = 'https://static.fia-net.com/widgets3/blanc/' ~ site.id ~ '.png' %}
     {% set header_img        = static_img_path ~ 'header_com.png' %}
@@ -34,8 +34,8 @@
     <tr>
         <td background="{{ left_img }}" width="5"></td>
         <td width="150" bgcolor="#d6e6f5">
-            <div style="margin:5px ; font-family:Verdana, Geneva, sans-serif ; font-size:10px ; color:#52434a">'+comm[nbcomm]+'\<br/>
-                <div align="right" style="font-size:9px ; margin-top:5px">'+datecomm[nbcomm]+'</div>
+            <div style="margin:5px ; font-family:Verdana, Geneva, sans-serif ; font-size:10px ; color:#52434a">'+comments[nbcomm].content+'{% if questionnaires|length %}&nbsp;<a style="color:#62b22f" href="https://logs177.xiti.com/go.url?xts=487123&xtor=AD-1-[{{ xiti }}]---[{{ site.url }}]--[{{ site.nom }}]&url=http://www.fia-net.com/annuaire/{{ site.id }}/{{ site.nom }}.html/r'+comments[nbcomm].repId+'#r'+comments[nbcomm].repId+'" target="_blank" title="Lire la suite">Lire la suite</a>{% endif %}<br/>
+                <div align="right" style="font-size:9px ; margin-top:5px">'+comments[nbcomm].date+'</div>
             </div>
         </td>
         <td background="{{ right_img }}" width="5"></td>
@@ -49,7 +49,7 @@
         <td background="{{ left_img }}" width="5"></td>
         <td width="150">
             <div align="right" style="margin-top:5px ; font-family:Verdana, Geneva, sans-serif ; font-size:10px ;">
-                <a href="https://logs177.xiti.com/go.url?xts=487123&xtor=AD-1-[{{ xiti }}]---[{{ site.url }}]--[{{ site.nom }}]&url=http://www.fia-net.com/annuaire/{{ site.id }}/{{ site.nom }}.html" target="_blank" style="color:#62b22f">Voir les 1 avis clients</a>
+                <a href="https://logs177.xiti.com/go.url?xts=487123&xtor=AD-1-[{{ xiti }}]---[{{ site.url }}]--[{{ site.nom }}]&url=http://www.fia-net.com/annuaire/{{ site.id }}/{{ site.nom }}.html" target="_blank" style="color:#62b22f">Voir les {{ questionnaires|length }} avis clients</a>
             </div>
         </td>
         <td background="{{ right_img }}" width="5"></td>

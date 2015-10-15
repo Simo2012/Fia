@@ -708,4 +708,22 @@ class QuestionnaireRepository extends EntityRepository
 
         return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getScalarResult();
     }
+
+    public function commentairesPrincipaux(Site $site, QuestionnaireType $questionnaireType)
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb = $this->jointureCommentaire($qb, $questionnaireType);
+
+        return $qb->select('q.id, q.dateReponse, qr_com.commentaire')
+            ->where('q.site = :siteId')
+            ->andWhere('q.actif = true')
+            ->andWhere('q.dateReponse IS NOT NULL')
+            ->andWhere('qr_com.commentaire IS NOT NULL')
+            ->setParameter('siteId', $site->getId())
+            ->getQuery()
+            ->useResultCache(true, Cache::LIFETIME_1J)
+            ->getArrayResult()
+        ;
+    }
 }
