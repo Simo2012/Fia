@@ -88,4 +88,20 @@ class HomeController extends Controller
         }
         return $this->render("SceauBundle:Site/Security:test.html.twig"); 
     }
+
+
+    /**
+     * List all published Articles.
+     *
+     * @Route("/presse", name="presse")
+     * @Method("GET")
+     */
+    public function presseAction(Request $request)
+    {
+        $articlePresseRepo = $this->get('sceau.repository.article.presse');
+        $articlePresses = $articlePresseRepo->findBy(array(), array('date' => 'ASC'));
+
+        return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePresses' => $articlePresses));
+    }
+
 }

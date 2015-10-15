@@ -1,0 +1,10 @@
+{% extends 'SceauBundle:Site:layout.html.twig' %}
+{% block CONTENT %}
+    {% for articlePresse in articlePresses %}
+        <ul>
+            <li>{{ articlePresse.title }} - {{ articlePresse.date|date('m/d/Y') }}</li>
+            <li>{{ articlePresse.content }}</li>
+            <li></li>
+        </ul>
+    {% endfor %}
+{% endblock %}
