@@ -1,6 +1,15 @@
 {% extends 'SceauBundle:Admin:layout.html.twig' %}
 
 {% block CONTENT %}
+
+
+    {# On affiche tous les messages flash dont le nom est « info » #}
+    {% for message in app.session.flashbag.get('info') %}
+        <div class="alert alert-success">
+            <p> Confirmation: {{ message }}</p>
+        </div>
+    {% endfor %}
+
     <div class="page-content page-content-ease-in">
         <div class="row">
             <div class="col-lg-12">
@@ -48,7 +57,7 @@
                                 <tbody>
                                     {% for articlePresse in articlePresses %}
                                     <tr class="odd gradeX">
-                                        <td>{{ articlePresse.id }}</td>
+                                        <td>{{ loop.index }}</td>
                                         <td>{{ articlePresse.title }}</td>
                                         <td>{{ articlePresse.date|date("m/d/Y")  }}</td>
                                         <td>{{ articlePresse.content }}</td>
