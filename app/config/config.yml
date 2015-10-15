@@ -30,8 +30,10 @@ framework:
 
 # Twig Configuration
 twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
+    debug:             "%kernel.debug%"
+    strict_variables:  "%kernel.debug%"
+    globals:
+        fianet_static_site: "%fianet_static_site%"
 
 # Assetic Configuration
 assetic:

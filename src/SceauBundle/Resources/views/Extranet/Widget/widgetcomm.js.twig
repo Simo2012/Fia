@@ -1,0 +1,13 @@
+/*widgetcomm.js*/
+var comm = [];
+var datecomm = [];
+{% for comment in comments %}
+comm[{{ loop.index1 }}] = '{{ comment|striptags|nl2br }}';
+datecomm[{{ loop.index1 }}] = '{{ comment.date | date(d/m/Y) }}';
+var nbcomm = (Math.floor({{ (comments|length <= 5) ?: 5 }}*Math.random()+1));
+{% else %}
+comm[0] = '';
+datecomm[0] = '';
+var nbcomm = 0;
+{% endfor %}
+document.write('{% spaceless %}{% include '@Sceau/Extranet/Widget/widgetcomm.html.twig' with {'white': true} %}{% endspaceless %}');
