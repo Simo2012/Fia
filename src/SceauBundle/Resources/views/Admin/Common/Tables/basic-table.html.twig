@@ -11,10 +11,9 @@
                 <table class="table {{ type }}">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        {% for column in columns %}
+                            <th>{{ column }}</th>
+                        {% endfor %}
                     </tr>
                     </thead>
                     <tbody>
