@@ -1,0 +1,52 @@
+{% extends 'SceauBundle:Admin:layout.html.twig' %}
+
+{% block CONTENT -%}
+    <h1>ArticlePresse</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ entity.title }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ entity.date|date('m/d/Y') }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ entity.content }}</td>
+            </tr>
+            <tr>
+                <th>Source</th>
+                <td>{{ entity.source }}</td>
+            </tr>
+            <tr>
+                <th>Urlsource</th>
+                <td>{{ entity.urlSource }}</td>
+            </tr>
+            <tr>
+                <th>Published</th>
+                <td>{{ entity.published }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('articles') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('article_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

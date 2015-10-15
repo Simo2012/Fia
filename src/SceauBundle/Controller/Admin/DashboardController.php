@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 
-class AdminController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Show admin dashboard.

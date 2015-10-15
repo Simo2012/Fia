@@ -1,8 +1,3 @@
-sceau_admin:
-    resource: "@SceauBundle/Controller/Admin"
-    type:     annotation
-    prefix:   /admin/
-
 sceau_extranet:
     resource: "@SceauBundle/Controller/Extranet"
     type:     annotation
@@ -20,7 +15,7 @@ sceau_site:
         _locale: fr|en
 
 sceau_back_office:
-    resource: "@SceauBundle/Controller/BackOffice"
+    resource: "@SceauBundle/Controller/Admin"
     type:     annotation
     prefix:   /back-office/{_locale}/
     defaults: { _locale: fr }

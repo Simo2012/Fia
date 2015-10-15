@@ -17,10 +17,12 @@ SceauBundle\Entity\ArticlePresse:
         source:
             type: string
             length: 255
+            nullable: true
         urlSource:
             type: string
             length: 255
             column: url_source
+            nullable: true
         published:
             type: boolean
 
