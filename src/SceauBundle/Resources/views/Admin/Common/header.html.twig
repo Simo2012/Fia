@@ -1,0 +1,24 @@
+{% spaceless %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>FIA-NET Dasboard</title>
+    
+    {% block CSS %}
+        {% stylesheets
+            'bundles/sceau/css/admin/common/pace.css'
+            'bundles/sceau/css/admin/common/bootstrap.min.css'
+            'bundles/sceau/css/admin/common/font-awesome/css/font-awesome.min.css'
+            'bundles/sceau/css/admin/common/datatables.css'
+            'bundles/sceau/css/admin/common/style.css'
+            'bundles/sceau/css/admin/common/plugins.css'
+            filter='cssrewrite'
+        %}
+         <link rel="stylesheet" href="{{ asset_url }}"/>
+        {%     endstylesheets %}
+    {% endblock %}
+    
+{% endspaceless %}
