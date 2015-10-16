@@ -108,10 +108,9 @@ class HomeController extends Controller
             $articlePressesDate = $articlePresse->getDate()->format('m-Y');
             if (isset($articlePressesByMonths[$articlePressesDate])) {
                 $articlePressesByMonths[$articlePressesDate]['articles'][] = $articlePresse;
-                $articlePressesByMonths[$articlePressesDate]['date'] = $articlePresse->getDate()->format('d-m-Y');
             } else {
-                $articlePressesByMonths[$articlePressesDate]['articles'] = array($articlePresse);
-                $articlePressesByMonths[$articlePressesDate]['date'] = $articlePresse->getDate()->format('d-m-Y');
+                $articlePressesByMonths[$articlePressesDate]['articles'] = [$articlePresse];
+                $articlePressesByMonths[$articlePressesDate]['date'] = $articlePresse->getDate();
             }
         }
 
