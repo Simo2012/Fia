@@ -1,0 +1,29 @@
+SceauBundle\Entity\EnvoiEmail:
+    type: entity
+    table: null
+    repositoryClass: SceauBundle\Entity\Repository\EnvoiEmailRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        subject:
+            type: string
+            length: 255
+        sendFrom:
+            type: string
+            length: 255
+        sendTo:
+            type: string
+            length: 255
+        content:
+            type: text
+        dateInsert:
+            type: datetimetz
+        dateSend:
+            type: datetimetz
+        status:
+            type: integer
+    lifecycleCallbacks: {  }
