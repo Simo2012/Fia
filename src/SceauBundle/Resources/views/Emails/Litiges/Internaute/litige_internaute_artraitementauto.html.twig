@@ -1,11 +1,11 @@
 {% extends 'SceauBundle:Emails/Litiges/Internaute:base_internaute.html.twig' %}
 
 {% block subject %}
-	Enregistrement de votre litige #LITIGEID#
+	Enregistrement de votre litige {{ litige.id }}
 {% endblock %}
 
 {% block body %}
-	#MEMBRE#&sbquo;<br /><br />
+	{{ membre }}&sbquo;<br /><br />
 	Nous avons bien pris note de votre d&eacute;claration de litige.<br /><br />
 	Celui-ci va dor&eacute;navant &ecirc;tre g&eacute;r&eacute; par notre service de gestion de litiges.<br />
 	<br />

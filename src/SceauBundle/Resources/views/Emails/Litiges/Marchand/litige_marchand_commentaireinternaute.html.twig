@@ -1,16 +1,16 @@
 {% extends 'SceauBundle:Emails/Litiges/Marchand:base_marchand.html.twig' %}
 
 {% block subject %}
-	Votre client a ajout&eacute; un commentaire &agrave; propos du litige n&deg;#LITIGEID#
+	Votre client a ajout&eacute; un commentaire &agrave; propos du litige n&deg;{{ litige.id }}
 {% endblock %}
 
 {% block body %}
 	Madame&sbquo; Monsieur&sbquo;<br /><br />
-	Nous vous informons que l&#39;internaute a souhait&eacute; ajouter un commentaire sur le dossier n&deg;#LITIGEID# avant l&#39;arbitrage de l&#39;expert FIA-NET.<br />
+	Nous vous informons que l&#39;internaute a souhait&eacute; ajouter un commentaire sur le dossier n&deg;{{ litige.id }} avant l&#39;arbitrage de l&#39;expert FIA-NET.<br />
 	L&#39;expert FIA-NET rendra maintenant sa d&eacute;cision ou interrogera une des deux parties sous 72 heures ouvr&eacute;es (hors week-ends et jours f&eacute;ri&eacute;s).<br /><br />
 	Vous pouvez consulter le commentaire de l&#39;internaute dans votre interface d&eacute;di&eacute;e.<br />
 	Pour y acc&eacute;der&sbquo; il vous suffit de <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=7&xtor=EPR-5-[litige_marchand_commentaire_internaute]--[Extranet_connexion]&url=https://www.fia-net.com/__extranet/">cliquer ici</a>.<br /><br />
 	Nous vous tiendrons au courant de la prochaine intervention de l&#39;expert FIA-NET par e-mail.<br /><br />
 	Nous vous rappelons ci-dessous tous les &eacute;l&eacute;ments en notre possession concernant ce litige :<br /><br />
-	{% include 'SceauBundle:Emails/Litiges/Marchand:litige_marchand_references.html.twig' %}
+	{{ parent() }}
 {% endblock %}

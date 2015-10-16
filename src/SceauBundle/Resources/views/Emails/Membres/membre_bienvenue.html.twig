@@ -1,13 +1,12 @@
 {% extends 'SceauBundle:Emails\Membres:base_membre.html.twig' %}
 
-{% block title %}ESPACE MEMBRE{% endblock %}
-{% block subject %}Bienvenue &Agrave; vous !{% endblock %}
+{% block subject %}{{ 'Bienvenue &Agrave; vous !' }}{% endblock %}
 
 {% block body %}
 	<td colspan="4" align="left" style="line-height:normal">
 		<table width="480" align="center" border="0" cellspacing="0" cellpadding="0"  style="line-height:normal">
 			<tr style="line-height:normal">
-				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;"><strong>Bonjour ##PRENOM##,</strong><br />
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;"><strong>Bonjour {{ prenom }},</strong><br />
 					<br />Je suis Charlie, et je serai votre interlocutrice privil&eacute;gi&eacute;e pour toutes les communications entre le Sceau de Confiance FIA-NET et vous.<br />
 					Au nom de toute l'&eacute;quipe, je vous souhaite la bienvenue dans <strong>VOTRE</strong> nouvelle communaut&eacute; !!
 				<br />&nbsp;</td>
@@ -18,12 +17,12 @@
 						<tr style="line-height:normal">
 							<td width="35" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">&nbsp;</td>
 							<td width="10" height="22" valign="middle" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" /></td>
-							<td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">Identifiant : <strong>##EMAIL##</strong></td>
+							<td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">Identifiant : <strong>{{ email }}</strong></td>
 						</tr>
 						<tr style="line-height:normal">
 							<td width="35" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">&nbsp;</td>
 							<td width="10" height="22" valign="middle" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" /></td>
-							<td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">Mot de passe : <strong>##PASSWORD##</strong></td>
+							<td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">Mot de passe : <strong>{{ password }}</strong></td>
 						</tr>
 					</table>
 				</td>
@@ -136,9 +135,7 @@
 					Bien que je sois persuad&eacute;e que cela n'arrivera pas, sachez que vous pouvez supprimer &agrave; tout moment votre compte dans la rubrique « Mon compte ».
 				</td>
 			</tr>
-			<tr style="line-height:normal">
-				{% include 'SceauBundle:Emails/Membres:block_dont_forget.html.twig' %}
-			</tr>  
+			{% include 'SceauBundle:Emails/Membres:block_dont_forget.html.twig' %}
 		</table>
 	</td>
 {% endblock %}
@@ -148,7 +145,7 @@
 		<table align="center" width="475" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
 			<tr style="line-height:normal">
 				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:10px; font-style:italic;">* FIA-NET est la premi&egrave;re source d'avis d'acheteurs de France concernant des e-commerçants.<br />
-					** Consultez la liste des sites partenaires &eacute;valu&eacute;s sur <a target="_blank"   href="http://logi118.xiti.com/go.url?xts=487123&s2=1&xtor=EPR-5-[membre_bienvenue]--[Homepage]&url=http://www.fia-net.com/" style="color:#52ae35;">www.fia-net.com</a>
+					** Consultez la liste des sites partenaires &eacute;valu&eacute;s sur <a target="_blank"   href="http://logi118.xiti.com/go.url?xts=487123&s2=1&xtor=EPR-5-[{{ xiti_template }}]--[Homepage]&url=http://www.fia-net.com/" style="color:#52ae35;">www.fia-net.com</a>
 				</td>
 			</tr>
 		</table>
