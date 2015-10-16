@@ -1,0 +1,62 @@
+{% set static_img_path = fianet_static_site ~ '/img/widget/' %}
+
+{% if blanc %}
+    {% set xiti              = 'fond_blanc' %}
+    {% set site_img          = 'https://static.fia-net.com/widgets3/blanc/' ~ site.id ~ '.png' %}
+    {% set header_img        = static_img_path ~ 'header_com.png' %}
+    {% set right_img         = static_img_path ~ 'droit_com.png' %}
+    {% set left_img          = static_img_path ~ 'gauche_com.png' %}
+    {% set footer_img        = static_img_path ~ 'footer_com.png' %}
+    {% set footer_border_img = static_img_path ~ 'footer_cadre.png' %}
+{% else %}
+    {% set xiti              = 'fond_transparent' %}
+    {% set site_img          = 'https://static.fia-net.com/widgets3/transparent/' ~ site.id ~ '.png' %}
+    {% set header_img        = static_img_path ~ 'header_com_trans.png' %}
+    {% set right_img         = static_img_path ~ 'droit_com_trans.png' %}
+    {% set left_img          = static_img_path ~ 'gauche_com_trans.png' %}
+    {% set footer_img        = static_img_path ~ 'footer_com_trans.png' %}
+    {% set footer_border_img = static_img_path ~ 'footer_cadre_trans.png' %}
+{% endif %}
+
+<table width="160" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td colspan="3" height="70" margin="0" padding="0">
+            <a href="https://logs177.xiti.com/go.url?xts=487123&xtor=AD-1-[{{ xiti }}]---[{{ site.url }}]--[{{ site.nom }}]&url=http://www.fia-net.com/annuaire/{{ site.id }}/{{ site.nom }}.html" target="_blank" border="0">
+                <img border="0" style="display:block;" src="{{ site_img }}" width="160" height="70"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" height="40">
+            <img style="display:block;" src="{{ header_img }}" width="160" height="40"/>
+        </td>
+    </tr>
+    <tr>
+        <td background="{{ left_img }}" width="5"></td>
+        <td width="150" bgcolor="#d6e6f5">
+            <div style="margin:5px ; font-family:Verdana, Geneva, sans-serif ; font-size:10px ; color:#52434a">'+comments[nbcomm].content+'{% if questionnaires|length %}&nbsp;<a style="color:#62b22f" href="https://logs177.xiti.com/go.url?xts=487123&xtor=AD-1-[{{ xiti }}]---[{{ site.url }}]--[{{ site.nom }}]&url=http://www.fia-net.com/annuaire/{{ site.id }}/{{ site.nom }}.html/r'+comments[nbcomm].repId+'#r'+comments[nbcomm].repId+'" target="_blank" title="Lire la suite">Lire la suite</a>{% endif %}<br/>
+                <div align="right" style="font-size:9px ; margin-top:5px">'+comments[nbcomm].date+'</div>
+            </div>
+        </td>
+        <td background="{{ right_img }}" width="5"></td>
+    </tr>
+    <tr>
+        <td colspan="3" height="7" margin="0" padding="0">
+            <img style="display:block;" src="{{ footer_img }}" width="160" height="7"/>
+        </td>
+    </tr>
+    <tr>
+        <td background="{{ left_img }}" width="5"></td>
+        <td width="150">
+            <div align="right" style="margin-top:5px ; font-family:Verdana, Geneva, sans-serif ; font-size:10px ;">
+                <a href="https://logs177.xiti.com/go.url?xts=487123&xtor=AD-1-[{{ xiti }}]---[{{ site.url }}]--[{{ site.nom }}]&url=http://www.fia-net.com/annuaire/{{ site.id }}/{{ site.nom }}.html" target="_blank" style="color:#62b22f">Voir les {{ questionnaires|length }} avis clients</a>
+            </div>
+        </td>
+        <td background="{{ right_img }}" width="5"></td>
+    </tr>
+    <tr>
+        <td colspan="3" height="5">
+            <img style="display:block;" src="{{ footer_border_img }}" width="160" height="5"/>
+        </td>
+    </tr>
+</table>
