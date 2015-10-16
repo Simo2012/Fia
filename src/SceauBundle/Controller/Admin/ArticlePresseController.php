@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use SceauBundle\Entity\ArticlePresse;
-use SceauBundle\Form\ArticlePresseType;
+use SceauBundle\Form\Type\Admin\ArticlePresseType;
 
 /**
  * ArticlePresse controller.
@@ -77,7 +77,6 @@ class ArticlePresseController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
     }
@@ -165,7 +164,6 @@ class ArticlePresseController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
@@ -229,7 +227,8 @@ class ArticlePresseController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            $session->getFlashBag()->add('info', 'Article bien modifié');
+            $title = $entity->getTitle();
+            $session->getFlashBag()->add('delete', "Article $title bien supprimé");
 
             return $this->redirect($this->generateUrl('articles'));
         }

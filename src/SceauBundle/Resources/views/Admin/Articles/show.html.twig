@@ -22,18 +22,18 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <h1>Article presse</h1>
+    <h1>Article de presse</h1>
     <div class="row">
 
         <div class="col-lg-6">
             <div class="portlet portlet-default">
                 <div class="portlet-heading">
                     <div class="portlet-title">
-                        <h4>Titre : {{ entity.title }} <em>{{  entity.date|date('m/d/Y') }}</em></h4>
+                        <h4>{{ entity.title }}</h4>
                     </div>
                     <div class="portlet-widgets">
                         {% if entity.published %}
-                            <span class="label green">Label</span>
+                            <span class="label green">Publié</span>
                         {% else %}
                             <span class="label orange">Non publié</span>
                         {% endif %}
@@ -49,16 +49,18 @@
                 </div>
                 <div class="portlet-footer">
                     <p>Source : {{ entity.source }}  <em>{{ entity.urlSource }}</em></p>
+                    <p>Date de publication: {{  entity.date|date('d/m/Y') }}</p>
                 </div>
             </div>
         </div>
+
+                <p><a class = "btn btn-green btn-md" href="{{ path('articles') }}">Retour </a></p>
+                <p><a class = "btn btn-orange btn-md" href="{{ path('article_edit', { 'id': entity.id }) }}">Modifier </a></p>
+                {{ form(delete_form) }}
+
     </div>
 </div>
 
-        <p>
-            <a class = "btn btn-green btn-md" href="{{ path('articles') }}">Retour </a>
-            <a class = "btn btn-orange btn-md" href="{{ path('article_edit', { 'id': entity.id }) }}">Modifier </a>
-            {{ form(delete_form) }}
-        </p>
+
 </ul>
 {% endblock %}
