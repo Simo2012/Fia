@@ -15,6 +15,15 @@
 {% endblock %}
 
 {% block extranet_body %}
+        <div class="block-message">
+        {% for messageSucces in app.session.flashbag.get('droit_de_reponse_succes') %}
+            <p class="succes">{{ messageSucces }}</p>
+        {% endfor %}
+        {% for messageErreur in app.session.flashbag.get('droit_de_reponse_erreur') %}
+            <p class="erreur">{{ messageErreur }}</p>
+        {% endfor %}
+        </div>    
+    
         {# ToDo : il faudra gérer l'affichage prénom+nom ou adresse e-mail selon le statut du membre - à voir dans le lot lié aux membres #}
         <h1>{% trans %}commun_avis_de{% endtrans %} {% if questionnaire1.membre.prenom is not empty %}{{ questionnaire1.membre.prenom|capitalize }}{% endif %} {% if questionnaire1.membre.nom is not empty %}{{ questionnaire1.membre.nom |upper }}{% endif %}
             <span>
@@ -112,7 +121,7 @@
                 maxWidth: 550,
                 position: 'left',
                 offsetX: 0
-            });
+            });      
         });
     </script>
 {% endblock %}

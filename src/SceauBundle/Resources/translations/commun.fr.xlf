@@ -200,6 +200,14 @@
                 <source>commun_supprimer</source>
                 <target>Supprimer</target>
             </trans-unit>
+            <trans-unit id="46">
+                <source>commun_repondre</source>
+                <target>Répondre</target>
+            </trans-unit>
+            <trans-unit id="47">
+                <source>commun_modifier</source>
+                <target>Modifier</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
