@@ -1,0 +1,15 @@
+{% extends 'SceauBundle:Emails/Litiges/Marchand:base_marchand.html.twig' %}
+
+{% block subject %}
+	Un expert FIA-NET est intervenu sur le litige {{ litige.id }}
+{% endblock %}
+
+{% block body %}
+	Madame&sbquo; Monsieur&sbquo;<br /><br />
+	Nous revenons vers vous au sujet du litige n&deg;{{ litige.id }}.<br /><br />
+	Nous vous informons que l&#39;expert FIA-NET est intervenu sur le litige n&deg;{{ litige.id }} et qu'il a demand&eacute; &agrave; l&#39;internaute de fournir des informations compl&eacute;mentaires justifiant sa position.<br /><br />
+	Il est donc de la responsabilit&eacute; de l&#39;internaute de fournir ces informations : vous pouvez toutefois consulter la r&eacute;ponse de l&#39;expert FIA-NET dans <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=7&xtor=EPR-5-[litige_marchand_questioninternaute]--[Extranet_connexion]&url=https://www.fia-net.com/__extranet/">votre interface d&eacute;di&eacute;e</a>.<br /><br />
+	Nous vous tiendrons au courant de la prochaine mise &agrave; jour de ce dossier.<br /><br />
+	Nous vous rappelons ci-dessous tous les &eacute;l&eacute;ments en notre possession concernant ce litige :<br /><br />
+	{{ parent() }}
+{% endblock %}

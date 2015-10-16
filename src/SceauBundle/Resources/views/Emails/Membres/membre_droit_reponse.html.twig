@@ -1,0 +1,34 @@
+{% extends 'SceauBundle:Emails\Membres:base_membre.html.twig' %}
+
+{% block subject %}{{ 'l\'e-commerçant vous r&Eacute;pond' }}{% endblock %}
+
+{% block body %}
+	<td colspan="4" align="left" style="line-height:normal">
+		<table width="480" align="center" border="0" cellspacing="0" cellpadding="0"  style="line-height:normal">
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;"><strong>{{ prenom }},</strong><br />
+					<br />Vous avez r&eacute;pondu &agrave; un questionnaire de satisfaction suite &agrave; votre achat du {{ date_achat }} sur le site {{ nom_marchand }} et je vous en remercie.<br /><br />
+					Comme vous le savez, votre avis est important, aussi bien pour les futurs acheteurs que pour les e-commerçants.<br /><br />
+					C'est d'ailleurs le cas de {{ nom_marchand }} qui a souhait&eacute; vous r&eacute;pondre !
+				<br />&nbsp;</td>
+			</tr>
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+					<strong>D&eacute;couvrez sa r&eacute;ponse sans plus attendre !!</strong><br />
+					<br /><table align="center" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
+						<tr style="line-height:normal">
+							<td align="center" style="line-height:normal"><a target="_blank"  href="http://logi118.xiti.com/go.url?xts=487123&s2=3&xtor=EPR-5-[{{ xiti_template }}]--[Fiche_marchand]&url={{ url_marchand }}" >
+								<img src="http://www.fia-net.com/img/emails/btn_marchand.png" width="195" height="24" alt="Voir la r&eacute;ponse du marchand" border="0" /></a>
+							</td>
+						</tr>
+						<tr style="line-height:normal">
+							<td height="30" align="center" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;"><a target="_blank"  href="http://logi118.xiti.com/go.url?xts=487123&s2=3&xtor=EPR-5-[{{ xiti_template }}]--[Fiche_marchand]&url={{ url_marchand }}"  style="line-height:normal; font-weight:bold; color:#52ae35;">{{ url_marchand }}</a>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			{% include 'SceauBundle:Emails/Membres:block_dont_forget.html.twig' %}
+		</table>
+	</td>
+{% endblock %}
