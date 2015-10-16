@@ -5,12 +5,12 @@ namespace SceauBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MoyenPaiment
+ * MoyenPaiement
  *
- * @ORM\Table(name="MoyenPaiment")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\MoyenPaimentRepository")
+ * @ORM\Table(name="MoyenPaiement")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\MoyenPaiementRepository")
  */
-class MoyenPaiment
+class MoyenPaiement
 {
     /**
      * @var integer

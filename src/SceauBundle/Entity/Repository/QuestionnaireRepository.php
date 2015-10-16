@@ -1,12 +1,16 @@
 <?php
 
-namespace SceauBundle\Entity;
+namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use SceauBundle\Cache\Cache;
 use Gedmo\Translatable\TranslatableListener;
+use SceauBundle\Entity\Site;
+use SceauBundle\Entity\QuestionnaireType;
+use SceauBundle\Entity\ReponseStatut;
+use SceauBundle\Entity\QuestionStatut;
 
 class QuestionnaireRepository extends EntityRepository
 {
@@ -707,5 +711,20 @@ class QuestionnaireRepository extends EntityRepository
             ->andWhere('q.actif = true');
 
         return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getScalarResult();
+    }
+    
+    /**
+     * Recuperer Le membre de chaque questionnaire 
+     * 
+     **/
+    public function getMembre($lpQuestionnaireId)
+    {
+        $loQuery =  $this->createQueryBuilder('q')
+                     ->select('q, m')
+                     ->leftJoin('q.membre', 'm')
+                     ->where('q.id = :questionnaireid')
+                     ->setParameter('questionnaireid', $lpQuestionnaireId);
+                 
+        return $loQuery->getQuery()->getScalarResult();
     }
 }
