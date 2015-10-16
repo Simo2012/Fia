@@ -14,5 +14,17 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
  */
 class ArticlePresseRepository extends EntityRepository
 {
+    public function getAllArticlePresse()
+    {
+        $queryBuilder = $this->createQueryBuilder('a');
+        $queryBuilder->where('a.published = true')
+                     ->orderBy('a.date', 'DESC')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+
+
 
 }

@@ -1,0 +1,27 @@
+{% extends 'SceauBundle:Site:layout.html.twig' %}
+{% block CONTENT %}
+    {% include "SceauBundle:Site/Common:menu.html.twig" %}
+
+    <div class="filariane-div">
+        <div class="filariane">
+            Vous êtes ici :
+            <a href="{{ path('site_home') }}">Accueil</a>
+            <span class="filariane-separation"> &gt;</span><span class="filariane-page-actuelle">Ils parlent de nous</span>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="bloc_faq">
+        <h1 class="titre">Ils parlent de nous</h1>
+            {% for articlePressesByMonth in articlePressesByMonths %}
+                <h2 class="mini-titre">{{ articlePressesByMonth.date|localizeddate('none', 'none', null, null, 'MMMM yyyy') }}</h2>
+                {% for articlePresse in articlePressesByMonth.articles %}
+                    <div class="presse-bloc">
+                        <p class="presse-titre">{{ articlePresse.title }}</p>
+                        <p class="presse-citation"><em>{{ articlePresse.content }}</em></p>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
