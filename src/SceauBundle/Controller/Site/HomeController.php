@@ -103,6 +103,7 @@ class HomeController extends Controller
 
         $articlePressesByMonths = array();
 
+        //Group by month
         foreach ($articlePresses as $articlePresse){
             $articlePressesDate = $articlePresse->getDate()->format('m-Y');
             if (isset($articlePressesByMonths[$articlePressesDate])) {
@@ -113,11 +114,6 @@ class HomeController extends Controller
                 $articlePressesByMonths[$articlePressesDate]['date'] = $articlePresse->getDate()->format('d-m-Y');
             }
         }
-
-        /*echo '<pre>';
-        \Doctrine\Common\Util\Debug::dump($articlePressesByMonths);
-        echo '</pre>';
-        die;*/
 
         return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths));
     }
