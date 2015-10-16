@@ -1,12 +1,12 @@
 {% extends 'SceauBundle:Emails/Litiges/Internaute:base_internaute.html.twig' %}
 
 {% block subject %}
-	Cl&ocirc;ture automatique de votre litige #LITIGEID#
+	Cl&ocirc;ture automatique de votre litige {{ litige.id }}
 {% endblock %}
 
 {% block body %}
-	#MEMBRE#&sbquo;<br /><br />
-	Nous vous informons de la cl&ocirc;ture du litige n&deg;#LITIGEID#.<br /><br />
+	{{ membre }}&sbquo;<br /><br />
+	Nous vous informons de la cl&ocirc;ture du litige n&deg;{{ litige.id }}.<br /><br />
 	En absence de réponse de votre part à nos courriers éléctroniques, nous consid&eacute;rons celui-ci comme r&eacute;solu.<br /><br />
 	Plus aucune action le concernant n&#39;est possible.
 {% endblock %}

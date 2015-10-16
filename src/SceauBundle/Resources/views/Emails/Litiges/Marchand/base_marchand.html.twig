@@ -14,7 +14,18 @@
         </tr>
         <tr>
             <td style="padding:15px; color:#57484d ; text-align:justify; font-family:tahoma, verdana, arial; font-size:11px;">
-               {% block body %}{% endblock %}
+               {% block body %}
+                   <table cellpadding="2" cellspacing="0" style="font-size:11px;color:#57484d;">
+                       <tr><td  width="125">R&eacute;f&eacute;rence du litige : </td><td>{{ ligite.id }}</td></tr>
+                       <tr><td>Type de litige : </td><td>{{ litige.typologie }}</td></tr>
+                       <tr><td>Date d&#39;ouverture : </td><td>{{ litige.dateouverture }}</td></tr>
+                       <tr><td>Internaute : </td><td>{{ litige.membre }}</td></tr>
+                       <tr><td>Adresse e-mail : </td><td>{{ litige.mailmembre }}</td></tr>
+                       <tr><td>N&deg; de commande : </td><td>{{ litige.numcommande }}</td></tr>
+                       <tr><td>Montant : </td><td>{{ litige.mtcommande }}</td></tr>
+                       <tr><td>Description : </td><td>{{ litige.litigedesc }}</td></tr>
+                   </table>
+               {% endblock %}
             </td>
         </tr>
         <tr>

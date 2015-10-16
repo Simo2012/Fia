@@ -1,11 +1,11 @@
 {% extends 'SceauBundle:Emails/Litiges/Internaute:base_internaute.html.twig' %}
 
 {% block subject %}
-	Votre litige #LITIGEID#
+	Votre litige {{ litige.id }}
 {% endblock %}
 
 {% block body %}
-	#MEMBRE#&sbquo;<br /><br />
+	{{ membre }}&sbquo;<br /><br />
 	Vous n&#39;avez pas mis &agrave; jour votre dossier alors que diff&eacute;rentes actions pour le poursuivre ou le clore vous &eacute;taient propos&eacute;es.<br /><br />
 	Nous attirons votre attention sur le fait que si vous ne mettez pas &agrave; jour votre dossier dans les 3 jours qui suivent l&#39;envoi de ce courrier &eacute;lectronique&sbquo; nous estimerons que celui-ci est r&eacute;gl&eacute;.<br />
 	Il sera donc clos et plus aucune action le concernant ne sera possible.<br /><br />

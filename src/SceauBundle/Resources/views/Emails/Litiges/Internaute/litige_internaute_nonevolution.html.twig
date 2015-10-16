@@ -1,11 +1,11 @@
 {% extends 'SceauBundle:Emails/Litiges/Internaute:base_internaute.html.twig' %}
 
 {% block subject %}
-	Votre litige #LITIGEID# est statique depuis 30 jours
+	Votre litige {{ litige.id }} est statique depuis 30 jours
 {% endblock %}
 
 {% block body %}
-	#MEMBRE#&sbquo;<br /><br />
+	{{ membre }}&sbquo;<br /><br />
 	Nous vous informons que votre dossier n&#39;a pas &eacute;volu&eacute; (nouvelle &eacute;tape) depuis 30 jours ou plus.<br /><br />
 	Pour pouvoir suivre les performances de r&eacute;solution des marchands ou vous apporter une aide compl&eacute;mentaire&sbquo; nous vous invitons &agrave; venir vous connecter sur votre <a target="_blank"  style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=5&xtor=EPR-5-[litige_internaute_nonevolution]--[Espace_membre]&url=https://www.fia-net.com/membre/">espace membre</a> et nous indiquer :<br />
 	- si votre litige a &eacute;t&eacute; r&eacute;solu<br />
