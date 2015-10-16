@@ -93,15 +93,33 @@ class HomeController extends Controller
     /**
      * List all published Articles.
      *
-     * @Route("/presse", name="presse")
+     * @Route("/presse", name="site_presse")
      * @Method("GET")
      */
     public function presseAction(Request $request)
     {
         $articlePresseRepo = $this->get('sceau.repository.article.presse');
-        $articlePresses = $articlePresseRepo->findBy(array(), array('date' => 'ASC'));
+        $articlePresses = $articlePresseRepo->getAllArticlePresse();
 
-        return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePresses' => $articlePresses));
+        $articlePressesByMonths = array();
+
+        foreach ($articlePresses as $articlePresse){
+            $articlePressesDate = $articlePresse->getDate()->format('m-Y');
+            if (isset($articlePressesByMonths[$articlePressesDate])) {
+                $articlePressesByMonths[$articlePressesDate]['articles'][] = $articlePresse;
+                $articlePressesByMonths[$articlePressesDate]['date'] = $articlePresse->getDate()->format('d-m-Y');
+            } else {
+                $articlePressesByMonths[$articlePressesDate]['articles'] = array($articlePresse);
+                $articlePressesByMonths[$articlePressesDate]['date'] = $articlePresse->getDate()->format('d-m-Y');
+            }
+        }
+
+        /*echo '<pre>';
+        \Doctrine\Common\Util\Debug::dump($articlePressesByMonths);
+        echo '</pre>';
+        die;*/
+
+        return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths));
     }
 
 }

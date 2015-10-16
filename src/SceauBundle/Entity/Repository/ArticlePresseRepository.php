@@ -3,7 +3,6 @@
 namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
 
 
 /**
@@ -21,8 +20,7 @@ class ArticlePresseRepository extends EntityRepository
                      ->orderBy('a.date', 'DESC')
         ;
 
-        return $adapter = new DoctrineORMAdapter($queryBuilder);
-
+        return $queryBuilder->getQuery()->getResult();
     }
 
 
