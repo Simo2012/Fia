@@ -7,45 +7,44 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use SceauBundle\Entity\ArticlePresse;
-use SceauBundle\Form\Type\Admin\ArticlePresseType;
+use SceauBundle\Entity\Actualite;
+use SceauBundle\Form\Type\Admin\ActualiteType;
 
 /**
- * ArticlePresse controller.
+ * Actualite controller.
  *
- * @Route("/articles")
+ * @Route("/actualites")
  */
-class ArticlePresseController extends Controller
+class ActualiteController extends Controller
 {
 
     /**
-     * List all published Articles.
+     * Lists all Actualite entities.
      *
-     * @Route("/", name="articles")
+     * @Route("/", name="actualites")
      * @Method("GET")
-     * @Template("SceauBundle:Admin/Articles:index.html.twig")
+     * @Template("SceauBundle:Admin/Actualite:index.html.twig")
      */
     public function indexAction()
     {
-        $entityRepo = $this->get('sceau.repository.article.presse');
-        $entities = $entityRepo->findBy(array(), array('date' => 'ASC'));
+        $entityRepo = $this->get('sceau.repository.actualite');
+        $entities = $entityRepo->findAll();
 
         return array(
-            'entities' => $entities
+            'entities' => $entities,
         );
     }
-
     /**
-     * Creates a new ArticlePresse entity.
+     * Creates a new Actualite entity.
      *
-     * @Route("/", name="article_create")
+     * @Route("/", name="actualites_create")
      * @Method("POST")
-     * @Template("SceauBundle:Admin/Articles:new.html.twig")
+     * @Template("SceauBundle:Admin/Actualite:new.html.twig")
      */
     public function createAction(Request $request)
     {
         $session = $request->getSession();
-        $entity = new ArticlePresse();
+        $entity = new Actualite();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -55,9 +54,9 @@ class ArticlePresseController extends Controller
             $em->flush();
 
             $title = $entity->getTitle();
-            $session->getFlashBag()->add('info', "Article  $title bien ajouté");
+            $session->getFlashBag()->add('info', "Actualité  $title bien ajoutée");
 
-            return $this->redirect($this->generateUrl('articles'));
+            return $this->redirect($this->generateUrl('actualites'));
         }
 
         return array(
@@ -67,16 +66,16 @@ class ArticlePresseController extends Controller
     }
 
     /**
-     * Creates a form to create a ArticlePresse entity.
+     * Creates a form to create a Actualite entity.
      *
-     * @param ArticlePresse $entity The entity
+     * @param Actualite $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(ArticlePresse $entity)
+    private function createCreateForm(Actualite $entity)
     {
-        $form = $this->createForm(new ArticlePresseType(), $entity, array(
-            'action' => $this->generateUrl('article_create'),
+        $form = $this->createForm(new ActualiteType(), $entity, array(
+            'action' => $this->generateUrl('actualites_create'),
             'method' => 'POST',
         ));
 
@@ -85,17 +84,16 @@ class ArticlePresseController extends Controller
     }
 
     /**
-     * Displays a form to create a new ArticlePresse entity.
+     * Displays a form to create a new Actualite entity.
      *
-     * @Route("/new", name="article_new")
+     * @Route("/new", name="actualites_new")
      * @Method("GET")
-     * @Template("SceauBundle:Admin/Articles:new.html.twig")
+     * @Template()
      */
-    public function newAction(Request $request)
+    public function newAction()
     {
-        $entity = new ArticlePresse();
+        $entity = new Actualite();
         $form   = $this->createCreateForm($entity);
-
 
         return array(
             'entity' => $entity,
@@ -104,19 +102,20 @@ class ArticlePresseController extends Controller
     }
 
     /**
-     * Finds and displays a ArticlePresse entity.
+     * Finds and displays a Actualite entity.
      *
-     * @Route("/{id}", name="article_show")
+     * @Route("/{id}", name="actualites_show")
      * @Method("GET")
-     * @Template("SceauBundle:Admin/Articles:show.html.twig")
+     * @Template()
      */
     public function showAction($id)
     {
-        $articlePresseRepo = $this->get('sceau.repository.article.presse');
-        $entity = $articlePresseRepo->find($id);
+        $entityRepo = $this->get('sceau.repository.actualite');
+
+        $entity = $entityRepo->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ArticlePresse entity.');
+            throw $this->createNotFoundException('Unable to find Actualite entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -128,19 +127,20 @@ class ArticlePresseController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing ArticlePresse entity.
+     * Displays a form to edit an existing Actualite entity.
      *
-     * @Route("/{id}/edit", name="article_edit")
+     * @Route("/{id}/edit", name="actualites_edit")
      * @Method("GET")
-     * @Template("SceauBundle:Admin/Articles:edit.html.twig")
+     * @Template()
      */
     public function editAction($id)
     {
-        $articlePresseRepo = $this->get('sceau.repository.article.presse');
-        $entity = $articlePresseRepo->find($id);
+        $entityRepo = $this->get('sceau.repository.actualite');
+
+        $entity = $entityRepo->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ArticlePresse entity.');
+            throw $this->createNotFoundException('Unable to find Actualite entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -154,16 +154,16 @@ class ArticlePresseController extends Controller
     }
 
     /**
-    * Creates a form to edit a ArticlePresse entity.
+    * Creates a form to edit a Actualite entity.
     *
-    * @param ArticlePresse $entity The entity
+    * @param Actualite $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(ArticlePresse $entity)
+    private function createEditForm(Actualite $entity)
     {
-        $form = $this->createForm(new ArticlePresseType(), $entity, array(
-            'action' => $this->generateUrl('article_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new ActualiteType(), $entity, array(
+            'action' => $this->generateUrl('actualites_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -171,21 +171,22 @@ class ArticlePresseController extends Controller
         return $form;
     }
     /**
-     * Edits an existing ArticlePresse entity.
+     * Edits an existing Actualite entity.
      *
-     * @Route("/{id}", name="article_update")
+     * @Route("/{id}", name="actualites_update")
      * @Method("PUT")
-     * @Template("SceauBundle:ArticlePresse:edit.html.twig")
+     * @Template("SceauBundle:Admin/Actualite:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
-        $articlePresseRepo = $this->get('sceau.repository.article.presse');
-        $entity = $articlePresseRepo->find($id);
+        $entityRepo = $this->get('sceau.repository.actualite');
+
+        $entity = $entityRepo->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ArticlePresse entity.');
+            throw $this->createNotFoundException('Unable to find Actualite entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -196,9 +197,9 @@ class ArticlePresseController extends Controller
             $em->flush();
 
             $title = $entity->getTitle();
-            $session->getFlashBag()->add('info', "Article $title bien modifié");
+            $session->getFlashBag()->add('info', "Actualité $title bien modifiée");
 
-            return $this->redirect($this->generateUrl('articles'));
+            return $this->redirect($this->generateUrl('actualites'));
         }
 
         return array(
@@ -208,11 +209,11 @@ class ArticlePresseController extends Controller
         );
     }
     /**
-     * Deletes a ArticlePresse entity.
+     * Deletes a Actualite entity.
      *
-     * @Route("/{id}", name="article_delete")
+     * @Route("/{id}", name="actualites_delete")
      * @Method("DELETE")
-     * @Template("SceauBundle:Admin/Articles:delete.html.twig")
+     * @Template("SceauBundle:Admin/Actualite:delete.html.twig")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -222,29 +223,28 @@ class ArticlePresseController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $articlePresseRepo = $this->get('sceau.repository.article.presse');
-            $entity = $articlePresseRepo->find($id);
+            $entityRepo = $this->get('sceau.repository.actualite');
+            $entity = $entityRepo->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ArticlePresse entity.');
+                throw $this->createNotFoundException('Unable to find Actualité entity.');
             }
 
             $em->remove($entity);
             $em->flush();
             $title = $entity->getTitle();
-            $session->getFlashBag()->add('delete', "Article $title bien supprimé");
+            $session->getFlashBag()->add('delete', "Actualité $title bien supprimée");
 
-            return $this->redirect($this->generateUrl('articles'));
+            return $this->redirect($this->generateUrl('actualites'));
         }
 
         return array(
             'delete_form' => $form->createView(),
         );
-
     }
 
     /**
-     * Creates a form to delete a ArticlePresse entity by id.
+     * Creates a form to delete a Actualite entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -253,7 +253,7 @@ class ArticlePresseController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('article_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('actualites_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Supprimer', 'attr' => array('class' => 'btn btn-red')))
             ->getForm()

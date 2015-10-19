@@ -21,4 +21,5 @@ SceauBundle\Entity\Actualite:
             type: datetimetz
         active:
             type: boolean
+            nullable: true
     lifecycleCallbacks: {  }
