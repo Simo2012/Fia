@@ -13,3 +13,4 @@ parameters:
     locale: fr
     secret: RobertTenaif
     logger_nb_max_fichier: 30
+    fianet_static_site: "https://static.fia-net.com/site_fianet"
