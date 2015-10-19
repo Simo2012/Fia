@@ -24,8 +24,8 @@
                 <div class="site-prem">
                     {{ include('SceauBundle:Site/Home:preniumwebsite.html.twig', {'categories': categories}) }}
                 </div>
-                <div class='infos-HP'>
-                    {% include "SceauBundle:Site/Home:news.html.twig" %}
+                <div class='newsletter-inscrip'>
+                    {{ include('SceauBundle:Site/Home:news.html.twig', {'newsletters': newsletters}) }}
                 </div>
                 <div class="annuaire-main"> 
                     {{ include('SceauBundle:Site/Category:listcategory.html.twig', {'siteprenium': siteprenium}) }}

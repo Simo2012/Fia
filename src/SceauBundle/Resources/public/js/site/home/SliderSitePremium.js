@@ -1,3 +1,10 @@
 $(document).ready(function() {
-    $("#bloc_sitepremiumrandom > ul").tabs({fx:{opacity: "toggle"}}).tabs("rotate", 10, true);
+    $('#bloc_sitepremiumrandom > ul').tabs('#bloc_sitepremiumrandom > div > div', {
+        effect: 'fade',
+        rotate: true
+    }).slideshow({
+        autoplay: true,
+        interval: 5000
+    })
+    
 });

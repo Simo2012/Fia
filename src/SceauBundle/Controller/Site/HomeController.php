@@ -46,13 +46,17 @@ class HomeController extends Controller
                     //Recuperer les categories disponibles
            $loCategories = $loManager->getRepository('SceauBundle:Categorie')->getActifCategories();
            /** Envoyer vars la page Home **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories,'siteprenium' => $lpPreniumSite ,'menu' => 'home'));
+                    //Recuperer la dérniére newsletter
+           $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
+           
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories,
+               'siteprenium' => $lpPreniumSite ,'menu' => 'home', 'newsletters' => $loNewletters));
        } elseif ($loRouteName === 'site_operation_detail') {
            /** Envoyer vers la page fonctionnement **/
            return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'operation'));
        } elseif ($loRouteName === 'site_operation_news') {
                     //récuperer les 3 derniére newsletter
-           $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters();
+           $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(3);
            /** Envoyer vers la page NewsLetter **/
            return $this->render("SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'newsletter'));
        } elseif ($loRouteName === 'site_home_mobile') {
@@ -89,7 +93,7 @@ class HomeController extends Controller
             } else {
                 $loUser->setNewsletter(true);
                 $loManager->flush();
-                $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters();
+                $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(3);
                 /** Envoyer vers la page NewsLetter **/
                 $this->get('session')->set('confirmation',$loNewletters);
                 return $this->render("SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'newsletter', 'user' => $loUser));

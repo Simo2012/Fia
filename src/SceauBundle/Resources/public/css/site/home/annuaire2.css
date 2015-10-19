@@ -78,6 +78,14 @@ div.btn-1-main {
 	padding-bottom: 2px\9;
 	background: url(../../../images/site/common/btn_1.png) no-repeat;
 }
+.btn-home-regiter {
+	font-size: 10px;
+	background: url(../../../images/site/common/btn_1.png) no-repeat;
+	text-transform: uppercase;
+	text-decoration: none;
+        color: #ffffff;
+        border:0px;
+}
 div.btn-1-main-disabled {
 	float: left;
 	height: 17px;
@@ -123,7 +131,6 @@ div.btn-1-end-disabled {
     border-radius: 10px;
     padding: 5px;
     margin-top: 10px;
-    margin-left: 15px;
 }
 
 .title-avatar {
@@ -609,8 +616,7 @@ span.site-name a, span.site-cat a, .site-prem-pres a {
 	float: right;
 	width: 220px;
 	height: 295px;
-	background-image: url('../../images/site/homenewsletter_back.png');
-	background-repeat: no-repeat;
+	background: url(../../../images/site/home/newsletter_back.png) no-repeat;
 }
 .newsletter-inscrip img {
 	margin-left: 35px;
@@ -1034,7 +1040,7 @@ ul.popup_AFNOR_list li {
 	margin-top: 8px;
 	margin-right: 25px;
 }
-#bloc_sitepremiumrandom ul.ui-tabs-nav li.ui-tabs-selected a {
+#bloc_sitepremiumrandom ul.ui-tabs-nav li a.current {
 	display: block;
 	width: 185px;
 	height: 61px;
@@ -1043,7 +1049,7 @@ ul.popup_AFNOR_list li {
 	background: url(../../../images/site/home/site_prem_back_on.png) no-repeat;
 	background-position: 10px;
 }
-#bloc_sitepremiumrandom li.ui-tabs-nav-item-last.ui-tabs-selected a {
+#bloc_sitepremiumrandom li.ui-tabs-nav-item-last a.current {
 	display: block;
 	width: 185px;
 	height: 61px;
@@ -3070,12 +3076,32 @@ button.go em.type {
 }
 #inscription-formulaire div {
 	margin-top: 10px;
+        float: left;
 }
-#inscription-formulaire label {
-	margin-right: 40px;
+
+#site_member_register_civilite {
+    float: left;
+}
+#site_member_register_civilite label {
         margin-bottom: 15px;
 	width: 150px;
 	margin-top: 15px;
+        width: 50px;
+        float: left;
+}
+
+#inscription-formulaire label {
+	display: block;
+        width: 150px;
+        float: left;
+        margin-top: 15px;
+}
+#site_member_register_civilite input[type=radio] {
+	margin-left: 10px;
+        float: left;
+}
+.g-recaptcha {
+ float : left;   
 }
 #inscription-formulaire input {
 	margin-top: 14px;

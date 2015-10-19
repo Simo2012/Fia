@@ -21,24 +21,19 @@
         
         {% block JAVASCRIPT %}
             {% javascripts
-                '//code.jquery.com/jquery-1.10.2.js'
-                '//code.jquery.com/ui/1.11.4/jquery-ui.js'
-                'bundles/sceau/js/site/common/commun.js'
-                'bundles/sceau/js/site/home/SliderSitePremium.js'
                 'bundles/sceau/js/site/home/annuaire.js'
                 'bundles/sceau/js/site/home/mdr.js'
+                'bundles/sceau/js/site/common/jquery-1.4.2.min.js'
                 'bundles/sceau/js/site/home/XHRConnection.js'
                 'bundles/sceau/js/site/home/popup.js'
                 'bundles/sceau/js/site/home/membre.js'
-                'http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js'
-               
-                
-            %}
+                'bundles/sceau/js/site/home/SliderSitePremium.js'
+                'bundles/sceau/js/site/common/commun.js'
+                'bundles/sceau/js/site/common/jquery-ui.js'
+                'bundles/sceau/js/site/common/jquery-tools.js'
+                'bundles/sceau/js/site/home/avatar.js' %}
                 <script src="{{ asset_url }}" type="text/javascript"></script>
-                 <script type="text/javascript">
-                     $(document).ready(function() {
-                        $("#bloc_sitepremiumrandom > ul").tabs({fx:{opacity: "toggle"}}).tabs("rotate", 10, true);
-                    });
+                <script type="text/javascript">
                     $(function() {
                         $("#newsletter-success-popup").overlay({
                             effect: 'default',
@@ -55,9 +50,7 @@
                         });
                     });
                     
-        
                 </script>
-               
                
             {% endjavascripts %}  
         {% endblock %}
