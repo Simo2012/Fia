@@ -20,7 +20,6 @@ class ArticlePresseType extends AbstractType
             ))
             ->add('date', 'date', array(
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd',
                 'label' => 'Date de publication',
                 'attr' => array('class' => 'datepicker')
             ))
