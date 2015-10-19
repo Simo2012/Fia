@@ -2,6 +2,15 @@
 
 {% block CONTENT -%}
 
+
+    {# On affiche tous les messages flash dont le nom est « info » #}
+    {% for message in app.session.flashbag.get('info') %}
+        <div class="alert alert-success">
+            <p> Confirmation: {{ message }}</p>
+        </div>
+    {% endfor %}
+
+
 <div class="page-content page-content-ease-in">
     <div class="row">
         <div class="col-lg-12">
@@ -39,6 +48,7 @@
                         </div>
                         <div id="basicFormExample" class="panel-collapse collapse in">
                             <div class="portlet-body">
+                                {% form_theme edit_form 'bootstrap_3_horizontal_layout.html.twig' %}
                                 {{ form(edit_form) }}
                             </div>
                         </div>

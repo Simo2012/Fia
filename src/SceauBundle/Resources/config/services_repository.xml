@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="sceau.entity.article.presse">SceauBundle\Entity\ArticlePresse</parameter>
+        <parameter key="sceau.entity.envoi.email">SceauBundle\Entity\EnvoiEmail</parameter>
     </parameters>
 
     <services>
@@ -16,7 +17,12 @@
             factory-method="getRepository">
             <argument>%sceau.entity.article.presse%</argument>
         </service>
-
+        <service id="sceau.repository.envoi.email"
+                 class="SceauBundle\Entity\Repository\EnvoiEmailRepository"
+                 factory-service="doctrine.orm.default_entity_manager"
+                 factory-method="getRepository">
+            <argument>%sceau.entity.envoi.email%</argument>
+        </service>
     </services>
 
 </container>

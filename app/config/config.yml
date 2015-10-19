@@ -122,7 +122,7 @@ lsw_memcache:
     pools:
         default:
             servers:
-              - { host: %memcache_host%, tcp_port: %memcache_port% }
+              - { host: 10.199.54.106, tcp_port: 11211 }
     doctrine:
         metadata_cache:
             pool: default

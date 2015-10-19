@@ -1,6 +1,6 @@
 <?php
 
-namespace SceauBundle\Form;
+namespace SceauBundle\Form\Type\Admin;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,24 +15,36 @@ class ArticlePresseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', null, array(
-                'attr' => array('class' => 'form-control')
+            ->add('title', 'text', array(
+                'label' => 'Titre'
             ))
-            ->add('date')
-            ->add('content', null, array(
-                'attr' => array('class' => 'form-control', 'id' => 'datepickerId')
+            ->add('date', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'label' => 'Date de publication',
+                'attr' => array('class' => 'datepicker')
             ))
-            ->add('source', null, array(
+            ->add('content', 'textarea', array(
+                'label' => 'Contenu'
+            ))
+            ->add('source', 'text', array(
                 'required' => false,
-                'attr' => array('class' => 'form-control')
+                'label' => 'Source'
             ))
-            ->add('urlSource', null, array(
+            ->add('urlSource', 'text', array(
                 'required' => false,
-                'attr' => array('class' => 'form-control')
+                'label' => 'URL'
             ))
-            ->add('published', null, array(
-                'required' => false
+            ->add('published', 'checkbox', array(
+                'required' => false,
+                'label' => 'Publié'
             ))
+            ->add('save', 'submit', array(
+                'attr' => array('class' => 'submit'),
+                'label' => "Enregistrer",
+                'attr' => array('class' => 'btn btn-green')
+            ))
+
         ;
     }
     

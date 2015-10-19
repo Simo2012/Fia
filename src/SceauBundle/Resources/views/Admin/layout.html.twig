@@ -20,6 +20,19 @@
                 </div>
             </div>
             {% include 'SceauBundle:Admin/Common:js-global.html.twig' %}
+
+        <script>
+
+            $(document).ready(function() {
+
+
+                $('.datepicker').datepicker({
+                    format: 'yyyy-mm-dd'
+                });
+
+            });
+
+        </script>
         </body>
     </html>
     

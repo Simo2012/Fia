@@ -3,6 +3,7 @@
 namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
 
 
 /**

@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use SceauBundle\Entity\ArticlePresse;
-use SceauBundle\Form\ArticlePresseType;
+use SceauBundle\Form\Type\Admin\ArticlePresseType;
 
 /**
  * ArticlePresse controller.
@@ -37,10 +37,11 @@ class ArticlePresseController extends Controller
      *
      * @Route("/", name="article_create")
      * @Method("POST")
-     * @Template("SceauBundle:ArticlePresse:new.html.twig")
+     * @Template("SceauBundle:Admin/Articles:new.html.twig")
      */
     public function createAction(Request $request)
     {
+        $session = $request->getSession();
         $entity = new ArticlePresse();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -50,7 +51,10 @@ class ArticlePresseController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('article_show', array('id' => $entity->getId())));
+            $title = $entity->getTitle();
+            $session->getFlashBag()->add('info', "Article  $title bien ajouté");
+
+            return $this->redirect($this->generateUrl('articles'));
         }
 
         return array(
@@ -73,7 +77,6 @@ class ArticlePresseController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
     }
@@ -85,10 +88,11 @@ class ArticlePresseController extends Controller
      * @Method("GET")
      * @Template("SceauBundle:Admin/Articles:new.html.twig")
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
         $entity = new ArticlePresse();
         $form   = $this->createCreateForm($entity);
+
 
         return array(
             'entity' => $entity,
@@ -160,7 +164,6 @@ class ArticlePresseController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
@@ -173,6 +176,7 @@ class ArticlePresseController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $articlePresseRepo = $this->get('sceau.repository.article.presse');
         $entity = $articlePresseRepo->find($id);
@@ -187,8 +191,10 @@ class ArticlePresseController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+            $title = $entity->getTitle();
+            $session->getFlashBag()->add('info', "Article $title bien modifié");
 
-            return $this->redirect($this->generateUrl('article_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('articles'));
         }
 
         return array(
@@ -206,6 +212,7 @@ class ArticlePresseController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $session = $request->getSession();
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -220,6 +227,8 @@ class ArticlePresseController extends Controller
 
             $em->remove($entity);
             $em->flush();
+            $title = $entity->getTitle();
+            $session->getFlashBag()->add('delete', "Article $title bien supprimé");
 
             return $this->redirect($this->generateUrl('articles'));
         }
