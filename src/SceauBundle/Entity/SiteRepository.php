@@ -62,4 +62,37 @@ class SiteRepository extends EntityRepository
             ->execute()
         ;
     }
+
+    /**
+     * Retourne les paramètrage CSV Auto pour un type de questionnaire d'un site.
+     * Attention : le site doit avoir une garantie valide et être lié à ce mode d'administration.
+     *
+     * @param int $siteId                 Identifiant du site
+     * @param int $questionnaireTypeId    Identifiant du questionnaire type
+     *
+     * @return Site|null Instance de Site ou null si le site n'est pas autorisé
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function parametragesCSVAutoByQuestionnaireType($siteId, $questionnaireTypeId)
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        // TODO : rajouter restriction sur les garanties
+        $qb->innerJoin('s.questionnairePersonnalisations', 'qp')
+            ->innerJoin('qp.questionnaireType', 'qt')
+            ->innerJoin('qp.commandeCSVParametrage', 'ccp')
+            ->addSelect('qp')
+            ->addSelect('qt')
+            ->addSelect('ccp')
+            ->where($qb->expr()->eq('s.id', $siteId))
+            ->andWhere($qb->expr()->eq('qp.id', $questionnaireTypeId))
+            ->andWhere($qb->expr()->eq('s.administrationType', AdministrationType::CSV_AUTO))
+            ->andWhere($qb->expr()->orX(
+                $qb->expr()->isNull('qp.dateFin'),
+                $qb->expr()->gt('qp.dateFin', 'CURRENT_DATE()')
+            ));
+
+        return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getOneOrNullResult();
+    }
 }
