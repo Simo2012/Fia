@@ -95,8 +95,12 @@
                 <br />
                 <h2>{% trans %}commun_droit_de_reponse{% endtrans %} - {% trans %}commun_le{% endtrans %} {{ commentairePrincipal.droitDeReponses[0].dateInsertion|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ commentairePrincipal.droitDeReponses[0].dateInsertion|localizeddate('none', 'short') }}</h2>
                 <div class="drt-rep">{{ commentairePrincipal.droitDeReponses[0].commentaire }}</div>
+                <p>
+                    <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_modification', {'qid': questionnaire.id, 'qrid': commentairePrincipal.id,'drid': commentairePrincipal.droitDeReponses[0].id }) }}' "><img src="{{ asset('bundles/sceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {% trans from 'commun'%}commun_modifier{% endtrans %}</button> 
+                    <button onclick="if(confirm('{% trans from 'extranet_droit_de_reponse' %}supprimer_confirmation{% endtrans %}')) { window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_suppression', {'qid': questionnaire.id, 'qrid': commentairePrincipal.id,'drid': commentairePrincipal.droitDeReponses[0].id }) }}'; }"> {% trans from 'commun'%}commun_supprimer{% endtrans %}</button>
+                </p>
             {% else %}
-                <p>{% trans from 'extranet_droit_de_reponse'%}repondez_directement{% endtrans %} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': commentairePrincipal.id}) }}' "><img src="{{ asset('bundles/sceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {% trans from 'extranet_droit_de_reponse'%}repondez{% endtrans %}</button></p>
+                <p>{% trans from 'extranet_droit_de_reponse'%}repondre_directement{% endtrans %} <button onclick="window.location.href = '{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': commentairePrincipal.id}) }}' "><img src="{{ asset('bundles/sceau/images/extranet/fleche-btn.png') }}" width="14" height="12"/> {% trans from 'commun'%}commun_repondre{% endtrans %}</button></p>
             {% endif %}
         {% endif %}
     {% endif %}

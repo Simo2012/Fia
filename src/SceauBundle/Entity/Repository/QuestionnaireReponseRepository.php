@@ -1,8 +1,9 @@
 <?php
 
-namespace SceauBundle\Entity;
+namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use SceauBundle\Entity\QuestionnaireReponse;
 
 class QuestionnaireReponseRepository extends EntityRepository
 {
@@ -25,4 +26,5 @@ class QuestionnaireReponseRepository extends EntityRepository
         
         return $qb->getQuery()->getSingleScalarResult();
     }
+    
 }
