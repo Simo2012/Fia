@@ -27,8 +27,7 @@
             <!-- end SIDE NAV SEARCH -->
             <!-- begin DASHBOARD LINK -->
 
-            {% include 'SceauBundle:Admin/Common:menu.html.twig' %}
-
+            {{ render(controller('SceauBundle:Admin/Menu:index',{'currentRoute': app.request.attributes.get('_route')} ))  }}
         </ul>
         <!-- /.side-nav -->
     </div>

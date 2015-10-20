@@ -52,34 +52,5 @@
             }%}
 
         </div>
-
-        <div class="row">
-
-            {% include basicTableTemplate with{
-                'title': 'Basic Responsive Table',
-                'color': 'default',
-                'type':  'table-striped',
-                'columns': {'1':'column1','2':'column2','3':'column3','4':'column4'}
-            }%}
-
-            {% include basicTableTemplate with{
-                'title': 'Striped Responsive Table',
-                'color': 'green',
-                'type':  'table-bordered',
-                'columns': {'1':'test','2':'test2','3':'test3','4':'test4'}
-            }%}
-
-        </div>
-
-        <div class="row">
-
-            {% include advancedTableTemplate with{
-                'title': 'Adanced table',
-                'color': 'orange',
-                'columns': {'1':'Youpi','2':'Youpi2','3':'Youpi3','4':'Youpi4','5':'Youpi5'}
-            }%}
-
-        </div>
-
     </div>
 {% endblock %}
