@@ -9,6 +9,7 @@ use SceauBundle\Entity\Question;
 use SceauBundle\Entity\QuestionType;
 use SceauBundle\Entity\Relance;
 use SceauBundle\Exception\Extranet\AccesInterditException;
+use SceauBundle\Form\Type\Extranet\QuestionnairesImportType;
 use SceauBundle\Form\Type\RelanceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,13 +20,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+/**
+ * Class QuestionnairesController
+ * @package SceauBundle\Controller\Extranet
+ * @Route("/questionnaires")
+ */
 class QuestionnairesController extends Controller
 {
     /**
      * Affiche la page de listing des questionnaires. Les questionnaires affichés dépendent des filtres et tris demandés
      * par l'utilisateur.
      *
-     * @Route("/questionnaires/questionnaires", name="extranet_questionnaires_questionnaires")
+     * @Route("/questionnaires", name="extranet_questionnaires_questionnaires")
      * @Method({"GET", "POST"})
      *
      * @param Request $request Instance de Request
@@ -177,7 +183,7 @@ class QuestionnairesController extends Controller
      * Action appelable uniquement via AJAX. Elle retourne les questionnaires par paquet de lignes de tableau en
      * fonction des filtres demandés (utilisé pour le scroll infini).
      *
-     * @Route("/questionnaires/questionnaires-ajax", name="extranet_questionnaires_questionnaires_ajax",
+     * @Route("/questionnaires-ajax", name="extranet_questionnaires_questionnaires_ajax",
      *     options={"expose"=true})
      * @Method({"POST"})
      *
@@ -239,8 +245,8 @@ class QuestionnairesController extends Controller
     /**
      * Affichage la page de création de question personnalisée.
      *
-     * @Route("/questionnaires/questions-personnalisees", name="extranet_questionnaires_questions_personnalisees")
-     * @Route("/questionnaires/questions-personnalisees/{id}",
+     * @Route("/questions-personnalisees", name="extranet_questionnaires_questions_personnalisees")
+     * @Route("/questions-personnalisees/{id}",
      *     name="extranet_questionnaires_questions_personnalisees_question_type", options={"expose"=true})
      * @Method({"GET", "POST"})
      *
@@ -316,8 +322,8 @@ class QuestionnairesController extends Controller
      * Affiche la page de relance des questionnaires. Si un identifiant de langue est passé en plus dans l'URL, la
      * liste déroulante des langues est initialisée avec cette langue.
      *
-     * @Route("/questionnaires/relance-questionnaires", name="extranet_questionnaires_relance_questionnaires")
-     * @Route("/questionnaires/relance-questionnaires/{langue_id}", requirements={"langue_id" = "\d+"},
+     * @Route("/relance-questionnaires", name="extranet_questionnaires_relance_questionnaires")
+     * @Route("/relance-questionnaires/{langue_id}", requirements={"langue_id" = "\d+"},
      *     name="extranet_questionnaires_relance_questionnaires_langue")
      * @Method({"GET", "POST"})
      *
@@ -417,7 +423,7 @@ class QuestionnairesController extends Controller
      * Action appelable uniquement via AJAX. Elle retourne les questionnaires pouvant être relancés par paquet
      * de lignes de tableau (utilisé pour le scroll infini).
      *
-     * @Route("/questionnaires/relance-questionnaires-ajax", name="extranet_questionnaires_relance_ajax",
+     * @Route("/relance-questionnaires-ajax", name="extranet_questionnaires_relance_ajax",
      *     options={"expose"=true})
      * @Method({"POST"})
      *
@@ -464,7 +470,7 @@ class QuestionnairesController extends Controller
     /**
      * Active ou désactive la relance automatique.
      *
-     * @Route("/questionnaires/relance-auto", name="extranet_questionnaires_relance_auto",
+     * @Route("/relance-auto", name="extranet_questionnaires_relance_auto",
      *     options={"expose"=true})
      * @Method({"POST"})
      *
@@ -505,7 +511,7 @@ class QuestionnairesController extends Controller
      * Renvoie les questionnaires non répondus pour un site, un type de questionnaire et une langue suite à une
      * demande de relance de l'utilisateur.
      *
-     * @Route("/questionnaires/renvoyer/{langue_id}", requirements={"langue_id" = "\d+"},
+     * @Route("/renvoyer/{langue_id}", requirements={"langue_id" = "\d+"},
      *     name="extranet_questionnaires_relance_renvoyer")
      * @Method("GET")
      *
@@ -544,7 +550,7 @@ class QuestionnairesController extends Controller
     /**
      * Affiche la page et traite le formulaire qui permet de personnaliser la relance pour un type de questionnaire.
      *
-     * @Route("/questionnaires/personnaliser-relance/{langue_id}", requirements={"langue_id" = "\d+"},
+     * @Route("/personnaliser-relance/{langue_id}", requirements={"langue_id" = "\d+"},
      *     name="extranet_questionnaires_relance_perso")
      * @ParamConverter("langue", class="SceauBundle:Langue", options={"id" = "langue_id"})
      * @Method({"GET", "POST"})
@@ -613,10 +619,10 @@ class QuestionnairesController extends Controller
     /**
      * Affiche la page de détail d'un questionnaire (avis)
      *
-     * @Route("/questionnaires/detail-questionnaire/{questionnaire_id}/{position}",
+     * @Route("/detail-questionnaire/{questionnaire_id}/{position}",
      *     requirements={"questionnaire_id" = "\d+", "position" = "\d+"},
      *     name="extranet_questionnaires_detail_questionnaire_pagine")
-     * @Route("/questionnaires/detail-questionnaire/{questionnaire_id}", requirements={"questionnaire_id" = "\d+"},
+     * @Route("/detail-questionnaire/{questionnaire_id}", requirements={"questionnaire_id" = "\d+"},
      *     name="extranet_questionnaires_detail_questionnaire")
      * @Method({"GET", "POST"})
      *
@@ -694,7 +700,7 @@ class QuestionnairesController extends Controller
     /**
      * Affiche la page avec le formulaire de droit de réponse pour ajout
      *
-     * @Route("/questionnaires/droit-de-reponse/ajout/{qid}/{qrid}", requirements={"qid" = "\d+", "qrid" = "\d+"},
+     * @Route("/droit-de-reponse/ajout/{qid}/{qrid}", requirements={"qid" = "\d+", "qrid" = "\d+"},
      *     name="extranet_questionnaires_droit_de_reponse_ajout")
      * @Method({"GET", "POST"})
      *
@@ -957,6 +963,52 @@ class QuestionnairesController extends Controller
             $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
         );
         
+    }
+
+    /**
+     * @Route("/import", name="extranet_questionnaires_import")
+     * @Method({"GET", "POST"})
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function importAction(Request $request)
+    {
+        $form = $this->createForm(new QuestionnairesImportType());
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $message  = 'import.error';
+            $filename = $form->get('filename')->getData();
+
+            $em = $this->get('doctrine.orm.entity_manager');
+            /** @var \SceauBundle\Entity\Site $site */
+            $site = $em->merge($request->getSession()->get('siteSelectionne'));
+            /** @var \SceauBundle\Entity\QuestionnaireType $questionnaireType */
+            $questionnaireType = $em->merge($request->getSession()->get('questionnaireTypeSelectionne'));
+
+            /** @var \SceauBundle\Entity\Site $siteInfo */
+            $siteInfo = $this->getDoctrine()->getRepository('Site')
+                ->parametragesCSVAutoByQuestionnaireType($site->getId(), $questionnaireType->getId())
+            ;
+
+            if (($questionnairePersonnalisation = $siteInfo->getQuestionnairePersonnalisations()[0])) {
+                $filepath = $questionnairePersonnalisation->getCommandeCSVParametrage()->getDossierStockage();
+                if ($filepath) {
+                    $form->get('file')->getData()->move($filepath, $filename);
+                    $message = 'import.success';
+                }
+            }
+
+            $this->get('session')->getFlashBag()->add(
+                $message,
+                $this->get('translator')->trans($message, array(), 'extranet_questionnaires_import')
+            );
+        }
+
+        return $this->render('@Sceau/Extranet/Questionnaires/import.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
     
 }
