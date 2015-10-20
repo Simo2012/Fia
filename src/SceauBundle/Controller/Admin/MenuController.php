@@ -27,6 +27,12 @@ class MenuController extends Controller
                 'childMenus' => null
             ),
             array(
+                'libelle' => 'Actualités',
+                'route' => 'actualites',
+                'icon' => 'list',
+                'childMenus' => null
+            ),
+            array(
                 'libelle' => 'Questions',
                 'route' => 'questions',
                 'icon' => 'question',

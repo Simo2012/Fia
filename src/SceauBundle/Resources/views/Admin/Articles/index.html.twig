@@ -11,7 +11,7 @@
     {% endfor %}
 
     {# On affiche tous les messages flash dont le nom est « delete » #}
-    {% for message in app.session.flashbag.get('info') %}
+    {% for message in app.session.flashbag.get('delete') %}
         <div class="alert alert-success">
             <p> Suppression: {{ message }}</p>
         </div>
@@ -64,7 +64,7 @@
                                         <td>{{ loop.index }}</td>
                                         <td>{{ articlePresse.title }}</td>
                                         <td>{{ articlePresse.date|date("m/d/Y")  }}</td>
-                                        <td>{{ articlePresse.content | truncate(35, true, '...') }}</td>
+                                        <td>{{ articlePresse.content }}</td>
                                         <td>
                                             {% if articlePresse.published %}
                                                 <span class="label label-success">Publié</span>
@@ -73,11 +73,11 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                                <a class="btn btn-green btn-md btn-square" href="{{ path('article_show', { 'id': articlePresse.id }) }}">Voir</a>
+                                                <a class="btn btn-green btn-md" href="{{ path('article_show', { 'id': articlePresse.id }) }}">Voir</a>
 
-                                                <a class="btn btn-orange btn-md btn-square" href="{{ path('article_edit', { 'id': articlePresse.id }) }}">Editer</a>
+                                                <a class="btn btn-orange btn-md" href="{{ path('article_edit', { 'id': articlePresse.id }) }}">Editer</a>
 
-                                            <a class="btn btn-red btn-md btn-square" data-toggle="modal" data-target="{{'#' ~  articlePresse.id  }}">
+                                            <a class="btn btn-red btn-md" data-toggle="modal" data-target="{{'#' ~  articlePresse.id  }}">
                                                 Supprimer
                                             </a>
                                         </td>

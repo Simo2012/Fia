@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ArticlePresseType extends AbstractType
+class ActualiteType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -18,32 +18,22 @@ class ArticlePresseType extends AbstractType
             ->add('title', 'text', array(
                 'label' => 'Titre'
             ))
-            ->add('date', 'date', array(
-                'widget' => 'single_text',
-                'label' => 'Date de publication',
-                'attr' => array('class' => 'datepicker')
-            ))
+            ->add('introduction')
             ->add('content', 'textarea', array(
                 'label' => 'Contenu'
             ))
-            ->add('source', 'text', array(
-                'required' => false,
-                'label' => 'Source'
+            ->add('date', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'label' => 'Date de publication',
+                'attr' => array('class' => 'datepicker')
             ))
-            ->add('urlSource', 'text', array(
-                'required' => false,
-                'label' => 'URL'
-            ))
-            ->add('published', 'checkbox', array(
-                'required' => false,
-                'label' => 'Publié'
-            ))
+            ->add('active')
             ->add('save', 'submit', array(
                 'attr' => array('class' => 'submit'),
                 'label' => "Enregistrer",
                 'attr' => array('class' => 'btn btn-green')
             ))
-
         ;
     }
     
@@ -53,7 +43,7 @@ class ArticlePresseType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SceauBundle\Entity\ArticlePresse'
+            'data_class' => 'SceauBundle\Entity\Actualite'
         ));
     }
 
@@ -62,6 +52,6 @@ class ArticlePresseType extends AbstractType
      */
     public function getName()
     {
-        return 'sceaubundle_articlepresse';
+        return 'sceaubundle_actualite';
     }
 }

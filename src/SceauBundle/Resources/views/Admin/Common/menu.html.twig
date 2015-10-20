@@ -1,7 +1,7 @@
 {% for menu in menus %}
     {% if menu.childMenus is null %}
         <li>
-            {% if currentRoute == menu.route %}
+            {% if menu.route in currentRoute %}
                 <a class="active" href="{{ path(menu.route) }}">
                     <i class="fa fa-{{ menu.icon }}"></i> {{ menu.libelle }}
                 </a>
@@ -16,7 +16,11 @@
             <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="{{ '#' ~ menu.route  }}">
                 <i class="fa fa-{{ menu.icon }}"></i> {{ menu.libelle }} <i class="fa fa-caret-down"></i>
             </a>
-            <ul class="collapse nav" id="{{ menu.route }}">
+            {% if menu.route in currentRoute  %}
+                <ul class="in nav" id="{{ menu.route }}">
+                    {% else %}
+                <ul class="collapse nav" id="{{ menu.route }}">
+            {% endif  %}
                 {% for childMenu in menu.childMenus %}
                     <li>
                         {% if currentRoute == childMenu.route %}
