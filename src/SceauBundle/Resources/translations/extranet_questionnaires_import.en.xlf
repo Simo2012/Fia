@@ -14,6 +14,16 @@
                 <source>form.import.file</source>
                 <target></target>
             </trans-unit>
+            <trans-unit id="3">
+                <source>Les lignes du fichier CSV doivent respecter le format suivant : id, nom, prénom, email</source>
+            <trans-unit id="4">
+                <source>Étape 1 : indique le fichier à importer en cliquant sur le bouton Parcourir :</source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Étape 2 : cliquez sur le bouton Valider et patientez quelques instants, une page de confirmation va s'afficher :</source>
+                <target></target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
