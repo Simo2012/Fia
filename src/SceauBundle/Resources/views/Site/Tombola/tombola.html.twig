@@ -1,0 +1,29 @@
+{% trans_default_domain 'site_home_tombola' %}
+
+{% if call == 1 %}
+    <div class="tombola-main">
+        <h1 class="titre">{% trans %}titre_tombola{% endtrans %}</h1>
+        {% trans %}description_tombola{% endtrans %}
+        <a class="lien" href="#">({% trans %}reglement_tombola{% endtrans %}).</a>
+        <br/>
+        <br/>
+        <span>
+            >  
+        </span>
+        <a class="lien" href="#" onclick="chooseMode('login'); return false;">
+            {% trans %}login_tombola{% endtrans %}
+        </a>
+        <div id="div_login" name="div_login" style="display:none; padding-top:10px;">
+           {% include "SceauBundle:Site/Tombola:tombolalogin.html.twig" %}
+        </div>
+        <br/>
+        <br/>
+        <span> > 
+        </span>
+        <a class="lien" href="#" onclick="chooseMode('inscription'); return false;">
+            {% trans %}register_tombola{% endtrans %}
+        </a>
+    </div>
+{% elseif call == 2 %}
+    {% include "SceauBundle:Site/Tombola:tombolasuccess.html.twig" %} 
+{% endif %}

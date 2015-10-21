@@ -1,0 +1,27 @@
+{% trans_default_domain 'site_home_tombola' %}
+<form action="{{ path('site_tombola_login')}}" method="post">
+    <table class="gris11" cellpadding="2" cellspacing="0" border="0">
+            <tr>
+                <td colspan="2">{% trans %}login_tombola_titre{% endtrans %}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}login_tombola_email{% endtrans %} :</td>
+                <td><input type="text" name="email"  autocomplete="off" /></td>
+            </tr>
+            <tr>
+                <td>{% trans %}login_tombola_pwd{% endtrans %} :</td>
+                <td><input type="password" name="password"   autocomplete="off" /></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="btn-espace-membre">
+                        <div class="btn-1-main">
+                            <input type="submit" value="{% trans %}login_tombola_input{% endtrans %}" class="btn-home-regiter"/> 
+                        </div>
+                        <div class="btn-1-end"></div>
+                    </div>
+                </td>
+            </tr>
+    </table>
+</form>
+                      
