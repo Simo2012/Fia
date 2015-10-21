@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CommunController extends Controller
 {
@@ -116,5 +117,77 @@ class CommunController extends Controller
             'SceauBundle:Extranet:liste_questionnaire_type.html.twig',
             array('questionnaireTypes' => $questionnaireTypes)
         );
+    }
+
+    /**
+     * Get the last News from the database
+     *
+     */
+    public function getLastNewsAction()
+    {
+        $actualiteRepo = $this->get('sceau.repository.actualite');
+        $actualite = $actualiteRepo->findOneBy(
+            array('active' => 'true'),
+            array('date' => 'desc'),
+            1,
+            0
+        );
+
+        return $this->render('SceauBundle:Extranet/Actualite:actualite.html.twig', array('actualite' => $actualite));
+
+    }
+
+
+    /**
+     * Get a news by id and an array of all news classified by month
+     *
+     * @Route("/ajax/{id}", name="extranet_commun_news")
+     */
+
+    public function getNewsAction($id)
+    {
+        $actualiteRepo = $this->get('sceau.repository.actualite');
+        $actualite = $actualiteRepo->findOneById($id);
+
+        $actualitesByMonths = $this->getNewsArchive();
+
+       return $this->render('SceauBundle:Extranet/Actualite:actualite_content.html.twig', array(
+           'actualite' => $actualite,
+           'actualitesByMonths' => $actualitesByMonths,
+       ));
+
+    }
+
+    /**
+     * Get News's archives from the database classified by month.
+     *
+     * @return array contains all news classifed by month
+     */
+    private function getNewsArchive()
+    {
+
+        $actualiteRepo = $this->get('sceau.repository.actualite');
+
+        $actualites = $actualiteRepo->findBy(
+            array('active' => 'true'),
+            array('date' => 'desc' )
+        );
+
+        $actualitesByMonths = array();
+
+        //Group by month
+        foreach ($actualites as $actualite){
+            $actualiteDate = $actualite->getDate()->format('m-Y');
+            if (isset($actualitesByMonths[$actualiteDate])) {
+                $actualitesByMonths[$actualiteDate]['actualites'][] = $actualite;
+            } else {
+                $actualitesByMonths[$actualiteDate]['actualites'] = [$actualite];
+                $actualitesByMonths[$actualiteDate]['date'] = $actualite->getDate();
+                $actualitesByMonths[$actualiteDate]['id'] = $actualite->getId();
+            }
+        }
+
+        return $actualitesByMonths;
+
     }
 }

@@ -19,11 +19,7 @@
 
         {{ render(controller('SceauBundle:Extranet/Commun:listeQuestionnaireType', { 'id':  app.session.get('siteSelectionne').id})) }}
     </div>
-    <div id="news">
-        <h6>NEWS</h6>
 
-        <p><strong>Titre de l’actualité au nombre de caractères maximum de combien svp ? 70 car.</strong><br/>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet interdum sapien. Pellentesque at
-            velit vel erat rhoncus bibendum in id arcu. Morbi nunc elit metus. <a href="#">Lire la suite</a></p>
-    </div>
+        {{ render(controller('SceauBundle:Extranet/Commun:getLastNews')) }}
+
 </header>
