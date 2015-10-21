@@ -24,7 +24,7 @@ class AccueilController extends Controller
 
         $pieChart = new PieChart();
         $pieChart->setElementID('pieTreshold');
-        $pieChart->getData()->setArrayToTable([
+        $pieChart->getData()->setArrayToDataTable([
             [['label' => 'Pizza', 'type' => 'string'], ['label' => 'Populartiy', 'type' => 'number']],
             ['Pepperoni', 33],
             ['Hawaiian', 26],
@@ -38,7 +38,7 @@ class AccueilController extends Controller
         $pieChart->getOptions()->setWidth(450);
 
         $geoChart = new GeoChart();
-        $geoChart->getData()->setArrayToTable(
+        $geoChart->getData()->setArrayToDataTable(
             [
                 ['City',   'Population', 'Area'],
                 ['Rome',      2761477,    1285.31],
@@ -61,7 +61,7 @@ class AccueilController extends Controller
         $geoChart->getOptions()->setHeight(400);
 
         $lineChart = new LineChart();
-        $lineChart->getData()->setArrayToTable([
+        $lineChart->getData()->setArrayToDataTable([
             [['label' => 'X', 'type' => 'number'], ['label' => 'Dogs', 'type' => 'number'],
                 ['label' => 'Cats', 'type' => 'number']],
             [0, 0, 0],    [1, 10, 5],   [2, 23, 15],  [3, 17, 9],   [4, 18, 10],  [5, 9, 5],

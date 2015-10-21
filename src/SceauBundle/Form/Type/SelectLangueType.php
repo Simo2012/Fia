@@ -2,7 +2,7 @@
 
 namespace SceauBundle\Form\Type;
 
-use SceauBundle\Entity\LangueRepository;
+use SceauBundle\Entity\Repository\LangueRepository;
 use SceauBundle\Service\OutilsString;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

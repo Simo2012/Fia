@@ -77,7 +77,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     
     /**
     * @var ArrayCollection
-    * 
+    *
     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TrancheAge")
     * @ORM\JoinColumn(name="trancheage_id", referencedColumnName="id", nullable=true)
     */

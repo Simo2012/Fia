@@ -9,7 +9,7 @@ use Symfony\Component\Validator\GroupSequenceProviderInterface;
  * Flux
  *
  * @ORM\Table(name="Flux")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\FluxRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\FluxRepository")
  */
 class Flux implements GroupSequenceProviderInterface
 {

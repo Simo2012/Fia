@@ -3,6 +3,7 @@
 namespace SceauBundle\Model\Site\User;
 
 use SceauBundle\Entity\Membre;
+use SceauBundle\Entity\TombolaTicket;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -167,6 +168,33 @@ class MembreLogger
             var_dump('erreur lors de la creation user');
         }
     } // createUser
+    
+    /**
+     * Participation du membre dans tombola
+     * 
+     * @param $poUser
+     * @param $poSourceId
+     * @$return Membre
+     * @throws DBALException
+     */
+    public function particpateTombola($poUser, $poSourceId) 
+    {
+        $loTombolaTicket = new TombolaTicket();
+        try {
+            $loTombolaTicket->setDateInsert(new \DateTime());
+            $loTombolaTicket->setDateParticipe(new \DateTime());
+            $loTombolaTicket->setMembre($poUser);
+
+            $loSource = $this->manager->getRepository('SceauBundle:TombolaSource')->find($poSourceId);
+
+            $loTombolaTicket->setTombolaSource($loSource);
+            $this->manager->persist($loTombolaTicket);
+            $this->manager->flush();
+        } catch(\Exception $e) {
+            var_dump('erreur lors de creation du nouveau ticket tombolat');
+        }
+        return $loTombolaTicket->getId();
+    }
     
 
 }

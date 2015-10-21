@@ -129,5 +129,24 @@ class HomeController extends Controller
 
         return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths));
     }
+    
+    /**
+    * Action pour l'appel du Participation a tombola
+    * 
+    * @Route("/tombola",
+    *     name="site_home_tombola")
+    * @Method("GET")
+    */
+    public function callRegisterAction() {
+        $loUser = new Membre();
+        $loForm = $this->createForm(new RegisterType(), $loUser);
+        return $this->render(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
+                'form' => $loForm->createView(),
+                'menu' => 'tombola',
+            )
+        );
+    }
 
 }

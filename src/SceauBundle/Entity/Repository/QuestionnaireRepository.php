@@ -7,6 +7,8 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use SceauBundle\Cache\Cache;
 use Gedmo\Translatable\TranslatableListener;
+use SceauBundle\Entity\LivraisonType;
+use SceauBundle\Entity\Questionnaire;
 use SceauBundle\Entity\Site;
 use SceauBundle\Entity\QuestionnaireType;
 use SceauBundle\Entity\ReponseStatut;
@@ -714,9 +716,8 @@ class QuestionnaireRepository extends EntityRepository
     }
     
     /**
-     * Recuperer Le membre de chaque questionnaire 
-     * 
-     **/
+     * Recuperer Le membre de chaque questionnaire
+     */
     public function getMembre($lpQuestionnaireId)
     {
         $loQuery =  $this->createQueryBuilder('q')

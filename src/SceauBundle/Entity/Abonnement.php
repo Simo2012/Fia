@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Abonnement
  *
  * @ORM\Table(name="Abonnement")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\AbonnementRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\AbonnementRepository")
  */
 class Abonnement
 {
