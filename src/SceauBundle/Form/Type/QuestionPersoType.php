@@ -2,8 +2,8 @@
 
 namespace SceauBundle\Form\Type;
 
-use SceauBundle\Entity\QuestionTypeRepository;
 use IntlDateFormatter;
+use SceauBundle\Entity\Repository\QuestionTypeRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;

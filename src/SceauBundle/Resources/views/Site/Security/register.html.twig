@@ -7,20 +7,5 @@
 <p>
     Renseignez vos informations personnelles, cela ne prend qu'une ou deux minutes.
 </p>
-<form  action="{{ path('site_member_register')}}" method="post">    
-    <input type="hidden" name="formulaireinscription" valuek="1">
-    <div id="inscription-formulaire">
-        
-        {{ form_start(form) }}
-            {{ form_widget(form) }}
-        {{ form_end(form) }}
-        {% include 'SceauBundle:Site/Security:avatar.html.twig' %}
-        
-        <div class="btn-espace-membre">
-			<div class="btn-1-main">
-                            <input type="submit" value="Validez" class="btn-1-link"/> 
-			</div>
-			<div class="btn-1-end"></div>
-        </div>
-    </div>
-</form>
+{% include "SceauBundle:Site/Security:registerform.html.twig" %}
+{% include "SceauBundle:Site/Common:dataprotection.html.twig" %}

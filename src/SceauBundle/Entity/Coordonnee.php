@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Coordonnee
  *
  * @ORM\Table(name="Coordonnee")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\CoordonneeRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\CoordonneeRepository")
  */
 class Coordonnee
 {

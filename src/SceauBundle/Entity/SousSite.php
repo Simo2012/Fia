@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * SousSite
  *
  * @ORM\Table(name="SousSite")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\SousSiteRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\SousSiteRepository")
  */
 class SousSite
 {

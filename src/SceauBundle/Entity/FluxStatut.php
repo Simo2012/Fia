@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * FluxStatut
  *
  * @ORM\Table(name="FluxStatut")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\FluxStatutRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\FluxStatutRepository")
  */
 class FluxStatut
 {

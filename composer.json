@@ -28,7 +28,7 @@
         "friendsofsymfony/jsrouting-bundle": "~1.5",
         "symfony/finder": "~2.6",
         "leaseweb/memcache-bundle": "~2.1",
-        "cmen/google-charts": "@dev",
+        "cmen/google-charts-bundle": "@dev",
         "excelwebzone/recaptcha-bundle": "~1.4",
         "white-october/pagerfanta-bundle": "^1.0"
     },

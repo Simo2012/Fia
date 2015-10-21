@@ -97,6 +97,12 @@
             <argument type="service" id="sceau.api.filter.Decript"/>
         </service>
         
+        <!-- Recuperer Les Site Prenium pour la page Home-->
+        <service id="sceau.site.home.home_prenium" class="SceauBundle\Model\Site\Home\PreniumSite">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="request_stack"/>
+        </service>
+        
         <!-- Encoder Le mot de passe -->
         <service id="sceau.site.user.encode.password" class="SceauBundle\Model\Common\Encoder\MembrePasswordEncoder">
             <argument type="service" id="sceau.api.filter.Encrypt"/>

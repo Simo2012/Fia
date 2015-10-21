@@ -1,44 +1,45 @@
-					
 <div class="site-prem-lien">
     <a class="lien-prem" href="#" title="Cliquez ici pour afficher l'ensemble des sites premium FIA-NET">
         LES SITES PREMIUM FIA-NET
     </a>
 </div>
-<div id="bloc_sitepremiumrandom">
-    <ul class="ui-tabs-nav">
-        <li class="ui-tabs-nav-item ui-tabs-selected" id="nav-fragment-1">
-            <a href="#">
-                <img src="{{ asset('bundles/sceau/images/site/testlogos/929.gif') }}" alt="COMPTOIRDELHOMME - evalué par FIA-NET" width="150px" height="40px">
+
+
+ <div id="bloc_sitepremiumrandom">
+ <ul class="ui-tabs-nav">
+ {% for prenium in siteprenium.sitePrenium %}
+     {% if loop.index == 1 %}
+            {% set classfragment = "ui-tabs-nav-item ui-tabs-selected" %}
+        {% else %}
+           {% set classfragment = "ui-tabs-nav-item" %}
+        {%endif%}
+    
+        <li class="{{classfragment}}" id="nav-fragment-{{loop.index}}">
+            <a href="#fragment-{{loop.index}}">
+                <img src="{{ asset('bundles/sceau/images/site/testlogos/' ~ prenium.logo ~ '.gif') }}" alt="{{prenium.nom | capitalize }} - evalué par FIA-NET" width="150px" height="40px">
             </a>
         </li>
-	<li class="ui-tabs-nav-item" id="nav-fragment-2">
-            <a href="#fragment-2">
-                <img src="{{ asset('bundles/sceau/images/site/testlogos/930.gif') }}" alt="test - Evalué par FIA-NET" width="150px" height="40px">
-            </a>
-        </li>						
-	<li class="ui-tabs-nav-item" id="nav-fragment-3">
-            <a href="#fragment-3">
-                <img src="{{ asset('bundles/sceau/images/site/testlogos/931.gif') }}" alt="Test2 - Evalué par FIA-NET" width="150px" height="40px">
-            </a>
-        </li>						
-	<li class="ui-tabs-nav-item-last" id="nav-fragment-4">
-            <a href="#fragment-4">
-                <img src="{{ asset('bundles/sceau/images/site/testlogos/932.gif') }}" alt="Test3 - Evalué par FIA-NET" width="150px" height="40px">
-            </a>
-        </li>						
-    </ul>
+   
+{% endfor %}
+ </ul>
     <div class="site-prem-detail">
-	<div id="fragment-1" class="ui-tabs-panel" style="">
+{% for prenium in siteprenium.sitePrenium %}
+        {% if loop.index == 1 %}
+            {% set classfragment = "ui-tabs-panel" %}
+        {% else %}
+           {% set classfragment = "ui-tabs-panel ui-tabs-hide" %}
+        {%endif%}
+        <div id="fragment-{{loop.index}}" class="{{classfragment}}" style="">
             <div class="detail-site">
                 <div style="float:left; margin-top: 10px;">
                     <span class="site-name">
                         <a href="#">
-                            COMPTOIRDELHOMME.COM
+                            {{prenium.nom | capitalize }}
                         </a>
                     </span>
                     <br/>
                     <span class="site-cat">
-                        <a href="#">SANTÉ & BEAUTÉ</a>
+                        <a href="#">{{prenium.siteCategories[0].categorie.libelle | capitalize }}</a>
                     </span>
                 </div>
                 <div class="site-prem-note-detail">
@@ -53,35 +54,34 @@
                 </div>
             </div>
             <div class="site-prem-pres">
-                Vente en ligne de produits d'équipement du bateau, d'accessoires du plaisancier et de vêtements de l’univers de la mer. 6000 articles en stock disponible immédiatement. Livraison gratuite à partir de
+                {{prenium.description | capitalize }}
             </div>
             <div class="site-prem-com">
                 <div class="com-site-smile">
                     <img src="{{ asset('bundles/sceau/images/site/common/smile_m_green.png') }}" width="40" height="49" alt="avis de consommateurs" /><br />
-                    <strong>Momo B</strong><br /> 26/09/2015 <br/> le à 10h30
+                    <strong>{{prenium.information[0].questionnaire.membre.pseudo}}</strong><br /> le {{prenium.information[0].questionnaire.dateReponse.date |date("d/m/Y") }} <br/> 
+                            à {{prenium.information[0].questionnaire.dateReponse.date |date("h:i") }}
                 </div>
                 <div class="com-site-detail">
                     <div class="com-site-detail-top"></div>
                         <div class="com-site-detail-bottom">
-                            Rapidité, choix expédition rapide, facilité de trouver
-                            <a class="lien" href="#" title="Lire la suite du commentaire pour COMPTOIRDELHOMME" style="font-weight: bold;">
-                                Lire la suite
-                            </a>
+                            {{prenium.information[0].commentaire}} <br>
+                            {% set taille = 150 %}
+                            {% if prenium.information[0].commentaire > taille %}
+                                <a class="lien" href="#" title="Lire la suite du commentaire pour COMPTOIRDELHOMME" style="font-weight: bold;">
+                                    Lire la suite
+                                </a>
+                            {% endif %}
                     </div>
                 </div>
             </div>
             <div class="btn-1 btn-vers-fiche">
                 <div class="btn-1-main">
-                    <a href="#" class="btn-1-link" title="COMPTOIRDELHOMME">accédez à la fiche marchand</a>
+                    <a href="#" class="btn-1-link" title="{{prenium.nom | capitalize }}">accédez à la fiche marchand</a>
                 </div>
                 <div class="btn-1-end"></div>
             </div>
         </div>
-	<div id="fragment-2" class="ui-tabs-panel ui-tabs-hide" style="">
-	</div>
-	<div id="fragment-3" class="ui-tabs-panel ui-tabs-hide" style="">
-	</div>
-	<div id="fragment-4" class="ui-tabs-panel ui-tabs-hide" style="">
-	</div>
+    {%endfor%}
     </div>
 </div>

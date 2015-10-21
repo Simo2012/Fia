@@ -28,6 +28,8 @@ class HomeController extends Controller
      *     name="site_operation_detail")
      * @Route("/newsletter",
      *     name="site_operation_news")
+     * @Route("/mobile",
+     *        name="site_home_mobile")
      * @Method("GET")
      */
     public function indexAction() 
@@ -36,19 +38,30 @@ class HomeController extends Controller
        //Récupération Route Envoyé
        $loRequest = $this->container->get('request');
        $loRouteName = $loRequest->get('_route');
-       if (preg_match('/site_home/i', $loRouteName)) {
+       if ($loRouteName === 'site_home') {
+                    //Recuperer Site Prenium
+           /**$loMembreLogger = $this->container->get('sceau.site.home.home_prenium');**/
+            $lsPrenium = $this->container->get('sceau.site.home.home_prenium');
+            $lpPreniumSite = $lsPrenium->getPreniumSite();
                     //Recuperer les categories disponibles
            $loCategories = $loManager->getRepository('SceauBundle:Categorie')->getActifCategories();
            /** Envoyer vars la page Home **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories, 'menu' => 'home'));
-       } elseif (preg_match('/site_operation_detail/i', $loRouteName)) {
+                    //Recuperer la dérniére newsletter
+           $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
+           
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories,
+               'siteprenium' => $lpPreniumSite ,'menu' => 'home', 'newsletters' => $loNewletters));
+       } elseif ($loRouteName === 'site_operation_detail') {
            /** Envoyer vers la page fonctionnement **/
            return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'operation'));
-       } elseif (preg_match('/site_operation_news/i', $loRouteName)) {
+       } elseif ($loRouteName === 'site_operation_news') {
                     //récuperer les 3 derniére newsletter
-           $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters();
+           $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(3);
            /** Envoyer vers la page NewsLetter **/
            return $this->render("SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'newsletter'));
+       } elseif ($loRouteName === 'site_home_mobile') {
+           /** Envoyer vers la page Mobile **/
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'mobile'));
        } else {
            return null;
        }
@@ -80,7 +93,7 @@ class HomeController extends Controller
             } else {
                 $loUser->setNewsletter(true);
                 $loManager->flush();
-                $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters();
+                $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(3);
                 /** Envoyer vers la page NewsLetter **/
                 $this->get('session')->set('confirmation',$loNewletters);
                 return $this->render("SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'newsletter', 'user' => $loUser));
@@ -115,6 +128,25 @@ class HomeController extends Controller
         }
 
         return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths));
+    }
+    
+    /**
+    * Action pour l'appel du Participation a tombola
+    * 
+    * @Route("/tombola",
+    *     name="site_home_tombola")
+    * @Method("GET")
+    */
+    public function callRegisterAction() {
+        $loUser = new Membre();
+        $loForm = $this->createForm(new RegisterType(), $loUser);
+        return $this->render(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
+                'form' => $loForm->createView(),
+                'menu' => 'tombola',
+            )
+        );
     }
 
 }

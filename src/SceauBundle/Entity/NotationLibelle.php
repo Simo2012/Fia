@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * NotationLibelle
  *
  * @ORM\Table(name="NotationLibelle")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\NotationLibelleRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\NotationLibelleRepository")
  */
 class NotationLibelle
 {

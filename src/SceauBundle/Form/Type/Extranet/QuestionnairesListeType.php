@@ -2,7 +2,7 @@
 
 namespace SceauBundle\Form\Type\Extranet;
 
-use SceauBundle\Entity\LivraisonTypeRepository;
+use SceauBundle\Entity\Repository\LivraisonTypeRepository;
 use SceauBundle\Service\OutilsString;
 use IntlDateFormatter;
 use Symfony\Component\Form\AbstractType;
