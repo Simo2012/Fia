@@ -30,7 +30,8 @@
                 'bundles/sceau/js/site/home/SliderSitePremium.js'
                 'bundles/sceau/js/site/common/commun.js'
                 'bundles/sceau/js/site/common/jquery-ui.js'
-                'bundles/sceau/js/site/common/jquery-tools.js' %}
+                'bundles/sceau/js/site/common/jquery-tools.js'
+                'bundles/sceau/js/site/home/avatar.js' %}
                 <script src="{{ asset_url }}" type="text/javascript"></script>
                 <script type="text/javascript">
                     $(function() {
@@ -48,24 +49,7 @@
                             oneInstance: true
                         });
                     });
-                    var popupAvatar = "";
-                    SelectAvatar(jQuery('#AvatarID').val());
-                    function showPopupAvatar()
-                        {
-                                jQuery(function() {
-                            popupAvatar = jQuery( "#avatar-popup" ).dialog({width:330});
-                        });
-                        }
-                    function SelectAvatar(num)
-                    {   
-                        tab = jQuery('#avatar_id_' + num).attr('coords').split(',');
-                        jQuery('#img_avatar').css('background-position','-' + tab[0] + 'px -' + tab[1] + 'px');
-                        jQuery('#AvatarID').val(num);
-                        if(popupAvatar)
-                            popupAvatar.dialog( "close" );
-                    }
                     
-        
                 </script>
                
             {% endjavascripts %}  

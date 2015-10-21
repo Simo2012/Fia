@@ -1,0 +1,115 @@
+{% extends 'SceauBundle:Admin:layout.html.twig' %}
+
+{% block CONTENT -%}
+
+<div class="page-content page-content-ease-in">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-title">
+                <h1>Question internaute
+                   {#  <small>Content Overview</small> #}
+                </h1>
+                <ol class="breadcrumb">
+                    <li class="active"><i class="fa fa-dashboard"></i> Question</li>
+                    <li class="pull-right">
+                        <div id="reportrange" class="btn btn-green btn-square date-picker">
+                            <i class="fa fa-calendar"></i>
+                            <span class="date-range"></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <h1>Détails de la question #ID_QUESTION#</h1>
+    <div class="row">
+        {# BLOCK QUESTION #}
+        <div class="col-lg-12">
+            <div class="portlet portlet-default">
+                <div class="portlet-heading">
+                    <div class="portlet-title col-lg-6">
+                        <h4>Détails de la question #ID_QUESTION# du #DATE_QUESTION#</h4>
+                    </div>
+                    <div class="portlet-widgets">
+                        <span class="label green">Traitée</span>
+                        <span class="label orange">En attente</span>
+                        <span class="divider"></span>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#defaultPortlet"><i class="fa fa-chevron-down"></i></a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="defaultPortlet" class="panel-collapse collapse in">
+                    <div class="col-lg-6">
+                        <p>Question posée par : test</p>
+                        <p>Email : test@test.com</p>
+                        <p>Téléphone :</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>Type : erreur fiche marchand</p>
+                        <p>Service affecté : Informatique Modifier</p>
+                        <p>Etat :  En attente de traitement </p>
+                        <p>Action : Une réponse doit être apportée à l'auteur du signalement ?</p>
+                    </div>
+                    <div class="portlet-body">
+                        <p>Site concerné : #SITENAME#</p>
+                        <p>#CONTENT#</p>
+                    </div>
+                </div>
+                <div class="portlet-footer">
+                    <a class = "btn btn-green btn-md" href="#">Répondre</a>
+                </div>
+            </div>
+        </div>
+
+        {# BLOCK NOTE #}
+        <div class="col-lg-12">
+            <div class="portlet portlet-default">
+                <div class="portlet-heading">
+                    <div class="portlet-title">
+                        <h4>Note de la question #ID_QUESTION# (visible uniquement par FIA-NET)</h4>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="defaultPortlet" class="panel-collapse collapse in">
+                    <div class="portlet-body">
+                        <p>#CONTENT#</p>
+                    </div>
+                </div>
+                <div class="portlet-footer">
+                    <a class = "btn btn-green btn-md" href="#">Ajouter une note</a>
+                    <a class = "btn btn-default btn-md" href="#">Modifier</a>
+                    <a class = "btn btn-red btn-md" href="#">Supprimer</a>
+                </div>
+            </div>
+        </div>
+
+        {# BLOCK HISTORIQUE #}
+        <div class="col-lg-12">
+            <div class="portlet portlet-default">
+                <div class="portlet-heading">
+                    <div class="portlet-title">
+                        <h4>Historique de la question #ID_QUESTION#</h4>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="defaultPortlet" class="panel-collapse collapse in">
+                    <div class="portlet-body">
+                        <p>#CONTENT#</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <a class = "btn btn-white" href="#">Question précédente</a>
+            <a class = "btn btn-white" href="#">Retour </a>
+            <a class = "btn btn-white" href="#">Question suivante</a>
+        </div>
+            
+    </div>
+</div>
+
+
+</ul>
+{% endblock %}

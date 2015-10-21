@@ -1,0 +1,11 @@
+{% extends 'SceauBundle:Emails/Litiges/Internaute:base_internaute.html.twig' %}
+
+{% block subject %}
+	Cl&ocirc;ture de votre litige {{ litige.id }}
+{% endblock %}
+
+{% block body %}
+	{{ membre }}&sbquo;<br /><br />
+	Nous avons bien pris note de votre souhait de clore votre litige n&deg;{{ litige.id }}.<br /><br />
+	Plus aucune action le concernant ne sera dor&eacute;navant possible.
+{% endblock %}

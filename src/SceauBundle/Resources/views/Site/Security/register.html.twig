@@ -13,14 +13,17 @@
         
         {{ form_start(form) }}
             {{ form_widget(form) }}
-        {{ form_end(form) }}
         {% include 'SceauBundle:Site/Security:avatar.html.twig' %}
-        
-        <div class="btn-espace-membre">
+         </div>
+                <div class="btn-espace-membre">
 			<div class="btn-1-main">
-                            <input type="submit" value="Validez" class="btn-1-link"/> 
+                            <input type="submit" value="Valider" class="btn-home-regiter"/> 
 			</div>
 			<div class="btn-1-end"></div>
         </div>
-    </div>
+        {{ form_end(form) }}
+
+        
+   
 </form>
+{% include "SceauBundle:Site/Common:dataprotection.html.twig" %}

@@ -15,4 +15,5 @@
 /web/js/*
 /.idea/
 /web/fonts/*
+nbproject/
 .DS_Store

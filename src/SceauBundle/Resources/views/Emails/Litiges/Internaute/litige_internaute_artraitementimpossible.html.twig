@@ -1,0 +1,12 @@
+{% extends 'SceauBundle:Emails/Litiges/Internaute:base_internaute.html.twig' %}
+
+{% block subject %}
+	Impossible de traiter votre litige {{ litige.id }}
+{% endblock %}
+
+{% block body %}
+	{{ membre }}&sbquo;<br /><br />
+	Nous avons bien pris note de votre d&eacute;claration de litige.<br /><br />
+	Toutefois&sbquo; ce dernier ne peut rentrer dans le cadre de notre service de gestion de litiges.<br /><br />
+	Retrouvez les raisons de cette d&eacute;cision en vous connectant sur votre <a target="_blank"  style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=5&xtor=EPR-5-[litige_internaute_artraitementimpossible]--[Espace_membre]&url=https://www.fia-net.com/membre/">espace membre</a>.
+{% endblock %}
