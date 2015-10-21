@@ -1,0 +1,27 @@
+{% extends 'SceauBundle:Site:layout.html.twig' %}
+{% block CONTENT %}
+    {% include "SceauBundle:Site/Common:menu.html.twig" %}
+
+    <div class="filariane-div">
+        <div class="filariane">
+            Vous êtes ici :
+            <a href="{{ path('site_home') }}">Accueil</a>
+            <span class="filariane-separation"> &gt;</span><span class="filariane-page-actuelle">Contact</span>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="contact-main">
+            <p>Vous avez une remarque, une question, ou une proposition concernant le Sceau de Confiance FIA-NET ?</p>
+            <p>Avez-vous regardé si la réponse à votre question se trouvait dans notre Foire Aux Questions (FAQ) ?
+                La plupart des réponses aux questions que vous vous posez y sont répertoriées,
+                <a class="lien" href="#" target="_blank">en cliquant ici</a>.
+            </p>
+            <p>Si celle-ci n'y figure pas, nous vous invitons à utiliser le formulaire de contact ci-dessous.</p>
+            <p>N'hésitez pas à nous écrire, nous nous engageons à vous répondre sous 72h ouvrées maximum.</p>
+            {{ form_start(form) }}
+                {{ form_row(form.acteur) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
