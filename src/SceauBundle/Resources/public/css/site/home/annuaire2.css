@@ -132,27 +132,6 @@ div.btn-1-end-disabled {
     padding: 5px;
     margin-top: 10px;
 }
-div.grostitre {
-	width: 917px;
-	text-align:left;
-	float: right;
-	background-color: #E4E5E6;
-	padding-top:10px;
-	padding-bottom:10px;
-}
-
-p.grostitre{
-	margin:0;
-	padding:0;
-	margin-left:40px;
-}
-
-table.grostitre{
-	font-size:22px;
-	color:#FFFFFF;
-	background-color:#C7C9CB;
-	height:50px;
-}
 
 .title-avatar {
 float: left;
@@ -777,11 +756,7 @@ p.norme-afnor_titre {
 	margin-top: -2px;
 	margin-right: 20px;
 }
-.div_captcha {float:left;width:800px}
-.div_partenaires {float:left;width: 100%; margin-top: 20px}
-.div_partenaires label {float: right; margin-right: 400px;margin-top: 5px}
 
-.register-legal {width: 250px}
 
 .bons-plans_bloc {
 	float: right;
@@ -3091,7 +3066,7 @@ button.go em.type {
 	height: 10px;
 	display: block;
 	background-image: url('../../images/site/hometombola_back_bottom.png');
-	background-repeat: ndo-repeat;
+	background-repeat: no-repeat;
 }
 .input-erreur {
 	background-color: #FFB6B8;
@@ -3101,6 +3076,7 @@ button.go em.type {
 }
 #inscription-formulaire div {
 	margin-top: 10px;
+        float: left;
 }
 
 #site_member_register_civilite {
@@ -3108,7 +3084,7 @@ button.go em.type {
 }
 #site_member_register_civilite label {
         margin-bottom: 15px;
-	width: 200px;
+	width: 150px;
 	margin-top: 15px;
         width: 50px;
         float: left;
@@ -3116,7 +3092,7 @@ button.go em.type {
 
 #inscription-formulaire label {
 	display: block;
-        width: 200px;
+        width: 150px;
         float: left;
         margin-top: 15px;
 }

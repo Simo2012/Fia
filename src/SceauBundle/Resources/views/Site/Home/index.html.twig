@@ -17,12 +17,7 @@
             {% set locations = ['Accueil','mobile'] %}
             {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
             {{ forms.input(locations) }}
-        {% elseif menu == 'tombola'%}
-            {% set locations = ['Accueil','Tombola FIA-NET'] %}
-            {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
-            {{ forms.input(locations) }}
         {% endif %}
-        
         
         <div id="content">
             {% if menu == 'home' %}
@@ -58,13 +53,12 @@
                     {{ include ("SceauBundle:Site/Newsletter:newslettres.html.twig", {'newsletters' : newsletters}) }}
                     <div class="main-block-end"></div>
             {% elseif  menu == 'mobile' %}
-                    {% include "SceauBundle:Site/Mobile:mobile.html.twig" %}
-            {% elseif  menu == 'tombola' %}
-                    {% include "SceauBundle:Site/Tombola:tombola.html.twig" %}
+                    {% include "SceauBundle:Site/Mobile:mobile.html.twig" %} 
             {% else %}
                 <div class='avis-conso-hier'>
                     {% include "SceauBundle:Site/Home:stats.html.twig" %}
                 </div>
+
             
             {% endif %}
         </div>
