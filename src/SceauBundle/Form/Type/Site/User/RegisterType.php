@@ -5,7 +5,7 @@ namespace SceauBundle\Form\Type\Site\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
+use Symfony\Component\Validator\Constraints\True;
 
 /**
  * 
@@ -111,6 +111,14 @@ class RegisterType extends AbstractType
             )
         );
         $poBuilder->add('recaptcha', 'ewz_recaptcha', $laParams);
+        
+        $poBuilder->add('legal', 'checkbox', array(
+        'mapped' => false,
+        'empty_data' => false,
+        'required' => 'required',
+        'label' => 'J\'accepte de recevoir les offres des partenaires de FIA-NET adaptées à mon profil.',
+        'data'=>false,
+        'constraints' => new True(array('message' => 'J\'accepte de recevoir les offres des partenaires de FIA-NET adaptées à mon profil.', 'groups' => 'registration'))));
     } // buildForm
 
     
