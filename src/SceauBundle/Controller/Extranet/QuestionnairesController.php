@@ -989,10 +989,11 @@ class QuestionnairesController extends Controller
 
             /** @var \SceauBundle\Entity\Site $siteInfo */
             $siteInfo = $this->getDoctrine()->getRepository('Site')
-                ->parametragesCSVAutoByQuestionnaireType($site->getId(), $questionnaireType->getId())
+                ->parametragesCSVManuelByQuestionnaireType($site->getId(), $questionnaireType->getId())
             ;
 
-            if (($questionnairePersonnalisation = $siteInfo->getQuestionnairePersonnalisations()[0])) {
+            /** @var \SceauBundle\Entity\QuestionnairePersonnalisation $questionnairePersonnalisation */
+            if ($siteInfo && ($questionnairePersonnalisation = $siteInfo->getQuestionnairePersonnalisations()[0])) {
                 $filepath = $questionnairePersonnalisation->getCommandeCSVParametrage()->getDossierStockage();
                 if ($filepath) {
                     $form->get('file')->getData()->move($filepath, $filename);
@@ -1000,10 +1001,7 @@ class QuestionnairesController extends Controller
                 }
             }
 
-            $this->get('session')->getFlashBag()->add(
-                $message,
-                $this->get('translator')->trans($message, array(), 'extranet_questionnaires_import')
-            );
+            $this->addFlash($message, $this->get('translator')->trans($message, [], 'extranet_questionnaires_import'));
         }
 
         return $this->render('@Sceau/Extranet/Questionnaires/import.html.twig', [

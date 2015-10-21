@@ -44,7 +44,7 @@ EOT
         $site_id = $input->getArgument('site_id');
 
         if (is_numeric($site_id)) {
-            $site = $this->em->getRepository('SceauBundle:Site')->parametragesCSVAuto($site_id);
+            $site = $this->em->getRepository('SceauBundle:Site')->parametragesCSV($site_id);
 
             if ($site) {
                 foreach ($site->getQuestionnairePersonnalisations() as $questionnairePersonnalisation) {
