@@ -22,7 +22,7 @@ class AppKernel extends Kernel
             new Lsw\MemcacheBundle\LswMemcacheBundle(),
             new CMEN\GoogleChartsBundle\CMENGoogleChartsBundle(),
             new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
-            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            // new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
