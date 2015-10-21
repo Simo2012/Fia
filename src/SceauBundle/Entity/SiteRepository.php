@@ -9,7 +9,7 @@ use SceauBundle\Cache\Cache;
 class SiteRepository extends EntityRepository
 {
     /**
-     * Retourne l'ensemble des paramètrage CSV Auto pour chaque type de questionnaire d'un site.
+     * Retourne l'ensemble des paramètrage CSV auto et manuel pour chaque type de questionnaire d'un site.
      * Attention : le site doit avoir une garantie valide et être lié à ce mode d'administration.
      *
      * @param int $site_id Identifiant du site
@@ -17,7 +17,7 @@ class SiteRepository extends EntityRepository
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function parametragesCSVAuto($site_id)
+    public function parametragesCSV($site_id)
     {
         $qb = $this->createQueryBuilder('s');
 
@@ -32,7 +32,10 @@ class SiteRepository extends EntityRepository
             ->addSelect('ccc')
             ->where('s.id = :id')
             ->setParameter('id', $site_id)
-            ->andWhere($qb->expr()->eq('s.administrationType', AdministrationType::CSV_AUTO))
+            ->andWhere($qb->expr()->orX(
+                $qb->expr()->eq('s.administrationType', AdministrationType::CSV_AUTO),
+                $qb->expr()->eq('s.administrationType', AdministrationType::CSV_AUTO)
+            ))
             ->andWhere($qb->expr()->orX(
                 $qb->expr()->isNull('qp.dateFin'),
                 $qb->expr()->gt('qp.dateFin', 'CURRENT_DATE()')
@@ -74,7 +77,7 @@ class SiteRepository extends EntityRepository
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function parametragesCSVAutoByQuestionnaireType($siteId, $questionnaireTypeId)
+    public function parametragesCSVManuelByQuestionnaireType($siteId, $questionnaireTypeId)
     {
         $qb = $this->createQueryBuilder('s');
 
@@ -87,7 +90,7 @@ class SiteRepository extends EntityRepository
             ->addSelect('ccp')
             ->where($qb->expr()->eq('s.id', $siteId))
             ->andWhere($qb->expr()->eq('qp.id', $questionnaireTypeId))
-            ->andWhere($qb->expr()->eq('s.administrationType', AdministrationType::CSV_AUTO))
+            ->andWhere($qb->expr()->eq('s.administrationType', AdministrationType::CSV_MANUEL))
             ->andWhere($qb->expr()->orX(
                 $qb->expr()->isNull('qp.dateFin'),
                 $qb->expr()->gt('qp.dateFin', 'CURRENT_DATE()')
