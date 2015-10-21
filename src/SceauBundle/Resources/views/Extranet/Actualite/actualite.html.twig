@@ -1,13 +1,12 @@
-<div id="news">
-    <h6>NEWS</h6>
-    <p>
-        <strong>{{ actualite.title }}</strong><br/>
-        {{ actualite.introduction }}
-        <a class="btn btn-red btn-md btn-square" href="{{ path('extranet_commun_news', {'id': actualite.id}) }}"
-           data-toggle="modal" data-target="#modal">En savoir plus</a>
-    </p>
-</div>
-
-
-<div class="modal modal-flex fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="flexModalLabel" aria-hidden="true">
-</div>
+{% if actualite %}
+    <div id="news">
+        <h6>NEWS</h6>
+        <p>
+            <strong>{{ actualite.title }}</strong><br/>
+            {{ actualite.introduction }}
+            <a class="btn btn-red btn-md btn-square"
+               href="{{ path('extranet_commun_news', {'id': actualite.id}) }}"
+               data-toggle="modal" data-target="#modal">En savoir plus</a>
+        </p>
+    </div>
+{% endif %}

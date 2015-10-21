@@ -1,5 +1,7 @@
 {% extends "SceauBundle:Extranet:modal.html.twig" %}
 
+{% block modal_header %}<h4 class="modal-title">{{ 'Actualite' | trans() }}</h4>{% endblock %}
+
 {% block modal_body %}
     <div class="panel panel-default">
         <div class="panel-heading">Actualité</div>
@@ -10,6 +12,7 @@
         </div>
     </div>
 
+    {% if actualitesByMonths %}
     <div class="panel panel-default">
         <div class="panel-heading">Archives</div>
         <div class="panel-body">
@@ -19,7 +22,9 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingOne">
                             <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="{{ '#actu' ~ actualitesByMonth.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                <a href="{{ '#actu' ~ actualitesByMonth.id }}"
+                                    role="button" data-toggle="collapse" data-parent="#accordion"
+                                    aria-expanded="true" aria-controls="collapseOne">
                                     <h4 class="mini-titre">{{ actualitesByMonth.date|localizeddate('none', 'none', null, null, 'MMMM yyyy') }}</h4>
                                 </a>
                             </h4>
@@ -28,9 +33,9 @@
                             <div class="panel-body">
                                 {% for actualite in actualitesByMonth.actualites %}
                                     <div class="actualite-bloc">
-                                        <a class="btn btn-red btn-md btn-square" href="{{ path('extranet_commun_news', {'id': actualite.id}) }}"
-                                                data-toggle="modal" data-target="#modal">{{ actualite.title }}
-                                        </a>
+                                        <a class="btn btn-red btn-md btn-square"
+                                            href="{{ path('extranet_commun_news', {'id': actualite.id}) }}"
+                                            data-toggle="modal" data-target="#modal">{{ actualite.title }}</a>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -41,4 +46,6 @@
             {% endfor %}
         </div>
     </div>
+    {% endif %}
+
 {% endblock %}

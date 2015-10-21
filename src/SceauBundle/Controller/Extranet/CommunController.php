@@ -119,59 +119,70 @@ class CommunController extends Controller
         );
     }
 
+
     /**
      * Get the last News from the database
      *
+     * @return Response
      */
     public function getLastNewsAction()
     {
-        $actualiteRepo = $this->get('sceau.repository.actualite');
-        $actualite = $actualiteRepo->findOneBy(
+        /** @var \SceauBundle\Entity\Repository\ActualiteRepository $actualiteRepository */
+        $actualiteRepository = $this->get('sceau.repository.actualite');
+
+        $actualite = $actualiteRepository->findOneBy(
             array('active' => 'true'),
-            array('date' => 'desc'),
-            1,
-            0
+            array('date' => 'desc')
         );
 
         return $this->render('SceauBundle:Extranet/Actualite:actualite.html.twig', array('actualite' => $actualite));
-
     }
 
 
     /**
      * Get a news by id and an array of all news classified by month
      *
-     * @Route("/ajax/{id}", name="extranet_commun_news")
+     * @Route("/actualite/{id}", name="extranet_commun_news")
+     *
+     * @return Response
      */
 
     public function getNewsAction($id)
     {
-        $actualiteRepo = $this->get('sceau.repository.actualite');
-        $actualite = $actualiteRepo->findOneById($id);
+        /** @var \SceauBundle\Entity\Repository\ActualiteRepository $actualiteRepository */
+        $actualiteRepository = $this->get('sceau.repository.actualite');
 
-        $actualitesByMonths = $this->getNewsArchive();
+        $actualite = $actualiteRepository->findOneById($id);
 
-       return $this->render('SceauBundle:Extranet/Actualite:actualite_content.html.twig', array(
+        $actualitesByMonths = $this->getArchivedNews();
+
+        return $this->render('SceauBundle:Extranet/Actualite:actualite_content.html.twig', array(
            'actualite' => $actualite,
            'actualitesByMonths' => $actualitesByMonths,
-       ));
+        ));
 
     }
 
     /**
-     * Get News's archives from the database classified by month.
+     * Get archived news from the database classified by month.
      *
-     * @return array contains all news classifed by month
+     * @return array contains all news classified by month
      */
-    private function getNewsArchive()
+    private function getArchivedNews()
     {
+        /** @var \SceauBundle\Entity\Repository\ActualiteRepository $actualiteRepository */
+        $actualiteRepository = $this->get('sceau.repository.actualite');
 
-        $actualiteRepo = $this->get('sceau.repository.actualite');
-
-        $actualites = $actualiteRepo->findBy(
+        /** @var \SceauBundle\Entity\Actualite[] $actualites */
+        $actualites = $actualiteRepository->findBy(
             array('active' => 'true'),
             array('date' => 'desc' )
         );
+
+        // We remove first entry since we already display it on header
+        if (count($actualites) > 0) {
+            array_shift($actualites);
+        }
 
         $actualitesByMonths = array();
 
@@ -188,6 +199,5 @@ class CommunController extends Controller
         }
 
         return $actualitesByMonths;
-
     }
 }
