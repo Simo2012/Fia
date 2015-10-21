@@ -26,6 +26,7 @@ class RegisterType extends AbstractType
         $laParams = array(
             'attr'     => array(
                 'caption'   => 'Civilite :*',
+                 
             ),
             'choices' => array(
                 'Mr' => 'Mr',
@@ -39,23 +40,24 @@ class RegisterType extends AbstractType
         
        
         $laParams = array(
-            'label'    => 'nom',
+            'label'    => 'Nom :*',
             'required' => true,
             'attr'     => array(
+                'size'         => '40',
                 'caption'      => 'nom',
                 'autocomplete' => false,
-                'placeholder'  => 'nom'
+
             )
         );
         $poBuilder->add('nom', 'text', $laParams);
         
         $laParams = array(
-            'label'    => 'prenom',
+            'label'    => 'Prenom :*',
             'required' => true,
             'attr'     => array(
+                'size'         => '40',
                 'caption'      => 'prenom',
                 'autocomplete' => false,
-                'placeholder'  => 'prenom'
             )
         );
         $poBuilder->add('prenom', 'text', $laParams);
@@ -63,7 +65,7 @@ class RegisterType extends AbstractType
         $laParams = array(
             'type' => 'email',
             'invalid_message' => 'Les Adresses Emails doit étres pareils',
-            'options' => array('attr' => array('class' => 'email-field')),
+            'options' => array('attr' => array('class' => 'email-field', 'size' => '40')),
             'required' => true,
             'first_options'  => array('label' => 'E-mail* :'),
             'second_options' => array('label' => 'E-mail de confirmation* :'),
@@ -72,12 +74,12 @@ class RegisterType extends AbstractType
         $poBuilder->add('email','repeated',$laParams);
         
         $laParams = array(
-            'label'    => 'Pseudonyme :',
+            'label'    => 'Pseudonyme :*',
             'required' => true,
             'attr'     => array(
-                'caption'      => 'pseudo',
+                'caption'      => 'Pseudo',
                 'autocomplete' => false,
-                'placeholder'  => 'pseudo'
+                'size' => '40',
             )
         );
         $poBuilder->add('pseudo', 'text', $laParams);
@@ -85,18 +87,19 @@ class RegisterType extends AbstractType
         
         
         $laParams = array(
-            'label'    => 'password',
+            'label'    => 'Password :*',
             'required' => true,
             'attr'     => array(
-                'caption'      => 'password',
+                'caption'      => 'Password',
                 'autocomplete' => false,
-                'placeholder'  => 'password',
-                'class'        => 'password'
+                'class'        => 'password',
+                'size' => '40',
             )
         );
         $poBuilder->add('password', 'password', $laParams);
         
         $laParams = array(
+            'label' => 'Captcha :',
             'attr'        => array(
                 'options' => array(
                     'theme' => 'clean',

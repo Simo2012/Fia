@@ -31,7 +31,7 @@ class Livraison
     /**
      * @var string
      *
-     * @ORM\Column(name="del�ai", type="string", length=50)
+     * @ORM\Column(name="delai", type="string", length=50)
      */
     private $delai;
 

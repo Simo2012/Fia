@@ -13,19 +13,24 @@
             {% set locations = ['Accueil','Newsletter'] %}
             {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
             {{ forms.input(locations) }}
+        {% elseif menu == 'mobile' %} 
+            {% set locations = ['Accueil','mobile'] %}
+            {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
+            {{ forms.input(locations) }}
         {% endif %}
         
         <div id="content">
             {% if menu == 'home' %}
                 <div class="site-prem">
-                    {% include "SceauBundle:Site/Home:preniumwebsite.html.twig" %}  
+                    {{ include('SceauBundle:Site/Home:preniumwebsite.html.twig', {'categories': categories}) }}
+                </div>
+                <div class='newsletter-inscrip'>
+                    {{ include('SceauBundle:Site/Home:news.html.twig', {'newsletters': newsletters}) }}
                 </div>
                 <div class="annuaire-main"> 
-                    {{ include('SceauBundle:Site/Category:listcategory.html.twig', {'categories': categories}) }}
+                    {{ include('SceauBundle:Site/Category:listcategory.html.twig', {'siteprenium': siteprenium}) }}
                 </div>
-                <div class='infos-HP'>
-                    {% include "SceauBundle:Site/Home:news.html.twig" %}
-                </div>
+                
                 <div class="declarer-litige">
                     {% include "SceauBundle:Site/Home:letige.html.twig" %}
                 </div>
@@ -45,10 +50,10 @@
                 </div>
                 <div class="main-block-end"></div>
             {% elseif menu == 'newsletter' %} 
-                     {{ include ("SceauBundle:Site/Newsletter:newslettres.html.twig", {'newsletters' : newsletters}) }}
-                      
-                <div class="main-block-end"></div>
-                
+                    {{ include ("SceauBundle:Site/Newsletter:newslettres.html.twig", {'newsletters' : newsletters}) }}
+                    <div class="main-block-end"></div>
+            {% elseif  menu == 'mobile' %}
+                    {% include "SceauBundle:Site/Mobile:mobile.html.twig" %} 
             {% else %}
                 <div class='avis-conso-hier'>
                     {% include "SceauBundle:Site/Home:stats.html.twig" %}

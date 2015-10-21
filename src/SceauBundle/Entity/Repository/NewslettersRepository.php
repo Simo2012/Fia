@@ -10,11 +10,11 @@ namespace SceauBundle\Entity\Repository;
  */
 class NewslettersRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getLastNewsLetters() {
+    public function getLastNewsLetters($loLimte) {
         $loQuery = $this->createQueryBuilder('nl')
                         ->select('nl')
                         ->orderBy('nl.id', 'DESC')
-                        ->setMaxResults(3);
+                        ->setMaxResults($loLimte);
         return $loQuery->getQuery()->getResult();
     }
 }
