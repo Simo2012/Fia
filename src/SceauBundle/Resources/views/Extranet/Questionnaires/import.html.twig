@@ -1,0 +1,27 @@
+{% extends 'SceauBundle:Extranet:extranet.html.twig' %}
+
+{% block extranet_body %}
+    {% for flashMessage in app.session.flashbag.get('import.sucess') %}
+        <div class="flash-notice">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('import.error') %}
+        <div class="flash-error">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    {{ 'Les lignes du fichier CSV doivent respecter le format suivant : id, nom, prénom, email' | trans({}, 'extranet_questionnaires_import') }}
+    <br>
+    {{ form_start(form) }}
+
+    {{ 'Étape 1 : indique le fichier à importer en cliquant sur le bouton Parcourir :' | trans({}, 'extranet_questionnaires_import') }}
+    {{ form_row(form.file) }}
+    {{ form_row(form.filename) }}
+    <br>
+    {{ 'Étape 2 : cliquez sur le bouton Valider et patientez quelques instants, une page de confirmation va s\'afficher :' | trans({}, 'extranet_questionnaires_import') }}
+    <button type="submit"><span>{{ "Valider" | trans() }}</span></button>
+
+    {{ form_end(form) }}
+{% endblock %}
