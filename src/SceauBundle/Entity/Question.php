@@ -11,7 +11,7 @@ use Gedmo\Translatable\Translatable;
  * Question
  *
  * @ORM\Table(name="Question")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\QuestionRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\QuestionRepository")
  * @Gedmo\TranslationEntity(class="SceauBundle\Entity\Traduction\QuestionTraduction")
  */
 class Question implements Translatable

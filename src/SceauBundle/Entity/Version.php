@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Version
  *
  * @ORM\Table(name="Version")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\VersionRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\VersionRepository")
  */
 class Version
 {

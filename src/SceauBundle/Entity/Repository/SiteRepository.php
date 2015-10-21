@@ -5,6 +5,8 @@ namespace SceauBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use SceauBundle\Cache\Cache;
+use SceauBundle\Entity\AdministrationType;
+use SceauBundle\Entity\Site;
 
 class SiteRepository extends EntityRepository
 {
@@ -43,31 +45,52 @@ class SiteRepository extends EntityRepository
 
         return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getOneOrNullResult();
     }
-    
+
     /**
-     * Fonction pour Récuperer les sites prenium
+     * Retourne l'ensemble des sites avec pour seul questionnairePersonnalisation associé, le principal.
+     * Utiliser pour la génération des widgets.
+     *
+     * @return Site[] Une collection d'instance de Site ou une collection vide
      */
-    public function getPreniumSite() {
-        $loCount = $this->getCount();
+    public function questionnairePrincipal()
+    {
+        // TODO : rajouter le filtrage sur le type de site
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.questionnairePersonnalisations', 'qp')
+            ->where('qp.principal = :principal')
+            ->setParameter('principal', true)
+            ->getQuery()
+            ->useResultCache(true, Cache::LIFETIME_1J)
+            ->execute()
+            ;
+    }
+
+    /**
+     * Fonction pour récuperer les sites prenium
+     */
+    public function getPreniumSite()
+    {
         $loQuery = $this->createQueryBuilder('s')
-                        ->select('s, sc ,c, qp, qt')
-                        ->Join('s.siteCategories', 'sc')
-                        ->Join('sc.categorie', 'c')
-                        ->Join('s.questionnairePersonnalisations','qp')
-                        ->Join('qp.questionnaireType', 'qt')
-                        ->where('qp.principal = true')
-                        ->andWhere('sc.principal = true')
-                        ->setMaxResults(4);
+            ->select('s, sc ,c, qp, qt')
+            ->join('s.siteCategories', 'sc')
+            ->join('sc.categorie', 'c')
+            ->join('s.questionnairePersonnalisations', 'qp')
+            ->join('qp.questionnaireType', 'qt')
+            ->where('qp.principal = true')
+            ->andWhere('sc.principal = true')
+            ->setMaxResults(4);
+
         return $loQuery->getQuery()->getArrayResult();
     }
-    
+
     /**
      * Fonction pour retourner le nombre de site
      */
-    public function getCount() {
-        return  $this->createQueryBuilder('s')
-                     ->select('count(s)')
-                     ->getQuery()
-                     ->getSingleScalarResult();
+    public function getCount()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('count(s)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }
