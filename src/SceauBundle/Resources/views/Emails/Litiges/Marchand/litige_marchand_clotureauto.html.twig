@@ -1,0 +1,15 @@
+{% extends 'SceauBundle:Emails/Litiges/Marchand:base_marchand.html.twig' %}
+
+{% block subject %}
+	Cl&ocirc;ture automatique du litige {{ litige.id }}
+{% endblock %}
+
+{% block body %}
+	Madame&sbquo; Monsieur&sbquo;<br /><br />
+	Nous revenons vers vous au sujet du litige n&deg;{{ ligite.id }}.<br /><br />
+	Aucune action &agrave; propos de ce litige n&#39;a &eacute;t&eacute; entreprise par l&#39;internaute &agrave; l&#39;origine de cette r&eacute;clamation&sbquo; dans les d&eacute;lais impartis par FIA-NET.<br /><br />
+	Nous vous informons donc que nous cl&ocirc;turons ce litige et le consid&eacute;rons comme r&eacute;solu. Il viendra impacter favorablement votre note de résolution de litiges disponible sur votre <a style="color: #52AE35;" style="color:#913935;" href="http://logi118.xiti.com/go.url?xts=487123&s2=3&xtor=EPR-5-[litige_marchand_clotureauto]--[Fiche_marchand]&url=http://www.fia-net.com/annuaire/#SITEID#/fiche.html">fiche marchand</a>.<br /><br />
+	Plus aucune action n&#39;est n&eacute;cessaire sur ce dossier.<br /><br />
+	Nous vous rappelons ci-dessous tous les &eacute;l&eacute;ments en notre possession concernant ce litige :<br /><br />
+	{{ parent() }}
+{% endblock %}

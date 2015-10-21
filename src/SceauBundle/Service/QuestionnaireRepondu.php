@@ -22,9 +22,9 @@ class QuestionnaireRepondu
     /**
      * Méthode qui permet de savoir si un Questionnaire existe bien et qu'il est actif
      *
-     * @param integer $questionnaire_id Identifiant du Questionnaire
+     * @param int $questionnaire_id Identifiant du Questionnaire
      *
-     * @return Boolean true s'il existe bien et qu'il est actif
+     * @return bool true s'il existe bien et qu'il est actif
      */
     public function verifierValiditeQuestionnaire($questionnaire_id)
     {
@@ -46,9 +46,9 @@ class QuestionnaireRepondu
     /**
      * Méthode qui permet de savoir si un QuestionnaireReponse existe bien
      *
-     * @param integer $questionnaireReponse_id Identifiant du QuestionnaireReponse
+     * @param int $questionnaireReponse_id Identifiant du QuestionnaireReponse
      *
-     * @return Boolean true s'il existe bien
+     * @return bool true s'il existe bien
      */
     public function verifierValiditeQuestionnaireReponse($questionnaireReponse_id)
     {
@@ -71,7 +71,7 @@ class QuestionnaireRepondu
      * @param Questionnaire $questionnaire Instance de Questionnaire
      * @param QuestionnaireReponse $questionnaireReponse Instance de QuestionnaireReponse
      *
-     * @return Boolean true s'il y a cohérence
+     * @return bool true s'il y a cohérence
      */
     public function coherenceQuestionnaireVsQuestionnaireReponse(
         Questionnaire $questionnaire,
@@ -92,7 +92,7 @@ class QuestionnaireRepondu
      * @param Questionnaire $questionnaire Instance de Questionnaire
      * @param Site $site Instance de Site
      *
-     * @return Boolean true s'il y a cohérence
+     * @return bool true s'il y a cohérence
      */
     public function coherenceQuestionnaireVsSite(Questionnaire $questionnaire, Site $site)
     {
@@ -104,10 +104,10 @@ class QuestionnaireRepondu
      * Méthode qui permet de savoir si les arguments donnés pour l'appel d'un droit de réponse sont cohérents
      *
      * @param Site $site Instance de Site
-     * @param integer $questionnaire_id Identifiant du Questionnaire
-     * @param integer $questionnaireReponse_id Identifiant du QuestionnaireReponse
+     * @param int $questionnaire_id Identifiant du Questionnaire
+     * @param int $questionnaireReponse_id Identifiant du QuestionnaireReponse
      *
-     * @return Boolean true s'il y a cohérence
+     * @return bool true s'il y a cohérence
      */
     public function coherenceArgumentsDroitDeReponse(Site $site, $questionnaire_id, $questionnaireReponse_id)
     {
@@ -137,10 +137,10 @@ class QuestionnaireRepondu
      * Méthode qui permet de savoir si les arguments donnés pour l'appel d'un ajout de droit de réponse sont cohérents
      *
      * @param Site $site Instance de Site
-     * @param integer $questionnaire_id Identifiant du Questionnaire
-     * @param integer $questionnaireReponse_id Identifiant du QuestionnaireReponse
+     * @param int $questionnaire_id Identifiant du Questionnaire
+     * @param int $questionnaireReponse_id Identifiant du QuestionnaireReponse
      *
-     * @return Boolean true s'il y a cohérence
+     * @return bool true s'il y a cohérence
      */
     public function coherenceArgumentsDroitDeReponseAjout(Site $site, $questionnaire_id, $questionnaireReponse_id)
     {
@@ -153,8 +153,38 @@ class QuestionnaireRepondu
              un droit de réponse */
             $nb_DroitDeReponse_Actif = $this->em
                 ->getRepository('SceauBundle:QuestionnaireReponse')
-                ->nbDroitDeReponseActif($questionnaireReponse);
+            ->nbDroitDeReponseActif($questionnaireReponse);
             if ($nb_DroitDeReponse_Actif == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    /**
+     * Méthode qui permet de savoir si les arguments donnés pour l'appel d'une modification/suppression de droit de réponse sont cohérents
+     *
+     * @param Site $site Instance de Site
+     * @param int $questionnaire_id Identifiant du Questionnaire
+     * @param int $questionnaireReponse_id Identifiant du QuestionnaireReponse
+     * @param int $droitDeReponse_id Identifiant du DroitDeReponse
+     *
+     * @return bool true s'il y a cohérence
+     */
+    public function coherenceArgumentsDroitDeReponseModification(Site $site, $questionnaire_id, $questionnaireReponse_id, $droitDeReponse_id)
+    {
+        if ($this->coherenceArgumentsDroitDeReponse($site, $questionnaire_id, $questionnaireReponse_id)) {
+            $droitDeReponse = $this->em
+                ->getRepository('SceauBundle:DroitDeReponse')
+                ->find($droitDeReponse_id);
+            
+            // ToDo : check pour QuestionnaireReponse à revoir !
+            $QuestionnaireReponse = $droitDeReponse->getQuestionnaireReponse();
+            $QuestionnaireReponseParam = $this->em
+                ->getRepository('SceauBundle:QuestionnaireReponse')
+                ->find($questionnaireReponse_id);
+            if ($QuestionnaireReponse == $QuestionnaireReponseParam) {
                 return true;
             }
         }

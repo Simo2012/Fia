@@ -14,6 +14,14 @@ sceau_site:
     requirements:
         _locale: fr|en
 
+sceau_back_office:
+    resource: "@SceauBundle/Controller/Admin"
+    type:     annotation
+    prefix:   /back-office/{_locale}/
+    defaults: { _locale: fr }
+    requirements:
+        _locale: fr|en
+
 sceau_webservice:
     resource: "@SceauBundle/Controller/Webservice"
     type:     annotation

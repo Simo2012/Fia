@@ -103,8 +103,6 @@
             <argument type="service" id="request_stack"/>
         </service>
         
-           
-        
         <!-- Encoder Le mot de passe -->
         <service id="sceau.site.user.encode.password" class="SceauBundle\Model\Common\Encoder\MembrePasswordEncoder">
             <argument type="service" id="sceau.api.filter.Encrypt"/>

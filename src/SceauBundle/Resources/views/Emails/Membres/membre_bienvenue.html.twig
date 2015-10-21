@@ -1,0 +1,154 @@
+{% extends 'SceauBundle:Emails\Membres:base_membre.html.twig' %}
+
+{% block subject %}{{ 'Bienvenue &Agrave; vous !' }}{% endblock %}
+
+{% block body %}
+	<td colspan="4" align="left" style="line-height:normal">
+		<table width="480" align="center" border="0" cellspacing="0" cellpadding="0"  style="line-height:normal">
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;"><strong>Bonjour {{ prenom }},</strong><br />
+					<br />Je suis Charlie, et je serai votre interlocutrice privil&eacute;gi&eacute;e pour toutes les communications entre le Sceau de Confiance FIA-NET et vous.<br />
+					Au nom de toute l'&eacute;quipe, je vous souhaite la bienvenue dans <strong>VOTRE</strong> nouvelle communaut&eacute; !!
+				<br />&nbsp;</td>
+			</tr>
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;"><strong>Pour bien d&eacute;buter, voici vos identifiants de connexion &agrave; l'espace membre :</strong><br />
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
+						<tr style="line-height:normal">
+							<td width="35" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">&nbsp;</td>
+							<td width="10" height="22" valign="middle" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" /></td>
+							<td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">Identifiant : <strong>{{ email }}</strong></td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="35" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">&nbsp;</td>
+							<td width="10" height="22" valign="middle" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" /></td>
+							<td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">Mot de passe : <strong>{{ password }}</strong></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+					<br />
+					Savez-vous que vous venez d'int&eacute;grer la communaut&eacute; d'acheteurs la plus active de France ?*
+					<br />
+					<br />
+					<strong>Passons aux choses s&eacute;rieuses, et d&eacute;couvrons  ce que vous r&eacute;serve votre espace membre :</strong><br />
+					<br />
+					<table width="476" height="245" background="http://www.fia-net.com/img/emails/visu_block-recap.png" align="center" border="0" cellspacing="0" cellpadding="0" style="line-height:normal; background-position:left; background-repeat:no-repeat; font-family:Verdana, Geneva, sans-serif; color:#7c7979; font-size:10px;">
+						<tr style="line-height:normal">
+							<td height="6" colspan="6" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/pixel.png" width="1" height="1" /></td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="9" height="70" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="70" style="line-height:normal">&nbsp;</td>
+							<td width="191" rowspan="2" style="line-height:normal">
+								<table width="159" border="0" align="center" cellpadding="0" cellspacing="0" style="line-height:normal">
+									<tr style="line-height:normal">
+										<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:11px; font-weight:bold; color:#dd0131; text-align:center; font-weight:bold;">Questionnaires :</td>
+									</tr>
+									<tr style="line-height:normal">
+										<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:10px; color:#7c7979; text-align:justify">après achat, vous pourrez consulter tous vos questionnaires répondus et non répondus !</td>
+									</tr>
+								</table>
+							</td>
+							<td width="64" height="70" style="line-height:normal">&nbsp;</td>
+							<td width="191" height="70" style="line-height:normal"><table width="159" border="0" align="center" cellpadding="0" cellspacing="0" style="line-height:normal">
+								<tr style="line-height:normal">
+									<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:11px; font-weight:bold; color:#dd0131; text-align:center; font-weight:bold;">Bons plans :</td>
+								</tr>
+								<tr style="line-height:normal">
+									<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:10px; color:#7c7979; text-align:justify">des exclusivités FIA-NET pour acheter malin, et vous faire économiser !
+									&nbsp;</td>
+								</tr>
+							</table></td>
+							<td width="9" height="70" style="line-height:normal">&nbsp;</td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="9" height="12" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="12" style="line-height:normal">&nbsp;</td>
+							<td width="64" height="12" style="line-height:normal">&nbsp;</td>
+							<td width="191" height="12" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="12" style="line-height:normal">&nbsp;</td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="9" height="14" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="14" style="line-height:normal">&nbsp;</td>
+							<td width="191" height="14" style="line-height:normal">&nbsp;</td>
+							<td width="64" height="14" style="line-height:normal">&nbsp;</td>
+							<td width="191" height="14" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="14" style="line-height:normal">&nbsp;</td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="9" height="6" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/pixel.png" width="1" height="1" /></td>
+							<td width="9" height="6" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/pixel.png" width="1" height="1" /></td>
+							<td width="191" height="6" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/pixel.png" width="1" height="1" /></td>
+							<td width="64" height="6" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/pixel.png" width="1" height="1" /></td>
+							<td width="191" rowspan="4" style="line-height:normal"><table width="159" border="0" align="center" cellpadding="0" cellspacing="0" style="line-height:normal">
+								<tr style="line-height:normal">
+									<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:11px; font-weight:bold; color:#dd0131; text-align:center; font-weight:bold;">Espace litiges :</td>
+								</tr>
+								<tr style="line-height:normal">
+									<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:10px; color:#7c7979; text-align:justify">en cas de litige avec un site partenaire, notre service de médiation vous aide à trouver une solution. Vous influerez directement sur l'indice de résolution des litiges, et donc sur l'Indice de Satisfaction de l'e-commerçant.</td>
+								</tr>
+							</table></td>
+							<td width="9" height="6" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/pixel.png" width="1" height="1" /></td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="9" height="58" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="58" style="line-height:normal">&nbsp;</td>
+							<td width="191" height="58" style="line-height:normal"><table width="159" border="0" align="center" cellpadding="0" cellspacing="0" style="line-height:normal">
+								<tr style="line-height:normal">
+									<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:11px; font-weight:bold; color:#dd0131; text-align:center; font-weight:bold;">Tombola :</td>
+								</tr>
+								<tr style="line-height:normal">
+									<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:10px; color:#7c7979; text-align:justify">tenter de gagner jusqu'à 100&euro; en chèques cadeaux !&nbsp;</td>
+								</tr>
+							</table></td>
+							<td width="64" height="58" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="58" style="line-height:normal">&nbsp;</td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="9" height="21" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="21" style="line-height:normal">&nbsp;</td>
+							<td width="191" height="21" style="line-height:normal">&nbsp;</td>
+							<td width="64" height="21" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="21" style="line-height:normal">&nbsp;</td>
+						</tr>
+						<tr style="line-height:normal">
+							<td width="9" height="58" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="58" style="line-height:normal">&nbsp;</td>
+							<td width="191" height="58" style="line-height:normal"><table width="159" border="0" align="center" cellpadding="0" cellspacing="0" style="line-height:normal">
+								<tr style="line-height:normal">
+									<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:11px; font-weight:bold; color:#dd0131; text-align:center; font-weight:bold;">Aide à l'achat en ligne :</td>
+								</tr>
+								<tr style="line-height:normal">
+									<td align="center" style="line-height:normal; font-family:Verdana, Geneva, sans-serif; font-size:10px; color:#7c7979; text-align:justify">une multitude de conseils pour acheter sans risque !</td>
+								</tr>
+							</table></td>
+							<td width="64" height="58" style="line-height:normal">&nbsp;</td>
+							<td width="9" height="58" style="line-height:normal">&nbsp;</td>
+						</tr>
+					</table>
+					<br />
+					<strong>Une derni&egrave;re chose !</strong><br />
+					Bien que je sois persuad&eacute;e que cela n'arrivera pas, sachez que vous pouvez supprimer &agrave; tout moment votre compte dans la rubrique « Mon compte ».
+				</td>
+			</tr>
+			{% include 'SceauBundle:Emails/Membres:block_dont_forget.html.twig' %}
+		</table>
+	</td>
+{% endblock %}
+
+{% block asterisques %}
+	<td colspan="4" align="left" style="line-height:normal">
+		<table align="center" width="475" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:10px; font-style:italic;">* FIA-NET est la premi&egrave;re source d'avis d'acheteurs de France concernant des e-commerçants.<br />
+					** Consultez la liste des sites partenaires &eacute;valu&eacute;s sur <a target="_blank"   href="http://logi118.xiti.com/go.url?xts=487123&s2=1&xtor=EPR-5-[{{ xiti_template }}]--[Homepage]&url=http://www.fia-net.com/" style="color:#52ae35;">www.fia-net.com</a>
+				</td>
+			</tr>
+		</table>
+	</td>
+{% endblock %}
+

@@ -101,4 +101,33 @@ class HomeController extends Controller
         }
         return $this->render("SceauBundle:Site/Security:test.html.twig"); 
     }
+
+
+    /**
+     * List all published Articles.
+     *
+     * @Route("/presse", name="site_presse")
+     * @Method("GET")
+     */
+    public function presseAction(Request $request)
+    {
+        $articlePresseRepo = $this->get('sceau.repository.article.presse');
+        $articlePresses = $articlePresseRepo->getAllArticlePresse();
+
+        $articlePressesByMonths = array();
+
+        //Group by month
+        foreach ($articlePresses as $articlePresse){
+            $articlePressesDate = $articlePresse->getDate()->format('m-Y');
+            if (isset($articlePressesByMonths[$articlePressesDate])) {
+                $articlePressesByMonths[$articlePressesDate]['articles'][] = $articlePresse;
+            } else {
+                $articlePressesByMonths[$articlePressesDate]['articles'] = [$articlePresse];
+                $articlePressesByMonths[$articlePressesDate]['date'] = $articlePresse->getDate();
+            }
+        }
+
+        return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths));
+    }
+
 }

@@ -11,7 +11,7 @@
                 </target>            
             </trans-unit>
             <trans-unit id="2">
-                <source>repondez_directement</source>
+                <source>repondre_directement</source>
                 <target>With the « Right of Reply », reply directly to comments from your customers !</target>
             </trans-unit>
             <trans-unit id="3">
@@ -26,9 +26,21 @@
                 </target>       
             </trans-unit>
             <trans-unit id="4">
-                <source>repondez</source>
-                <target>Answer</target>            
-            </trans-unit>                                                                                                                                                                                                                                                        
+                <source>message_creation_droit_de_reponse_succes</source>
+                <target>The right of reply was well recorded.</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>supprimer_confirmation</source>
+                <target>You are about to permanently delete your answer. Are you sure you want to continue ?</target>            
+            </trans-unit>
+            <trans-unit id="6">
+                <source>message_suppression_droit_de_reponse_succes</source>
+                <target>The right of reply was well deleted.</target>
+            </trans-unit> 
+            <trans-unit id="7">
+                <source>modifier_confirmation</source>
+                <target>You are about to edit your answer. Your comment will be visible on www.fia-net.com.</target>
+            </trans-unit>                                                                                                                                                                                            
         </body>
     </file>
 </xliff>

@@ -29,7 +29,8 @@
         "symfony/finder": "~2.6",
         "leaseweb/memcache-bundle": "~2.1",
         "cmen/google-charts": "@dev",
-        "excelwebzone/recaptcha-bundle": "dev-master"
+        "excelwebzone/recaptcha-bundle": "~1.4",
+        "white-october/pagerfanta-bundle": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

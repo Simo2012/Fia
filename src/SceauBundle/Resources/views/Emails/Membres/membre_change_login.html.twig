@@ -1,0 +1,44 @@
+{% extends 'SceauBundle:Emails\Membres:base_membre.html.twig' %}
+
+{% block subject %}{{ 'Votre nouvel identifiant' }}{% endblock %}
+
+{% block body %}
+	<td colspan="4" align="left" style="line-height:normal">
+		<table width="480" align="center" border="0" cellspacing="0" cellpadding="0"  style="line-height:normal">
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+					<strong>{{ prenom }},</strong><br />
+					<br />Comme votre ancien identifiant ne semblait plus vous plaire, je viens d'enregistrer le nouveau !<br />&nbsp;
+				</td>
+			</tr>
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+					<table width="300" border="0" align="center" cellpadding="15" cellspacing="0" style="color:#7c7979; line-height:normal;">
+						<tr>
+							<td align="center" style="font-family:Verdana, Geneva, sans-serif; font-size:13px;"><strong style="color:#dd0131">Voici un rappel du nouvel identifiant :</strong><br /> 
+							<strong>{{ email_change_login }}</strong></td>
+						</tr>
+					</table>
+					<br />
+					<strong>Ne partez pas, il reste une &eacute;tape :</strong><br />
+					<em>Pour que votre compte soit d&eacute;finitivement mis &agrave; jour, cliquez sur le bouton ci-dessous (ou copiez-collez le lien dans votre navigateur) :</em>
+					<br /><br />
+					<table align="center" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
+						<tr style="line-height:normal">
+							<td align="center" style="line-height:normal"><a target="_blank"  href="http://logi118.xiti.com/go.url?xts=487123&s2=5&xtor=EPR-5-[{{ xiti_template }}]--[url_validation_inscription]&url={{ url_confirmation_change_login }}" ><img src="http://www.fia-net.com/img/emails/btn_valide-info.png" width="194" height="24" alt="Je valide mes nouvels infos" border="0" /></a>
+							</td>
+						</tr>
+						<tr style="line-height:normal">
+							<td height="30" align="center" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;"><a target="_blank"  href="http://logi118.xiti.com/go.url?xts=487123&s2=5&xtor=EPR-5-[{{ xiti_template }}]--[url_validation_inscription]&url={{ url_confirmation_change_login }}"  style="line-height:normal; font-weight:bold; color:#52ae35;">{{ url_confirmation_change_login }}</a>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr style="line-height:normal">
+				<td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;"><br />Pour information, et parce que nous aimons vous simplifier la vie, cet  e-mail a &eacute;t&eacute; envoy&eacute; &agrave; l'ancienne et &agrave; la nouvelle adresse, qui vous sert d'identifiant &agrave; votre compte.</td>
+			</tr>
+			{% include 'SceauBundle:Emails/Membres:block_dont_forget.html.twig' %}
+		</table>
+	</td>
+{% endblock %}

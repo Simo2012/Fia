@@ -1,0 +1,39 @@
+
+{% spaceless %}
+    <!DOCTYPE html>
+    <html lang="fr">
+        <head>
+            {% include 'SceauBundle:Admin/Common:header.html.twig' %}
+        </head>
+        <body>
+            <div id="wrapper">
+                <nav class="navbar-top" role="navigation">
+                    {% include 'SceauBundle:Admin/Common:nav-top.html.twig' %}
+                </nav>
+
+                <nav class="navbar-side" role="navigation">
+                    {% include 'SceauBundle:Admin/Common:nav-side.html.twig' %}
+                </nav>
+
+                <div id="page-wrapper">
+                    {% block CONTENT %}{% endblock %}
+                </div>
+            </div>
+            {% include 'SceauBundle:Admin/Common:js-global.html.twig' %}
+
+        <script>
+
+            $(document).ready(function() {
+
+
+                $('.datepicker').datepicker({
+                    format: 'yyyy-mm-dd'
+                });
+
+            });
+
+        </script>
+        </body>
+    </html>
+    
+{% endspaceless %}

@@ -1,0 +1,15 @@
+{% extends 'SceauBundle:Emails/Litiges/Internaute:base_internaute.html.twig' %}
+
+{% block subject %}
+	Enregistrement de votre litige {{ litige.id }}
+{% endblock %}
+
+{% block body %}
+	{{ membre }}&sbquo;<br /><br />
+	Nous avons bien pris note de votre d&eacute;claration de litige.<br /><br />
+	Celui-ci va dor&eacute;navant &ecirc;tre g&eacute;r&eacute; par notre service de r&eacute;solution des litiges Facilitiges.<br />
+	Ce dernier mettra &agrave; jour votre dossier et vous ouvrira diff&eacute;rentes possibilit&eacute;s d&#39;action.<br /><br />
+	A chaque mise &agrave; jour de votre dossier&sbquo; un e-mail vous sera envoy&eacute; pour vous inviter &agrave; venir vous connecter.<br /><br />
+	Nous vous informons que votre dossier n&eacute;cessite une intervention humaine qui aura lieu sous 48 heures ouvr&eacute;es (hors week-ends et jours f&eacute;ri&eacute;s).<br />
+	La prochaine mise &agrave; jour de votre dossier aura donc lieu dans ce d&eacute;lai.
+{% endblock %}

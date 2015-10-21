@@ -11,7 +11,7 @@
                 </target>            
             </trans-unit>
             <trans-unit id="2">
-                <source>repondez_directement</source>
+                <source>repondre_directement</source>
                 <target>Grâce au « Droit de réponse », répondez directement aux remarques de vos clients !</target>
             </trans-unit>
             <trans-unit id="3">
@@ -26,9 +26,21 @@
                 </target>            
             </trans-unit>
             <trans-unit id="4">
-                <source>repondez</source>
-                <target>Répondez</target>            
-            </trans-unit>                                                                                                                                                                                                                                                 
+                <source>message_creation_droit_de_reponse_succes</source>
+                <target>Le droit de réponse a bien été enregistré.</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>supprimer_confirmation</source>
+                <target>Vous êtes sur le point de supprimer définitivement votre réponse. Êtes-vous certain(e) de vouloir continuer ?</target>            
+            </trans-unit>
+            <trans-unit id="6">
+                <source>message_suppression_droit_de_reponse_succes</source>
+                <target>Le droit de réponse a bien été supprimé.</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>modifier_confirmation</source>
+                <target>Vous êtes sur le point de modifier votre réponse. Celle-ci sera visible sur le site www.fia-net.com.</target>
+            </trans-unit>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
         </body>
     </file>
 </xliff>

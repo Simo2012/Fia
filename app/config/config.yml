@@ -6,6 +6,9 @@ imports:
     - { resource: emails.yml }
     - { resource: doctrine_extensions.yml }
 
+parameters:
+    pagination_size: 5
+
 framework:
     #esi:             ~
     translator:      { fallback: "%locale%" }
@@ -30,8 +33,10 @@ framework:
 
 # Twig Configuration
 twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
+    debug:             "%kernel.debug%"
+    strict_variables:  "%kernel.debug%"
+    globals:
+        fianet_static_site: "%fianet_static_site%"
 
 # Assetic Configuration
 assetic:
@@ -39,6 +44,22 @@ assetic:
     use_controller: false
     bundles:        ['SceauBundle']
     #java: /usr/bin/java
+    assets:
+        font-awesome-otf:
+            inputs: '%kernel.root_dir%/../src/SceauBundle/Resources/public/css/admin/common/font-awesome/fonts/FontAwesome.otf'
+            output: 'fonts/FontAwesome.otf'
+        font-awesome-eot:
+            inputs: '%kernel.root_dir%/../src/SceauBundle/Resources/public/css/admin/common/font-awesome/fonts/fontawesome-webfont.eot'
+            output: 'fonts/fontawesome-webfont.eot'
+        font-awesome-svg:
+            inputs: '%kernel.root_dir%/../src/SceauBundle/Resources/public/css/admin/common/font-awesome/fonts/fontawesome-webfont.svg'
+            output: 'fonts/fontawesome-webfont.svg'
+        font-awesome-ttf:
+            inputs: '%kernel.root_dir%/../src/SceauBundle/Resources/public/css/admin/common/font-awesome/fonts/fontawesome-webfont.ttf'
+            output: 'fonts/fontawesome-webfont.ttf'
+        font-awesome-woff:
+            inputs: '%kernel.root_dir%/../src/SceauBundle/Resources/public/css/admin/common/font-awesome/fonts/fontawesome-webfont.woff'
+            output: 'fonts/fontawesome-webfont.woff'
     filters:
         cssrewrite: ~
         #closure:
@@ -101,7 +122,7 @@ lsw_memcache:
     pools:
         default:
             servers:
-              - { host: 10.199.54.106, tcp_port: 11211 }
+              - { host: %memcache_host%, tcp_port: %memcache_port% }
     doctrine:
         metadata_cache:
             pool: default

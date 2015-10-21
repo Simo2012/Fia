@@ -28,5 +28,6 @@ class SceauExtension extends Extension
         $loader->load('services_form.xml');
         $loader->load('services_listener.xml');
         $loader->load('services_validator.xml');
+        $loader->load('services_repository.xml');
     }
 }

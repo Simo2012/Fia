@@ -13,3 +13,5 @@
 /web/css/*
 /web/images/*
 /web/js/*
+/.idea/
+/web/fonts/*

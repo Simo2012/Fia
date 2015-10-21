@@ -1,0 +1,40 @@
+{% for menu in menus %}
+    {% if menu.childMenus is null %}
+        <li>
+            {% if menu.route in currentRoute %}
+                <a class="active" href="{{ path(menu.route) }}">
+                    <i class="fa fa-{{ menu.icon }}"></i> {{ menu.libelle }}
+                </a>
+            {% else %}
+                <a  href="{{ path(menu.route) }}">
+                    <i class="fa fa-{{ menu.icon }}"></i> {{ menu.libelle }}
+                </a>
+            {% endif %}
+        </li>
+    {% else %}
+        <li class="panel">
+            <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="{{ '#' ~ menu.route  }}">
+                <i class="fa fa-{{ menu.icon }}"></i> {{ menu.libelle }} <i class="fa fa-caret-down"></i>
+            </a>
+            {% if menu.route in currentRoute  %}
+                <ul class="in nav" id="{{ menu.route }}">
+                    {% else %}
+                <ul class="collapse nav" id="{{ menu.route }}">
+            {% endif  %}
+                {% for childMenu in menu.childMenus %}
+                    <li>
+                        {% if currentRoute == childMenu.route %}
+                            <a class="active" href="{{ path(childMenu.route) }}">
+                                <i class="fa fa-{{ childMenu.icon }}"></i> {{ childMenu.libelle }}
+                            </a>
+                        {% else %}
+                            <a  href="{{ path(childMenu.route) }}">
+                                <i class="fa fa-{{ childMenu.icon }}"></i> {{ childMenu.libelle }}
+                            </a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endif %}
+{% endfor %}
