@@ -8,6 +8,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use SceauBundle\Entity\Membre;
 use SceauBundle\Form\Type\Site\User\RegisterType;
+use SceauBundle\Form\Type\Site\TicketQuestionType;
+use SceauBundle\Entity\TicketActeur;
+use SceauBundle\Entity\Ticket;
+
 /**
  * Contrôleur Home : pages relatives aux home de site web
  *
@@ -115,6 +119,23 @@ class HomeController extends Controller
         }
 
         return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths));
+    }
+
+    /**
+     * List all published Articles.
+     *
+     * @Route("/contact", name="site_contact")
+     * @Method({"GET","POST"})
+     */
+    public function contactAction(Request $request)
+    {
+        $ticket = new Ticket();
+        $form = $this->createForm(new TicketQuestionType());
+        $form->handleRequest($request);
+
+        return $this->render('SceauBundle:Site/Contact:index.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 
 }
