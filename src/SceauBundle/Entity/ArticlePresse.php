@@ -2,16 +2,50 @@
 
 namespace SceauBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Table(name="articlepresse")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\ArticlePresseRepository")
+ */
 class ArticlePresse
 {
 
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $title;
+
+    /**
+     * @ORM\Column(type="datetimetz")
+     */
     private $date;
+
+    /**
+     * @ORM\Column(type="text")
+     */
     private $content;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $source;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $urlSource;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private $published;
 
 

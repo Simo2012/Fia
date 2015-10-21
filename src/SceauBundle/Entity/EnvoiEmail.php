@@ -2,9 +2,11 @@
 
 namespace SceauBundle\Entity;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EnvoiEmail
+ * @ORM\Table(name="envoiemail")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\EnvoiEmailRepository")
  */
 class EnvoiEmail
 {
@@ -21,42 +23,44 @@ class EnvoiEmail
     ];
 
     /**
-     * @var integer
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $subject;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $sendFrom;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $sendTo;
 
     /**
-     * @var string
+     * @ORM\Column(type="text")
      */
     private $content;
 
     /**
-     * @var \DateTime
+     * @ORM\Column(type="datetimetz")
      */
     private $dateInsert;
 
     /**
-     * @var \DateTime
+     * @ORM\Column(type="datetimetz")
      */
     private $dateSend;
 
     /**
-     * @var integer
+     * @ORM\Column(type="integer")
      */
     private $status;
 

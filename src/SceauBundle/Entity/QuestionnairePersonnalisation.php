@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * QuestionnairePersonnalisation
  *
  * @ORM\Table(name="QuestionnairePersonnalisation")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\QuestionnairePersonnalisationRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\QuestionnairePersonnalisationRepository")
  */
 class QuestionnairePersonnalisation
 {

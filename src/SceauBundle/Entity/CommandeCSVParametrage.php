@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CommandeCSVParametrage
  *
  * @ORM\Table(name="CommandeCSVParametrage")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\CommandeCSVParametrageRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\CommandeCSVParametrageRepository")
  */
 class CommandeCSVParametrage
 {

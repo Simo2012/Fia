@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * DelaiEnvoi
  *
  * @ORM\Table(name="DelaiEnvoi")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\DelaiEnvoiRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\DelaiEnvoiRepository")
  */
 class DelaiEnvoi
 {

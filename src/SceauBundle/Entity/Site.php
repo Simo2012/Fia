@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Site
  *
  * @ORM\Table(name="Site")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\SiteRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\SiteRepository")
  */
 class Site
 {
@@ -29,6 +29,13 @@ class Site
      * @ORM\Column(name="nom", type="string", length=100)
      */
     private $nom;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="logo", type="integer", nullable=true)
+     */
+    private $logo;
 
     /**
      * @var string
@@ -51,6 +58,13 @@ class Site
      * @ORM\Column(name="clePrivee", type="string", length=20, nullable=true)
      */
     private $clePrivee;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=200, nullable=true)
+     */
+    private $description;
 
 
     /**
@@ -215,7 +229,7 @@ class Site
 
         return $this;
     }
-
+    
     /**
      * Get nom
      *
@@ -226,6 +240,32 @@ class Site
         return $this->nom;
     }
 
+
+    /**
+     * Get logo
+     *
+     * @return integer
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+    
+    /**
+     * Set logo
+     *
+     * @param integer $logo
+     *
+     * @return Site
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    
     /**
      * Set package
      *
@@ -306,6 +346,30 @@ class Site
     public function getSlug()
     {
         return $this->slug;
+    }
+    
+    /**
+     * Set Description
+     *
+     * @param string $description
+     *
+     * @return Site
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get $description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

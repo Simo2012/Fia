@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ServiceClientel
  *
  * @ORM\Table(name="ServiceClientel")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\ServiceClientelRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\ServiceClientelRepository")
  */
 class ServiceClientel
 {
@@ -59,9 +59,9 @@ class ServiceClientel
     /**
      * @var string
      *
-     * @ORM\Column(name="decription", type="string", length=500)
+     * @ORM\Column(name="description", type="string", length=500)
      */
-    private $decription;
+    private $description;
 
 
     /**
@@ -195,27 +195,27 @@ class ServiceClientel
     }
 
     /**
-     * Set decription
+     * Set description
      *
-     * @param string $decription
+     * @param string $description
      *
      * @return ServiceClientel
      */
-    public function setDecription($decription)
+    public function setDescription($description)
     {
-        $this->decription = $decription;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get decription
+     * Get description
      *
      * @return string
      */
-    public function getDecription()
+    public function getDescription()
     {
-        return $this->decription;
+        return $this->description;
     }
 }
 

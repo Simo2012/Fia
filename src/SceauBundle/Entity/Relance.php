@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Relance
  *
  * @ORM\Table(name="Relance")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\RelanceRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\RelanceRepository")
  */
 class Relance
 {

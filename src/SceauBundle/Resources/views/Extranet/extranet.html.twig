@@ -19,6 +19,7 @@
     'bundles/sceau/css/extranet/externe.css'
     'bundles/sceau/css/extranet/main.css'
     'bundles/sceau/css/extranet/navigation.css'
+    'bundles/sceau/css/admin/common/bootstrap.min.css'
     filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -54,6 +55,9 @@
     {% include 'SceauBundle:Extranet:footer.html.twig' %}
 
     <div id="masque"></div>
+
+    <div class="modal modal-flex fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="flexModalLabel" aria-hidden="true">
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -64,6 +68,7 @@
     '../vendor/components/jqueryui/jquery-ui.min.js'
     '../vendor/components/jqueryui/ui/datepicker.js'
     'bundles/fosjsrouting/js/router.js'
+    'bundles/sceau/js/admin/common/bootstrap.min.js'
     'bundles/sceau/js/extranet/main.js'
     'bundles/sceau/js/calendrier.js' %}
     <script src="{{ asset_url }}" type="text/javascript"></script>

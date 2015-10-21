@@ -1,0 +1,12 @@
+{% if actualite %}
+    <div id="news">
+        <h6>NEWS</h6>
+        <p>
+            <strong>{{ actualite.title }}</strong><br/>
+            {{ actualite.introduction }}
+            <a class="btn btn-red btn-md btn-square"
+               href="{{ path('extranet_commun_news', {'id': actualite.id}) }}"
+               data-toggle="modal" data-target="#modal">En savoir plus</a>
+        </p>
+    </div>
+{% endif %}

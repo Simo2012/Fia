@@ -85,9 +85,7 @@
                 {{ form_errors(form) }}
                 {{ form_errors(form.commentaire) }}
                 <br />
-                {# <button id="form_valider" class="btn btn-primary" name="form[valider]" type="submit">{{ 'commun_valider'|trans }}</button> #}
-                {{ form_widget(form.valider, {'attr': {'class': 'btn btn-primary', 'value' : 'commun_valider'|trans}}) }}
-                {# ToDo : bouton de validation à revoir pour pouvoir utiliser le form_widget mais avec texte traductible #}
+                {{ form_widget(form.valider, {'attr': {'class': 'btn btn-primary'}}) }}
 
                 {# Génération automatique des champs pas encore écrits.
                 Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
@@ -133,7 +131,11 @@
                     $('#form_commentaire').val(txtDroitDeReponse);
                     return false;
                 } else {
-                    confirm("{{ 'commun_droit_de_reponse_confirm_envoi'|trans }}");
+                    if ({{ droitDeReponse_id }} == 0) {
+                        confirm("{% trans from 'commun' %}commun_droit_de_reponse_confirm_envoi{% endtrans %}");                 
+                    } else {
+                        confirm("{% trans from 'extranet_droit_de_reponse' %}modifier_confirmation{% endtrans %}"); 
+                    }
                 }
             });
 

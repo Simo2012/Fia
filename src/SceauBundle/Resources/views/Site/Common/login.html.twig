@@ -1,0 +1,16 @@
+    <div class="login">
+        <img src="{{ asset('bundles/sceau/images/site/home/login_titre.png') }}" width="121" height="19" alt="Espace Membre" style="margin-left:5px" />
+            <form name="formloginhome" action="#" method="post" class="login-home-form">
+                <input type="hidden" name="formulaireloginhome" value="1" />
+                <div class="login-input-div">
+                    <input class="login-input-back" type="text" name="loginemail" placeholder="E-mail" autocomplete="off" />
+                </div>
+                <div class="login-input-div">
+                    <input class="login-input-back" type="password" name="password"  placeholder="Mot de passe" autocomplete="off" />
+                    <div class="login-btn-ok">
+                        <a href="{{ path('site_member_login')}}" onclick="#"><img src="{{ asset('bundles/sceau/images/site/home/login_btn_ok.png') }}" width="35" height="16" alt="Bouton Valider" border="0" /></a>
+                    </div>
+                </div>
+            </form>
+            <div class="inscrip-lost"><a href="#">S'inscrire</a> <b>/</b> <a href="#">Mot de passe oublié ?</a></div>			
+    </div>

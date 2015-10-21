@@ -9,7 +9,7 @@ use Symfony\Component\Validator\GroupSequenceProviderInterface;
  * DroitDeReponse
  *
  * @ORM\Table(name="DroitDeReponse")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\DroitDeReponseRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\DroitDeReponseRepository")
  */
 class DroitDeReponse implements GroupSequenceProviderInterface
 {

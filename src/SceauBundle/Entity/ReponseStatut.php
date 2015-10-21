@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="ReponseStatut")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\ReponseStatutRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\ReponseStatutRepository")
  */
 class ReponseStatut
 {

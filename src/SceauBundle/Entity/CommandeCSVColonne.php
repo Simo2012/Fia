@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CommandeCSVColonne
  *
  * @ORM\Table(name="CommandeCSVColonne")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\CommandeCSVColonneRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\CommandeCSVColonneRepository")
  */
 class CommandeCSVColonne
 {
