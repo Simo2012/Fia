@@ -15,4 +15,4 @@
 /web/js/*
 /.idea/
 /web/fonts/*
- /nbproject/
+nbproject/
