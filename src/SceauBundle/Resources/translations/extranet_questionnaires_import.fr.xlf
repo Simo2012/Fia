@@ -17,6 +17,7 @@
             <trans-unit id="3">
                 <source>Les lignes du fichier CSV doivent respecter le format suivant : id, nom, prénom, email</source>
                 <target></target>
+            </trans-unit>
             <trans-unit id="4">
                 <source>Étape 1 : indique le fichier à importer en cliquant sur le bouton Parcourir :</source>
                 <target></target>
