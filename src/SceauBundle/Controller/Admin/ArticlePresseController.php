@@ -232,7 +232,7 @@ class ArticlePresseController extends Controller
             $em->remove($entity);
             $em->flush();
             $title = $entity->getTitle();
-            $session->getFlashBag()->add('delete', "Article $title bien supprimé");
+            $session->getFlashBag()->add('info', "Article $title bien supprimé");
 
             return $this->redirect($this->generateUrl('articles'));
         }
