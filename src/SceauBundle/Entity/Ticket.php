@@ -31,7 +31,7 @@ class Ticket
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="datetimetz")
      */
     private $date;
 
@@ -47,6 +47,28 @@ class Ticket
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id", nullable=true)
      */
     private $type;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\Site")
+     * @ORM\JoinColumn(name="site_id", referencedColumnName="id", nullable=true)
+     */
+    private $site;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketCategorie")
+     * @ORM\JoinColumn(name="categorie", referencedColumnName="id")
+     */
+    private $categorie;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text", nullable=true)
+     */
+    private $note;
+
 
     private $acteur;
     public function getActeur(){return $this->acteur;}
@@ -157,5 +179,75 @@ class Ticket
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set note
+     *
+     * @param string $note
+     *
+     * @return Ticket
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set site
+     * @param \SceauBundle\Entity\Site $site
+     *
+     * @return Ticket
+     */
+    public function setSite(\SceauBundle\Entity\Site $site)
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * Get site
+     *
+     * @return \SceauBundle\Entity\Site
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
+
+    /**
+     * Set category
+     * @param \SceauBundle\Entity\TicketCategorie $categorie
+     *
+     * @return Ticket
+     */
+    private function setCategorie(\SceauBundle\Entity\TicketCategorie $categorie)
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \SceauBundle\Entity\TicketCategorie
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
     }
 }
