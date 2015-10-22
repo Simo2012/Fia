@@ -161,13 +161,25 @@ class HomeController extends Controller
      */
     public function contactAction(Request $request)
     {
-        $ticket = new Ticket();
-        $form = $this->createForm(new TicketQuestionType());
-        $form->handleRequest($request);
+        $ticket   = new Ticket();
+        $template = null;
 
-        return $this->render('SceauBundle:Site/Contact:index.html.twig', array(
-            'form' => $form->createView()
-        ));
+        $form = $this->createForm(new TicketQuestionType(), $ticket);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($ticket->getType()) {
+                $template = Ticket::$TYPES_TEMPLATE[$ticket->getType()];
+            }
+            dump($ticket->getType());
+        }
+
+        return $this->render(
+            'SceauBundle:Site/Contact:index.html.twig',
+            [
+                'form'     => $form->createView(),
+                'template' => $template,
+            ]
+        );
     }
 
 }
