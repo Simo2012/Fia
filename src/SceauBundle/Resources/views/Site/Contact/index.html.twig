@@ -1,4 +1,5 @@
 {% extends 'SceauBundle:Site:layout.html.twig' %}
+
 {% block CONTENT %}
     {% include "SceauBundle:Site/Common:menu.html.twig" %}
 
@@ -19,9 +20,54 @@
             </p>
             <p>Si celle-ci n'y figure pas, nous vous invitons à utiliser le formulaire de contact ci-dessous.</p>
             <p>N'hésitez pas à nous écrire, nous nous engageons à vous répondre sous 72h ouvrées maximum.</p>
-            {{ form_start(form) }}
-                {{ form_row(form.acteur) }}
-            {{ form_end(form) }}
+            {{ form(form) }}
+            {% if template %}
+                <p class="ticket-content">
+                    {% include template %}
+                </p>
+            {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block JAVASCRIPT %}
+    {{ parent() }}
+    <script>
+        (function(){
+            var selectors = {
+                content: '#content',
+                csrf: '#ticket__token',
+                actor: '#ticket_actor',
+                type: '#ticket_type'
+            };
+
+            var refreshForm = function(selector) {
+                $(selector).change(function() {
+                    var $form = $(this).closest('form');
+
+                    var data = {};
+                    data[$(selectors.csrf).attr('name')] = $(selectors.csrf).val();
+                    data[$(selectors.actor).attr('name')] = $(selectors.actor).val();
+                    if ($(selectors.type).length) {
+                        data[$(selectors.type).attr('name')] = $(selectors.type).val();
+                    }
+
+                    $.ajax({
+                        url : $form.attr('action'),
+                        type: $form.attr('method'),
+                        data : data,
+                        success: function(html) {
+                            $(selectors.content).replaceWith(
+                                $(html).find(selectors.content)
+                            );
+                            refreshForm($(selectors.actor));
+                            refreshForm($(selectors.type));
+                        }
+                    });
+                })
+            };
+
+            refreshForm($(selectors.actor));
+        })();
+    </script>
 {% endblock %}
