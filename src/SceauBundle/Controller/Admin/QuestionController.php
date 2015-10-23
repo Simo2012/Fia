@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use SceauBundle\Form\Type\Admin\TicketReponseType;
 /**
  * QuestionController controller.
  *
@@ -43,17 +43,43 @@ class QuestionController extends Controller
      */
     public function showAction($id)
     {
-        // $articlePresseRepo = $this->get('sceau.repository.article.presse');
-        // $entity = $articlePresseRepo->find($id);
+        $formTicketReponse = $this->createForm(new TicketReponseType());
 
-        // if (!$entity) {
-        //     throw $this->createNotFoundException('Unable to find ArticlePresse entity.');
-        // }
-
-        // $deleteForm = $this->createDeleteForm($id);
+        $request = $this->get('request');
+        if($request->isXmlHttpRequest()) {  
+            $modeleType = $request->request->get('modeleType');  
+            var_dump($modeleType);          
+            //
+            // Ici ajax renvoit l'indice de l'ufr selectionné parce-que les ufrs sont affichés
+            // dans la liste sans être triés On récupère l'ufr pour l'index récupéré puis on
+            // récupère les diplomes pour cet ufr. On le met dans la variable $mesDiplomes.
+            //
+            // $em = $this->getDoctrine()
+            //            ->getEntityManager();    
+                        
+            // $ufrChoisi = $em->getRepository('UdcDiplomeBundle:Ufr')
+            //                 ->find($idUFR);
+            // $this->container->get('request')->getSession()->set('ufrSelected', $ufrChoisi->getId());            
+            // $diplomesDeLufrChoisi = $ufrChoisi->getDiplomes();          
+                 
+            // $html = "<select id=\"udc_diplomebundle_etudianttype_diplome\" name=\"udc_diplomebundle_etudianttype[diplome]\" required=\"required\" class=\"span4\">";
+            // foreach ($diplomesDeLufrChoisi as $dip) {
+            //     $html = $html . "<option value=\"" . $dip->getId() . "\">" . $dip->getNomDiplome() . "</option>";
+            // }          
+            // $html = $html . "</select>";             
+            // return new Response($html);
+             
+        }
+        
 
         return array(
-            'entity'      => []
+            'entity'            => [],
+            'formTicketReponse' => $formTicketReponse->createView(),
         );
+    }
+
+    public function updateReponseFromSelect()
+    {
+        
     }
 }

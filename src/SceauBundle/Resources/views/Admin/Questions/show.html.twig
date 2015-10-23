@@ -57,7 +57,11 @@
                     </div>
                 </div>
                 <div class="portlet-footer">
-                    <a class = "btn btn-green btn-md" href="#">Répondre</a>
+                    <!-- Reponse Modal Trigger -->
+                    <button class="btn btn-default btn-lg pull-right" data-toggle="modal" data-target="#reponseModal">
+                        Répondre
+                    </button>
+                    {# <a class = "btn btn-green btn-md" href="#">Répondre</a> #}
                 </div>
             </div>
         </div>
@@ -106,10 +110,57 @@
             <a class = "btn btn-white" href="#">Retour </a>
             <a class = "btn btn-white" href="#">Question suivante</a>
         </div>
+
+        
+        <br>
+
+        <!-- Réponse Modal -->
+        <div class="modal fade" id="reponseModal" tabindex="-1" role="dialog" aria-labelledby="reponseModalModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="reponseModalLabel">Réponse à la question #ID_TICKET#</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_widget(formTicketReponse)}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-green">Save changes</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
             
     </div>
 </div>
 
 
-</ul>
+{% endblock %}
+
+
+{% block JAVASCRIPT %}
+    <script type="text/javascript">
+    console.log('coucou');
+        $('select').change(function() { 
+        console.log($(this));    
+        // var modeleType = $(this).val(); 
+        
+        // console.log('modeleType : ', modeleType);
+        // $.ajax({
+        //     type: 'POST',
+        //     data: {'idUFR' : idUFR},          
+        //     url:  '{{path('question_show', { 'id': 1 }) }}',      
+        //     success: function(response) {
+        //       $('#mesDiplomes select').html(response).show();
+        //    }
+        // });
+      });  
+         
+       
+</script>
 {% endblock %}
