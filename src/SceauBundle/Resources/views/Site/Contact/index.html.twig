@@ -1,0 +1,81 @@
+{% extends 'SceauBundle:Site:layout.html.twig' %}
+
+{% block CONTENT %}
+    {% include "SceauBundle:Site/Common:menu.html.twig" %}
+
+    <div class="filariane-div">
+        <div class="filariane">
+            Vous êtes ici :
+            <a href="{{ path('site_home') }}">Accueil</a>
+            <span class="filariane-separation"> &gt;</span><span class="filariane-page-actuelle">Contact</span>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="contact-main">
+            <p>Vous avez une remarque, une question, ou une proposition concernant le Sceau de Confiance FIA-NET ?</p>
+            <p>Avez-vous regardé si la réponse à votre question se trouvait dans notre Foire Aux Questions (FAQ) ?
+                La plupart des réponses aux questions que vous vous posez y sont répertoriées,
+                <a class="lien" href="#" target="_blank">en cliquant ici</a>.
+            </p>
+            <p>Si celle-ci n'y figure pas, nous vous invitons à utiliser le formulaire de contact ci-dessous.</p>
+            <p>N'hésitez pas à nous écrire, nous nous engageons à vous répondre sous 72h ouvrées maximum.</p>
+            {{ form_start(form) }}
+                {{ form_row(form.type.actor) }}
+                {% if form.type.id is defined %}
+                    {{ form_row(form.type.id) }}
+                {% endif %}
+                {% if form.lastName is defined %}
+                    <p>{{ "Veuillez nous indiquer :"|trans({}) }}</p>
+                {% endif %}
+                {% if template %}
+                    <p class="ticket-content">
+                        {% include template %}
+                    </p>
+                {% endif %}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block JAVASCRIPT %}
+    {{ parent() }}
+    <script>
+        (function(){
+            var selectors = {
+                content: '#content',
+                csrf: '#ticket__token',
+                actor: '#ticket_type_actor',
+                type: '#ticket_type_id'
+            };
+
+            var refreshForm = function(selector) {
+                $(selector).change(function() {
+                    var $form = $(this).closest('form');
+
+                    var data = {};
+                    data[$(selectors.csrf).attr('name')] = $(selectors.csrf).val();
+                    data[$(selectors.actor).attr('name')] = $(selectors.actor).val();
+                    if ($(selectors.type).length) {
+                        data[$(selectors.type).attr('name')] = $(selectors.type).val();
+                    }
+
+                    $.ajax({
+                        url : $form.attr('action'),
+                        type: $form.attr('method'),
+                        data : data,
+                        success: function(html) {
+                            $(selectors.content).replaceWith(
+                                $(html).find(selectors.content)
+                            );
+                            refreshForm($(selectors.actor));
+                            refreshForm($(selectors.type));
+                        }
+                    });
+                })
+            };
+
+            refreshForm($(selectors.actor));
+        })();
+    </script>
+{% endblock %}

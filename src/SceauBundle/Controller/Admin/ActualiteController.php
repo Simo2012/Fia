@@ -233,7 +233,7 @@ class ActualiteController extends Controller
             $em->remove($entity);
             $em->flush();
             $title = $entity->getTitle();
-            $session->getFlashBag()->add('delete', "Actualité $title bien supprimée");
+            $session->getFlashBag()->add('info', "Actualité $title bien supprimée");
 
             return $this->redirect($this->generateUrl('actualites'));
         }

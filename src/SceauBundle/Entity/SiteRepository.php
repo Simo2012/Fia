@@ -1,12 +1,10 @@
 <?php
 
-namespace SceauBundle\Entity\Repository;
+namespace SceauBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use SceauBundle\Cache\Cache;
-use SceauBundle\Entity\AdministrationType;
-use SceauBundle\Entity\Site;
 
 class SiteRepository extends EntityRepository
 {
@@ -65,36 +63,7 @@ class SiteRepository extends EntityRepository
             ->getQuery()
             ->useResultCache(true, Cache::LIFETIME_1J)
             ->execute()
-            ;
-    }
-
-    /**
-     * Fonction pour récuperer les sites prenium
-     */
-    public function getPreniumSite()
-    {
-        $loQuery = $this->createQueryBuilder('s')
-            ->select('s, sc ,c, qp, qt')
-            ->join('s.siteCategories', 'sc')
-            ->join('sc.categorie', 'c')
-            ->join('s.questionnairePersonnalisations', 'qp')
-            ->join('qp.questionnaireType', 'qt')
-            ->where('qp.principal = true')
-            ->andWhere('sc.principal = true')
-            ->setMaxResults(4);
-
-        return $loQuery->getQuery()->getArrayResult();
-    }
-
-    /**
-     * Fonction pour retourner le nombre de site
-     */
-    public function getCount()
-    {
-        return $this->createQueryBuilder('s')
-            ->select('count(s)')
-            ->getQuery()
-            ->getSingleScalarResult();
+        ;
     }
 
     /**
