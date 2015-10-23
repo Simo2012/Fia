@@ -2,10 +2,19 @@
 
 namespace SceauBundle\Service;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use SceauBundle\Entity\Indice;
 use SceauBundle\Entity\QuestionnaireType;
 
 class Notes
 {
+    private $em;
+
+    public function __construct(ObjectManager $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * Méthode qui permet de récupérer pour un type de questionnaire les identifiants des réponses ou les bornes de
      * notation liés à un/des indicateur(s).
@@ -18,7 +27,7 @@ class Notes
      */
     public function listeReponsesIndicateursPourQuestionnaireType(QuestionnaireType $questionnaireType, $indicateurs)
     {
-        $listeReponses['reponses'] = array();
+        $listeReponses['reponses'] = [];
         $listeReponses['nullable'] = false;
 
         if ($questionnaireType->getParametrage()['indicateur']['type'] == 'reponse_id') {
@@ -45,31 +54,43 @@ class Notes
 
         } else {
             if (in_array('vert', $indicateurs)) {
-                $listeReponses['reponses'][] = array(
-                    'min' => $questionnaireType->getParametrage()['indicateur']['vert']['min'],
-                    'max' => $questionnaireType->getParametrage()['indicateur']['vert']['max']
-                );
+                $listeReponses['reponses'][] =
+                    ['min' => $questionnaireType->getParametrage()['indicateur']['vert']['min'],
+                    'max' => $questionnaireType->getParametrage()['indicateur']['vert']['max']];
             }
 
             if (in_array('jaune', $indicateurs)) {
-                $listeReponses['reponses'][] = array(
-                    'min' => $questionnaireType->getParametrage()['indicateur']['jaune']['min'],
-                    'max' => $questionnaireType->getParametrage()['indicateur']['jaune']['max']
-                );
+                $listeReponses['reponses'][] =
+                    ['min' => $questionnaireType->getParametrage()['indicateur']['jaune']['min'],
+                    'max' => $questionnaireType->getParametrage()['indicateur']['jaune']['max']];
             }
 
             if (in_array('rouge', $indicateurs)) {
-                $listeReponses['reponses'][] = array(
-                    'min' => $questionnaireType->getParametrage()['indicateur']['rouge']['min'],
-                    'max' => $questionnaireType->getParametrage()['indicateur']['rouge']['max']
-                );
+                $listeReponses['reponses'][] =
+                    ['min' => $questionnaireType->getParametrage()['indicateur']['rouge']['min'],
+                    'max' => $questionnaireType->getParametrage()['indicateur']['rouge']['max']];
             }
         }
 
         if (in_array('gris', $indicateurs)) {
-            $listeReponses['nullable'] = true ;
+            $listeReponses['nullable'] = true;
         }
 
         return $listeReponses;
+    }
+
+    /**
+     * Retourne la valeur d'un indice pour un site.
+     *
+     * @param int $indice_id Identifiant de l'indice
+     * @param int $site_id Identifiant du site
+     */
+    public function getIndice($indice_id, $site_id)
+    {
+        /** @var Indice $indice */
+        $indice = $this->em->getRepository('SceauBundle:Indice')->getIndice($indice_id);
+
+        $valeurIndice = $this->em->getRepository('SceauBundle:QuestionnaireReponse')
+            ->getValeurIndice($indice, $site_id);
     }
 }

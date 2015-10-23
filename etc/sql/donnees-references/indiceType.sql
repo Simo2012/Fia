@@ -1,0 +1,7 @@
+INSERT INTO IndiceType (id, libelle)
+VALUES
+(1, 'MOYENNE'),
+(2, 'POURCENTAGE'),
+(3, 'NB_AVIS_PERIODE'),
+(4, 'NB_AVIS_TOTAL')
+;

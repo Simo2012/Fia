@@ -33,6 +33,7 @@
             <argument>%delai_envoi_date_utilisation%</argument>
         </service>
         <service id="sceau.notes" class="SceauBundle\Service\Notes">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         <service id="sceau.questionnaire_repondu" class="SceauBundle\Service\QuestionnaireRepondu">
             <argument type="service" id="doctrine.orm.entity_manager"/>
