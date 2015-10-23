@@ -43,11 +43,18 @@ class Ticket
     private $etat;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketType")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id", nullable=true)
+     * @var integer
+     *
+     * @ORM\Embedded(class="TicketType", columnPrefix="type_")
      */
     private $type;
 
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+        $this->etat = false;
+        $this->type = new TicketType();
+    }
 
     /**
      * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\Site")
@@ -68,12 +75,7 @@ class Ticket
      * @ORM\Column(name="note", type="text", nullable=true)
      */
     private $note;
-
-
-    private $acteur;
-    public function getActeur(){return $this->acteur;}
-    public function setActeur($acteur){$this->acteur = $acteur; return $this;}
-
+    
 
     /**
      * Get id
@@ -158,27 +160,23 @@ class Ticket
     }
 
     /**
-     * Set type
-     *
-     * @param \SceauBundle\Entity\TicketType $type
-     *
-     * @return Ticket
-     */
-    public function setType(\SceauBundle\Entity\TicketType $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
      * @return \SceauBundle\Entity\TicketType
      */
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @param \SceauBundle\Entity\TicketType $type
+     * 
+     * @return Ticket
+     */
+    public function setType(TicketType $type)
+    {
+        $this->type = $type;
+        
+        return $this;
     }
 
     /**
