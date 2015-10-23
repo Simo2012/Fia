@@ -148,17 +148,18 @@
     console.log('coucou');
         $('select').change(function() { 
         console.log($(this));    
-        // var modeleType = $(this).val(); 
+        modeleType = $(this).val(); 
         
-        // console.log('modeleType : ', modeleType);
-        // $.ajax({
-        //     type: 'POST',
-        //     data: {'idUFR' : idUFR},          
-        //     url:  '{{path('question_show', { 'id': 1 }) }}',      
-        //     success: function(response) {
-        //       $('#mesDiplomes select').html(response).show();
-        //    }
-        // });
+        console.log('modeleType : ', modeleType);
+        $.ajax({
+            type: 'POST',
+            data: {'modeleType' : modeleType},          
+            url:  '{{path('question_show', { 'id': 1 }) }}',      
+            success: function(response) {
+                console.log(response);
+              //$('#mesDiplomes select').html(response).show();
+           }
+        });
       });  
          
        
