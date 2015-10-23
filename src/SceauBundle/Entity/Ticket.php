@@ -200,9 +200,9 @@ class Ticket
      *
      * @return string
      */
-    public function getCode()
+    public function getNote()
     {
-        return $this->code;
+        return $this->note;
     }
 
     /**

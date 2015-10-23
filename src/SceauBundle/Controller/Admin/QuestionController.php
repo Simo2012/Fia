@@ -2,11 +2,14 @@
 
 namespace SceauBundle\Controller\Admin;
 
+use SceauBundle\Entity\Ticket;
+use SceauBundle\Form\Type\Admin\TicketNoteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * QuestionController controller.
@@ -35,25 +38,64 @@ class QuestionController extends Controller
 
 
     /**
-     * Finds and displays a InternauteQuestion entity.
+     * Finds and displays a Ticket entity.
      *
      * @Route("/{id}", name="question_show")
      * @Method("GET")
      * @Template("SceauBundle:Admin/Questions:show.html.twig")
      */
-    public function showAction($id)
+    public function showAction(Ticket $ticket, $id)
     {
-        // $articlePresseRepo = $this->get('sceau.repository.article.presse');
-        // $entity = $articlePresseRepo->find($id);
-
-        // if (!$entity) {
-        //     throw $this->createNotFoundException('Unable to find ArticlePresse entity.');
-        // }
-
-        // $deleteForm = $this->createDeleteForm($id);
+        $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket, array(
+            'action' => $this->generateUrl('question_update',array('id'=>$id)),
+            'method' => 'POST',
+        ));
 
         return array(
-            'entity'      => []
+            'ticketNoteForm' => $ticketNoteForm->createView(),
+            'ticket'      => $ticket,
         );
+    }
+
+    /**
+     *  Update a ticket's note
+     *
+     * @Route("/add/{id}", name="question_update")
+     * @Method("POST")
+     * @Template("SceauBundle:Admin/Questions:show.html.twig")
+     */
+    public function updateAction(Request $request, Ticket $ticket, $id)
+    {
+        $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket);
+
+        $ticketNoteForm->handleRequest($request);
+
+        if ($ticketNoteForm->isValid()) {
+            $note = $ticketNoteForm->get('note')->getData();
+            $ticket->setNote($note);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ticket);
+            $em->flush();
+
+        }
+        return $this->redirect($this->generateUrl('question_show', array('id' => $id)));
+    }
+
+    /**
+     * Delete a ticket's note
+     *
+     * @Route("/{id}/deleteNote", name="question_note_delete")
+     * @Method("GET")
+     * @Template("SceauBundle:Admin/Questions:show.html.twig")
+     */
+    public function deleteNoteAction(Ticket $ticket, $id)
+    {
+        $ticket->setNote(null);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($ticket);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('question_show', array('id' => $id)));
+
     }
 }
