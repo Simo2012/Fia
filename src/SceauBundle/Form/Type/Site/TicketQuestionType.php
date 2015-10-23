@@ -21,44 +21,45 @@ class TicketQuestionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('actor', 'choice', [
-                'placeholder'   => '-----------------------------',
-                'empty_data'    => null,
-                'label'         => 'form.ticket.acteur',
-                'choices'       => Ticket::$ACTORS,
-            ]);
-        ;
+        $builder->add('type', new TicketTypeQuestionType());
 
-        $formModifier = function (FormInterface $form, $actor) {
-            $form->add('type', 'choice', [
-                'placeholder'   => '-----------------------------',
-                'empty_data'    => null,
-                'label'         => 'form.ticket.type',
-                'choices'       => Ticket::getAvailableTypes($actor),
-            ]);
+        $formModifier = function(FormInterface $form) {
+            $form
+                ->add('lastName', 'text', [
+                    'label'    => 'form.ticket.lastName',
+                    'mapped'   => false,
+                ])
+                ->add('firstName', 'text', [
+                    'required' => false,
+                    'label'    => 'form.ticket.firstName',
+                    'mapped'   => false,
+                ])
+                ->add('email', 'repeated', [
+                    'type'     => 'email',
+                    'mapped'   => false,
+                    'first_options'  => ['label' => 'form.ticket.email'],
+                    'second_options' => ['label' => 'form.ticket.email_confirmation'],
+                ])
+                ->add('phone', 'text', [
+                    'label'    => 'form.ticket.phone',
+                    'mapped'   => false,
+                ])
+                ->add('question', 'textarea', [
+                    'label'    => 'form.ticket.question',
+                ])
+                ->add('submit', 'submit', [
+                    'label'    => 'form.ticket.submit'
+                ])
+            ;
         };
 
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($formModifier) {
-                $form   = $event->getForm();
-                /** @var \SceauBundle\Entity\Ticket $ticket */
-                $ticket = $event->getData();
-
-                if ($ticket && $ticket->getActor()) {
-                    $formModifier($form, $ticket->getActor());
-                }
-            }
-        );
-
-        $builder->get('actor')->addEventListener(
+        $builder->get('type')->addEventListener(
             FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier) {
-                $actor = $event->getForm()->getData();
+            function(FormEvent $event) use ($formModifier) {
+                $ticketType = $event->getForm()->getData();
 
-                if ($actor) {
-                    $formModifier($event->getForm()->getParent(), $actor);
+                if ($ticketType->getId() && $ticketType->isForm()) {
+                    $formModifier($event->getForm()->getParent());
                 }
             }
         );
@@ -70,7 +71,8 @@ class TicketQuestionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'SceauBundle\Entity\Ticket',
+            'data_class'         => 'SceauBundle\Entity\Ticket',
+            'translation_domain' => 'site_contact_ticket',
         ]);
     }
 

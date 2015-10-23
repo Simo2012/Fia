@@ -2,6 +2,7 @@
 
 namespace SceauBundle\Controller\Site;
 
+use SceauBundle\Entity\TicketType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use SceauBundle\Entity\Membre;
 use SceauBundle\Form\Type\Site\User\RegisterType;
 use SceauBundle\Form\Type\Site\TicketQuestionType;
-use SceauBundle\Entity\TicketActeur;
 use SceauBundle\Entity\Ticket;
 
 /**
@@ -167,10 +167,12 @@ class HomeController extends Controller
         $form = $this->createForm(new TicketQuestionType(), $ticket);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            if ($ticket->getType()) {
-                $template = Ticket::$TYPES_TEMPLATE[$ticket->getType()];
+            if ($form->has('submit') && $form->get('submit')->isClicked()) {
+                $this->getDoctrine()->getManager()->persist($ticket);
+                $this->getDoctrine()->getManager()->flush();
             }
-            dump($ticket->getType());
+
+            $template = $ticket->getType()->getTemplate();
         }
 
         return $this->render(

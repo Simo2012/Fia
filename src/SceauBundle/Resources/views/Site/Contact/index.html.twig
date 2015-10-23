@@ -20,12 +20,20 @@
             </p>
             <p>Si celle-ci n'y figure pas, nous vous invitons à utiliser le formulaire de contact ci-dessous.</p>
             <p>N'hésitez pas à nous écrire, nous nous engageons à vous répondre sous 72h ouvrées maximum.</p>
-            {{ form(form) }}
-            {% if template %}
-                <p class="ticket-content">
-                    {% include template %}
-                </p>
-            {% endif %}
+            {{ form_start(form) }}
+                {{ form_row(form.type.actor) }}
+                {% if form.type.id is defined %}
+                    {{ form_row(form.type.id) }}
+                {% endif %}
+                {% if form.lastName is defined %}
+                    <p>{{ "Veuillez nous indiquer :"|trans({}) }}</p>
+                {% endif %}
+                {% if template %}
+                    <p class="ticket-content">
+                        {% include template %}
+                    </p>
+                {% endif %}
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
@@ -37,8 +45,8 @@
             var selectors = {
                 content: '#content',
                 csrf: '#ticket__token',
-                actor: '#ticket_actor',
-                type: '#ticket_type'
+                actor: '#ticket_type_actor',
+                type: '#ticket_type_id'
             };
 
             var refreshForm = function(selector) {
