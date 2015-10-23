@@ -49,6 +49,14 @@ body.fs_homepage {
 	z-index: 0;
 }*/
 
+#tombola-error {
+    color: #D8000C;
+    width: 550px;
+    height: 30px;
+    float: left;
+    margin-left: 80px;
+    margin-top: 10px;
+}
 hr {
 	clear: both;
 	width: 95%;
@@ -780,6 +788,9 @@ p.norme-afnor_titre {
 .div_captcha {float:left;width:800px}
 .div_partenaires {float:left;width: 100%; margin-top: 20px}
 .div_partenaires label {float: right; margin-right: 400px;margin-top: 5px}
+
+.div_partenaires-tombola {float:left;width: 100%; margin-top: 20px}
+.div_partenaires-tombola label {float: right; margin-right: 200px;margin-top: 5px}
 
 .register-legal {width: 250px}
 
@@ -3103,6 +3114,13 @@ button.go em.type {
 	margin-top: 10px;
 }
 
+#inscription-formulaire-tombola {
+	float: left;
+}
+#inscription-formulaire-tombola div {
+	margin-top: 10px;
+}
+
 #site_member_register_civilite {
     float: left;
 }
@@ -3117,6 +3135,12 @@ button.go em.type {
 #inscription-formulaire label {
 	display: block;
         width: 200px;
+        float: left;
+        margin-top: 15px;
+}
+#inscription-formulaire-tombola label {
+	display: block;
+        width: 150px;
         float: left;
         margin-top: 15px;
 }
@@ -3140,6 +3164,22 @@ button.go em.type {
 	vertical-align: middle;
 }
 #inscription-formulaire #captcha-texte {
+	margin-left: 30px;
+}
+
+#inscription-formulaire-tombola input {
+	margin-top: 14px;
+}
+#inscription-formulaire-tombola input[type=radio] {
+	margin-left: 10px;
+}
+#inscription-formulaire-tombola select {
+	margin-top: 14px;
+}
+#inscription-formulaire-tombola #captcha {
+	vertical-align: middle;
+}
+#inscription-formulaire-tombola #captcha-texte {
 	margin-left: 30px;
 }
 /*** Aide à l'achat ***/
@@ -7803,7 +7843,7 @@ a.footer_certification_afnor_lien, a.footer_certification_afnor_lien:hover {
 
 #div_captcha {float:left;width:800px}
 #div_partenaires {float:left;width: 100%;}
-
+#div_partenaires-tombola {float:left;width: 100%;}
 
 a.bloc_infobulle{
 position: absolute;

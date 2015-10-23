@@ -1,0 +1,93 @@
+<div class="resultat_tombola_cadre">
+    <div class="resultat_tombola">
+	<p class="resultat_tombola_title">LES GAGNANTS DU MOIS</p>   
+        <br>
+
+ {% set count =  0 %}
+{% for winner in winners %} 
+        {% if winner.gainValue == 100 %}
+            <b>{{winner.prenom}} {{ winner.nom|slice(0, 1)|capitalize  }} </b>
+            {% if winner.codePostal > 0 %}
+                ({{winner.codePostal}})
+            {% endif %}
+            {% if count > 1 %}
+                ,
+            {% endif %}
+            {% set lastValue =  100%}
+                  
+        {% elseif winner.gainValue == 50 %}
+            {% if lastValue == 100 %}
+                {% if count==1 %}
+                    a gagné un chèque cadeau de <span style="font-weight: bold; font-size: 14px;">{{lastValue}} €.</span>
+                {% else %}
+                    ont gagné chacun un chèque cadeau de <span style="font-weight: bold; font-size: 14px;">{{lastValue}} €.</span>
+                {%endif%}
+                {% set count = 0 %}
+                <br>
+                <br>
+            {%endif%}
+            <b>{{winner.prenom}} {{ winner.nom|slice(0, 1)|capitalize  }} </b>
+            {% if winner.codePostal > 0 %}
+                ({{winner.codePostal}})
+            {% endif %}
+            {% if count > 1 %}
+                ,
+            {% endif %}
+            {% set lastValue =  50%}
+        {%elseif winner.gainValue == 20%}
+            {% if lastValue == 50 %}
+                {% if count==1 %}
+                    a gagné un chèque cadeau de <span style="font-weight: bold; font-size: 14px;">{{lastValue}} €.</span>
+                {% else %}
+                    ont gagné chacun un chèque cadeau de <span style="font-weight: bold; font-size: 14px;">{{lastValue}} €.</span>
+                {%endif%}
+                {% set count = 0 %}
+                <br>
+                <br>
+                
+            {%endif%}
+            <b>{{winner.prenom}} {{ winner.nom|slice(0, 1)|capitalize  }} </b>
+            {% if winner.codePostal > 0 %}
+                ({{winner.codePostal}})
+            {% endif %}
+            {% if count > 1 %}
+                ,
+            {% endif %}
+            {% set lastValue =  20%}
+            {% set count = count + 1 %}
+        {%else%}
+             {% if lastValue == 20 %}
+                {% if count==1 %}
+                    a gagné un chèque cadeau de <span style="font-weight: bold; font-size: 14px;">{{lastValue}} €.</span>
+                {% else %}
+                    ont gagné chacun un chèque cadeau de <span style="font-weight: bold; font-size: 14px;">{{lastValue}} €.</span>
+                {%endif%}
+                {% set count = 0 %}
+                <br>
+                <br>
+            {%endif%}
+            <b>{{winner.prenom}} {{ winner.nom|slice(0, 1)|capitalize  }} </b>
+            {% if winner.codePostal > 0 %}
+                ({{winner.codePostal}})
+            {% endif %}
+            {% if count > 1 %}
+                ,
+            {% endif %}
+            {% set lastValue =  10%}
+            {% set count = count + 1 %}
+        {%endif%}
+            
+         {% if loop.index == winners|length %}
+             {% if count==1 %}
+                a gagné un chèque cadeau de <span style="font-weight: bold; font-size: 14px;">{{lastValue}} €.</span>
+            {% else %}
+                ont gagné chacun un chèque cadeau de <span style="font-weight: bold; font-size: 14px;">{{lastValue}} €.</span>
+            {%endif%}
+                    <br>
+                <br>
+         {% endif %}
+                {% set count = count + 1 %} 
+{% endfor %}
+    </div>
+    <div class="resultat_tombola_bottom"></div>
+</div>

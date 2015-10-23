@@ -11,7 +11,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundE
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-
+use SceauBundle\Entity\Coordonnee;
+use SceauBundle\Entity\Email;
 /**
  * Connexion des utilisateurs
  *
@@ -195,6 +196,58 @@ class MembreLogger
         }
         return $loTombolaTicket->getId();
     }
+    
+    /**
+    * Sauvgarder Coordonnées
+    * 
+    * @param $poField
+    * @$return Coordonnees
+    * @throws DBALException
+    */
+    public function saveCoordonnées($poField) {
+        dump($poField);
+        $loPays = $this->manager->getRepository('SceauBundle:Pays')->find($poField['pays']);
+        dump($loPays);
+        $loCoordonnees =  new Coordonnee();
+         try {
+            $loCoordonnees->setAdresse($poField['adresse']);
+            $loCoordonnees->setCodePostal($poField['codePostal']);
+            $loCoordonnees->setCompAdresse($poField['compAdresse']);
+            $loCoordonnees->setVille($poField['ville']);
+            $loCoordonnees->setPays($loPays);
+            $this->manager->persist($loCoordonnees);
+            $this->manager->flush();
+        } catch(\Exception $e) {
+            var_dump('erreur lors de creation des Coordonnées');
+        }
+        
+        return $loCoordonnees;
+    }
+    
+    /**
+    * Sauvgarder Coordonnées
+    * 
+    * @param $poField
+    * @$return Email
+    * @throws DBALException
+    */
+    public function saveEmail($poField) {
+        $loEmail = new Email();
+        dump($poField);
+        try {
+            $loEmail->setEmail($poField['email']['first']);
+            $loEmail->setPrincipal(true);
+            $loEmail->setDateConfirmation(new \DateTime());
+            dump($loEmail);
+            $this->manager->persist($loEmail);
+            $this->manager->flush();
+        } catch(\Exception $e) {
+            var_dump('erreur lors de creation des Emails');
+        }
+        return $loEmail;
+    }
+    
+    
     
 
 }

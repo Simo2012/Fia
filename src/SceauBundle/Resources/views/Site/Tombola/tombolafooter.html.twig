@@ -1,0 +1,32 @@
+{% trans_default_domain 'site_home_tombola' %}
+    <div class='tombola-end'>
+    </div>
+    <div class="tombola-main">
+        <h1 class="titre">{% trans %}titre_tombola_2{% endtrans %}</h1>
+         {% trans %}tombola_success_part6{% endtrans %}
+         <a class="lien" href="{{ path('site_operation_detail')}}">{% trans %}tombola_success_fonctionnement{% endtrans %}</a>
+        <p>
+            {% trans %}tombola_success_part7{% endtrans %}
+        </p>
+	<div style="margin-top:10px; float:left; margin-bottom: -20px;">
+		<div class="menu-find-input-div" style="float:left; margin-left: 170px;">
+			<form id="formRecherche2" name="formRecherche2" method="" action="#" >
+				<input class="menu-find-input-back" type="text" name="recherche" id="foo" value="{% trans %}tombola_success_find{% endtrans %}" onfocus="" autocomplete="off" onKeyUp="" />
+				<div class="menu-find-btn-ok" onclick="">
+					<img src="{{ asset('bundles/sceau/images/site/home/find_btn_ok.png') }}" width="35" height="16" alt="Rechercher un site e-commerce" border="0" onClick="" />
+				</div>
+				<div id="autoCompletion_answer2" class="result"></div>
+			</form>
+		</div>
+		<div style="float:right; margin-left: 40px; margin-top: -10px;">
+			<p style="text-align:right; font-size:10px;">
+                            {% trans %}tombola_success_part8{% endtrans %}
+                            <a class="lien" href="#">
+                                www.fia-net.com
+                            </a>
+                        </p>
+		</div>
+	</div>
+    </div>
+    <div class='tombola-end'>
+    </div>

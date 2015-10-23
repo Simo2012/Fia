@@ -97,6 +97,13 @@
             <argument type="service" id="sceau.api.filter.Decript"/>
         </service>
         
+        <!-- Class Gestion Des Gangants -->
+        <service id="sceau.site.user.user_tombola" class="SceauBundle\Model\Site\Tombola\MembreGagnants">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="translator"/>
+        </service>
+        
         <!-- Recuperer Les Site Prenium pour la page Home-->
         <service id="sceau.site.home.home_prenium" class="SceauBundle\Model\Site\Home\PreniumSite">
             <argument type="service" id="doctrine.orm.entity_manager"/>

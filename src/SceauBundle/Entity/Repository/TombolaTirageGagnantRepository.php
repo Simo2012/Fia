@@ -10,4 +10,32 @@ namespace SceauBundle\Entity\Repository;
  */
 class TombolaTirageGagnantRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    /**
+     * Fonction pour récuperer les gagnants
+     */
+    public function getGagnants()
+    {
+        $poDateFin = strtotime('noon last day of last month');
+        $poDateDebut = strtotime('noon first day of last month');
+        //echo $loDateFin;
+        $loDateFin = date('Y-m-d H:i:s', $poDateFin);
+        $loDateDebut= date('Y-m-d H:i:s', $poDateDebut);
+        $loQuery = $this->createQueryBuilder('ttg')
+            ->select('tg.gainValue, m.nom, m.prenom, c.codePostal')
+            ->join('ttg.tombolaticket', 'tt')
+            ->join('ttg.tombolagain', 'tg')
+            ->join('tt.membre', 'm')
+            ->join('m.coordonnee', 'c')
+            ->andWhere('ttg.isValide = 1')
+            ->andWhere('tt.dateParticipe <=  :datefin')
+            ->andWhere('tt.dateParticipe >=  :datedebut')
+            ->setParameter('datefin',$loDateFin)
+            ->setParameter('datedebut',$loDateDebut)
+            ->orderBy('tg.gainValue', 'DESC');
+           // ->groupBy('tg.gainValue');
+            
+
+        return $loQuery->getQuery()->getArrayResult();
+    }
 }

@@ -145,6 +145,16 @@
                     ]]>
                 </target>
             </trans-unit>
+            
+            
+            <trans-unit id="21">
+                <source>tombola_success_part8</source>
+                <target> 
+                    <![CDATA[
+                       * Consulter la liste des sites partenaires <br> sur
+                    ]]>
+                </target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
