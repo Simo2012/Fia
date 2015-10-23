@@ -2,38 +2,43 @@
 
 namespace SceauBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * Actualite
+ * @ORM\Table(name="actualite")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\ActualiteRepository")
  */
 class Actualite
 {
     /**
-     * @var integer
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255)
      */
     private $introduction;
 
     /**
-     * @var string
+     * @ORM\Column(type="text")
      */
     private $content;
 
     /**
-     * @var \DateTime
+     * @ORM\Column(type="datetimetz")
      */
     private $date;
 
     /**
-     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $active;
 

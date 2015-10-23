@@ -1,21 +1,9 @@
 {% extends 'SceauBundle:Admin:layout.html.twig' %}
 
+{% set flashMessageItem = 'SceauBundle:Admin/Common/Items:flash-message.html.twig' %}
+
 {% block CONTENT %}
 
-
-    {# On affiche tous les messages flash dont le nom est « info » #}
-    {% for message in app.session.flashbag.get('info') %}
-        <div class="alert alert-success">
-            <p> Information: {{ message }}</p>
-        </div>
-    {% endfor %}
-
-    {# On affiche tous les messages flash dont le nom est « delete » #}
-    {% for message in app.session.flashbag.get('delete') %}
-        <div class="alert alert-success">
-            <p> Suppression: {{ message }}</p>
-        </div>
-    {% endfor %}
     <div class="page-content page-content-ease-in">
         <div class="row">
             <div class="col-lg-12">
@@ -34,6 +22,14 @@
             </div>
             <!-- /.col-lg-12 -->
         </div>
+
+        {# Affichage des messages flash  #}
+        {% for message in app.session.flashbag.get('info') %}
+            {% include flashMessageItem with{
+            'message': message
+            }%}
+        {% endfor %}
+
         <div class="row">
 
             <div class="col-lg-12">
@@ -59,40 +55,40 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {% for articlePresse in articlePresses %}
+                                    {% for entity in entities %}
                                     <tr class="odd gradeX">
                                         <td>{{ loop.index }}</td>
-                                        <td>{{ articlePresse.title }}</td>
-                                        <td>{{ articlePresse.date|date("m/d/Y")  }}</td>
-                                        <td>{{ articlePresse.content }}</td>
+                                        <td>{{ entity.title }}</td>
+                                        <td>{{ entity.date|date("m/d/Y")  }}</td>
+                                        <td>{{ entity.content| truncate(35, true, '...')  }}</td>
                                         <td>
-                                            {% if articlePresse.published %}
+                                            {% if entity.published %}
                                                 <span class="label label-success">Publié</span>
                                             {% else %}
                                                 <span class="label label-warning">Non publié</span>
                                             {% endif %}
                                         </td>
                                         <td>
-                                                <a class="btn btn-green btn-md" href="{{ path('article_show', { 'id': articlePresse.id }) }}">Voir</a>
+                                                <a class="btn btn-green btn-md btn-square" href="{{ path('article_show', { 'id': entity.id }) }}">Voir</a>
 
-                                                <a class="btn btn-orange btn-md" href="{{ path('article_edit', { 'id': articlePresse.id }) }}">Editer</a>
+                                                <a class="btn btn-orange btn-md btn-square" href="{{ path('article_edit', { 'id': entity.id }) }}">Editer</a>
 
-                                            <a class="btn btn-red btn-md" data-toggle="modal" data-target="{{'#' ~  articlePresse.id  }}">
+                                            <a class="btn btn-red btn-md btn-square" data-toggle="modal" data-target="{{'#' ~  entity.id  }}">
                                                 Supprimer
                                             </a>
                                         </td>
                                     </tr>
 
-                                        <div class="modal modal-flex fade" id="{{ articlePresse.id }}" tabindex="-1" role="dialog" aria-labelledby="flexModalLabel" aria-hidden="true">
+                                        <div class="modal modal-flex fade" id="{{ entity.id }}" tabindex="-1" role="dialog" aria-labelledby="flexModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title" id="flexModalLabel">Suppressin de l'article {{ articlePresse.title }}</h4>
+                                                        <h4 class="modal-title" id="flexModalLabel">Suppressin de l'article {{ entity.title }}</h4>
                                                     </div>
                                                     <div class="modal-body">
                                                         <p>Etes-vous sur de vouloir supprimer cet article ?</p>
-                                                        {{ render(controller('SceauBundle:Admin/ArticlePresse:delete', { 'id': articlePresse.id })) }}
+                                                        {{ render(controller('SceauBundle:Admin/ArticlePresse:delete', { 'id': entity.id })) }}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>

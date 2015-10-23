@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CommunController extends Controller
 {
@@ -116,5 +117,87 @@ class CommunController extends Controller
             'SceauBundle:Extranet:liste_questionnaire_type.html.twig',
             array('questionnaireTypes' => $questionnaireTypes)
         );
+    }
+
+
+    /**
+     * Get the last News from the database
+     *
+     * @return Response
+     */
+    public function getLastNewsAction()
+    {
+        /** @var \SceauBundle\Entity\Repository\ActualiteRepository $actualiteRepository */
+        $actualiteRepository = $this->get('sceau.repository.actualite');
+
+        $actualite = $actualiteRepository->findOneBy(
+            array('active' => 'true'),
+            array('date' => 'desc')
+        );
+
+        return $this->render('SceauBundle:Extranet/Actualite:actualite.html.twig', array('actualite' => $actualite));
+    }
+
+
+    /**
+     * Get a news by id and an array of all news classified by month
+     *
+     * @Route("/actualite/{id}", name="extranet_commun_news")
+     *
+     * @return Response
+     */
+
+    public function getNewsAction($id)
+    {
+        /** @var \SceauBundle\Entity\Repository\ActualiteRepository $actualiteRepository */
+        $actualiteRepository = $this->get('sceau.repository.actualite');
+
+        $actualite = $actualiteRepository->findOneById($id);
+
+        $actualitesByMonths = $this->getArchivedNews();
+
+        return $this->render('SceauBundle:Extranet/Actualite:actualite_content.html.twig', array(
+           'actualite' => $actualite,
+           'actualitesByMonths' => $actualitesByMonths,
+        ));
+
+    }
+
+    /**
+     * Get archived news from the database classified by month.
+     *
+     * @return array contains all news classified by month
+     */
+    private function getArchivedNews()
+    {
+        /** @var \SceauBundle\Entity\Repository\ActualiteRepository $actualiteRepository */
+        $actualiteRepository = $this->get('sceau.repository.actualite');
+
+        /** @var \SceauBundle\Entity\Actualite[] $actualites */
+        $actualites = $actualiteRepository->findBy(
+            array('active' => 'true'),
+            array('date' => 'desc' )
+        );
+
+        // We remove first entry since we already display it on header
+        if (count($actualites) > 0) {
+            array_shift($actualites);
+        }
+
+        $actualitesByMonths = array();
+
+        //Group by month
+        foreach ($actualites as $actualite){
+            $actualiteDate = $actualite->getDate()->format('m-Y');
+            if (isset($actualitesByMonths[$actualiteDate])) {
+                $actualitesByMonths[$actualiteDate]['actualites'][] = $actualite;
+            } else {
+                $actualitesByMonths[$actualiteDate]['actualites'] = [$actualite];
+                $actualitesByMonths[$actualiteDate]['date'] = $actualite->getDate();
+                $actualitesByMonths[$actualiteDate]['id'] = $actualite->getId();
+            }
+        }
+
+        return $actualitesByMonths;
     }
 }

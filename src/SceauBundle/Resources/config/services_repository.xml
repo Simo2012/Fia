@@ -19,15 +19,15 @@
             <argument>%sceau.entity.article.presse%</argument>
         </service>
         <service id="sceau.repository.envoi.email"
-                 class="SceauBundle\Entity\Repository\EnvoiEmailRepository"
-                 factory-service="doctrine.orm.default_entity_manager"
-                 factory-method="getRepository">
+             class="SceauBundle\Entity\Repository\EnvoiEmailRepository"
+             factory-service="doctrine.orm.default_entity_manager"
+             factory-method="getRepository">
             <argument>%sceau.entity.envoi.email%</argument>
         </service>
         <service id="sceau.repository.actualite"
-                 class="SceauBundle\Entity\Repository\ActualiteRepository"
-                 factory-service="doctrine.orm.default_entity_manager"
-                 factory-method="getRepository">
+             class="SceauBundle\Entity\Repository\ActualiteRepository"
+             factory-service="doctrine.orm.default_entity_manager"
+             factory-method="getRepository">
             <argument>%sceau.entity.actualite%</argument>
         </service>
     </services>

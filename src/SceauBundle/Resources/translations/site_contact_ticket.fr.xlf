@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>form.ticket_type.acteur</source>
+                <target>Vous êtes :</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>form.ticket_type.id</source>
+                <target>Votre question porte sur :</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>form.ticket.lastName</source>
+                <target>Votre nom :</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>form.ticket.firstName</source>
+                <target>Votre prénom :</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>form.ticket.email</source>
+                <target>Votre e-mail :</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>form.ticket.email_confirmation</source>
+                <target>Confirmation e-mail :</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>form.ticket.phone</source>
+                <target>Votre téléphone :</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>form.ticket.question</source>
+                <target>Votre question :</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>form.ticket.submit</source>
+                <target>Valider</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
