@@ -19,17 +19,22 @@ class TicketReponseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('modeleType','entity', array(
-                'class' => 'SceauBundle:TicketReponseModele',
-                'empty_value' => 'choisir_valeur',
-                'choice_label' => 'type',
-                'property' => 'type',
-            ))
+            ->add('modeleType','entity', [
+                'class'         => 'SceauBundle:TicketReponseModele',
+                'empty_value'   => '-- Choisissez une réponse type --',
+                'choice_label'  => 'type',
+                'property'      => 'type',
+            ])
             ->add('expediteur' , 'text', [
                 'data' => 'sceau-de-confiance@fia-net.fr'
             ])
-            ->add('sujet')
-            ->add('message')
+            ->add('sujet', 'text')
+            ->add('message', 'textarea')
+            ->add('save', 'submit', [
+                'attr' => ['class' => 'submit'],
+                'label' => "Valider",
+                'attr' => ['class' => 'btn btn-green']
+            ])
         ;
     }
     

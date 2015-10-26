@@ -58,7 +58,7 @@
                 </div>
                 <div class="portlet-footer">
                     <!-- Reponse Modal Trigger -->
-                    <button class="btn btn-default btn-lg pull-right" data-toggle="modal" data-target="#reponseModal">
+                    <button class="btn btn-default btn-md pull-right" data-toggle="modal" data-target="#reponseModal">
                         Répondre
                     </button>
                     {# <a class = "btn btn-green btn-md" href="#">Répondre</a> #}
@@ -123,12 +123,18 @@
                         <h4 class="modal-title" id="reponseModalLabel">Réponse à la question #ID_TICKET#</h4>
                     </div>
                     <div class="modal-body">
-                        {{ form_widget(formTicketReponse)}}
+                        <div id="basicFormExample" class="panel-collapse collapse in">
+                            <div class="portlet-body">
+                                {% form_theme formTicketReponse 'bootstrap_3_horizontal_layout.html.twig' %}
+                                {{ form(formTicketReponse) }}
+                            </div>
+                        </div>
+                        {# {{ form_widget(formTicketReponse)}} #}
                     </div>
-                    <div class="modal-footer">
+                    {# <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-green">Save changes</button>
-                    </div>
+                        <button type="button" class="btn btn-green">V</button>
+                    </div> #}
                 </div>
                 <!-- /.modal-content -->
             </div>
@@ -145,23 +151,25 @@
 
 {% block JAVASCRIPT %}
     <script type="text/javascript">
-    console.log('coucou');
-        $('select').change(function() { 
-        console.log($(this));    
-        modeleType = $(this).val(); 
         
-        console.log('modeleType : ', modeleType);
-        $.ajax({
-            type: 'POST',
-            data: {'modeleType' : modeleType},          
-            url:  '{{path('question_show', { 'id': 1 }) }}',      
-            success: function(response) {
-                console.log(response);
-              //$('#mesDiplomes select').html(response).show();
-           }
-        });
-      });  
-         
-       
-</script>
+        $('select').change(function() { 
+            modeleType = $(this).val();
+            if (modeleType) {
+                $.ajax({
+                    type: 'POST',
+                    data: {'modeleType' : modeleType},          
+                    url:  '{{path('update_ticket_reponse_modele', { 'id': 1 }) }}',      
+                    success: function(response) {
+                        var objectReponse = JSON.parse(response);
+                        $('input#sujet').val(objectReponse.sujet);
+                        $('textarea#message').val(objectReponse.message);  
+                    }
+                });
+            } else {
+                $('input#sujet').val('');
+                $('textarea#message').val(''); 
+            }
+        });   
+
+    </script>
 {% endblock %}
