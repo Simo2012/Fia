@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Admin\TicketReponseType;
+use SceauBundle\Entity\Ticket;
+
 /**
  * QuestionController controller.
  *
@@ -26,11 +28,11 @@ class QuestionController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // $entityRepo = $this->get('sceau.repository.question');
-        // $entities = $entityRepo->findBy(array(), array('date' => 'ASC'));
+        $entityRepo = $this->get('sceau.repository.ticket');
+        $entities = $entityRepo->findAll(array(), array('date' => 'ASC'));
 
         return array(
-            'entities' => [1,2,3,4]
+            'entities' => $entities
         );
     }
 
@@ -42,13 +44,13 @@ class QuestionController extends Controller
      * @Method("GET")
      * @Template("SceauBundle:Admin/Questions:show.html.twig")
      */
-    public function showAction($id)
+    public function showAction(Ticket $ticket)
     {
 
         $formTicketReponse = $this->createForm(new TicketReponseType());
 
         return array(
-            'entity'            => [],
+            'ticket'            => $ticket,
             'formTicketReponse' => $formTicketReponse->createView(),
         );
     }

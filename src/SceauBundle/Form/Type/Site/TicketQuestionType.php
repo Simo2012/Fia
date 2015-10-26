@@ -3,64 +3,87 @@
 namespace SceauBundle\Form\Type\Site;
 
 use Doctrine\ORM\EntityRepository;
+use SceauBundle\Entity\Ticket;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use SceauBundle\Entity\TicketActeur;
 use SceauBundle\Entity\TicketType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use SceauBundle\Form\Type\Site\TicketAuteurType;
 
 class TicketQuestionType extends AbstractType
 {
+
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('acteur', 'entity', array(
-                'class'    => 'SceauBundle:TicketActeur',
-                'property' => 'libelle',
-                //'mapped'   => false,
-                'empty_value' => ".......",
-            ));
-        ;
+        $builder->add('type', new TicketTypeQuestionType());
 
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) {
-                $form = $event->getForm();
+        $formModifier = function(FormInterface $form) {
+            $form
+                // ->add('lastName', 'text', [
+                //     'label'    => 'form.ticket.lastName',
+                //     'mapped'   => false,
+                // ])
+                // ->add('firstName', 'text', [
+                //     'required' => false,
+                //     'label'    => 'form.ticket.firstName',
+                //     'mapped'   => false,
+                // ])
+                // ->add('email', 'repeated', [
+                //     'type'     => 'email',
+                //     'mapped'   => false,
+                //     'first_options'  => ['label' => 'form.ticket.email'],
+                //     'second_options' => ['label' => 'form.ticket.email_confirmation'],
+                // ])
+                // ->add('phone', 'text', [
+                //     'label'    => 'form.ticket.phone',
+                //     'mapped'   => false,
+                // ])
+                //->add('auteur', new TicketAuteurType())
+                ->add('auteur', new TicketAuteurType(), [
+                    'data_class' => 'SceauBundle\Entity\TicketAuteur'
+                ])
+                ->add('question', 'textarea', [
+                    'label'    => 'form.ticket.question',
+                ])
+                ->add('submit', 'submit', [
+                    'label'    => 'form.ticket.submit'
+                ])
+            ;
+        };
 
-                $ticket = $event->getData();
+        $builder->get('type')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function(FormEvent $event) use ($formModifier) {
+                $ticketType = $event->getForm()->getData();
 
-            if ($ticket) {
-                $form->add('type', 'entity', array(
-                    'class'    => 'SceauBundle:TicketType',
-                    'property' => 'libelle',
-                    'query_builder' => function(EntityRepository $er) use ($ticket) {
-                        $qb = $er->createQueryBuilder('tt');
-                        return $qb->where($qb->expr()->eq('tt.acteur', $ticket->getId()));
-                    }
-                ));
-            }
+                if ($ticketType->getId() && $ticketType->isForm()) {
+                    $formModifier($event->getForm()->getParent());
+                }
             }
         );
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            //'data_class' => 'SceauBundle\Entity\Ticket'
-        ));
+        $resolver->setDefaults([
+            'data_class'         => 'SceauBundle\Entity\Ticket',
+            'translation_domain' => 'site_contact_ticket',
+        ]);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

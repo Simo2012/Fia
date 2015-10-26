@@ -1,6 +1,16 @@
-<form  action="{{ path('site_member_register')}}" method="post">    
+{% if menu == 'tombola' %}
+        {% set classFormulaire = 'inscription-formulaire-tombola' %}
+        {% set action = path('site_member_register_tombola') %}
+        {% set classFormulairepartenaires = 'div_partenaires-tombola' %}
+    {% else %} 
+         {% set classFormulaire = 'inscription-formulaire' %}
+         {% set action = path('site_member_register') %}
+        {% set classFormulairepartenaires = 'div_partenaires' %}
+    {%  endif %}
+<form  action="{{action}}" method="post">    
     <input type="hidden" name="formulaireinscription" valuek="1">
-    <div id="inscription-formulaire">
+    
+    <div id="{{classFormulaire}}">
         
         {{ form_start(form) }}
         {{ form_row(form.civilite) }}
@@ -8,6 +18,15 @@
         {{ form_row(form.prenom) }}
         {{ form_row(form.email) }}
         {{ form_row(form.pseudo) }}
+        {% if menu == 'tombola' %}
+            {{ form_row(form.pays) }}
+            <div id="coordonnes">
+                {{ form_row(form.adresse) }}
+                {{ form_row(form.compAdresse) }}
+                {{ form_row(form.codePostal) }}
+                {{ form_row(form.ville) }}
+            </div>
+        {% endif %}
         {{ form_row(form.password) }}
         <div class='registre-avatar'>
             {% include 'SceauBundle:Site/Security:avatar.html.twig' %}
@@ -17,19 +36,21 @@
         </div>
     
     </div>
-    <div class='div_partenaires'>
+    <div class='{{classFormulairepartenaires}}'>
         {{ form_row(form.legal) }}
     </div>
-      
+    {% if menu == 'tombola' %}
+        <div id="tombola-error">Vous Pouvez Pas participer au tombola puisque vous étes pas en france</div>
+    {% endif %}
     <div class="btn-espace-membre">
-        <div class="btn-1-main">
-            <input type="submit" value="Valider" class="btn-home-regiter"/> 
+        <div class="btn-1-main" id="btn-tombola">
+            <input type="submit" value="Valider" class="btn-home-regiter" /> 
         </div>
 	<div class="btn-1-end"></div>
     </div>
          
     {{ form_end(form) }}
     {{ form_rest(form) }}
-        
+    
    
 </form>

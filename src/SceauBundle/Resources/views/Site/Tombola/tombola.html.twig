@@ -1,5 +1,5 @@
 {% trans_default_domain 'site_home_tombola' %}
-
+{{ include ("SceauBundle:Site/Tombola:tombolagain.html.twig", {'winners' : winners}) }}
 {% if call == 1 %}
     <div class="tombola-main">
         <h1 class="titre">{% trans %}titre_tombola{% endtrans %}</h1>
@@ -13,17 +13,29 @@
         <a class="lien" href="#" onclick="chooseMode('login'); return false;">
             {% trans %}login_tombola{% endtrans %}
         </a>
+        
         <div id="div_login" name="div_login" style="display:none; padding-top:10px;">
            {% include "SceauBundle:Site/Tombola:tombolalogin.html.twig" %}
         </div>
-        <br/>
-        <br/>
+	<br>
+        <br>
         <span> > 
         </span>
         <a class="lien" href="#" onclick="chooseMode('inscription'); return false;">
             {% trans %}register_tombola{% endtrans %}
         </a>
+        <div id="div_inscription" name="div_inscription" style="display:none; padding-top:10px; padding-bottom:15px;">
+				<b>Pour participer à la tombola, merci de bien vouloir compléter les informations ci-dessous.</b><br/><br/>
+                                    Les champs comportant un astérisque sont obligatoires car ils nous permettront de vous envoyer par la poste, avec AR, votre chèque cadeau si vous faites partie des gagnants de la tombola. Ils nous aideront aussi à vous identifier à chacune de vos participations et vous éviteront ainsi d'avoir à ressaisir vos informations personnelles. 
+				<br/>
+				<br/>
+	{% include "SceauBundle:Site/Security:registerform.html.twig" %}			
+	</div>
+        <br/>
+        <br/>
+        
     </div>
 {% elseif call == 2 %}
         {% include "SceauBundle:Site/Tombola:tombolasuccess.html.twig" %} 
 {% endif %}
+        {% include "SceauBundle:Site/Tombola:tombolafooter.html.twig" %} 

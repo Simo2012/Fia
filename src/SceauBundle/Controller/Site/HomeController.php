@@ -2,14 +2,16 @@
 
 namespace SceauBundle\Controller\Site;
 
+use SceauBundle\Entity\TicketType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use SceauBundle\Entity\Membre;
 use SceauBundle\Form\Type\Site\User\RegisterType;
+
+use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Site\TicketQuestionType;
-use SceauBundle\Entity\TicketActeur;
 use SceauBundle\Entity\Ticket;
 
 /**
@@ -27,14 +29,27 @@ class HomeController extends Controller
     /**
      * Afficher la page home.
      *
-     * @Route("/", name="site_home")
-     * @Route("/operation",
+     *@Route("/", name="site_home")
+     *@Route("/operation",
      *     name="site_operation_detail")
-     * @Route("/newsletter",
+     *@Route("/newsletter",
      *     name="site_operation_news")
-     * @Route("/mobile",
+     *@Route("/mobile",
      *        name="site_home_mobile")
+     *@Route("/whos",
+     *        name="site_whos_fianet")
+     *@Route("/mention_legales",
+     *        name="site_fianet_mention")
+     *@Route("/protection_donnees",
+     *        name="site_fianet_protectiondonnes")
+     *@Route("/CGU",
+     *        name="site_fianet_cgu")
+     *@Route("/politique_qualite",
+     *        name="site_fianet_politique")
+     *@Route("/Faq",
+     *        name="site_fianet_faq")
      * @Method("GET")
+     * 
      */
     public function indexAction() 
     {
@@ -66,6 +81,24 @@ class HomeController extends Controller
        } elseif ($loRouteName === 'site_home_mobile') {
            /** Envoyer vers la page Mobile **/
            return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'mobile'));
+       } elseif ($loRouteName === 'site_whos_fianet') {
+           /** Envoyer vers la page description fianet **/
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'whos'));
+       } elseif ($loRouteName === 'site_fianet_mention') {
+           /** Envoyer vers la page mention legale **/
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'mention'));
+       } elseif ($loRouteName === 'site_fianet_protectiondonnes') {
+           /** Envoyer vers la page mention legale **/
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'protection'));
+       } elseif ($loRouteName === 'site_fianet_cgu') {
+           /** Envoyer vers la page mention legale **/
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'cgu'));
+       } elseif ($loRouteName === 'site_fianet_politique') {
+           /** Envoyer vers la page mention legale **/
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'politique'));
+       } elseif ($loRouteName === 'site_fianet_faq') {
+           /** Envoyer vers la page mention legale **/
+           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'faq'));
        } else {
            return null;
        }
@@ -152,6 +185,31 @@ class HomeController extends Controller
             )
         );
     }
+    
+    
+    /**
+    * Action pour telecharger politique
+    * 
+    * @Route("/download_politique",
+    *     name="site_politique_downald")
+    * @Method("GET")
+    */
+    public function downloadPolitiqueAction() {
+        
+        $request = $this->get('request');
+        $path = $this->get('kernel')->getRootDir(). "/../web/documents/";
+        $content = file_get_contents($path.'PolitiqueQualite-SCEAU.pdf');
+
+        $response = new Response();
+
+        //set headers
+        $response->headers->set('Content-Type', 'mime/type');
+        $response->headers->set('Content-Disposition', 'attachment;filename=PolitiqueQualite-SCEAU.pdf');
+
+        $response->setContent($content);
+        return $response;
+    }
+    //
 
     /**
      * List all published Articles.
@@ -161,13 +219,27 @@ class HomeController extends Controller
      */
     public function contactAction(Request $request)
     {
-        $ticket = new Ticket();
-        $form = $this->createForm(new TicketQuestionType());
-        $form->handleRequest($request);
+        $ticket   = new Ticket();
+        $template = null;
 
-        return $this->render('SceauBundle:Site/Contact:index.html.twig', array(
-            'form' => $form->createView()
-        ));
+        $form = $this->createForm(new TicketQuestionType(), $ticket);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->has('submit') && $form->get('submit')->isClicked()) {
+                $this->getDoctrine()->getManager()->persist($ticket);
+                $this->getDoctrine()->getManager()->flush();
+            }
+
+            $template = $ticket->getType()->getTemplate();
+        }
+
+        return $this->render(
+            'SceauBundle:Site/Contact:index.html.twig',
+            [
+                'form'     => $form->createView(),
+                'template' => $template,
+            ]
+        );
     }
 
 }

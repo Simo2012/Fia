@@ -22,14 +22,14 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <h1>Détails de la question #ID_QUESTION#</h1>
+    <h1>Détails de la question n°{{ ticket.id }}</h1>
     <div class="row">
         {# BLOCK QUESTION #}
         <div class="col-lg-12">
             <div class="portlet portlet-default">
                 <div class="portlet-heading">
                     <div class="portlet-title col-lg-6">
-                        <h4>Détails de la question #ID_QUESTION# du #DATE_QUESTION#</h4>
+                        <h4>Détails de la question n°{{ ticket.id }} du {{ ticket.date|date("m/d/Y") }} à {{ ticket.date|date("H:i") }}</h4>
                     </div>
                     <div class="portlet-widgets">
                         <span class="label green">Traitée</span>
@@ -53,14 +53,18 @@
                     </div>
                     <div class="portlet-body">
                         <p>Site concerné : #SITENAME#</p>
-                        <p>#CONTENT#</p>
+                        <p>{{ ticket.question }}</p>
+                        <p>{{ dump(ticket) }}</p>
+                        <p>{{ dump(ticket.type) }}</p>
+                        <p>{{ ticket.type.TYPES[ticket.type.id] }}</p>
                     </div>
                 </div>
                 <div class="portlet-footer">
                     <!-- Reponse Modal Trigger -->
-                    <button class="btn btn-default btn-md pull-right" data-toggle="modal" data-target="#reponseModal">
+                    <button class="btn btn-green btn-md" data-toggle="modal" data-target="#reponseModal">
                         Répondre
                     </button>
+
                     {# <a class = "btn btn-green btn-md" href="#">Répondre</a> #}
                 </div>
             </div>
@@ -71,7 +75,7 @@
             <div class="portlet portlet-default">
                 <div class="portlet-heading">
                     <div class="portlet-title">
-                        <h4>Note de la question #ID_QUESTION# (visible uniquement par FIA-NET)</h4>
+                        <h4>Note de la question n°{{ ticket.id }} (visible uniquement par FIA-NET)</h4>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -93,7 +97,7 @@
             <div class="portlet portlet-default">
                 <div class="portlet-heading">
                     <div class="portlet-title">
-                        <h4>Historique de la question #ID_QUESTION#</h4>
+                        <h4>Historique de la question n°{{ ticket.id }}</h4>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -129,12 +133,7 @@
                                 {{ form(formTicketReponse) }}
                             </div>
                         </div>
-                        {# {{ form_widget(formTicketReponse)}} #}
                     </div>
-                    {# <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-green">V</button>
-                    </div> #}
                 </div>
                 <!-- /.modal-content -->
             </div>

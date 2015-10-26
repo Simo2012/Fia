@@ -3,25 +3,31 @@
         {% include "SceauBundle:Site/Common:menu.html.twig" %}    
         {% if menu == 'register' %}
             {% set locations = ['Accueil','Espace membre', 'Inscription'] %}
-            {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
-            {{ forms.input(locations) }}
         {% elseif menu == 'operation' %} 
             {% set locations = ['Accueil','Fonctionnement'] %}
-            {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
-            {{ forms.input(locations) }}
         {% elseif menu == 'newsletter' %} 
             {% set locations = ['Accueil','Newsletter'] %}
-            {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
-            {{ forms.input(locations) }}
         {% elseif menu == 'mobile' %} 
             {% set locations = ['Accueil','mobile'] %}
-            {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
-            {{ forms.input(locations) }}
         {% elseif menu == 'tombola'%}
             {% set locations = ['Accueil','Tombola FIA-NET'] %}
+        {% elseif menu == 'whos'%}
+            {% set locations = ['Accueil','Qui est FIA-NET ?'] %}
+        {% elseif menu == 'mention'%}
+            {% set locations = ['Accueil','Mentions légales'] %}
+        {% elseif menu == 'protection'%}
+            {% set locations = ['Accueil','Charte de protection des données Sceau de confiance'] %}
+        {% elseif menu == 'cgu'%}
+            {% set locations = ['Accueil','CGU'] %}
+        {% elseif menu == 'politique'%}
+            {% set locations = ['Accueil','Politique Qualité'] %}
+        {% elseif menu == 'faq'%}
+            {% set locations = ['Accueil','F.A.Q.'] %}
+        {% endif %}
+        {% if locations is defined %}
             {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
             {{ forms.input(locations) }}
-        {% endif %}
+        {%endif%}
         
         
         <div id="content">
@@ -60,12 +66,19 @@
             {% elseif  menu == 'mobile' %}
                     {% include "SceauBundle:Site/Mobile:mobile.html.twig" %}
             {% elseif  menu == 'tombola' %}
-                    {% include "SceauBundle:Site/Tombola:tombola.html.twig" %}
-            {% else %}
-                <div class='avis-conso-hier'>
-                    {% include "SceauBundle:Site/Home:stats.html.twig" %}
-                </div>
-            
+                    {{ include ("SceauBundle:Site/Tombola:tombola.html.twig", {'winners' : winners}) }}
+            {% elseif  menu == 'whos' %}
+                 {% include "SceauBundle:Site/Footer:whosfianet.html.twig" %}
+             {% elseif  menu == 'mention' %}
+                 {% include "SceauBundle:Site/Footer:mentionlegal.html.twig" %}
+            {% elseif  menu == 'protection' %}
+                 {% include "SceauBundle:Site/Footer:protectiondonnes.html.twig" %}
+            {% elseif  menu == 'cgu' %}
+                 {% include "SceauBundle:Site/Footer:cgu.html.twig" %}
+            {% elseif  menu == 'politique' %}
+                 {% include "SceauBundle:Site/Footer:politique.html.twig" %}
+            {% elseif  menu == 'faq' %}
+                 {% include "SceauBundle:Site/Footer:faq.html.twig" %}
             {% endif %}
         </div>
 {% endblock %}

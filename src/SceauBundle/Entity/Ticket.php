@@ -43,11 +43,11 @@ class Ticket
     private $etat;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketType")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id", nullable=true)
+     * @var integer
+     *
+     * @ORM\Embedded(class="TicketType", columnPrefix="type_")
      */
     private $type;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\Site")
@@ -61,7 +61,6 @@ class Ticket
      */
     private $categorie;
 
-
     /**
      * @var string
      *
@@ -69,11 +68,25 @@ class Ticket
      */
     private $note;
 
+    /**
+     * @var auteur
+     *
+     * @ORM\OneToOne(targetEntity="SceauBundle\Entity\TicketAuteur", mappedBy="ticket", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="auteur_id",referencedColumnName="id")
+     */
+    private $auteur;
+
 
     private $acteur;
     public function getActeur(){return $this->acteur;}
     public function setActeur($acteur){$this->acteur = $acteur; return $this;}
 
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+        $this->etat = false;
+        $this->type = new TicketType();
+    }
 
     /**
      * Get id
@@ -158,27 +171,19 @@ class Ticket
     }
 
     /**
-     * Set type
-     *
-     * @param \SceauBundle\Entity\TicketType $type
-     *
-     * @return Ticket
-     */
-    public function setType(\SceauBundle\Entity\TicketType $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
      * @return \SceauBundle\Entity\TicketType
      */
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @param \SceauBundle\Entity\TicketType $type
+     */
+    public function setType(TicketType $type)
+    {
+        $this->type = $type;
     }
 
     /**
@@ -249,5 +254,39 @@ class Ticket
     public function getCategorie()
     {
         return $this->categorie;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * Set auteur
+     *
+     * @param \SceauBundle\Entity\TicketAuteur $auteur
+     *
+     * @return Ticket
+     */
+    public function setAuteur(\SceauBundle\Entity\TicketAuteur $auteur = null)
+    {
+        $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    /**
+     * Get auteur
+     *
+     * @return \SceauBundle\Entity\TicketAuteur
+     */
+    public function getAuteur()
+    {
+        return $this->auteur;
     }
 }

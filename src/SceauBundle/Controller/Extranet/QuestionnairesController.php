@@ -726,7 +726,7 @@ class QuestionnairesController extends Controller
                 $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
             );
         }
-            
+
         $questionnaire = $this->getDoctrine()->getRepository('SceauBundle:Questionnaire')->find($qid);
         $questionnaireReponse = $this->getDoctrine()
             ->getRepository('SceauBundle:QuestionnaireReponse')->find($qrid);
@@ -737,7 +737,7 @@ class QuestionnairesController extends Controller
                 $this->generateUrl('extranet_questionnaires_droit_de_reponse_modification', array('qid' => $qid, 'qrid' => $qrid, 'drid' => $drid,))
             );
         */
-        
+
         $infosGeneralesQuestionnaire = $this->getDoctrine()->getRepository('SceauBundle:Questionnaire')
                     ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
         
@@ -746,13 +746,13 @@ class QuestionnairesController extends Controller
         $formBuilder = $this->get('form.factory')->createBuilder('form', $droitDeReponse);
 
         $translator = $this->get('translator');
-        
+
         $formBuilder->add('commentaire', 'textarea', array('trim' => true))
                 ->add('valider', 'submit', array('label' => $translator->trans('commun_valider', array(), 'commun')));
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
-        
+
         // ToDo : il faudra effectuer des checks complets de saisie par la suite (trim, nombre de caractères minimum,
         // mots interdits, mots longs, caractères répétés, etc.)
         if ($form->isValid()) {
@@ -767,24 +767,24 @@ class QuestionnairesController extends Controller
                     'droit_de_reponse_erreur',
                     $translator->trans('probleme_technique', array(), 'erreurs')
                 );
-                
+
                 return $this->redirect(
                     $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
                 );
             }
-            
+
             // ToDo : envoyer un e-mail à l'internaute pour informer du droit de réponse. L'e-mail contiendra un lien vers la fiche marchand avec ancre vers le commentaire. cf. existant Sceau v2
-            
+
             $request->getSession()->getFlashBag()->add(
                 'droit_de_reponse_succes',
                 $translator->trans('message_creation_droit_de_reponse_succes', array(), 'extranet_droit_de_reponse')
             );
-            
+
             return $this->redirect(
                 $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
             );
         }
-        
+
         return $this->render(
             'SceauBundle:Extranet/Questionnaires:droit_de_reponse.html.twig',
             array(
@@ -799,9 +799,9 @@ class QuestionnairesController extends Controller
                     array('questionnaire_id' => $qid)
                 )
             )
-        ); 
+        );
     }
-    
+
     /**
      * Affiche la page avec le formulaire de droit de réponse pour modification
      *
@@ -822,33 +822,33 @@ class QuestionnairesController extends Controller
     {
         $menu = $this->get('sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
-        
+
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
-        
+
         if (!$this->get('sceau.questionnaire_repondu')
             ->coherenceArgumentsDroitDeReponseModification($site, $qid, $qrid, $drid)) {
             return $this->redirect(
                 $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
             );
         }
-        
+
         $questionnaire = $this->getDoctrine()->getRepository('SceauBundle:Questionnaire')->find($qid);
         $questionnaireReponse = $this->getDoctrine()
             ->getRepository('SceauBundle:QuestionnaireReponse')->find($qrid);
-        
+
         $infosGeneralesQuestionnaire = $this->getDoctrine()->getRepository('SceauBundle:Questionnaire')
                     ->infosGeneralesQuestionnaire($questionnaire, $questionnaireType);
-        
+
         // Construction du formulaire pour le droit de réponse
         $em = $this->getDoctrine()->getManager();
-        
+
         $droitDeReponse = $em->getRepository('SceauBundle:DroitDeReponse')->find($drid);
-        
+
         $formBuilder = $this->get('form.factory')->createBuilder('form', $droitDeReponse);
 
         $translator = $this->get('translator');
-        
+
         $formBuilder->add('commentaire', 'textarea', array('trim' => true))
                 ->add('valider', 'submit', array('label' => $translator->trans('commun_valider', array(), 'commun')));
 
@@ -861,7 +861,7 @@ class QuestionnairesController extends Controller
             
             try {
                 $droitDeReponse->setQuestionnaireReponse($questionnaireReponse);
-                
+
                 $em->persist($droitDeReponse);
                 $em->flush();
             } catch (Exception $e) {
@@ -869,17 +869,17 @@ class QuestionnairesController extends Controller
                     'droit_de_reponse_erreur',
                     $translator->trans('probleme_technique', array(), 'erreurs')
                 );
-                
+
                 return $this->redirect(
                     $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
                 );
             }
-            
+
             $request->getSession()->getFlashBag()->add(
                 'droit_de_reponse_succes',
                 $translator->trans('message_creation_droit_de_reponse_succes', array(), 'extranet_droit_de_reponse')
             );
-            
+
             return $this->redirect(
                 $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
             );
@@ -899,9 +899,9 @@ class QuestionnairesController extends Controller
                     array('questionnaire_id' => $qid)
                 )
             )
-        ); 
-    }    
-    
+        );
+    }
+
     /**
      * Supprime le droit de réponse
      *
@@ -922,24 +922,24 @@ class QuestionnairesController extends Controller
     {
         $menu = $this->get('sceau.extranet.menu');
         $menu->getChild('questionnaires')->getChild('questionnaires.questionnaires')->setCurrent(true);
-        
+
         $site = $this->getDoctrine()->getManager()->merge($request->getSession()->get('siteSelectionne'));
         $questionnaireType = $request->getSession()->get('questionnaireTypeSelectionne');
-        
+
         if (!$this->get('sceau.questionnaire_repondu')
             ->coherenceArgumentsDroitDeReponseModification($site, $qid, $qrid, $drid)) {
             return $this->redirect(
                 $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
             );
         }
-        
+
         $translator = $this->get('translator');
         $em = $this->getDoctrine()->getManager();
-        
+
         $droitDeReponse = $em
             ->getRepository('SceauBundle:DroitDeReponse')
             ->find($drid);
-        
+
         try {
             $em->remove($droitDeReponse);
             $em->flush();
@@ -948,7 +948,7 @@ class QuestionnairesController extends Controller
                 'droit_de_reponse_erreur',
                 $translator->trans('probleme_technique', array(), 'erreurs')
             );
-            
+
             return $this->redirect(
                 $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
             );
@@ -958,11 +958,11 @@ class QuestionnairesController extends Controller
             'droit_de_reponse_succes',
             $translator->trans('message_suppression_droit_de_reponse_succes', array(), 'extranet_droit_de_reponse')
         );
-        
+
         return $this->redirect(
             $this->generateUrl('extranet_questionnaires_detail_questionnaire', array('questionnaire_id' => $qid))
         );
-        
+
     }
 
     /**
@@ -1008,5 +1008,5 @@ class QuestionnairesController extends Controller
             'form' => $form->createView(),
         ]);
     }
-    
+
 }

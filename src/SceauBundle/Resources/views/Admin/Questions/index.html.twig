@@ -46,20 +46,20 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {% for question in entities %}
+                                    {% for ticket in entities %}
                                     <tr class="odd gradeX">
-                                        <td>#loop.index#</td>
-                                        <td>#question.dateDebut|date("m/d/Y")#</td>
-                                        <td>#question.site.id#</td>
-                                        <td>#question.site.nom#</td>
-                                        <td>#Nom#</td>
-                                        <td>#Type#</td>
-                                        <td>#Service#</td>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ ticket.date|date("m/d/Y") }}</td>
+                                        <td>{# {{ question.site.id }} #}</td>
+                                        <td>{# {{ question.site.nom }} #}</td>
+                                        <td>{{ dump(ticket.auteur) }}</td>
+                                        <td>{{ ticket.type.getLabel }}</td>
+                                        <td>Service</td>
                                         <td>
-                                            <a href="{{ path('question_show', { 'id': 1 }) }}">#Question#</a>
+                                            <a href="{{ path('question_show', { 'id': ticket.id }) }}">#Question#</a>
                                             {# <a href="{{ path('question_show', { 'id': question.id }) }}">#Question#</a> #}
                                         </td>
-                                        <td>#Etat#</td>
+                                        <td>{{ dump(ticket.etat) }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
