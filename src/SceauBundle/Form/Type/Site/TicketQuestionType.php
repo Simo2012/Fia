@@ -17,7 +17,6 @@ use SceauBundle\Form\Type\Site\TicketAuteurType;
 
 class TicketQuestionType extends AbstractType
 {
-
     /**
      * {@inheritdoc}
      */
@@ -27,29 +26,7 @@ class TicketQuestionType extends AbstractType
 
         $formModifier = function(FormInterface $form) {
             $form
-                // ->add('lastName', 'text', [
-                //     'label'    => 'form.ticket.lastName',
-                //     'mapped'   => false,
-                // ])
-                // ->add('firstName', 'text', [
-                //     'required' => false,
-                //     'label'    => 'form.ticket.firstName',
-                //     'mapped'   => false,
-                // ])
-                // ->add('email', 'repeated', [
-                //     'type'     => 'email',
-                //     'mapped'   => false,
-                //     'first_options'  => ['label' => 'form.ticket.email'],
-                //     'second_options' => ['label' => 'form.ticket.email_confirmation'],
-                // ])
-                // ->add('phone', 'text', [
-                //     'label'    => 'form.ticket.phone',
-                //     'mapped'   => false,
-                // ])
-                //->add('auteur', new TicketAuteurType())
-                ->add('auteur', new TicketAuteurType(), [
-                    'data_class' => 'SceauBundle\Entity\TicketAuteur'
-                ])
+                ->add('auteur', new TicketAuteurType())
                 ->add('question', 'textarea', [
                     'label'    => 'form.ticket.question',
                 ])

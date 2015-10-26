@@ -18,22 +18,18 @@ class TicketAuteurType extends AbstractType
         $builder
             ->add('lastName', 'text', [
                 'label'    => 'form.ticket.lastName',
-                'mapped'   => false,
             ])
             ->add('firstName', 'text', [
                 'required' => false,
                 'label'    => 'form.ticket.firstName',
-                'mapped'   => false,
             ])
             ->add('email', 'repeated', [
                 'type'     => 'email',
-                'mapped'   => false,
                 'first_options'  => ['label' => 'form.ticket.email'],
                 'second_options' => ['label' => 'form.ticket.email_confirmation'],
             ])
             ->add('phone', 'text', [
                 'label'    => 'form.ticket.phone',
-                'mapped'   => false,
             ])
         ;   
     }
@@ -45,7 +41,7 @@ class TicketAuteurType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => 'SceauBundle\Entity\TicketAuteur',
-            'translation_domain' => 'site_contact_ticket_auteur',
+            'translation_domain' => 'site_contact_ticket',
         ]);
     }
 
