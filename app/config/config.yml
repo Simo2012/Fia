@@ -88,6 +88,7 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
+        entity_listener_resolver: sceau.doctrine.entity_listener_resolver
         auto_mapping: true
         mappings:
             # Doctrine extensions

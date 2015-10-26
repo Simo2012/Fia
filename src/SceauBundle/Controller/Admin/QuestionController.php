@@ -3,6 +3,7 @@
 namespace SceauBundle\Controller\Admin;
 
 use SceauBundle\Entity\Ticket;
+use SceauBundle\Entity\TicketHistorique;
 use SceauBundle\Form\Type\Admin\TicketNoteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -73,6 +74,7 @@ class QuestionController extends Controller
         if ($ticketNoteForm->isValid()) {
             $note = $ticketNoteForm->get('note')->getData();
             $ticket->setNote($note);
+            /** @var \Doctrine\ORM\EntityManager $em */
             $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
             $em->flush();

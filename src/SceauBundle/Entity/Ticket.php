@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="Ticket")
  * @ORM\Entity
+ * @ORM\EntityListeners({"SceauBundle\Listener\Entity\TicketListener"})
  */
 class Ticket
 {
