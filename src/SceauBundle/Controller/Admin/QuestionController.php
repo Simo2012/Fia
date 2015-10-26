@@ -44,13 +44,6 @@ class QuestionController extends Controller
      */
     public function showAction($id)
     {
-        $entityRepo = $this->get('sceau.repository.ticket');
-
-        $entity = $entityRepo->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ticket entity.');
-        }
 
         $formTicketReponse = $this->createForm(new TicketReponseType());
 
@@ -63,7 +56,7 @@ class QuestionController extends Controller
     /**
      * yolo
      *
-     * @Route("/{id}/updateTicketReponseModele", name="update_ticket_reponse_modele")
+     * @Route("/{id}/reponse-modele", name="question_reponse_modele")
      * @Method("POST")
      */
     public function updateTicketReponseModele()

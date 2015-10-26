@@ -158,7 +158,7 @@
                 $.ajax({
                     type: 'POST',
                     data: {'modeleType' : modeleType},          
-                    url:  '{{path('update_ticket_reponse_modele', { 'id': 1 }) }}',      
+                    url:  '{{path('question_reponse_modele', { 'id': 1 }) }}',      
                     success: function(response) {
                         var objectReponse = JSON.parse(response);
                         $('input#sujet').val(objectReponse.sujet);
