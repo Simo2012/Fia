@@ -55,6 +55,11 @@ class TicketHistorique
      */
     private $user;  //variable temporaire à supprimer après la création de l'entité User. Pour le moment on a juste un entier
 
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
+
     /**
      * Get id
      *

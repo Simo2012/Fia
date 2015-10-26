@@ -1,8 +1,8 @@
 <?php
 namespace SceauBundle\Listener\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use SceauBundle\Entity\Ticket;
 use SceauBundle\Entity\TicketHistorique;
 
@@ -16,48 +16,37 @@ class TicketListener
     const NOTE_UPDATE = "modification de la note";
     const NOTE_DELETE = "suppression de la note";
 
-    public function prePersist(Ticket $ticket, LifecycleEventArgs $event)
-    {
-        dump($event); exit;
-    }
-
-    public function preUpdate(Ticket $ticket, PreUpdateEventArgs $eventArgs)
+    public function postUpdate(Ticket $ticket, LifecycleEventArgs $eventArgs)
     {
         $em = $eventArgs->getEntityManager();
+        $uow = $em->getUnitOfWork();
 
-        if($ticket instanceof Ticket)
+        $changes = $uow->getEntityChangeSet($ticket);
+
+        if (isset($changes['note'])) //if note has changed
         {
-            if($eventArgs->hasChangedField('note')) //if note has changed
+            if (isset($changes['note'][1]) && $changes['note'][1]) // if the new value of field note is not empty
             {
-                if(!empty($eventArgs->getNewValue('note'))) // if the new value of field note is not empty
+                if (empty($changes['note'][0])) //if the actual note value before update is empty
                 {
-                    if(empty($eventArgs->getOldValue('note'))) //if the actual note value before update is empty
-                    {
-                        $this->createTicketHistorique(self::NOTE_CREATE, $ticket, $em);
-                    }
-                    else
-                    {
-                        $this->createTicketHistorique(self::NOTE_UPDATE, $ticket, $em);
-                    }
+                    $this->createTicketHistorique(self::NOTE_CREATE, $ticket, $em);
                 }
                 else
                 {
-                    $this->createTicketHistorique(self::NOTE_DELETE, $ticket, $em);
+                    $this->createTicketHistorique(self::NOTE_UPDATE, $ticket, $em);
                 }
-
+            }
+            else
+            {
+                $this->createTicketHistorique(self::NOTE_DELETE, $ticket, $em);
             }
 
-        }else
-        {
-            return;
         }
-
     }
 
-    private function createTicketHistorique($action,$ticket, $em )
+    private function createTicketHistorique($action, $ticket, EntityManager $em)
     {
         $ticketHistorique = new TicketHistorique();
-        $ticketHistorique->setDate(new \DateTime());
 
         switch ($action) {
             case self::NOTE_CREATE:
@@ -71,12 +60,13 @@ class TicketListener
                 break;
         }
 
-        $ticketHistorique->setComment("commentaire en dur")
+        $ticketHistorique
+            ->setComment("commentaire en dur")
             ->setTicket($ticket)
-            ->setUser(1)
+            ->setUser(1) //TODO remove fix
         ;
+
         $em->persist($ticketHistorique);
         $em->flush();
     }
-
 }

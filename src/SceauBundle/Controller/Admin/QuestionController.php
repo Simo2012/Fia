@@ -29,11 +29,12 @@ class QuestionController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // $entityRepo = $this->get('sceau.repository.question');
-        // $entities = $entityRepo->findBy(array(), array('date' => 'ASC'));
+        /** @var \SceauBundle\Entity\Repository\QuestionnaireRepository */
+         $questionRepository = $this->getDoctrine()->getManager()->getRepository('SceauBundle\Entity\Ticket');
+         $questions = $questionRepository->findBy(array(), array('date' => 'ASC'));
 
         return array(
-            'entities' => [1,2,3,4]
+            'entities' => $questions,
         );
     }
 
