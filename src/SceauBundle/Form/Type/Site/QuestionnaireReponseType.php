@@ -58,13 +58,10 @@ class QuestionnaireReponseType extends AbstractType
                     }
                     break;
                 case QuestionType::COMMENTAIRE:
-                    $builder->add($question->getId(), 'textarea', [
+                    $builder->add($question->getId(), 'commentaire', [
                         'required' => false,
-                        'attr'     => [
-                            'maxlength' => 500,
-                            'rows'      => 5,
-                            'cols'      => '98%',
-                        ],
+                        'mapped'   => false,
+                        'response' => $question->getReponses()->first(),
                         'label'    => $question->getLibelle(),
                     ]);
                     break;
