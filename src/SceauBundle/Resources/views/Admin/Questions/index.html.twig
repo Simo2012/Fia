@@ -22,6 +22,15 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
+                <form id="filters">
+                    {{ form_row(ticketFilters.etat) }}
+                    {{ form_row(ticketFilters.type) }}
+                    {{ form_row(ticketFilters.destinataire) }}
+                </form>
+                
+            </div>
+            
+            <div class="col-lg-12">
                 <div class="portlet portlet-default">
                     <div class="portlet-heading">
                         <div class="portlet-title">
@@ -46,22 +55,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {% for ticket in entities %}
-                                    <tr class="odd gradeX">
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ ticket.date|date("m/d/Y") }}</td>
-                                        <td>{# {{ question.site.id }} #}</td>
-                                        <td>{# {{ question.site.nom }} #}</td>
-                                        <td>{{ dump(ticket.auteur) }}</td>
-                                        <td>{{ ticket.type.getLabel }}</td>
-                                        <td>Service</td>
-                                        <td>
-                                            <a href="{{ path('question_show', { 'id': ticket.id }) }}">#Question#</a>
-                                            {# <a href="{{ path('question_show', { 'id': question.id }) }}">#Question#</a> #}
-                                        </td>
-                                        <td>{{ dump(ticket.etat) }}</td>
-                                    </tr>
-                                    {% endfor %}
+                                    {% include 'SceauBundle:Admin/Questions:list.html.twig' %}
                                 </tbody>
                             </table>
                         </div>
@@ -73,4 +67,28 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+
+{% block JAVASCRIPT %}
+    <script type="text/javascript">
+        
+
+        $("form").change(function() {
+            var data = {};
+            $("form#filters").serializeArray().map(function(x){data[x.name] = x.value;}); 
+            console.log(data);
+            $.ajax({
+                type: 'POST',
+                data: data,          
+                url:  '{{path('question_update_filters') }}',      
+                success: function(response) {
+                    console.log(response);
+                    $('div.tickets-list').html(response);
+                }
+            });
+        });
+  
+
+    </script>
 {% endblock %}

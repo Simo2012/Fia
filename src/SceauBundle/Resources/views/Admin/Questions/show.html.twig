@@ -41,9 +41,9 @@
                 </div>
                 <div id="defaultPortlet" class="panel-collapse collapse in">
                     <div class="col-lg-6">
-                        <p>Question posée par : test</p>
-                        <p>Email : test@test.com</p>
-                        <p>Téléphone :</p>
+                        <p>Question posée par : {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}</p>
+                        <p>Email : {{ ticket.auteur.email }}</p>
+                        <p>Téléphone : {{ ticket.auteur.phone }}</p>
                     </div>
                     <div class="col-lg-6">
                         <p>Type : erreur fiche marchand</p>
@@ -52,11 +52,11 @@
                         <p>Action : Une réponse doit être apportée à l'auteur du signalement ?</p>
                     </div>
                     <div class="portlet-body">
+                        <p>{{ dump(ticket.auteur)}}</p>
                         <p>Site concerné : #SITENAME#</p>
                         <p>{{ ticket.question }}</p>
                         <p>{{ dump(ticket) }}</p>
                         <p>{{ dump(ticket.type) }}</p>
-                        <p>{{ ticket.type.TYPES[ticket.type.id] }}</p>
                     </div>
                 </div>
                 <div class="portlet-footer">

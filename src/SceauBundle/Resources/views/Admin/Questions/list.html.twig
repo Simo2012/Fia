@@ -1,0 +1,23 @@
+<div class="tickets-list">
+{% for ticket in entities %}
+    <tr class="odd gradeX">
+        <td>{{ loop.index }} {{ dump(ticket)}}</td>
+        <td>{{ ticket.date|date("m/d/Y") }}</td>
+        <td>{# {{ question.site.id }} #}</td>
+        <td>{# {{ question.site.nom }} #}</td>
+        <td>
+            {% if ticket.auteur %}
+                {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}
+            {% endif %}
+        </td>
+        <td>ok</td>
+        <td>Service</td>
+        <td>
+            <a href="{{ path('question_show', { 'id': 1 }) }}">
+                {{ ticket.question|truncate(15) }}
+            </a>
+        </td>
+        <td>{{ dump(ticket.etat) }}</td>
+    </tr>
+{% endfor %}
+</div>

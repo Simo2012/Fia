@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Ticket
  *
- * @ORM\Table(name="Ticket")
- * @ORM\Entity
+ * @ORM\Table(name="ticket")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\TicketRepository")
  */
 class Ticket
 {
@@ -76,10 +76,6 @@ class Ticket
      */
     private $auteur;
 
-
-    private $acteur;
-    public function getActeur(){return $this->acteur;}
-    public function setActeur($acteur){$this->acteur = $acteur; return $this;}
 
     public function __construct()
     {

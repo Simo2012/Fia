@@ -31,28 +31,28 @@ class TicketAuteur
     /**
      * @var string
      *
-     * @ORM\Column(name="lastName", type="text")
+     * @ORM\Column(name="lastName", type="string", length=100)
      */
     private $lastName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="firstName", type="text")
+     * @ORM\Column(name="firstName", type="string", length=100)
      */
     private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="text")
+     * @ORM\Column(name="email", type="string", length=100)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="text")
+     * @ORM\Column(name="phone", type="string", length=15)
      */
     private $phone;
 
