@@ -61,12 +61,12 @@
                                         <td>{{ ticket.date|date("m/d/Y") }}</td>
                                         <td>
                                             {% if ticket.site %}
-                                                {{ question.site.id }}
+                                                {{ ticket.site.id }}
                                             {% endif %}
                                         </td>
                                         <td>
                                             {% if ticket.site %}
-                                                {{ question.site.nom }}
+                                                {{ ticket.site.nom }}
                                             {% endif %}
                                         </td>
                                         <td>
