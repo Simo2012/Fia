@@ -56,11 +56,8 @@
                         <p>Action : Une réponse doit être apportée à l'auteur du signalement ?</p>
                     </div>
                     <div class="portlet-body">
-                        <p>{{ dump(ticket.auteur)}}</p>
-                        <p>Site concerné : #SITENAME#</p>
                         <p>{{ ticket.question }}</p>
-                        <p>{{ dump(ticket) }}</p>
-                        <p>{{ dump(ticket.type) }}</p>
+                        <p>{{ ticket.type }}</p>
                     </div>
                 </div>
                 <div class="portlet-footer">
