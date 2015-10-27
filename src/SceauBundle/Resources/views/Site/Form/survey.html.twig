@@ -77,7 +77,12 @@
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
                 <tbody>
                 <tr>
-                    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+                    <td>
+                    {%- for child in form %}
+                        {{- form_label(child, null, {translation_domain: translation_domain}) -}}
+                        {{- form_widget(child) -}}
+                    {% endfor -%}
+                    </td>
                 </tr>
                 <tr>
                     <td style="background-image:none; font-weight:normal;">
