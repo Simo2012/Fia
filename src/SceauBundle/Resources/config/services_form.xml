@@ -25,9 +25,6 @@
         <service id="sceau.form.type.site.notation" class="SceauBundle\Form\Type\Site\Question\NotationType">
             <tag name="form.type" alias="notation" />
         </service>
-        <service id="sceau.form.type.site.commentaire" class="SceauBundle\Form\Type\Site\Question\CommentaireType">
-            <tag name="form.type" alias="commentaire" />
-        </service>
     </services>
 
 </container>

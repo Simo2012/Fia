@@ -750,11 +750,6 @@ class Question implements Translatable
 
     public function getFormUsableResponse()
     {
-        $reponses = [];
-        /** @var \SceauBundle\Entity\Reponse $reponse */
-        foreach ($this->reponses as $reponse) {
-            $reponses[$reponse->getId()] = $reponse->getLibelle();
-        }
-        return $reponses;
+        return array_map(function($reponse){return $reponse->getLibelle();}, $this->reponses->toArray());
     }
 }
