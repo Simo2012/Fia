@@ -1,6 +1,6 @@
 <?php
 
-namespace SceauBundle\Entity;
+namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -12,4 +12,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class PaysRepository extends EntityRepository
 {
+    
 }
