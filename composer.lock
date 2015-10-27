@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6d0f2b0a820427c6ef710fac4110849a",
-    "content-hash": "6e92ba27266eaf084556d592411e0d64",
+    "hash": "9ed8bdb2cb27445ad987c54eb02ff615",
+    "content-hash": "e983f049fcff61ab4f9f280bbbbe1f88",
     "packages": [
         {
             "name": "afarkas/html5shiv",
@@ -79,18 +79,18 @@
             "time": "2015-09-28 16:26:35"
         },
         {
-            "name": "cmen/google-charts",
+            "name": "cmen/google-charts-bundle",
             "version": "dev-master",
             "target-dir": "CMEN/GoogleChartsBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cmen/CMENGoogleChartsBundle.git",
-                "reference": "9f7f449b731066e37c7c724acad04b7553d207d1"
+                "reference": "9d42414947cc03e16def3e397a6a5d4cbd8798f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cmen/CMENGoogleChartsBundle/zipball/5c3f50a0cf69626c89d29ed42c4b8d462de59225",
-                "reference": "9f7f449b731066e37c7c724acad04b7553d207d1",
+                "url": "https://api.github.com/repos/cmen/CMENGoogleChartsBundle/zipball/9d42414947cc03e16def3e397a6a5d4cbd8798f7",
+                "reference": "9d42414947cc03e16def3e397a6a5d4cbd8798f7",
                 "shasum": ""
             },
             "require": {
@@ -116,7 +116,7 @@
                 "charts",
                 "google"
             ],
-            "time": "2015-10-11 09:32:20"
+            "time": "2015-10-25 10:48:10"
         },
         {
             "name": "components/jquery",
@@ -2770,7 +2770,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "willdurand/faker-bundle": 0,
-        "cmen/google-charts": 20
+        "cmen/google-charts-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
