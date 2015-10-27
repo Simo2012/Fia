@@ -48,32 +48,48 @@
                                     <th>SiteID</th>
                                     <th>Site</th>
                                     <th>Nom</th>
-                                    <th>Type</th>
-                                    <th>Service</th>
+                                    <th>categorie</th>
+                                    <th>type</th>
                                     <th>Question</th>
                                     <th>Etat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    {% for ticket in entities %}
                                     <tr class="odd gradeX">
                                         <td>{{ loop.index }}</td>
                                         <td>{{ ticket.date|date("m/d/Y") }}</td>
-                                        <td>{# {{ question.site.id }} #}</td>
-                                        <td>{# {{ question.site.nom }} #}</td>
+                                        <td>
+                                            {% if ticket.site %}
+                                                {{ question.site.id }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if ticket.site %}
+                                                {{ question.site.nom }}
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             {% if ticket.auteur %}
                                                 {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}
                                             {% endif %}
                                         </td>
                                         <td>ok</td>
-                                        <td>Service</td>
+                                        <td>{{ ticket.type }}</td>
                                         <td>
                                             <a href="{{ path('question_show', { 'id': 1 }) }}">
                                                 {{ ticket.question|truncate(15) }}
                                             </a>
                                         </td>
-                                        <td>ok</td>
+                                        <td>
+                                            {% if ticket.etat %}
+                                                <span class="label green">Traitée</span>
+                                            {% else %}
+                                                <span class="label orange">En attente</span>
+                                            {% endif %}
+                                        </td>
                                     </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
