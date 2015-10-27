@@ -747,4 +747,9 @@ class Question implements Translatable
     {
         $this->locale = $locale;
     }
+
+    public function getFormUsableResponse()
+    {
+        return array_map(function($reponse){return $reponse->getLibelle();}, $this->reponses->toArray());
+    }
 }

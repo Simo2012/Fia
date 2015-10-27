@@ -6103,7 +6103,7 @@ h2.recherche-result span {
 	margin-top: 25px;
 	padding-left: 10px;
 	padding-top: 5px;
-	background-image: url('../../images/site/homequest_sub_title_back.png');
+	background-image: url('../../../images/site/home/quest_sub_title_back.png');
 	background-repeat: repeat-x;
 	color: #ffffff;
 	font-weight: bold;
@@ -6248,7 +6248,7 @@ h2.recherche-result span {
 	padding-left: 15px;
 	padding-top: 15px;
 	padding-right: 15px;
-	background-image: url('../../images/site/homeblue_block_top.png');
+	background-image: url('../../../images/site/home/blue_block_top.png');
 	background-repeat: no-repeat;
 	font-size: 11px;
 }
@@ -6260,7 +6260,7 @@ h2.recherche-result span {
 	float: left;
 	width: 920px;
 	height: 15px;
-	background-image: url('../../images/site/homeblue_block_bottom.png');
+	background-image: url('../../../images/site/home/blue_block_bottom.png');
 	background-repeat: no-repeat;
 }
 .btn-valid-quest {
