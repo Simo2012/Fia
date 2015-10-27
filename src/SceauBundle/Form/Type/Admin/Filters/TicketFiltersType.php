@@ -11,6 +11,12 @@ use SceauBundle\Entity\TicketType;
 
 class TicketFiltersType extends AbstractType
 {
+    public $params;
+
+    public function __construct($params)
+    {
+        $this->params = $params;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -18,16 +24,20 @@ class TicketFiltersType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $params = $this->params;
         $builder
             ->add('etat', 'choice', [
                 'choices'   => [
                     null    => 'Tous',
                     false   => 'En attente',
                     true    => 'Traités'
-                ]
+                ],
+                'data' => $params && $params['etat'] != '' ? (int)$params['etat']: null 
+
             ])
             ->add('type','choice', [
-                'choices'       => TicketType::$TYPES,
+                'choices'  => [null => '-- Choisissez un type -- ']+TicketType::$TYPES_LABEL,
+                'data'     => $params && $params['type'] != '' ? (int)$params['type']: null     
             ])
             ->add('destinataire')
         ;

@@ -23,9 +23,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <form id="filters" action="{{path('questions')}}">
-                    {{ form_row(ticketFilters.etat) }}
-                    {{ form_row(ticketFilters.type) }}
-                    {{ form_row(ticketFilters.destinataire) }}
+                    {{ form_row(filtersForm.etat) }}
+                    {{ form_row(filtersForm.type) }}
+                    {{ form_row(filtersForm.destinataire) }}
                 </form>
                 
             </div>
@@ -77,7 +77,7 @@
                                         <td>ok</td>
                                         <td>{{ ticket.type }}</td>
                                         <td>
-                                            <a href="{{ path('question_show', { 'id': 1 }) }}">
+                                            <a href="{{ path('question_show', { 'id': loop.index }) }}">
                                                 {{ ticket.question|truncate(15) }}
                                             </a>
                                         </td>

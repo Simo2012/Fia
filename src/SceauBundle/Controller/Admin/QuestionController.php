@@ -31,28 +31,20 @@ class QuestionController extends Controller
      */
     public function indexAction(Request $request)
     {
-
         $params = $request->query->all();
+        $filtersForm = $this->get('form.factory')->create(new TicketFiltersType($params), null);
+        $filtersForm->handleRequest($request);
+        
+        if ($filtersForm->isValid()) {
+            $params = $filtersForm->getData();
+            return $this->redirect($this->generateUrl('questions', $params));
+        }
 
         $tickets = $this->get('sceau.repository.ticket')->getTicketsByParams($params);
-        // $form = $this->get('form.factory')->create(new TicketFiltersType($params), null);
-        
-        // $form->handleRequest($request);
-        // if ($form->isValid()) {
-        //     $params = $form->getData();
-
-        //     return $this->redirect($this->generateUrl('vw_prm_admin_stats_index', $params));
-        // }
-
-
-
-        // $repo = $this->getDoctrine()->getManager()->getRepository('SceauBundle\Entity\Ticket');
-        // $questions = $questionRepository->findBy(array(), array('date' => 'ASC'));
-        $ticketFilters = $this->createForm(new TicketFiltersType());
-
+ 
         return array(
             'entities'      => $tickets,
-            'ticketFilters' => $ticketFilters->createView(),
+            'filtersForm'   => $filtersForm->createView(),
         );
     }
 

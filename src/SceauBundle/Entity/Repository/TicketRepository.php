@@ -10,14 +10,20 @@ class TicketRepository extends EntityRepository
 
     public function getTicketsByParams($params)
     {
-        $qb = $this->createQueryBuilder('t');
+    	var_dump('repo : ', $params);
+        $qb = $this->createQueryBuilder('t')
+        	->where('t.id is not null');
+
 
         if (isset($params['type']) && $params['type'] != '') {
-        	$qb->where($qb->expr()->eq('t.type.id', $params['type']));
+        	var_dump('set type : ', $params['type']);
+        	$qb->andWhere($qb->expr()->eq('t.type.id', $params['type']));
         }
 
         if (isset($params['etat']) && $params['etat'] != '') {
-        	$qb->where($qb->expr()->eq('t.etat', $params['etat']));
+        	var_dump('set etat : ', $params['etat']);
+        	$qb->andWhere('t.etat = :etat')
+        	 	->setParameter('etat', $params['etat']);
         }
 
         return $qb->getQuery()->getResult();
