@@ -5,17 +5,17 @@ namespace SceauBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Pays
+ * TicketCategorie
  *
- * @ORM\Table(name="Pays")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\PaysRepository")
+ * @ORM\Table()
+ * @ORM\Entity
  */
-class Pays
+class TicketCategorie
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="smallint")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -24,9 +24,9 @@ class Pays
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="string", length=50)
+     * @ORM\Column(name="label", type="string", length=255)
      */
-    private $libelle;
+    private $label;
 
 
     /**
@@ -40,26 +40,27 @@ class Pays
     }
 
     /**
-     * Set libelle
+     * Set label
      *
-     * @param string $libelle
+     * @param string $label
      *
-     * @return Pays
+     * @return TicketCategorie
      */
-    public function setLibelle($libelle)
+    public function setLabel($label)
     {
-        $this->libelle = $libelle;
+        $this->label = $label;
 
         return $this;
     }
 
     /**
-     * Get libelle
+     * Get label
      *
      * @return string
      */
-    public function getLibelle()
+    public function getLabel()
     {
-        return $this->libelle;
+        return $this->label;
     }
 }
+
