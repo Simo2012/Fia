@@ -1,0 +1,165 @@
+{% block form_row -%}
+    {{- form_errors(form) -}}
+    {{- form_widget(form) -}}
+{%- endblock form_row %}
+
+{%- block form_label -%}
+    {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+{%- endblock form_label -%}
+
+{# question id 2 #}
+{%- block _questionnaire_reponse_1_widget -%}
+    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <div class="quest-detail">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                <tr class="notions">
+                    <th scope="col"></th>
+                    <th scope="col" colspan="3" style="text-align:left; padding-left:3px;">{{ "Mauvais"|trans({}, translation_domain) }}</th>
+                    <th scope="col" colspan="3">{{ "Moyen"|trans({}, translation_domain) }}</th>
+                    <th scope="col" colspan="2">{{ "Bon"|trans({}, translation_domain) }}</th>
+                    <th scope="col" colspan="2" style="text-align:right; padding-right:3px;">{{ "Excellent"|trans({}, translation_domain) }}</th>
+                </tr>
+                <tr class="none">
+                    <th scope="col">&nbsp;</th>
+                    <th scope="col" class="col1" width="38">1</th>
+                    <th scope="col" width="38">2</th>
+                    <th scope="col" width="38">3</th>
+                    <th scope="col" width="38">4</th>
+                    <th scope="col" class="col5" width="38">5</th>
+                    <th scope="col" width="38">6</th>
+                    <th scope="col" width="38">7</th>
+                    <th scope="col" width="38">8</th>
+                    <th scope="col" width="38">9</th>
+                    <th scope="col" class="col10" width="38">10</th>
+                </tr>
+                {%- for child in form %}
+                    <tr>
+                        <th class="first" scope="row">{{- form_label(child, null, {translation_domain: translation_domain}) -}}</th>
+                        {%- for children in child %}
+                            <td class="active{{ loop.index0 }} col{{ loop.index }}">
+                                {{- form_widget(children) -}}
+                            </td>
+                        {% endfor -%}
+                    </tr>
+                {% endfor -%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{%- endblock _questionnaire_reponse_1_widget -%}
+
+{# question id 2 #}
+{% block _questionnaire_reponse_2_widget %}
+    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                <tr>
+                    {%- for child in form %}
+                        <td width="17%" align="center">
+                            {{- form_widget(child) -}}
+                            {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+                        </td>
+                    {% endfor -%}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{%- endblock _questionnaire_reponse_2_widget -%}
+
+{# question id 3 #}
+{%- block _questionnaire_reponse_3_widget -%}
+    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <div class="blue-block-top" style="margin-top:-5px;font-size:13px;">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                <tr>
+                    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+                </tr>
+                <tr>
+                    <td style="background-image:none; font-weight:normal;">
+                        <div style="float:left; margin-top:2px;">
+                            Nombre de caractères restants : <span id="nbcaracteres5" class="message-ok">500</span>
+                            {#<script language="javascript" type="text/javascript">affNbCaracteres(document.getElementById("tQuestions_5"), '#nbcaracteres5', 'message-ok', 'message-erreur');</script>#}
+                        </div>
+                        <div style="float:right;">
+                            <div style="float:right;">
+                                <a href="#" onclick="showPopupCharte(1); return false;">
+                                    <img src="/img/charteSceau_icon.png" alt="" width="22px" height="20px">
+                                </a>
+                            </div>
+                            <div style="float:right; margin-top:2px; margin-right: 5px;">
+                                <span onclick="showPopupCharte(1); return false;" style="cursor:pointer;">
+                                    Charte des internautes
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-image:none;">
+                        <span class="rouge">En commentant votre acte d'achat ci-dessus, vous doublez vos chances de gagner jusqu'à 100€ à la Tombola FIA-NET.</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="blue-block-bottom"></div>
+        <div class="clear:both"></div>
+    </div>
+{%- endblock _questionnaire_reponse_3_widget -%}
+
+{# question id 4 #}
+{%- block _questionnaire_reponse_4_widget -%}
+    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            {%- for child in form %}
+                <tr>
+                    <td width="35">{{- form_widget(child) -}}</td>
+                    <td>{{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}</td>
+                </tr>
+            {% endfor -%}
+            </tbody>
+        </table>
+    </div>
+{%- endblock _questionnaire_reponse_4_widget -%}
+
+{# question id 5 #}
+{%- block _questionnaire_reponse_5_widget -%}
+    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            {%- for child in form %}
+                {% if loop.index0 is even %}
+                <tr>
+                {% endif %}
+                <td valign="top">{{- form_widget(child) -}}</td>
+                <td valign="top" style="padding-top:3px;">{{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}</td>
+                {% if loop.index0 is odd or loop.last %}
+                </tr>
+                {% endif %}
+            {% endfor -%}
+            </tbody>
+        </table>
+    </div>
+{%- endblock _questionnaire_reponse_5_widget -%}
+
+{# question id 6 #}
+{%- block _questionnaire_reponse_6_widget -%}
+    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            <tr>
+                <td>{{- form_widget(form) -}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{%- endblock _questionnaire_reponse_6_widget -%}

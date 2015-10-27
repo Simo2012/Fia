@@ -714,6 +714,27 @@ class QuestionnaireRepository extends EntityRepository
 
         return $qb->getQuery()->useResultCache(true, Cache::LIFETIME_1J)->getScalarResult();
     }
+
+    /**
+     * Check if survey exists and is linked to site
+     *
+     * @param int $questionnaireId questionnaire id
+     * @param int $siteId site id
+     *
+     * @return array
+     */
+    public function existsAndIsLinked($questionnaireId, $siteId)
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb
+            ->innerJoin('q.site', 's', 'WITH', $qb->expr()->eq('s.id', $siteId))
+            ->where($qb->expr()->eq('q.id', $questionnaireId))
+            ->andWhere($qb->expr()->eq('q.actif', 'true'))
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
     
     /**
      * Recuperer Le membre de chaque questionnaire

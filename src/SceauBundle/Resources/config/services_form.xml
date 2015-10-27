@@ -20,6 +20,11 @@
             <argument type="service" id="sceau.outils.string" />
             <tag name="form.type" alias="sceaubundle_questionnaires_liste" />
         </service>
+
+        <!-- Site -->
+        <service id="sceau.form.type.site.notation" class="SceauBundle\Form\Type\Site\Question\NotationType">
+            <tag name="form.type" alias="notation" />
+        </service>
     </services>
 
 </container>
