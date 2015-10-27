@@ -73,7 +73,7 @@ class Indice
      * @var QuestionnaireType
      *
      * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\QuestionnaireType", inversedBy="indices")
-     * @ORM\JoinColumn(name="questionnaireType_id", referencedColumnName="id", nullable="false")
+     * @ORM\JoinColumn(name="questionnaireType_id", referencedColumnName="id", nullable=false)
      */
     private $questionnaireType;
 

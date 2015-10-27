@@ -13,6 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class IndiceType
 {
     const MOYENNE = 1;
+    const POURCENTAGE = 2;
+    const NB_AVIS_PERIODE = 3;
+    const NB_AVIS_TOTAL = 4;
 
     /**
      * @var integer

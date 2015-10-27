@@ -3,8 +3,6 @@
 namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use SceauBundle\Entity\Indice;
-use SceauBundle\Entity\IndiceType;
 use SceauBundle\Entity\QuestionnaireReponse;
 
 class QuestionnaireReponseRepository extends EntityRepository
@@ -74,28 +72,5 @@ class QuestionnaireReponseRepository extends EntityRepository
         }
 
         return null;
-    }
-
-    /**
-     * Retourne la valeur d'un indice pour un site.
-     *
-     * @param Indice $indice Instance de Indice
-     * @param int $site_id Identifiant du site
-     */
-    public function getValeurIndice(Indice $indice, $site_id)
-    {
-        $qb = $this->createQueryBuilder('qr');
-
-        /* MOYENNE */
-        if ($indice->getIndiceType()->getId() == IndiceType::MOYENNE) {
-            $qb->select($qb->expr()->avg('qr.note'));
-        }
-
-        $qb->where(
-            $qb->expr()->andX(
-                $qb->expr()->eq('qr.question', $indice->getQuestion()),
-                $qb->expr()->eq('qr.question', $indice->getQuestion())
-            )
-        );
     }
 }

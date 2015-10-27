@@ -4,6 +4,7 @@ namespace SceauBundle\Service;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use SceauBundle\Entity\Indice;
+use SceauBundle\Entity\IndiceType;
 use SceauBundle\Entity\QuestionnaireType;
 
 class Notes
@@ -80,17 +81,47 @@ class Notes
     }
 
     /**
-     * Retourne la valeur d'un indice pour un site.
+     * Retourne la valeur d'un indice pour un site. En fonction de l'indice, la valeur retournée peut être un entier ou
+     * un flottant. S'il n'y a aucune donnée pour l'indice, retourne null.
      *
      * @param int $indice_id Identifiant de l'indice
      * @param int $site_id Identifiant du site
+     *
+     * @return float|int|null
+     *
+     * @throws \Exception Si l'indice demandé n'existe pas
      */
     public function getIndice($indice_id, $site_id)
     {
         /** @var Indice $indice */
         $indice = $this->em->getRepository('SceauBundle:Indice')->getIndice($indice_id);
 
-        $valeurIndice = $this->em->getRepository('SceauBundle:QuestionnaireReponse')
-            ->getValeurIndice($indice, $site_id);
+        if (!$indice) {
+            throw new \Exception("L'indice $indice_id n'existe pas.");
+        }
+
+        $valeurBrut = $this->em->getRepository('SceauBundle:Indice')->getValeurIndice($indice, $site_id);
+
+        if ($indice->getIndiceType()->getId() == IndiceType::MOYENNE) {
+            $valeurIndice = round($valeurBrut, 1);
+
+        } elseif ($indice->getIndiceType()->getId() == IndiceType::POURCENTAGE) {
+            $indiceNbAvis = $this->em->getRepository('SceauBundle:Indice')
+                ->getIndice($indice->getQuestionnaireType()->getParametrage()['nbAvis']);
+
+            $nbAvis = $this->em->getRepository('SceauBundle:Indice')->getValeurIndice($indiceNbAvis, $site_id);
+
+            if ($nbAvis != 0) {
+                $valeurIndice = round(($valeurBrut * 100) / $nbAvis, 1);
+
+            } else {
+                $valeurIndice = null;
+            }
+
+        } else {
+            return $valeurBrut;
+        }
+
+        return $valeurIndice;
     }
 }
