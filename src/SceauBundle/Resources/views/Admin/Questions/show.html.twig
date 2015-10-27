@@ -101,7 +101,27 @@
                 </div>
                 <div id="defaultPortlet" class="panel-collapse collapse in">
                     <div class="portlet-body">
-                        <p>#CONTENT#</p>
+                        <div class="table-responsive">
+                            <table id="example-table" class="table table-striped table-bordered table-hover table-green">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Commentaire</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for historique in historiques %}
+                                    <tr class="odd gradeX">
+                                        <td>{{ historique.date | date("d/m/Y à H:i:s") }}</td>
+                                        <td>{{ historique.description }}</td>
+                                        <td>{{ historique.comment }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * TicketHistorique
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\TicketHistoriqueRepository")
  */
 class TicketHistorique
 {
@@ -31,7 +31,7 @@ class TicketHistorique
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="text")
+     * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
 
@@ -53,7 +53,7 @@ class TicketHistorique
      * @var integer
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $user;  //variable temporaire à supprimer après la création de l'entité User. Pour le moment on a juste un entier
+    private $user;   //TODO remove fix
 
     public function __construct()
     {

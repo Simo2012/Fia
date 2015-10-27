@@ -46,16 +46,19 @@ class QuestionController extends Controller
      * @Method("GET")
      * @Template("SceauBundle:Admin/Questions:show.html.twig")
      */
-    public function showAction(Ticket $ticket, $id)
+    public function showAction(Ticket $ticket)
     {
+        $historiques = $this->get('sceau.repository.ticket.historique')->findByTicket($ticket);
+
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket, array(
-            'action' => $this->generateUrl('question_update',array('id'=>$id)),
+            'action' => $this->generateUrl('question_update',array('id'=>$ticket->getId())),
             'method' => 'POST',
         ));
 
         return array(
             'ticketNoteForm' => $ticketNoteForm->createView(),
             'ticket'      => $ticket,
+            'historiques'  => $historiques,
         );
     }
 
@@ -64,9 +67,8 @@ class QuestionController extends Controller
      *
      * @Route("/add/{id}", name="question_update")
      * @Method("POST")
-     * @Template("SceauBundle:Admin/Questions:show.html.twig")
      */
-    public function updateAction(Request $request, Ticket $ticket, $id)
+    public function updateNoteAction(Request $request, Ticket $ticket)
     {
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket);
 
@@ -81,7 +83,7 @@ class QuestionController extends Controller
             $em->flush();
 
         }
-        return $this->redirect($this->generateUrl('question_show', array('id' => $id)));
+        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
 
     /**
@@ -91,14 +93,14 @@ class QuestionController extends Controller
      * @Method("GET")
      * @Template("SceauBundle:Admin/Questions:show.html.twig")
      */
-    public function deleteNoteAction(Ticket $ticket, $id)
+    public function deleteNoteAction(Ticket $ticket)
     {
         $ticket->setNote(null);
         $em = $this->getDoctrine()->getManager();
         $em->persist($ticket);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('question_show', array('id' => $id)));
+        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
 
     }
 }
