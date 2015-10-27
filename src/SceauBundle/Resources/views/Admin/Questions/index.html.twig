@@ -22,7 +22,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <form id="filters">
+                <form id="filters" action="{{path('questions')}}">
                     {{ form_row(ticketFilters.etat) }}
                     {{ form_row(ticketFilters.type) }}
                     {{ form_row(ticketFilters.destinataire) }}
@@ -55,7 +55,25 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {% include 'SceauBundle:Admin/Questions:list.html.twig' %}
+                                    <tr class="odd gradeX">
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ ticket.date|date("m/d/Y") }}</td>
+                                        <td>{# {{ question.site.id }} #}</td>
+                                        <td>{# {{ question.site.nom }} #}</td>
+                                        <td>
+                                            {% if ticket.auteur %}
+                                                {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}
+                                            {% endif %}
+                                        </td>
+                                        <td>ok</td>
+                                        <td>Service</td>
+                                        <td>
+                                            <a href="{{ path('question_show', { 'id': 1 }) }}">
+                                                {{ ticket.question|truncate(15) }}
+                                            </a>
+                                        </td>
+                                        <td>ok</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -72,23 +90,11 @@
 
 {% block JAVASCRIPT %}
     <script type="text/javascript">
-        
-
-        $("form").change(function() {
-            var data = {};
-            $("form#filters").serializeArray().map(function(x){data[x.name] = x.value;}); 
-            console.log(data);
-            $.ajax({
-                type: 'POST',
-                data: data,          
-                url:  '{{path('question_update_filters') }}',      
-                success: function(response) {
-                    console.log(response);
-                    $('div.tickets-list').html(response);
-                }
-            });
+    
+        $('form').change(function() {
+            console.log('submit');
+            $('form').submit();
         });
   
-
     </script>
 {% endblock %}

@@ -10,6 +10,7 @@
         <parameter key="sceau.entity.actualite">SceauBundle\Entity\Actualite</parameter>
         <parameter key="sceau.entity.ticket.reponse.modele">SceauBundle\Entity\TicketReponseModele</parameter>
         <parameter key="sceau.entity.ticket">SceauBundle\Entity\Ticket</parameter>
+        <parameter key="sceau.entity.ticket.historique">SceauBundle\Entity\TicketHistorique</parameter>
     </parameters>
 
     <services>
@@ -43,6 +44,12 @@
             factory-service="doctrine.orm.default_entity_manager"
             factory-method="getRepository">
             <argument>%sceau.entity.ticket.reponse.modele%</argument>
+        </service>
+        <service id="sceau.repository.ticket.historique"
+                 class="SceauBundle\Entity\Repository\TicketHistoriqueRepository"
+                 factory-service="doctrine.orm.default_entity_manager"
+                 factory-method="getRepository">
+            <argument>%sceau.entity.ticket.historique%</argument>
         </service>
     </services>
 

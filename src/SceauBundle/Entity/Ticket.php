@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="ticket")
  * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\TicketRepository")
+ * @ORM\EntityListeners({"SceauBundle\Listener\Entity\TicketListener"})
  */
 class Ticket
 {
@@ -49,6 +50,14 @@ class Ticket
      */
     private $type;
 
+
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+        $this->etat = false;
+        $this->type = new TicketType();
+    }
+
     /**
      * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\Site")
      * @ORM\JoinColumn(name="site_id", referencedColumnName="id", nullable=true)
@@ -75,14 +84,6 @@ class Ticket
      * @ORM\JoinColumn(name="auteur_id",referencedColumnName="id")
      */
     private $auteur;
-
-
-    public function __construct()
-    {
-        $this->date = new \DateTime();
-        $this->etat = false;
-        $this->type = new TicketType();
-    }
 
     /**
      * Get id
@@ -176,10 +177,14 @@ class Ticket
 
     /**
      * @param \SceauBundle\Entity\TicketType $type
+     * 
+     * @return Ticket
      */
     public function setType(TicketType $type)
     {
         $this->type = $type;
+        
+        return $this;
     }
 
     /**
@@ -201,9 +206,9 @@ class Ticket
      *
      * @return string
      */
-    public function getCode()
+    public function getNote()
     {
-        return $this->code;
+        return $this->note;
     }
 
     /**
@@ -250,16 +255,6 @@ class Ticket
     public function getCategorie()
     {
         return $this->categorie;
-    }
-
-    /**
-     * Get note
-     *
-     * @return string
-     */
-    public function getNote()
-    {
-        return $this->note;
     }
 
     /**
