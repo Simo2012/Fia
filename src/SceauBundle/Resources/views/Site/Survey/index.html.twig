@@ -1,0 +1,13 @@
+{% extends "SceauBundle:Site:layout.html.twig" %}
+{% form_theme form "SceauBundle:Site\\Form:survey.html.twig" %}
+
+{% block CONTENT %}
+<div id="contentbis" class="full-picto">
+    <div class="header-end"></div>
+    <div class="main-quest">
+        <div class="quest-title">{{ "Votre avis nous intéresse !"|trans({}) }}</div>
+        {{ form(form) }}
+    </div>
+    <div class="main-block-end"></div>
+</div>
+{% endblock %}
