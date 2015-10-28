@@ -1,4 +1,3 @@
-
 {% spaceless %}
     <!DOCTYPE html>
     <html lang="fr">
@@ -6,35 +5,45 @@
             {% include 'SceauBundle:Admin/Common:header.html.twig' %}
         </head>
         <body>
-            <div id="wrapper">
-                <nav class="navbar-top" role="navigation">
+            <!-- begin #page-loader -->
+            <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+
+            <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+
+
+                {# nav-top #}
+                <div id="header" class="header navbar navbar-default navbar-fixed-top">
                     {% include 'SceauBundle:Admin/Common:nav-top.html.twig' %}
-                </nav>
+                </div>
 
-                <nav class="navbar-side" role="navigation">
+                {# sidebar #}
+                <div id="sidebar" class="sidebar">
                     {% include 'SceauBundle:Admin/Common:nav-side.html.twig' %}
-                </nav>
+                </div>
+                <div class="sidebar-bg">  
+                </div>
 
-                <div id="page-wrapper">
+                {# content #}
+                <div id="content" class="content">
                     {% block CONTENT %}{% endblock %}
                 </div>
             </div>
             {% include 'SceauBundle:Admin/Common:js-global.html.twig' %}
 
-
-
-            {% block JAVASCRIPT %}
-                <script type="text/javascript">
+            <script type="text/javascript">
                 $(document).ready(function() {
+                    App.init();
+                    Dashboard.init();
                     $('.datepicker').datepicker({
                         format: 'yyyy-mm-dd'
                     });
 
                 });
-                </script>
-            {% endblock %}
+            </script>
+            {% block JAVASCRIPT %}
 
+            {% endblock %}
         </body>
     </html>
-    
+
 {% endspaceless %}
