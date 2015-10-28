@@ -1,4 +1,4 @@
-{# {% block JAVASCRIPT %}
+{% block JAVASCRIPT %}
     {% javascripts
     'bundles/sceau/js/admin/common/pace.js'
     'bundles/sceau/js/admin/common/jquery-1.10.2.min.js'
@@ -12,14 +12,6 @@
     'bundles/sceau/js/admin/common/flex.js'
     'bundles/sceau/js/admin/common/advanced-tables-demo.js'
     'bundles/sceau/js/admin/common/bootstrap-datepicker.js'
-     %}
-    <script src="{{ asset_url }}" type="text/javascript"></script>
-    {% endjavascripts %}
-{% endblock %} #}
-
-{% block JAVASCRIPT %}
-    {% javascripts
-    'bundles/sceau/js/admin/common/jquery-1.10.2.min.js'
      %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
