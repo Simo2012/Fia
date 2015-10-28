@@ -51,6 +51,21 @@ class TicketType
         ],
     ];
 
+    public static $TYPES_LABEL = [
+
+            self::COMMAND_CANCEL                => 'Une commande annulée par un e-commerçant',
+            self::COMMAND_AWAIT                 => 'Une commande en attente de pièces justificatives',
+            self::WEBSITE_TECHNICAL_PROBLEM     => 'Un problème technique sur le site FIA-NET.com',
+            self::MEMBER_AREA_TECHNICAL_PROBLEM => 'Un problème technique dans votre espace membre FIA-NET',
+            self::LITIGATION                    => 'La déclaration d\'un litige avec un e-commerçant sur FIA-NET.com',
+            self::JOB_OFFER                     => 'Les offres d\'emplois disponibles',
+            self::PHISHING                      => 'Une tentative de phishing concernant FIA-NET',
+            self::REPORTER                      => 'Un journaliste',
+            self::E_MERCHANT                    => 'Un e-commerçant souhaitant être informé sur nos offres',
+            self::WEB_AGENCY                    => 'Une web agency souhaitant devenir partenaire du Sceau de Confiance FIA-NET',
+
+    ];
+
     public static $TYPES_TEMPLATE = [
         self::COMMAND_CANCEL => 'SceauBundle:Site\Contact:command.html.twig',
         self::COMMAND_AWAIT  => 'SceauBundle:Site\Contact:command.html.twig',
@@ -119,7 +134,7 @@ class TicketType
      */
     public function getLabel()
     {
-        return isset(self::$TYPES[$this->id]) ? self::$TYPES[$this->id] : '';
+        return isset(self::$TYPES_LABEL[$this->id]) ? self::$TYPES_LABEL[$this->id] : '';
     }
 
     public static function getAvailableTypes($actor)
