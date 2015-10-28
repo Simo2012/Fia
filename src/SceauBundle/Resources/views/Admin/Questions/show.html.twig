@@ -1,32 +1,110 @@
 {% extends 'SceauBundle:Admin:layout.html.twig' %}
 
-{% block CONTENT -%}
+{% block CONTENT %}
 
-<div class="page-content page-content-ease-in">
+    <ol class="breadcrumb pull-right">
+        <li><a href="javascript:;">Home</a></li>
+        <li><a href="javascript:;">Gestions des questions</a></li>
+        <li class="active">Question {{ ticket.id }}</li>
+    </ol>
+
+    <h1 class="page-header">Question internaute
+        <small>n°{{ ticket.id }}</small>
+    </h1>
+
+    {# BLOCK QUESTION #}
     <div class="row">
-        <div class="col-lg-12">
-            <div class="page-title">
-                <h1>Question internaute
-                   {#  <small>Content Overview</small> #}
-                </h1>
-                <ol class="breadcrumb">
-                    <li class="active"><i class="fa fa-dashboard"></i> Question</li>
-                    <li class="pull-right">
-                        <div id="reportrange" class="btn btn-green btn-square date-picker">
-                            <i class="fa fa-calendar"></i>
-                            <span class="date-range"></span> <i class="fa fa-caret-down"></i>
-                        </div>
-                    </li>
-                </ol>
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    {% if ticket.etat %}
+                        <span class="label label-success m-r-10 pull-left">Traitée</span>
+                    {% else %}
+                        <span class="label label-warning m-r-10 pull-left">En attente</span>
+                    {% endif %}
+                    Détails de la question n°{{ ticket.id }} du {{ ticket.date|date("m/d/Y") }} à {{ ticket.date|date("H:i") }}
+                </h4>
+            </div>
+            <div class="panel-body bg-aqua text-white">
+                <div class="col-lg-6">
+                    <p>Question posée par : {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}</p>
+                    <p>Email : {{ ticket.auteur.email }}</p>
+                    <p>Téléphone : {{ ticket.auteur.phone }}</p>
+                </div>
+                <div class="col-lg-6">
+                    <p>Type : erreur fiche marchand</p>
+                    <p>Service affecté : Informatique Modifier</p>
+                    <p>Etat :  En attente de traitement </p>
+                    <p>Action : Une réponse doit être apportée à l'auteur du signalement ?</p>
+                </div>
+            </div>
+            <div class="panel-body">
+                <p>Site concerné : #SITENAME#</p>
+                <p>{{ ticket.question }}</p>
+            </div>
+            <div class="panel-footer text-right">
+                <a href="#reponseModal" class="btn btn-sm btn-success" data-toggle="modal">Répondre</a>
             </div>
         </div>
-        <!-- /.col-lg-12 -->
     </div>
-    <h1>Détails de la question n°{{ ticket.id }}</h1>
 
+    {# BLOCK NOTE #}
     <div class="row">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Note de la question n°{{ ticket.id }} (visible uniquement par FIA-NET)
+                </h4>
+            </div>
+            <div class="panel-body">
+                <p>{{ ticket.note }}</p>
+            </div>
+            <div class="panel-footer text-right">
+                {% if  not ticket.note %}
+                    <a href="#noteModal" class="btn btn-sm btn-success" data-toggle="modal">Ajouter une note</a>
+                {% else %}
+                    <a href="#noteModal" class="btn btn-sm btn-success" data-toggle="modal">Modifier</a>
+                    <a href="#noteDeleteModal" class="btn btn-sm btn-danger" data-toggle="modal">Supprimer</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {# BLOCK HISTORIQUE #}
+    <div class="row">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Historique de la question n°{{ ticket.id }}
+                </h4>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="example-table" class="table table-striped table-bordered table-hover table-green">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Commentaire</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for historique in historiques %}
+                            <tr class="odd gradeX">
+                                <td>{{ historique.date | date("d/m/Y à H:i:s") }}</td>
+                                <td>{{ historique.description }}</td>
+                                <td>{{ historique.comment }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
         {# BLOCK QUESTION #}
-        <div class="col-lg-12">
+{#         <div class="col-lg-12">
             <div class="portlet portlet-default">
                 <div class="portlet-heading">
                     <div class="portlet-title col-lg-6">
@@ -71,13 +149,14 @@
                         Répondre
                     </button>
 
-                    {# <a class = "btn btn-green btn-md" href="#">Répondre</a> #}
+
+              
                 </div>
             </div>
-        </div>
+        </div> #}
 
         {# BLOCK NOTE #}
-        <div class="col-lg-12">
+{#         <div class="col-lg-12">
             <div class="portlet portlet-default">
                 <div class="portlet-heading">
                     <div class="portlet-title">
@@ -99,10 +178,10 @@
                 {% endif %}
                 </div>
             </div>
-        </div>
+        </div> #}
 
         {# BLOCK HISTORIQUE #}
-        <div class="col-lg-12">
+{#         <div class="col-lg-12">
             <div class="portlet portlet-default">
                 <div class="portlet-heading">
                     <div class="portlet-title">
@@ -136,19 +215,87 @@
                     </div>
                 </div>
             </div>
+        </div> #}
+
+        <div class="row">
+            <div class="btn-group">
+                <a class = "btn btn-white" href="#">Question précédente</a>
+                <a class = "btn btn-white" href="#">Retour </a>
+                <a class = "btn btn-white" href="#">Question suivante</a>
+            </div>
         </div>
 
-        <div class="btn-group">
-            <a class = "btn btn-white" href="#">Question précédente</a>
-            <a class = "btn btn-white" href="#">Retour </a>
-            <a class = "btn btn-white" href="#">Question suivante</a>
+
+        <div class="modal fade" id="modal-dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Modal Dialog</h4>
+                    </div>
+                    <div class="modal-body">
+                        Modal body content here...
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Close</a>
+                        <a href="javascript:;" class="btn btn-sm btn-success">Action</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        
-        <br>
+        <div class="modal fade in" id="reponseModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Réponse à la question n°{{ ticket.id }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% form_theme ticketReponseForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                        {{ form(ticketReponseForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+
+        <!-- Note Modal -->
+        <div class="modal fade in" id="noteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Note</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% form_theme ticketNoteForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                        {{ form(ticketNoteForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Note Modal to delete -->
+        <div class="modal fade in" id="noteDeleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Note</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Etes-vous sur de vouloir supprimer cette note ?</p>
+                        <a class="btn btn-danger btn-md" href="{{ path('question_note_delete', {'id':ticket.id})}}">Oui</a>
+                        <a class="btn btn-white btn-md" data-dismiss="modal">Non</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Réponse Modal -->
-        <div class="modal fade" id="reponseModal" tabindex="-1" role="dialog" aria-labelledby="reponseModalModalLabel" aria-hidden="true">
+       {#  <div class="modal fade" id="reponseModal" tabindex="-1" role="dialog" aria-labelledby="reponseModalModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -166,10 +313,10 @@
                 </div>
                 <!-- /.modal-content -->
             </div>
-        </div>
+        </div> #}
 
         <!-- Note Modal -->
-        <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true">
+        {# <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -187,10 +334,10 @@
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
-        </div>
+        </div> #}
 
         <!-- Note Modal to delete -->
-        <div class="modal fade" id="noteDeleteModal" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true">
+{#         <div class="modal fade" id="noteDeleteModal" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -209,11 +356,8 @@
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
-        </div>
+        </div> #}
         <!-- /.modal -->
-    </div>
-</div>
-
 
 {% endblock %}
 
