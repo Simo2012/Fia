@@ -59,8 +59,6 @@
                                     <tr class="odd gradeX">
                                         <td>{{ loop.index }}</td>
                                         <td>{{ ticket.date|date("m/d/Y") }}</td>
-                                        <td>{# {{ question.site.id }} #}</td>
-                                        <td>{# {{ question.site.nom }} #}</td>
                                         <td>
                                             {% if ticket.site %}
                                                 {{ ticket.site.id }}
