@@ -23,9 +23,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <form id="filters" action="{{path('questions')}}">
-                    {{ form_row(ticketFilters.etat) }}
-                    {{ form_row(ticketFilters.type) }}
-                    {{ form_row(ticketFilters.destinataire) }}
+                    {{ form_row(filtersForm.etat) }}
+                    {{ form_row(filtersForm.type) }}
+                    {{ form_row(filtersForm.destinataire) }}
                 </form>
                 
             </div>
@@ -48,19 +48,29 @@
                                     <th>SiteID</th>
                                     <th>Site</th>
                                     <th>Nom</th>
-                                    <th>Type</th>
-                                    <th>Service</th>
+                                    <th>categorie</th>
+                                    <th>type</th>
                                     <th>Question</th>
                                     <th>Etat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    {% for ticket in entities %}
                                     <tr class="odd gradeX">
-                                        {% for ticket in entities %}
                                         <td>{{ loop.index }}</td>
                                         <td>{{ ticket.date|date("m/d/Y") }}</td>
                                         <td>{# {{ question.site.id }} #}</td>
                                         <td>{# {{ question.site.nom }} #}</td>
+                                        <td>
+                                            {% if ticket.site %}
+                                                {{ ticket.site.id }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if ticket.site %}
+                                                {{ ticket.site.nom }}
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             {% if ticket.auteur %}
                                                 {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}
@@ -69,13 +79,19 @@
                                         <td>ok</td>
                                         <td>{{ ticket.type }}</td>
                                         <td>
-                                            <a href="{{ path('question_show', { 'id': 1 }) }}">
+                                            <a href="{{ path('question_show', { 'id': loop.index }) }}">
                                                 {{ ticket.question|truncate(15) }}
                                             </a>
                                         </td>
-                                        <td>ok</td>
-                                        {% endfor %}
+                                        <td>
+                                            {% if ticket.etat %}
+                                                <span class="label green">Traitée</span>
+                                            {% else %}
+                                                <span class="label orange">En attente</span>
+                                            {% endif %}
+                                        </td>
                                     </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
