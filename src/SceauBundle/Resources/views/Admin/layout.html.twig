@@ -29,17 +29,19 @@
                 </div>
             </div>
             {% include 'SceauBundle:Admin/Common:js-global.html.twig' %}
-            {% block JAVASCRIPT %}
-                <script type="text/javascript">
-                    $(document).ready(function() {
-                        App.init();
-                        Dashboard.init();
-                        $('.datepicker').datepicker({
-                            format: 'yyyy-mm-dd'
-                        });
 
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    App.init();
+                    Dashboard.init();
+                    $('.datepicker').datepicker({
+                        format: 'yyyy-mm-dd'
                     });
-                </script>
+
+                });
+            </script>
+            {% block JAVASCRIPT %}
+
             {% endblock %}
         </body>
     </html>
