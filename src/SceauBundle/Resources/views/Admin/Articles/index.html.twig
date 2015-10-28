@@ -8,8 +8,7 @@
         <!-- begin breadcrumb -->
         <ol class="breadcrumb pull-right">
             <li><a href="javascript:;">Home</a></li>
-            <li><a href="javascript:;">UI Elements</a></li>
-            <li class="active">Buttons</li>
+            <li class="active"><a href="javascript:;">Gestion des articles</a></li>
         </ol>
         <!-- end breadcrumb -->
         <!-- begin page-header -->
@@ -51,7 +50,7 @@
                             <tbody>
                                 {% for entity in entities %}
                                     <tr class="odd gradeX">
-                                        <td>{{ loop.index }}</td>
+                                        <td>{{ entity.id}}</td>
                                         <td>{{ entity.title }}</td>
                                         <td>{{ entity.date|date("m/d/Y")  }}</td>
                                         <td>{{ entity.content| truncate(35, true, '...')  }}</td>

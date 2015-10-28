@@ -6,8 +6,8 @@
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li><a href="javascript:;">Home</a></li>
-        <li><a href="javascript:;">UI Elements</a></li>
-        <li class="active">Buttons</li>
+        <li><a href="javascript:;">Gestion des articles</a></li>
+        <li class="active">Article n° {{ entity.id }}</li>
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
@@ -28,7 +28,7 @@
                         {% endif %}
                     </h4>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body bg-aqua text-white">
                     <p>{{ entity.content }}</p>
                 </div>
                 <div class="panel-footer text-left">

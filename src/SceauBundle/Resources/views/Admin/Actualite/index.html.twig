@@ -8,8 +8,7 @@
         <!-- begin breadcrumb -->
         <ol class="breadcrumb pull-right">
             <li><a href="javascript:;">Home</a></li>
-            <li><a href="javascript:;">UI Elements</a></li>
-            <li class="active">Buttons</li>
+            <li class="active"><a href="javascript:;">Gestion des actualités</a></li>
         </ol>
         <!-- end breadcrumb -->
         <!-- begin page-header -->
@@ -55,9 +54,9 @@
                                     <td>{{ entity.introduction | truncate(35, true, '...') }}</td>
                                     <td>
                                         {% if entity.active %}
-                                            <span class="label label-success">Actif</span>
+                                            <span class="label label-success">Active</span>
                                         {% else %}
-                                            <span class="label label-warning">Non actif</span>
+                                            <span class="label label-warning">Innactive</span>
                                         {% endif %}
                                     </td>
                                     <td>
@@ -65,9 +64,7 @@
 
                                         <a class="btn btn-warning m-r-5 m-b-5" href="{{ path('actualites_edit', { 'id': entity.id }) }}">Editer</a>
 
-                                        <a class="btn btn-danger m-r-5 m-b-5" data-toggle="modal" data-target="{{'#' ~  entity.id  }}">
-                                            Supprimer
-                                        </a>
+                                        <a class="btn btn-danger m-r-5 m-b-5" data-toggle="modal" data-target="{{'#' ~  entity.id  }}">Supprimer</a>
                                     </td>
                                 </tr>
 

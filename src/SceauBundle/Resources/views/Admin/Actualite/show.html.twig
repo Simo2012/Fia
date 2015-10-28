@@ -6,8 +6,8 @@
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li><a href="javascript:;">Home</a></li>
-        <li><a href="javascript:;">UI Elements</a></li>
-        <li class="active">Buttons</li>
+        <li class="active"><a href="javascript:;">Gestion des actualités</a></li>
+        <li class="active">Actualité n°{{ entity.id }}</li>
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
@@ -22,13 +22,13 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">{{ entity.title }}
                         {% if entity.active %}
-                             <span class="label label-success pull-right">Actif</span>
+                             <span class="label label-success pull-right">Active</span>
                         {% else %}
-                            <span class="label label-warning pull-right">Innactif</span>
+                            <span class="label label-warning pull-right">Innactive</span>
                         {% endif %}
                     </h4>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body bg-aqua text-white">
                     <p>{{ entity.introduction }}</p><br>
                     <p>{{ entity.content }}</p>
                 </div>
