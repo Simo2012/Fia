@@ -4,6 +4,7 @@ namespace SceauBundle\Controller\Admin;
 
 use SceauBundle\Entity\Ticket;
 use SceauBundle\Entity\TicketHistorique;
+use SceauBundle\Entity\EnvoiEmail;
 use SceauBundle\Form\Type\Admin\TicketNoteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -64,11 +65,15 @@ class QuestionController extends Controller
             'action' => $this->generateUrl('question_update',array('id'=>$ticket->getId())),
             'method' => 'POST',
         ));
-        $formTicketReponse = $this->createForm(new TicketReponseType());
+
+        $ticketReponseForm = $this->createForm(new TicketReponseType(), null, array(
+            'action' => $this->generateUrl('question_reponse',array('id'=>$ticket->getId())),
+            'method' => 'POST',
+        ));
         
         return array(
             'ticket'            => $ticket,
-            'formTicketReponse' => $formTicketReponse->createView(),
+            'ticketReponseForm' => $ticketReponseForm->createView(),
             'ticketNoteForm'    => $ticketNoteForm->createView(),
             'historiques'       => $historiques,
         );
@@ -100,6 +105,28 @@ class QuestionController extends Controller
                 return new Response(json_encode($reponse)); 
             }                  
         }
+    }
+
+    /**
+     *  Reponse à un ticket
+     *
+     * @Route("/{id}/reponse", name="question_reponse")
+     * @Method("POST")
+     */
+    public function ticketReponseAction(Request $request, Ticket $ticket)
+    {
+        var_dump('ticketReponseAction');
+        $ticketReponseForm = $this->createForm(new TicketReponseType());
+
+        $ticketReponseForm->handleRequest($request);
+
+        if ($ticketReponseForm->isValid()) {
+            $data = $ticketReponseForm->getData();
+            // $envoiMail = new EnvoiEmail();
+            // $envoiMail->setSubjet($data['sujet']);
+            // $envoiMail->setSendFrom($data['expediteur']);
+        }
+        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
 
     /**
