@@ -44,7 +44,6 @@ class TicketReponseType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            //'data_class' => 'SceauBundle\Entity\Actualite'
         ));
     }
 

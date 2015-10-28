@@ -6,6 +6,7 @@ use SceauBundle\Entity\Ticket;
 use SceauBundle\Entity\TicketHistorique;
 use SceauBundle\Entity\EnvoiEmail;
 use SceauBundle\Form\Type\Admin\TicketNoteType;
+use SceauBundle\Form\Type\Admin\TicketReafectationType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -70,41 +71,37 @@ class QuestionController extends Controller
             'action' => $this->generateUrl('question_reponse',array('id'=>$ticket->getId())),
             'method' => 'POST',
         ));
-        
+
+        $ticketReafectationForm = $this->createForm(new TicketReafectationType(), $ticket, array(
+            'action' => $this->generateUrl('question_reafectation',array('id'=>$ticket->getId())),
+            'method' => 'POST',
+        ));
+
         return array(
-            'ticket'            => $ticket,
-            'ticketReponseForm' => $ticketReponseForm->createView(),
-            'ticketNoteForm'    => $ticketNoteForm->createView(),
-            'historiques'       => $historiques,
+            'ticket'                    => $ticket,
+            'ticketReponseForm'         => $ticketReponseForm->createView(),
+            'ticketNoteForm'            => $ticketNoteForm->createView(),
+            'ticketReafectationForm'    => $ticketReafectationForm->createView(),
+            'historiques'               => $historiques,
         );
     }
 
     /**
-     * update ticket response with model
+     *  Reafecter un ticket
      *
-     * @Route("/{id}/reponse-modele", name="question_reponse_modele")
+     * @Route("/{id}/reafecter", name="question_reafectation")
      * @Method("POST")
      */
-    public function updateTicketReponseModele(Request $request)
+    public function ticketReafectationAction(Request $request, Ticket $ticket)
     {
-        if($request->isXmlHttpRequest()) {  
-            $modeleId = $request->request->get('modeleType');
+        $ticketReafectationForm = $this->createForm(new TicketReafectationType());
 
-            if ($modeleId) {
-                $entityRepo = $this->get('sceau.repository.ticket.reponse.modele');
-                $ticketReponseModele = $entityRepo->find($modeleId);
+        $ticketReafectationForm->handleRequest($request);
 
-                if (!$ticketReponseModele) {
-                    return new Response('Unable to find TicketReponseModele entity', 404);
-                }
-
-                $reponse = [
-                    'sujet'     => $ticketReponseModele->getSujet(),
-                    'message'   => $ticketReponseModele->getMessage(),
-                ];
-                return new Response(json_encode($reponse)); 
-            }                  
+        if ($ticketReafectationForm->isValid()) {
+            $data = $ticketReafectationForm->getData();
         }
+        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
 
     /**
@@ -115,7 +112,6 @@ class QuestionController extends Controller
      */
     public function ticketReponseAction(Request $request, Ticket $ticket)
     {
-        var_dump('ticketReponseAction');
         $ticketReponseForm = $this->createForm(new TicketReponseType());
 
         $ticketReponseForm->handleRequest($request);
@@ -169,5 +165,34 @@ class QuestionController extends Controller
 
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
 
+    }
+
+
+    /**
+     * update ticket response with model
+     *
+     * @Route("/{id}/reponse-modele", name="question_reponse_modele")
+     * @Method("POST")
+     */
+    public function updateTicketReponseModele(Request $request)
+    {
+        if($request->isXmlHttpRequest()) {  
+            $modeleId = $request->request->get('modeleType');
+
+            if ($modeleId) {
+                $entityRepo = $this->get('sceau.repository.ticket.reponse.modele');
+                $ticketReponseModele = $entityRepo->find($modeleId);
+
+                if (!$ticketReponseModele) {
+                    return new Response('Unable to find TicketReponseModele entity', 404);
+                }
+
+                $reponse = [
+                    'sujet'     => $ticketReponseModele->getSujet(),
+                    'message'   => $ticketReponseModele->getMessage(),
+                ];
+                return new Response(json_encode($reponse)); 
+            }                  
+        }
     }
 }
