@@ -39,9 +39,11 @@
             <!--  end panel-->
         </div>
         <!-- end col-6 -->
-        <p><a class = "btn btn-success" href="{{ path('actualites') }}">Retour </a></p>
-        <p><a class = "btn btn-warning" href="{{ path('actualites_edit', { 'id': entity.id }) }}">Editer</a></p>
-        {{ form(delete_form) }}
+        <div class="btn-group-vertical">
+             <a class="btn btn-success" href="{{ path('actualites') }}">Retour</a>
+             <a class="btn btn-warning active" href="{{ path('actualites_edit', { 'id': entity.id }) }}">Editer</a>
+                {{ form(delete_form) }}
+        </div>
     </div>
     <!-- end row -->
 

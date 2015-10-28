@@ -2,7 +2,7 @@
 
 {% block CONTENT -%}
 
-<div class="page-content page-content-ease-in">
+
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li><a href="javascript:;">Home</a></li>
@@ -39,12 +39,14 @@
             <!--  end panel-->
         </div>
         <!-- end col-6 -->
-        <p><a class = "btn btn-info" href="{{ path('articles') }}">Retour </a></p>
-        <p><a class = "btn btn-warning" href="{{ path('article_edit', { 'id': entity.id }) }}">Editer </a></p>
-        {{ form(delete_form) }}
+        <div class="btn-group-vertical">
+            <a class="btn btn-success" href="{{ path('articles') }}">Retour</a>
+            <a class="btn btn-warning active" href="{{ path('article_edit', { 'id': entity.id }) }}">Editer</a>
+            {{ form(delete_form) }}
+        </div>
     </div>
     <!-- end row -->
 
-</div>
+
 
 {% endblock %}
