@@ -17,3 +17,4 @@
 /web/fonts/*
 nbproject/
 .DS_Store
+/app/config/parameters.yml
