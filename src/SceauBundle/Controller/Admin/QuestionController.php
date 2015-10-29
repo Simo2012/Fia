@@ -107,6 +107,11 @@ class QuestionController extends Controller
 
         if ($ticketReafectationForm->isValid()) {
             $data = $ticketReafectationForm->getData();
+            $event = new TicketEvent($ticket, $data);
+            
+            $this->get("event_dispatcher")->dispatch(
+                TicketEvents::TICKET_REAFECTATION, $event
+            );
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -125,18 +130,11 @@ class QuestionController extends Controller
 
         if ($ticketReponseForm->isValid()) {
             $data = $ticketReponseForm->getData();
-
-
             $event = new TicketEvent($ticket, $data);
 
-
-            // le dispatcher est un service symfony qui envoie l'event
             $this->get("event_dispatcher")->dispatch(
                 TicketEvents::TICKET_REPONSE, $event
             );
-            // $envoiMail = new EnvoiEmail();
-            // $envoiMail->setSubjet($data['sujet']);
-            // $envoiMail->setSendFrom($data['expediteur']);
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -149,6 +147,8 @@ class QuestionController extends Controller
      */
     public function updateNoteAction(Request $request, Ticket $ticket)
     {
+        $noteExist = $ticket->getNote() ? true : null ;  
+
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket);
 
         $ticketNoteForm->handleRequest($request);
@@ -160,6 +160,14 @@ class QuestionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
             $em->flush();
+
+            $event = new TicketEvent($ticket);
+
+            if ($noteExist) {
+                $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_NOTE_UPDATE, $event);
+            } else {
+                $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_NOTE_CREATE, $event);
+            }
 
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
@@ -178,6 +186,9 @@ class QuestionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($ticket);
         $em->flush();
+
+        $event = new TicketEvent($ticket);
+        $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_NOTE_DELETE, $event);
 
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
 

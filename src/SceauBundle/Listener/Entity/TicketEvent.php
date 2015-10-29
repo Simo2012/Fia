@@ -6,17 +6,14 @@ use SceauBundle\Entity\Ticket;
 
 class TicketEvent extends Event
 {
-    /** @var string */
     protected $ticket;
-    protected $reponseData;
+    protected $data;
 
-
-    public function __construct(Ticket $ticket,  $reponseData = null)
+    public function __construct(Ticket $ticket,  $data = null)
     {
         $this->ticket = $ticket;
-        $this->reponseData = $reponseData;
+        $this->data = $data;
     }
-
 
     public function setTicket($ticket)
     {
@@ -29,14 +26,14 @@ class TicketEvent extends Event
         return $this->ticket;
     }
 
-    public function setReponseData($reponseData)
+    public function setData($data)
     {
-        $this->reponseData = $reponseData;
+        $this->data = $data;
     }
 
 
-    public function getReponseData()
+    public function getData()
     {
-        return $this->reponseData;
+        return $this->data;
     }
 }
