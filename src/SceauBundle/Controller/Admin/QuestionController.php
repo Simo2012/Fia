@@ -2,11 +2,15 @@
 
 namespace SceauBundle\Controller\Admin;
 
+use SceauBundle\Entity\Ticket;
+use SceauBundle\Entity\TicketHistorique;
+use SceauBundle\Form\Type\Admin\TicketNoteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * QuestionController controller.
@@ -25,35 +29,78 @@ class QuestionController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // $entityRepo = $this->get('sceau.repository.question');
-        // $entities = $entityRepo->findBy(array(), array('date' => 'ASC'));
+        /** @var \SceauBundle\Entity\Repository\QuestionnaireRepository */
+         $questionRepository = $this->getDoctrine()->getManager()->getRepository('SceauBundle\Entity\Ticket');
+         $questions = $questionRepository->findBy(array(), array('date' => 'ASC'));
 
         return array(
-            'entities' => [1,2,3,4]
+            'entities' => $questions,
         );
     }
 
 
     /**
-     * Finds and displays a InternauteQuestion entity.
+     * Finds and displays a Ticket entity.
      *
      * @Route("/{id}", name="question_show")
      * @Method("GET")
      * @Template("SceauBundle:Admin/Questions:show.html.twig")
      */
-    public function showAction($id)
+    public function showAction(Ticket $ticket)
     {
-        // $articlePresseRepo = $this->get('sceau.repository.article.presse');
-        // $entity = $articlePresseRepo->find($id);
+        $historiques = $this->get('sceau.repository.ticket.historique')->findByTicket($ticket);
 
-        // if (!$entity) {
-        //     throw $this->createNotFoundException('Unable to find ArticlePresse entity.');
-        // }
-
-        // $deleteForm = $this->createDeleteForm($id);
+        $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket, array(
+            'action' => $this->generateUrl('question_update',array('id'=>$ticket->getId())),
+            'method' => 'POST',
+        ));
 
         return array(
-            'entity'      => []
+            'ticketNoteForm' => $ticketNoteForm->createView(),
+            'ticket'      => $ticket,
+            'historiques'  => $historiques,
         );
+    }
+
+    /**
+     *  Update a ticket's note
+     *
+     * @Route("/add/{id}", name="question_update")
+     * @Method("POST")
+     */
+    public function updateNoteAction(Request $request, Ticket $ticket)
+    {
+        $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket);
+
+        $ticketNoteForm->handleRequest($request);
+
+        if ($ticketNoteForm->isValid()) {
+            $note = $ticketNoteForm->get('note')->getData();
+            $ticket->setNote($note);
+            /** @var \Doctrine\ORM\EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ticket);
+            $em->flush();
+
+        }
+        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
+    }
+
+    /**
+     * Delete a ticket's note
+     *
+     * @Route("/{id}/deleteNote", name="question_note_delete")
+     * @Method("GET")
+     * @Template("SceauBundle:Admin/Questions:show.html.twig")
+     */
+    public function deleteNoteAction(Ticket $ticket)
+    {
+        $ticket->setNote(null);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($ticket);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
+
     }
 }

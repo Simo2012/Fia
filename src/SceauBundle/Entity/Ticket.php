@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="Ticket")
  * @ORM\Entity
+ * @ORM\EntityListeners({"SceauBundle\Listener\Entity\TicketListener"})
  */
 class Ticket
 {
@@ -31,7 +32,7 @@ class Ticket
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="datetimetz")
      */
     private $date;
 
@@ -55,6 +56,27 @@ class Ticket
         $this->etat = false;
         $this->type = new TicketType();
     }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\Site")
+     * @ORM\JoinColumn(name="site_id", referencedColumnName="id", nullable=true)
+     */
+    private $site;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketCategorie")
+     * @ORM\JoinColumn(name="categorie", referencedColumnName="id")
+     */
+    private $categorie;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text", nullable=true)
+     */
+    private $note;
+    
 
     /**
      * Get id
@@ -148,9 +170,83 @@ class Ticket
 
     /**
      * @param \SceauBundle\Entity\TicketType $type
+     * 
+     * @return Ticket
      */
     public function setType(TicketType $type)
     {
         $this->type = $type;
+        
+        return $this;
+    }
+
+    /**
+     * Set note
+     *
+     * @param string $note
+     *
+     * @return Ticket
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * Set site
+     * @param \SceauBundle\Entity\Site $site
+     *
+     * @return Ticket
+     */
+    public function setSite(\SceauBundle\Entity\Site $site)
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * Get site
+     *
+     * @return \SceauBundle\Entity\Site
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
+
+    /**
+     * Set category
+     * @param \SceauBundle\Entity\TicketCategorie $categorie
+     *
+     * @return Ticket
+     */
+    private function setCategorie(\SceauBundle\Entity\TicketCategorie $categorie)
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \SceauBundle\Entity\TicketCategorie
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
     }
 }
