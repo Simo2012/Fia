@@ -14,9 +14,17 @@ use SceauBundle\Entity\TicketType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use SceauBundle\Form\Type\Site\TicketAuteurType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class TicketQuestionType extends AbstractType
 {
+    private $tokenStorage;
+
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -26,7 +34,7 @@ class TicketQuestionType extends AbstractType
 
         $formModifier = function(FormInterface $form) {
             $form
-                ->add('auteur', new TicketAuteurType())
+                ->add('auteur', new TicketAuteurType($this->tokenStorage))
                 ->add('question', 'textarea', [
                     'label'    => 'form.ticket.question',
                 ])

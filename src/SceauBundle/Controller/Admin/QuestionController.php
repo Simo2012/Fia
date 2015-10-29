@@ -60,6 +60,7 @@ class QuestionController extends Controller
      */
     public function showAction(Ticket $ticket)
     {
+        $tokenStorage = $this->container->get('security.token_storage');
         $historiques = $this->get('sceau.repository.ticket.historique')->findByTicket($ticket);
 
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket, array(

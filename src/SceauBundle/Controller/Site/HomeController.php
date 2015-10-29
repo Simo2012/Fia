@@ -221,8 +221,9 @@ class HomeController extends Controller
     {
         $ticket   = new Ticket();
         $template = null;
+        $tokenStorage = $this->container->get('security.token_storage');
 
-        $form = $this->createForm(new TicketQuestionType(), $ticket);
+        $form = $this->createForm(new TicketQuestionType($tokenStorage), $ticket);
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->has('submit') && $form->get('submit')->isClicked()) {
