@@ -16,12 +16,12 @@ class TicketReafectationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('categorie','choice', [
-                'choices'  => [
-                    1 => 'Avis',
-                    2 => 'Categorie 2'
-                ]
-            ])
+//            ->add('categorie','choice', [
+//                'choices'  => [
+//                    1 => 'Avis',
+//                    2 => 'Categorie 2'
+//                ]
+//            ])
             // ->add('destinataire','choice', [
             //     'choices'  => [
             //         1 => 'Admin user 1',

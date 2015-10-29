@@ -3,11 +3,12 @@ namespace SceauBundle\Listener\Entity;
 
 use SceauBundle\Listener\Entity\TicketEvent;
 
-class Ticket2Listner
+class Ticket2Listener
 {
     public function ticketReponse(TicketEvent $event)
     {
-        $test = $event->getTest();
-        var_dump('in TicketSubscriber : ', $test);die;
+        $ticket = $event->getTicket();
+        $responseData = $event->getReponseData();
+
     }
 }

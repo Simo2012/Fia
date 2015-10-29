@@ -24,6 +24,7 @@ class TicketReponseType extends AbstractType
                 'empty_value'   => '-- Choisissez une réponse type --',
                 'choice_label'  => 'type',
                 'property'      => 'type',
+                'required'      => false,
             ])
             ->add('expediteur' , 'text', [
                 'data' => 'sceau-de-confiance@fia-net.fr'

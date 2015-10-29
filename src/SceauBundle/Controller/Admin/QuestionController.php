@@ -67,7 +67,6 @@ class QuestionController extends Controller
      */
     public function showAction(Ticket $ticket)
     {
-        $tokenStorage = $this->container->get('security.token_storage');
         $historiques = $this->get('sceau.repository.ticket.historique')->findByTicket($ticket);
 
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket, array(
@@ -128,11 +127,11 @@ class QuestionController extends Controller
             $data = $ticketReponseForm->getData();
 
 
-            $event = new TicketEvent();
-            $event->setTest("toto");
+            $event = new TicketEvent($ticket, $data);
+
 
             // le dispatcher est un service symfony qui envoie l'event
-            $this->get("dispatcher")->dispatch(
+            $this->get("event_dispatcher")->dispatch(
                 TicketEvents::TICKET_REPONSE, $event
             );
             // $envoiMail = new EnvoiEmail();
@@ -193,7 +192,7 @@ class QuestionController extends Controller
      */
     public function updateTicketReponseModele(Request $request)
     {
-        if($request->isXmlHttpRequest()) {  
+        if ($request->isXmlHttpRequest()) {
             $modeleId = $request->request->get('modeleType');
 
             if ($modeleId) {
@@ -205,12 +204,14 @@ class QuestionController extends Controller
                 }
 
                 $reponse = [
-                    'sujet'     => $ticketReponseModele->getSujet(),
-                    'message'   => $ticketReponseModele->getMessage(),
+                    'sujet' => $ticketReponseModele->getSujet(),
+                    'message' => $ticketReponseModele->getMessage(),
                 ];
-                return new Response(json_encode($reponse)); 
-            }                  
+                return new Response(json_encode($reponse));
+            }
         }
+    }
+
     /**
      * Get a HistoriqueEmail by id
      *
