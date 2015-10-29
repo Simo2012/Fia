@@ -135,7 +135,29 @@ class Membre implements AdvancedUserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="SceauBundle\Entity\Questionnaire", mappedBy="membre")
      */
     private $questionnaires;
-
+    
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="preference", type="string", length=250, nullable=true)
+    */
+    private $preference;
+    
+     /**
+     * @var ActiviteProfessionnelle
+     *
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\ActiviteProfessionnelle")
+     * @ORM\JoinColumn(name="activiteProfessionnelle_id", referencedColumnName="id", nullable=true)
+     */
+    private $activiteprofessionnelle;
+    
+    /**
+     * @var SituationFamiliale
+     *
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\SituationFamiliale")
+     * @ORM\JoinColumn(name="situationFamiliale_id", referencedColumnName="id", nullable=true)
+     */
+    private $situationfamiliale;
 
     public function __construct()
     {
@@ -355,6 +377,78 @@ class Membre implements AdvancedUserInterface, \Serializable
     public function setCivilite($civilite)
     {
         $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    /**
+     * Get String
+     *
+     * @return Preference
+     */
+    public function getPreference()
+    {
+        return $this->preference;
+    }
+    
+    /**
+     * Set preference
+     *
+     * @param String $preference
+     *
+     * @return Membre
+     */
+    public function setPreference($preference)
+    {
+        $this->preference = $preference;
+
+        return $this;
+    }
+    
+     /**
+     * Get ActiviteProfessionnelle
+     *
+     * @return ActiviteProfessionnelle
+     */
+    public function getActiviteProfessionnelle()
+    {
+        return $this->activiteprofessionnelle;
+    }
+    
+    /**
+     * Set ActiviteProfessionnelle
+     *
+     * @param ActiviteProfessionnelle $activiteprofessionnelle
+     *
+     * @return Membre
+     */
+    public function setActiviteProfessionnelle(ActiviteProfessionnelle $activiteprofessionnelle = null)
+    {
+        $this->activiteprofessionnelle = $activiteprofessionnelle;
+
+        return $this;
+    }
+    
+    /**
+     * Get SituationFamiliale
+     *
+     * @return SituationFamiliale
+     */
+    public function getSituationFamiliale()
+    {
+        return $this->situationfamiliale;
+    }
+    
+    /**
+    * Set SituationFamiliale
+    *
+    * @param ActiviteProfessionnelle $situationfamiliale
+    *
+    * @return Membre
+    */
+    public function setSituationFamiliale(SituationFamiliale $situationfamiliale = null)
+    {
+        $this->situationfamiliale = $situationfamiliale;
 
         return $this;
     }

@@ -1,0 +1,49 @@
+#menu-membre {
+  padding:0;
+  margin:0;
+  list-style:none;
+  text-align: center;
+}
+#menu-membre ul {
+  padding:0;
+  margin:0;
+  list-style:none;
+  text-align: center;
+}
+#menu-membre li {
+   margin-bottom:2px;
+   box-shadow: 3px 3px 3px #999;
+   border:solid 1px #333A40;
+   display: block;
+   line-height: 26px;
+    margin: 0px 0px 8px 0px;
+    background: url(../../../images/site/home-membre/fd_menu.png) left top repeat-x;
+}
+#menu-membre li li {
+   max-height:0;
+   overflow: hidden;
+   transition: all .5s;
+   border-radius:0;
+   box-shadow: none;
+   border:none;
+   margin:0;
+   background: url(../../../images/site/home-membre/fd_ssmenu.png) left top repeat-y;
+}
+
+
+#menu-membre ul li a, #menu-membre li:hover li a {
+  font-size:1em
+}
+#menu-membre li:hover {
+   background: #729EBF
+}
+#menu-membre li li:hover {
+   background: #999;
+}
+#menu-membre ul li:last-child {
+   border-radius: 0 0 6px 6px;
+   border:none;
+}
+#menu-membre li:hover li {
+  max-height: 15em;
+}

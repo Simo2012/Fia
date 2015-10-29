@@ -81,7 +81,7 @@ div.btn-1-main {
 	float: left;
 	height: 17px;
 	height: 20px\9;
-	padding: 2px 0px 1px 5px; /* top right bottom left */
+	padding: 2px 6px 1px 5px; /* top right bottom left */
 	padding-top: 2px\9;
 	padding-bottom: 2px\9;
 	background: url(../../../images/site/common/btn_1.png) no-repeat;
@@ -559,6 +559,40 @@ span.site-name a, span.site-cat a, .site-prem-pres a {
 }
 */
 
+/********** Bar de progression *********/
+
+#bloc-pourcentage {margin-left:30px;margin-top:50px;font-weight: bold}
+
+#bloc-pourcentage p {float:left}
+.progress {
+    height: 20px;
+    margin-left:30px;
+    margin-top:5px;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    width:300px;
+    float:left;
+}
+
+.progress-bar {
+    float: left;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    background-color: #428bca;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+    -webkit-transition: width .6s ease;
+    -o-transition: width .6s ease;
+    transition: width .6s ease;
+}
+
+/********** FIN Bar de progression *********/
 .site-prem-note-detail span.color-notefaible {
 	color: #DC0032;
 }
@@ -1093,6 +1127,8 @@ ul.popup_AFNOR_list li {
 	background: url(../../../images/site/home/corner_bottom_left.png) no-repeat;
 	background-position: left bottom;
 }
+
+
 #bloc_sitepremiumrandom .ui-tabs-panel {
 	height: 230px;
 	position: relative;
@@ -1125,6 +1161,135 @@ ul.popup_AFNOR_list li {
 #bloc_sitepremiumrandom .ui-tabs-hide {
 	display: none;
 }
+
+
+/*** Accueil ***/
+.gros-titre {
+	width: 500px;
+	float: left;
+	margin: 0px 0px 0px 30px;
+	padding: 20px 0px 0px 0px;
+	font-size: 15px;
+	font-weight: bold;
+	color: #e80032;
+}
+.content {
+	position: relative;
+	float: left;
+	width: 789px;
+	background-color: #FFF;
+	padding: 0px;
+	margin-left: -20px;
+	margin-top: -5px;
+}
+.newsletter {
+	width: 180px;
+	height: 255px;
+	float: right;
+	background:url(../../../images/site/home-membre/block_newsletter.png) right top no-repeat;
+	margin: 0px;
+	padding: 10px 20px 20px 20px;
+	color: #FFF;
+	text-transform: uppercase;
+	font-size: 12px;
+}
+.newsletter img {
+	text-align: center;
+	margin-left: 15px;
+	margin-top: 30px;
+	margin-bottom: 40px;
+}
+.block {
+	float: left;
+	width: 535px;
+	margin-left: 30px;
+	padding: 20px 0px 0px 0px;
+}
+.block-li {
+	float: left;
+	width: 685px;
+	margin-left: 30px;
+	padding: 20px 0px 0px 0px;
+}
+.litige {
+	float: left;
+	width: 180px;
+	height: 60px;
+	background: url(../../../images/site/home-membre/block_litige-s.png) left top no-repeat;
+	padding: 10px 70px 10px 10px;
+	color: #5b464b;
+	font-size: 12px;
+	margin-bottom: 10px;
+}
+.bonplan {
+	float: left;
+	width: 160px;
+	height: 60px;
+	background: url(../../../images/site/home-membre/block_bplan-s.png) left top no-repeat;
+	padding: 10px 80px 10px 10px;
+	color: #5b464b;
+	font-size: 12px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+.aide {
+	float: left;
+	width: 165px;
+	height: 60px;
+	background: url(../../../images/site/home-membre/block_aide-s.png) left top no-repeat;
+	padding: 10px 85px 10px 10px;
+	color: #5b464b;
+	font-size: 12px;
+}
+.compte {
+	float: left;
+	width: 180px;
+	height: 60px;
+	background: url(../../../images/site/home-membre/block_compte-s.png) left top no-repeat;
+	padding: 10px 60px 10px 10px;
+	color: #ffffff;
+	font-size: 12px;
+	margin-top: 10px;
+}
+.juriste {
+	float: right;
+	width: 155px;
+	height: 60px;
+	background: url(../../../images/site/home-membre/block_juriste-s.png) left top no-repeat;
+	padding: 10px 95px 10px 10px;
+	color: #5b464b;
+	font-size: 12px;
+	margin-bottom: 10px;
+}
+.litige p, .bonplan p, .aide p, .compte p, .juriste p, .questionnaire p {
+	margin: 0px 0px 10px 0px;
+	padding: 0px;
+	font-weight: bold;
+}
+.questionnaire {
+	float: left;
+	width: 180px;
+	height: 60px;
+	background: url(../../../images/site/home-membre/block_questionnaire-s.png) left top no-repeat;
+	padding: 10px 60px 10px 10px;
+	color: #5B464B;
+	font-size: 12px;
+	margin-left: 10px;
+}
+
+.preference {
+	float: left;
+	width: 180px;
+	height: 60px;
+	background: url(../../../images/site/home-membre/block_preferences-s.png) left top no-repeat;
+	padding: 10px 60px 10px 10px;
+	color: #5B464B;
+	font-size: 12px;
+    font-weight:bold;
+    margin-top:10px;
+	margin-left: 20px;
+}
+.preference p {margin:0;color:white;}
 /* */
 
 /* MDR */
@@ -1790,7 +1955,7 @@ a.lien {
 	float: left;
 	width: 180px;
 	height: 60px;
-	background: url('../../images/site/homeblock_litige-s.png') left top no-repeat;
+	background: url(../../../images/site/home-membre/block_litige-s.png) left top no-repeat;
 	padding: 10px 70px 10px 10px;
 	color: #5b464b;
 	font-size: 12px;
@@ -2477,133 +2642,6 @@ div.grp_btn {
 /** FIN PARTIE LITIGES **/
 
 
-/*** Accueil ***/
-.gros-titre {
-	width: 500px;
-	float: left;
-	margin: 0px 0px 0px 30px;
-	padding: 20px 0px 0px 0px;
-	font-size: 15px;
-	font-weight: bold;
-	color: #e80032;
-}
-.content {
-	position: relative;
-	float: left;
-	width: 789px;
-	background-color: #FFF;
-	padding: 0px;
-	margin-left: -20px;
-	margin-top: -5px;
-}
-.newsletter {
-	width: 180px;
-	height: 255px;
-	float: right;
-	background: url('../../images/site/homeblock_newsletter.png') right top no-repeat;
-	margin: 0px;
-	padding: 10px 20px 20px 20px;
-	color: #FFF;
-	text-transform: uppercase;
-	font-size: 12px;
-}
-.newsletter img {
-	text-align: center;
-	margin-left: 15px;
-	margin-top: 30px;
-	margin-bottom: 40px;
-}
-.block {
-	float: left;
-	width: 535px;
-	margin-left: 30px;
-	padding: 20px 0px 0px 0px;
-}
-.block-li {
-	float: left;
-	width: 685px;
-	margin-left: 30px;
-	padding: 20px 0px 0px 0px;
-}
-.litige {
-	float: left;
-	width: 180px;
-	height: 60px;
-	background: url('../../images/site/homeblock_litige-s.png') left top no-repeat;
-	padding: 10px 70px 10px 10px;
-	color: #5b464b;
-	font-size: 12px;
-	margin-bottom: 10px;
-}
-.bonplan {
-	float: left;
-	width: 160px;
-	height: 60px;
-	background: url('../../images/site/homeblock_bplan-s.png') left top no-repeat;
-	padding: 10px 80px 10px 10px;
-	color: #5b464b;
-	font-size: 12px;
-	margin-bottom: 10px;
-	margin-left: 10px;
-}
-.aide {
-	float: left;
-	width: 165px;
-	height: 60px;
-	background: url('../../images/site/homeblock_aide-s.png') left top no-repeat;
-	padding: 10px 85px 10px 10px;
-	color: #5b464b;
-	font-size: 12px;
-}
-.compte {
-	float: left;
-	width: 180px;
-	height: 60px;
-	background: url('../../images/site/homeblock_compte-s.png') left top no-repeat;
-	padding: 10px 60px 10px 10px;
-	color: #ffffff;
-	font-size: 12px;
-	margin-top: 10px;
-}
-.juriste {
-	float: right;
-	width: 155px;
-	height: 60px;
-	background: url('../../images/site/homeblock_juriste-s.png') left top no-repeat;
-	padding: 10px 95px 10px 10px;
-	color: #5b464b;
-	font-size: 12px;
-	margin-bottom: 10px;
-}
-.litige p, .bonplan p, .aide p, .compte p, .juriste p, .questionnaire p {
-	margin: 0px 0px 10px 0px;
-	padding: 0px;
-	font-weight: bold;
-}
-.questionnaire {
-	float: left;
-	width: 180px;
-	height: 60px;
-	background: url('../../images/site/homeblock_questionnaire-s.png') left top no-repeat;
-	padding: 10px 60px 10px 10px;
-	color: #5B464B;
-	font-size: 12px;
-	margin-left: 10px;
-}
-
-.preference {
-	float: left;
-	width: 180px;
-	height: 60px;
-	background: url('../../images/site/homeblock_preferences-s.png') left top no-repeat;
-	padding: 10px 60px 10px 10px;
-	color: #5B464B;
-	font-size: 12px;
-    font-weight:bold;
-    margin-top:10px;
-	margin-left: 20px;
-}
-.preference p {margin:0;color:white;}
 /*** Bons plans ***/
 .accueil-bon-plan {
 	background-image: url('../../images/site/homebons_plans_back.png');
@@ -3001,69 +3039,6 @@ button.go em.type {
 	width: 211px;
 	height: auto;
 	background-color: #efeded;
-}
-.block-menugche-mini {
-	position: absolute;
-	left: -38px;
-	width: 38px;
-}
-.block-menugche ul {
-	margin: 0px;
-	padding: 0px;
-	font-size: 11px;
-	list-style: none outside none;
-}
-.block-menugche ul li {
-	display: block;
-	line-height: 26px;
-	margin: 0px 0px 8px 0px;
-}
-.block-menugche ul li > a {
-	display: list-item;
-	background: url('../../images/site/home/fd_menu.png') left top repeat-x;
-	padding-left: 15px;
-	text-decoration: none;
-}
-.block-menugche-mini ul li > a {
-	padding-left: 10px;
-}
-.block-menugche ul li > a img {
-	border: none;
-	margin: 0px;
-	padding: 0px;
-	vertical-align: middle;
-}
-.block-menugche ul li > a:hover, .block-menugche ul li.on > a {
-	background: url('../../images/site/homefd_menu.png') left bottom repeat-x;
-}
-/*** Sous-menus gauche ***/
-.block-menugche ul li.on ul {
-	display: inline-block;
-	width: 211px;
-	background: url('../../images/site/homefd_ssmenu.png') left top repeat-y;
-	margin: -26px 0px -8px 0px;
-	padding: 5px 0px 10px 0px;
-}
-.block-menugche ul li.on ul li {
-	margin: 0px;
-	padding: 0px;
-}
-.block-menugche ul li.on ul li > a {
-	background: none;
-	color: #5a474c;
-	font-family: Verdana, Geneva, sans-serif;
-	margin-left: 5px;
-	margin-left: 3px\9;
-	font-size: 11px;
-	font-weight: normal;
-	list-style-position: inside;
-	list-style-type: disc;
-}
-.block-menugche ul li.on ul li > a:hover, .block-menugche ul li.on ul li.on > a.active, .block-menugche ul li.on ul li.on a {
-	background: none;
-	font-weight: bold;
-	list-style-position: inside;
-	list-style-type: disc;
 }
 /*** Inscription / Connexion ***/
 .login-left {
@@ -7798,41 +7773,6 @@ a.footer_certification_afnor_lien, a.footer_certification_afnor_lien:hover {
 }
 
 
-/********** Bar de progression *********/
-
-#bloc-pourcentage {margin-left:30px;margin-top:50px;font-weight: bold}
-
-#bloc-pourcentage p {float:left}
-.progress {
-    height: 20px;
-    margin-left:30px;
-    margin-top:5px;
-    overflow: hidden;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1');
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.1');
-    width:300px;
-    float:left;
-}
-
-.progress-bar {
-    float: left;
-    width: 0;
-    height: 100%;
-    font-size: 12px;
-    line-height: 20px;
-    color: #fff;
-    text-align: center;
-    background-color: #428bca;
-    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15');
-    box-shadow: inset 0 -1px 0 rgba(0,0,0,.15');
-    -webkit-transition: width .6s ease;
-    -o-transition: width .6s ease;
-    transition: width .6s ease;
-}
-
-/********** FIN Bar de progression *********/
 
 
 #div_form_coord .choose-avatar {float:right}

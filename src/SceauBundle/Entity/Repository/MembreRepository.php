@@ -12,6 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class MembreRepository extends EntityRepository
 {
+    /**
+     * Function pour retourner l'utilisateur par rapport a son pseudo
+     * @param type $poEmail
+     * @return type
+     */
     public function getByMail($poEmail) {
         $loQuery = $this->createQueryBuilder('m')
                         ->select('m')
@@ -20,5 +25,20 @@ class MembreRepository extends EntityRepository
                         ->andWhere('e.principal = true')
                         ->setParameter('email', $poEmail);
         return $loQuery->getQuery()->getOneOrNullResult();
+    }
+    
+    /**
+     * Function pour retourner l'utilisateur par rapport a son pseudo
+     * @param type $poPseudo
+     * @return type
+     */
+    public function getByPseudo($poPseudo) {
+        $loQuery = $this->createQueryBuilder('m')
+                        ->select('m')
+                        ->Where('m.pseudo = :pseudo')
+                        ->setParameter('pseudo', $poPseudo)
+                        ->setMaxResults(1);
+        return $loQuery->getQuery()->getOneOrNullResult();
+        
     }
 }

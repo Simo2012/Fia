@@ -2,12 +2,14 @@ security:
     providers:
         extranet_webservice:
             id: sceau.extranet.user_provider
+        site_user:
+            entity: { class: SceauBundle\Entity\Membre, property: email}
 
     encoders:
         SceauBundle\Entity\Extranet\Utilisateur: plaintext
-        SceauBundle\Entity\Membre:
+        SceauBundle\Entity\Membre: 
             id: sceau.site.user.encode.password
-
+            
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -16,11 +18,9 @@ security:
         extranet_login:
             pattern: ^/extranet/[a-z]+/login$
             anonymous: ~
-
         extranet_login_mdp_oublie:
             pattern: ^/extranet/[a-z]+/mdp_oublie
             anonymous: ~
-
         extranet:
             provider: extranet_webservice
             pattern: ^/extranet
@@ -31,4 +31,21 @@ security:
             logout:
                 path: extranet_utilisateur_logout
                 target: extranet_utilisateur_login
-
+        site_login:
+            pattern: ^/site/[a-z]+/login
+            anonymous: ~
+        secured_site_login_membre:
+            pattern: ^/site/*
+            provider: site_user
+            anonymous: ~
+            form_login:
+                login_path: site_home
+                check_path: site_member_login
+                default_target_path: site_home
+                username_parameter:  pseudo
+                password_parameter:  password
+                post_only: true
+            logout:
+                path: site_member_logout
+                target: site_home
+                invalidate_session:  true

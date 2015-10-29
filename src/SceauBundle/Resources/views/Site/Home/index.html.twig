@@ -3,26 +3,28 @@
         {% include "SceauBundle:Site/Common:menu.html.twig" %}    
         {% if menu == 'register' %}
             {% set locations = ['Accueil','Espace membre', 'Inscription'] %}
-        {% elseif menu == 'operation' %} 
+        {% elseif menu == 'site_operation_detail' %} 
             {% set locations = ['Accueil','Fonctionnement'] %}
-        {% elseif menu == 'newsletter' %} 
+        {% elseif menu == 'site_operation_news' %} 
             {% set locations = ['Accueil','Newsletter'] %}
-        {% elseif menu == 'mobile' %} 
+        {% elseif menu == 'site_home_mobile' %} 
             {% set locations = ['Accueil','mobile'] %}
         {% elseif menu == 'tombola'%}
             {% set locations = ['Accueil','Tombola FIA-NET'] %}
-        {% elseif menu == 'whos'%}
+        {% elseif menu == 'site_whos_fianet'%}
             {% set locations = ['Accueil','Qui est FIA-NET ?'] %}
-        {% elseif menu == 'mention'%}
+        {% elseif menu == 'site_fianet_mention'%}
             {% set locations = ['Accueil','Mentions légales'] %}
-        {% elseif menu == 'protection'%}
+        {% elseif menu == 'site_fianet_protectiondonnes'%}
             {% set locations = ['Accueil','Charte de protection des données Sceau de confiance'] %}
-        {% elseif menu == 'cgu'%}
+        {% elseif menu == 'site_fianet_cgu'%}
             {% set locations = ['Accueil','CGU'] %}
-        {% elseif menu == 'politique'%}
+        {% elseif menu == 'site_fianet_politique'%}
             {% set locations = ['Accueil','Politique Qualité'] %}
-        {% elseif menu == 'faq'%}
+        {% elseif menu == 'site_fianet_faq'%}
             {% set locations = ['Accueil','F.A.Q.'] %}
+        {% elseif menu == 'home-membre'%}
+            {% set locations = ['Accueil','Espace Membre'] %}
         {% endif %}
         {% if locations is defined %}
             {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
@@ -55,30 +57,46 @@
                 <div class="login-left">
                     {% include "SceauBundle:Site/Security:register.html.twig" %}  
                 </div>
-            {% elseif menu == 'operation' %} 
+            {% elseif menu == 'site_operation_detail' %} 
                 <div class="bloc_faq">
                      {% include "SceauBundle:Site/Operation:operation.html.twig" %} 
                 </div>
                 <div class="main-block-end"></div>
-            {% elseif menu == 'newsletter' %} 
+            {% elseif menu == 'site_operation_news' %} 
                     {{ include ("SceauBundle:Site/Newsletter:newslettres.html.twig", {'newsletters' : newsletters}) }}
                     <div class="main-block-end"></div>
-            {% elseif  menu == 'mobile' %}
+            {% elseif  menu == 'site_home_mobile' %}
                     {% include "SceauBundle:Site/Mobile:mobile.html.twig" %}
             {% elseif  menu == 'tombola' %}
                     {{ include ("SceauBundle:Site/Tombola:tombola.html.twig", {'winners' : winners}) }}
-            {% elseif  menu == 'whos' %}
+            {% elseif  menu == 'site_whos_fianet' %}
                  {% include "SceauBundle:Site/Footer:whosfianet.html.twig" %}
-             {% elseif  menu == 'mention' %}
+             {% elseif  menu == 'site_fianet_mention' %}
                  {% include "SceauBundle:Site/Footer:mentionlegal.html.twig" %}
-            {% elseif  menu == 'protection' %}
+            {% elseif  menu == 'site_fianet_protectiondonnes' %}
                  {% include "SceauBundle:Site/Footer:protectiondonnes.html.twig" %}
-            {% elseif  menu == 'cgu' %}
+            {% elseif  menu == 'site_fianet_cgu' %}
                  {% include "SceauBundle:Site/Footer:cgu.html.twig" %}
-            {% elseif  menu == 'politique' %}
+            {% elseif  menu == 'site_fianet_politique' %}
                  {% include "SceauBundle:Site/Footer:politique.html.twig" %}
-            {% elseif  menu == 'faq' %}
+            {% elseif  menu == 'site_fianet_faq' %}
                  {% include "SceauBundle:Site/Footer:faq.html.twig" %}
+            {% elseif  menu == 'home-membre'%}
+                <div class="block-menugche">
+                    {{ include('SceauBundle:Site/Membre:menumembre.html.twig') }}
+                </div>
+                <div class='newsletter-inscrip'>
+                    {{ include('SceauBundle:Site/Home:news.html.twig', {'newsletters': newsletters}) }}
+                </div>
+                {{ include('SceauBundle:Site/Membre:home.html.twig') }}
+                
+            {% elseif  menu == 'update-compte'%}
+                <div class="block-menugche">
+                    {{ include('SceauBundle:Site/Membre:menumembre.html.twig') }}
+                </div>
+                {% include "SceauBundle:Site/Membre:compte.html.twig" %}
+            {% else %}
+                {% include "SceauBundle:Site/Footer:politique.html.twig" %}
             {% endif %}
         </div>
 {% endblock %}

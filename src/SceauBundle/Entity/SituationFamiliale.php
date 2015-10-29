@@ -5,12 +5,12 @@ namespace SceauBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrancheAge
+ * SituationFamiliale
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\TrancheAgeRepository")
+ * @ORM\Table(name="SituationFamiliale")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\SituationFamilialeRepository")
  */
-class TrancheAge
+class SituationFamiliale
 {
     /**
      * @var integer
@@ -24,9 +24,9 @@ class TrancheAge
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="string", length=50)
+     * @ORM\Column(name="situation", type="string", length=200)
      */
-    private $libelle;
+    private $situation;
 
 
     /**
@@ -40,27 +40,27 @@ class TrancheAge
     }
 
     /**
-     * Set libelle
+     * Set situation
      *
-     * @param string $libelle
+     * @param string $situation
      *
-     * @return TrancheAge
+     * @return SituationFamiliale
      */
-    public function setLibelle($libelle)
+    public function setSituation($situation)
     {
-        $this->libelle = $libelle;
+        $this->situation = $situation;
 
         return $this;
     }
 
     /**
-     * Get libelle
+     * Get situation
      *
      * @return string
      */
-    public function getLibelle()
+    public function getSituation()
     {
-        return $this->libelle;
+        return $this->situation;
     }
 }
 
