@@ -2,7 +2,6 @@
 
 namespace SceauBundle\Controller\Site;
 
-use SceauBundle\Entity\TicketType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,6 +29,34 @@ class HomeController extends Controller
      * Afficher la page home.
      *
      *@Route("/", name="site_home")
+     * @Method("GET")
+     */
+    public function indexAction() 
+    {
+       $loManager = $this->getDoctrine()->getManager();
+       $loPseudoMembre =  $this->get('security.context')->getToken()->getUser();
+       $loUser = null;
+       if ($loPseudoMembre != 'anon.') {
+           $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+       }
+       
+        //Recuperer Site Prenium
+        /**$loMembreLogger = $this->container->get('sceau.site.home.home_prenium');**/
+        $lsPrenium = $this->container->get('sceau.site.home.home_prenium');
+        $lpPreniumSite = $lsPrenium->getPreniumSite();
+        //Recuperer les categories disponibles
+        $loCategories = $loManager->getRepository('SceauBundle:Categorie')->getActifCategories();
+        /** Envoyer vars la page Home **/
+        //Recuperer la dérniére newsletter
+        $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
+        return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories,
+               'siteprenium' => $lpPreniumSite ,'menu' => 'home', 'newsletters' => $loNewletters,
+                'user' => $loUser));
+    }
+    
+    /**
+    * Pour switcher entre plusieurs action de la page home.
+    *
      *@Route("/operation",
      *     name="site_operation_detail")
      *@Route("/newsletter",
@@ -51,60 +78,27 @@ class HomeController extends Controller
      * @Method("GET")
      * 
      */
-    public function indexAction() 
+    public function switchAction()
     {
        $loManager = $this->getDoctrine()->getManager();
+       $loUser = null;
+       $loNewletters = null;
+       $loPseudoMembre =  $this->get('security.context')->getToken()->getUser();
+       if ($loPseudoMembre != 'anon.') {
+           $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+       }
+       
        //Récupération Route Envoyé
        $loRequest = $this->container->get('request');
        $loRouteName = $loRequest->get('_route');
-       if ($loRouteName === 'site_home') {
-                    //Recuperer Site Prenium
-           /**$loMembreLogger = $this->container->get('sceau.site.home.home_prenium');**/
-            $lsPrenium = $this->container->get('sceau.site.home.home_prenium');
-            $lpPreniumSite = $lsPrenium->getPreniumSite();
-                    //Recuperer les categories disponibles
-           $loCategories = $loManager->getRepository('SceauBundle:Categorie')->getActifCategories();
-           /** Envoyer vars la page Home **/
-                    //Recuperer la dérniére newsletter
+       if ($loRouteName === 'site_operation_news') {
            $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
-           
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories,
-               'siteprenium' => $lpPreniumSite ,'menu' => 'home', 'newsletters' => $loNewletters));
-       } elseif ($loRouteName === 'site_operation_detail') {
-           /** Envoyer vers la page fonctionnement **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'operation'));
-       } elseif ($loRouteName === 'site_operation_news') {
-                    //récuperer les 3 derniére newsletter
-           $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(3);
-           /** Envoyer vers la page NewsLetter **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'newsletter'));
-       } elseif ($loRouteName === 'site_home_mobile') {
-           /** Envoyer vers la page Mobile **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'mobile'));
-       } elseif ($loRouteName === 'site_whos_fianet') {
-           /** Envoyer vers la page description fianet **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'whos'));
-       } elseif ($loRouteName === 'site_fianet_mention') {
-           /** Envoyer vers la page mention legale **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'mention'));
-       } elseif ($loRouteName === 'site_fianet_protectiondonnes') {
-           /** Envoyer vers la page mention legale **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'protection'));
-       } elseif ($loRouteName === 'site_fianet_cgu') {
-           /** Envoyer vers la page mention legale **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'cgu'));
-       } elseif ($loRouteName === 'site_fianet_politique') {
-           /** Envoyer vers la page mention legale **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'politique'));
-       } elseif ($loRouteName === 'site_fianet_faq') {
-           /** Envoyer vers la page mention legale **/
-           return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => 'faq'));
-       } else {
-           return null;
        }
+       return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => $loRouteName, 'newsletters' => $loNewletters, 'user' => $loUser ));
     }
-    
-     /**
+
+
+    /**
      * Enregistrer la newsletter.
      *
      * @Route("/newsletter/subcribe",
@@ -194,9 +188,9 @@ class HomeController extends Controller
     *     name="site_politique_downald")
     * @Method("GET")
     */
-    public function downloadPolitiqueAction() {
+    public function downloadPolitiqueAction()
+    {
         
-        $request = $this->get('request');
         $path = $this->get('kernel')->getRootDir(). "/../web/documents/";
         $content = file_get_contents($path.'PolitiqueQualite-SCEAU.pdf');
 

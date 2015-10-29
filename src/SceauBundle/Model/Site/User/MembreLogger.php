@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use SceauBundle\Entity\Coordonnee;
 use SceauBundle\Entity\Email;
+use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 /**
  * Connexion des utilisateurs
  *
@@ -100,17 +101,6 @@ class MembreLogger
     */
     public function setUserInSession(Membre $poMembre)
     {
-        // ==== Mise en session du token d'accès sécurisé ====
-        $loToken = new UsernamePasswordToken(
-            $poMembre,
-            $poMembre->getPassword(),
-            'secured_users_area',
-            $poMembre->getRoles()
-        );
-        $loSession = $this->request->getSession();
-        $loSession->set('_security_secured_users_area', serialize($loToken));
-
-        // ==== Enregistrement de la date de login ====
         $poMembre->setDateCreation(new \DateTime());
         $this->manager->flush();
     } // setUserInSession
@@ -247,7 +237,45 @@ class MembreLogger
         return $loEmail;
     }
     
-    
-    
+    public function getPourcentage($poUser) {
+        // Bar de pourcentage
+        $loPercentage = 61;
+        
+        if ($poUser->getNewsletter() == true) {
+            $loPercentage += 3;
+        }
+        if ($poUser->getCoordonnee() != null) {
+            if (!$poUser->getCoordonnee()->getTelephoneFixe()!=null) {
+                $loPercentage += 3;
+            }
+            if ($poUser->getCoordonnee()->getTelephoneMobile()!=null) {
+                 $loPercentage += 3;
+            }
+            if ($poUser->getCoordonnee()->getAdresse()!=null) {
+                 $loPercentage += 3;
+            }
+            if ($poUser->getCoordonnee()->getPays()!=null) 
+            {
+                if ($poUser->getCoordonnee()->getPays()->getLibelle()!= 'France') {
+                    $loPercentage += 9;
+                }   
+                 
+            }
+        }
+        if ($poUser->getPseudo()!=null) {
+             $loPercentage += 3;
+        }
+        if ($poUser->getAvatar()!=null) {
+             $loPercentage += 3;
+        }
+        if ($poUser->getPreference()!=null) {
+             $loPercentage += 3;
+        }
+        if($poUser->getSituationFamiliale()!=null && $poUser->getActiviteProfessionnelle() !=null || $poUser->getTrancheAge()!=null) {
+            $loPercentage += 3;
+        }
+        return $loPercentage;
+        
+    }
 
 }

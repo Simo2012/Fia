@@ -11,3 +11,11 @@ function chooseMode(id){
 			//$("div_login").hide();
 	}
 }
+function showFormulaire(type)
+{
+    $('#bouton_' + type).hide();
+    $('#div_form_' + type).slideToggle('slow');
+}
+function addClassByClick(button){
+    button.addClass("on")
+}

@@ -1,0 +1,83 @@
+<div class="contenu-espace-membre-avec-menu">
+    <div class="mon_compte">
+ 
+        <p class="mon-compte-titre">Vos informations personnelles</p>
+        Pour modifier vos informations personnelles
+        <div id="bouton_coord" class="btn-espace-membre-inline" style="margin-left:114px;">
+            <div class="btn-1-main">
+                <a onclick="showFormulaire('coord');
+                        return false;" href="#" class="btn-1-link">MODIFIER</a>
+            </div>
+            <div class="btn-1-end"></div>
+        </div>
+        
+        
+        <div id="div_form_coord" style="display:none;" class="mon-compte-div-hidden">
+            Si des informations sont inexactes, manquantes, ou ont changé, il vous suffit de les renseigner puis de valider ce formulaire.<br />
+            <span style="color:#FF0000;">Seuls les champs suivis d'un * sont obligatoires.</span><br />
+            <br />
+            {% include "SceauBundle:Site/Security:registerform.html.twig" %}
+        </div>
+
+        <hr class="mon-compte-separation-petite" />
+
+        Pour ajouter des adresses e-mail
+        <div id="bouton_emails_supp" class="btn-espace-membre-inline" style="margin-left:172px;">
+            <div class="btn-1-main">
+                <a onclick="showFormulaire('emails_supp');
+                        return false;" href="#" class="btn-1-link">MODIFIER</a>
+            </div>
+            <div class="btn-1-end"></div>
+        </div>
+        
+        
+        <div id="div_form_emails_supp" style="display:none;" class="mon-compte-div-hidden">
+            Email
+        </div>
+        
+        
+        <hr class="mon-compte-separation-grande" />
+        <p class="mon-compte-titre">Vos identifiants de connexion</p>
+        Pour modifier votre adresse e-mail (login)
+        <div id="bouton_login" class="btn-espace-membre-inline" style="margin-left:127px;">
+            <div class="btn-1-main">
+                <a onclick="showFormulaire('login');
+                        return false;" href="#" class="btn-1-link">MODIFIER</a>
+            </div>
+            <div class="btn-1-end"></div>
+        </div>
+        
+        
+        <div id="div_form_login" style="display:none;" class="mon-compte-div-hidden">
+            Identifiant
+        </div>
+
+        <hr class="mon-compte-separation-petite" />
+
+        Pour modifier votre mot de passe
+        <div id="bouton_password" class="btn-espace-membre-inline" style="margin-left:170px;">
+            <div class="btn-1-main">
+                <a onclick="showFormulaire('password');
+                        return false;" href="#" class="btn-1-link">MODIFIER</a>
+            </div>
+            <div class="btn-1-end"></div>
+        </div>
+        
+        
+        <div id="div_form_password" style="display:none;" class="mon-compte-div-hidden">
+            password
+        </div>
+
+
+        <hr class="mon-compte-separation-grande" />
+
+
+        <p class="mon-compte-titre">Suppression de vos données personnelles</p>
+        <p>Si vous souhaitez avoir un récapitulatif ou supprimer votre compte, <a href="#" class="lien">cliquez-ici</a>.</p>
+
+    </div>
+
+    {% include "SceauBundle:Site/Common:dataprotection.html.twig" %}
+
+</div>
+<div class="contenu-espace-membre-avec-menu-end"></div>

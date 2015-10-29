@@ -1,0 +1,51 @@
+<ul id="menu-membre"> 
+    <li>
+        <a href="#">
+            <img src="{{ asset('bundles/sceau/images/site/home-membre/litige_gris.png') }}" width="69" height="16" />
+        </a>
+        <br />
+        <ul>
+            <li><a href="#">Déclarez un litige</a></li>
+            <li><a href="#">Consultez vos litiges</a></li>
+        </ul>
+    </li>
+    <!--<li {if $menu-bons-plans==1}class="on"{/if}>
+            <a href="{$URLS.BONSPLANS}">
+                    <img src="{$URLS.IMAGES}BP_gris.png" width="96" height="16" />
+            </a>
+    </li>-->
+    <li>
+        <a href="#">
+            <img src="{{ asset('bundles/sceau/images/site/home-membre/aide_gris.png') }}" width="171" height="16" />
+        </a>
+    </li>
+    <li>
+        <a href="#" >
+            <img src="{{ asset('bundles/sceau/images/site/home-membre/questio_gris.png') }}" width="120" height="16" />
+        </a>
+        <div class="em_puce_en_attente" title="Voir uniquement les commandes avec un questionnaire en attente"  onClick="">
+            <p></p>
+        </div>
+        <br />
+        <ul>
+            <li><a href="#">Tous vos questionnaires</a></li>
+            <li><a href="#">Questionnaires en attente</a></li>
+        </ul>
+
+    </li>
+    <li>
+        <a href="{{ path('site_home_membre_compte')}}">
+            <img src="{{ asset('bundles/sceau/images/site/home-membre/compte_gris.png') }}" width="102" height="16" />
+        </a>
+    </li>
+    <li>
+        <a href="#" >
+            <img src="{{ asset('bundles/sceau/images/site/home-membre/compte_preferences.png') }}" width="102" height="16" />
+        </a>
+        <br />
+        <ul>
+            <li><a href="#">Mes préférences</a></li>
+            <li><a href="#">Mes abonnements</a></li>
+        </ul>
+    </li>
+</ul>
