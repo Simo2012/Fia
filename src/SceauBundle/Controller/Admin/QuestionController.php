@@ -5,6 +5,8 @@ namespace SceauBundle\Controller\Admin;
 use SceauBundle\Entity\Ticket;
 use SceauBundle\Entity\TicketHistorique;
 use SceauBundle\Entity\EnvoiEmail;
+use SceauBundle\Entity\TicketHistoriqueEmail;
+use SceauBundle\Form\Type\Admin\TicketHistoriqueEmailType;
 use SceauBundle\Form\Type\Admin\TicketNoteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Admin\TicketReponseType;
 use SceauBundle\Form\Type\Admin\Filters\TicketFiltersType;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * QuestionController controller.
@@ -168,6 +171,29 @@ class QuestionController extends Controller
         $em->flush();
 
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
+
+    }
+
+    /**
+     * Get a HistoriqueEmail by id
+     *
+     * @Route("/historiqueEmail/{id}", name="question_historique_email")
+     *
+     * @return Response
+     */
+
+    public function getHistoriqueEmailAction($id)
+    {
+        /** @var \SceauBundle\Entity\Repository\TicketHistoriqueRepository $historiqueRepository */
+        $historiqueRepository = $this->get('sceau.repository.ticket.historique');
+
+        $historique = $historiqueRepository->find($id);
+        $historiqueEmailForm = $this->createForm(new TicketHistoriqueEmailType, $historique->getHistoriqueEmail());
+
+        return $this->render('SceauBundle:Admin/Questions:historique_email_content.html.twig', array(
+            'historiqueEmailForm' => $historiqueEmailForm->createView(),
+            'ticket'              => $historique->getTicket(),
+        ));
 
     }
 }

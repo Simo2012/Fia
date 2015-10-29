@@ -48,6 +48,10 @@ class TicketHistorique
      */
     private $ticket;
 
+    /**
+     * @ORM\OneToOne(targetEntity="SceauBundle\Entity\TicketHistoriqueEmail", cascade={"persist", "remove"})
+     */
+    private $historiqueEmail;
 
     /**
      * @var integer
@@ -188,6 +192,28 @@ class TicketHistorique
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set historiqueEmail
+     *
+     * @param \SceauBundle\Entity\Ticket $historiqueEmail
+     *
+     * @return TicketHistorique
+     */
+    public function setHistoriqueEmail($historiqueEmail)
+    {
+        $this->historiqueEmail = $historiqueEmail;
+    }
+
+    /**
+     * Get historiqueEmail
+     *
+     * @return \SceauBundle\Entity\Ticket $historiqueEmail
+     */
+    public function getHistoriqueEmail()
+    {
+        return $this->historiqueEmail;
     }
 }
 

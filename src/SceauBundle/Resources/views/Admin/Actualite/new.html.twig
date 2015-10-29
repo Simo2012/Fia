@@ -2,44 +2,30 @@
 
 {% block CONTENT -%}
 
-    <div class="page-content page-content-ease-in">
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li><a href="javascript:;">Home</a></li>
         <li><a href="javascript:;">Gestion des actualités</a></li>
-        <li class="active">Ajout</li>
+        <li class="active">Création</li>
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header">Actualité<small> création de l'actualité</small></h1>
-    <!-- end page-header
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="row">
-                    <div class="col-lg-12">
+    <h1 class="page-header">Actualité <small>création de l'actualité</small></h1>
+    <!-- end page-header -->
 
-                        <div class="portlet portlet-default">
-                            <div class="portlet-heading">
-                                <div class="portlet-title">
-                                    <h4>Ajouter une actualité</h4>
-                                </div>
-                                <div class="portlet-widgets">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#basicFormExample"><i class="fa fa-chevron-down"></i></a>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div id="basicFormExample" class="panel-collapse collapse in">
-                                <div class="portlet-body">
-                                    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
-                                    {{ form(form) }}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.portlet -->
-                    </div>
+    <div class="row">
+        <!-- begin col-8 -->
+        <div class="col-md-6">
+            <div class="panel panel-inverse" data-sortable-id="ui-buttons-1"->
+                <div class="panel-heading">
+                    <h4 class="panel-title">Ajouter un article</h4>
+                </div>
+                <div class="panel-body">
+                    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+                    {{ form(form) }}
                 </div>
             </div>
         </div>
-
     </div>
+
 {% endblock %}
