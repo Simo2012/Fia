@@ -1,0 +1,16 @@
+{% extends "SceauBundle:Admin:modal.html.twig" %}
+
+{% block modal_header %}
+
+    <h4 class="modal-title">Détails de la réponse à la question n° {{ ticket.id }}</h4>
+
+{% endblock %}
+
+{% block modal_body %}
+
+    {% form_theme historiqueEmailForm 'bootstrap_3_horizontal_layout.html.twig' %}
+    {{ form(historiqueEmailForm) }}
+
+{% endblock %}
+
+

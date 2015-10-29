@@ -13,6 +13,10 @@
             <argument>%locale%</argument>
             <tag name="kernel.event_subscriber" />
         </service>
+        <service id="sceau.ticket.reponse" class="SceauBundle\Listener\Entity\Ticket2Listener">
+            <tag name="kernel.event_listener" event="ticket.reponse" method="ticketReponse" />
+        </service>
     </services>
+
 
 </container>

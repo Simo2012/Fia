@@ -32,7 +32,7 @@ class ActualiteType extends AbstractType
             ->add('save', 'submit', array(
                 'attr' => array('class' => 'submit'),
                 'label' => "Enregistrer",
-                'attr' => array('class' => 'btn btn-green')
+                'attr' => array('class' => 'btn btn-info')
             ))
         ;
     }
