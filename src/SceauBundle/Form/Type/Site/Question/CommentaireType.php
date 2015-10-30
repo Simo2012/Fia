@@ -22,6 +22,7 @@ class CommentaireType extends AbstractType
                     'maxlength' => 500,
                     'rows'      => 5,
                     'cols'      => '98%',
+                    'tombola'   => $options['tombola']
                 ],
                 'label'    => $response->getLibelle(),
             ]);
@@ -35,6 +36,7 @@ class CommentaireType extends AbstractType
     {
         $resolver->setDefaults([
             'response' => null,
+            'tombola'  => false,
         ]);
     }
 
