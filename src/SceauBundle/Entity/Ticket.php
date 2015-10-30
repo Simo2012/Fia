@@ -50,6 +50,12 @@ class Ticket
      */
     private $type;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Embedded(class="TicketCategorie", columnPrefix="categorie_")
+     */
+    private $categorie;
 
     public function __construct()
     {
@@ -63,12 +69,6 @@ class Ticket
      * @ORM\JoinColumn(name="site_id", referencedColumnName="id", nullable=true)
      */
     private $site;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketCategorie")
-     * @ORM\JoinColumn(name="categorie", referencedColumnName="id")
-     */
-    private $categorie;
 
     /**
      * @var string
@@ -235,29 +235,6 @@ class Ticket
     }
 
     /**
-     * Set category
-     * @param \SceauBundle\Entity\TicketCategorie $categorie
-     *
-     * @return Ticket
-     */
-    private function setCategorie(\SceauBundle\Entity\TicketCategorie $categorie)
-    {
-        $this->categorie = $categorie;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return \SceauBundle\Entity\TicketCategorie
-     */
-    public function getCategorie()
-    {
-        return $this->categorie;
-    }
-
-    /**
      * Set auteur
      *
      * @param \SceauBundle\Entity\TicketAuteur $auteur
@@ -279,5 +256,29 @@ class Ticket
     public function getAuteur()
     {
         return $this->auteur;
+    }
+
+    /**
+     * Set categorie
+     *
+     * @param \SceauBundle\Entity\TicketCategorie $categorie
+     *
+     * @return Ticket
+     */
+    public function setCategorie(\SceauBundle\Entity\TicketCategorie $categorie)
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get categorie
+     *
+     * @return \SceauBundle\Entity\TicketCategorie
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
     }
 }

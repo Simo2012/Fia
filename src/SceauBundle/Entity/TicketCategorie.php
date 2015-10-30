@@ -7,27 +7,25 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TicketCategorie
  *
- * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Embeddable
  */
 class TicketCategorie
 {
+    // type
+    const TYPE_AVIS      = 1;
+    const TYPE_CONTACT   = 2;
+
+    public static $TYPES = [
+        self::TYPE_AVIS      => 'Avis',
+        self::TYPE_CONTACT   => 'Contact',
+    ];
+
     /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="label", type="string", length=255)
-     */
-    private $label;
-
 
     /**
      * Get id
@@ -40,27 +38,33 @@ class TicketCategorie
     }
 
     /**
-     * Set label
+     * Set id
      *
-     * @param string $label
-     *
-     * @return TicketCategorie
+     * @param $id
      */
-    public function setLabel($label)
+    public function setId($id)
     {
-        $this->label = $label;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get label
-     *
      * @return string
      */
     public function getLabel()
     {
-        return $this->label;
+        return isset(self::$TYPES[$this->id]) ? self::$TYPES[$this->id] : '';
+    }
+
+    public static function getAvailableTypes()
+    {
+        return self::$TYPES;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLabel();
     }
 }
-

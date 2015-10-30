@@ -23,7 +23,6 @@ class TicketReponseType extends AbstractType
                 'class'         => 'SceauBundle:TicketReponseModele',
                 'empty_value'   => '-- Choisissez une réponse type --',
                 'choice_label'  => 'type',
-                'property'      => 'type',
                 'required'      => false,
             ])
             ->add('expediteur' , 'text', [

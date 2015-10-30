@@ -109,9 +109,13 @@ class QuestionController extends Controller
             $data = $ticketReafectationForm->getData();
             $event = new TicketEvent($ticket, $data);
             
-            $this->get("event_dispatcher")->dispatch(
-                TicketEvents::TICKET_REAFECTATION, $event
-            );
+            if ($data['categorie'] != $ticket->getCategorie()) {
+                $this->get("event_dispatcher")->dispatch(
+                    TicketEvents::TICKET_REAFECTATION_CATEGORIE, $event
+                );
+            }
+            // todo 
+            // dispatch TicketEvents::TICKET_REAFECTATION_DESTINATAIRE     
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -164,9 +168,13 @@ class QuestionController extends Controller
             $event = new TicketEvent($ticket);
 
             if ($noteExist) {
-                $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_NOTE_UPDATE, $event);
+                $this->get("event_dispatcher")->dispatch(
+                    TicketEvents::TICKET_NOTE_UPDATE, $event
+                );
             } else {
-                $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_NOTE_CREATE, $event);
+                $this->get("event_dispatcher")->dispatch(
+                    TicketEvents::TICKET_NOTE_CREATE, $event
+                );
             }
 
         }
@@ -188,7 +196,9 @@ class QuestionController extends Controller
         $em->flush();
 
         $event = new TicketEvent($ticket);
-        $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_NOTE_DELETE, $event);
+        $this->get("event_dispatcher")->dispatch(
+            TicketEvents::TICKET_NOTE_DELETE, $event
+        );
 
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
 

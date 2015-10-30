@@ -12,12 +12,6 @@ use Symfony\Component\Form\FormEvents;
 
 class TicketAuteurType extends AbstractType
 {
-    private $tokenStorage;
-
-    public function __construct(TokenStorageInterface $tokenStorage)
-    {
-        $this->tokenStorage = $tokenStorage;
-    }
     /**
      * {@inheritdoc}
      */
