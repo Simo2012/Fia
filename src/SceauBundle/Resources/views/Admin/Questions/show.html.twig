@@ -32,15 +32,25 @@
                     <p>Téléphone : {{ ticket.auteur.phone }}</p>
                 </div>
                 <div class="col-lg-6">
-                    <p>Type : erreur fiche marchand</p>
-                    <p>Service affecté : Informatique 
-                        <a href="#reafectationModal" class="btn btn-sm btn-danger" data-toggle="modal">Modifier</a> </p>
-                    <p>Etat :  En attente de traitement </p>
-                    <p>Action : Une réponse doit être apportée à l'auteur du signalement ?</p>
+                    <p>Type : {{ ticket.type }}</p>
+                    <p>Catégorie affectée : {{ ticket.categorie }} 
+                        <a href="#reafectationModal" class="btn btn-sm btn-warning" data-toggle="modal">Modifier</a> </p>
+                    <p>Etat : 
+                        {% if ticket.etat %}
+                            <span class="label label-success m-r-10 pull-left">Traitée</span>
+                        {% else %}
+                            <span class="label label-warning m-r-10 pull-left">En attente</span>
+                        {% endif %}
+                    </p>
+                    {% if ticket.etat != true %}
+                        <p>Action : Une réponse doit être apportée à l'auteur du signalement ?</p>
+                    {% endif %}
                 </div>
             </div>
             <div class="panel-body">
-                <p>Site concerné : #SITENAME#</p>
+                {% if ticket.site %}
+                    <p>Site concerné : #SITENAME#</p>
+                {% endif %}
                 <p>{{ ticket.question }}</p>
             </div>
             <div class="panel-footer text-right">
