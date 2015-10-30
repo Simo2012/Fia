@@ -17,7 +17,7 @@ class TicketCategorieType extends AbstractType
     {
         $builder
             ->add('id', 'choice', [
-                'label'   => 'catégorie',
+                'label'   => null,
                 'choices' => TicketCategorie::$TYPES,
             ])
         ;

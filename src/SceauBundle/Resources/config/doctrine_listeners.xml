@@ -8,9 +8,6 @@
         <service id="sceau.doctrine.entity_listener_resolver" class="SceauBundle\Doctrine\EntityListenerResolver">
             <argument type="service" id="service_container" />
         </service>
-        <service id="sceau.entity_listener.ticket" class="SceauBundle\Listener\Entity\TicketListener">
-            <tag name="doctrine.entity_listener" />
-        </service>
     </services>
 
 </container>

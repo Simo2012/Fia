@@ -17,7 +17,9 @@ class TicketReafectationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('categorie', new TicketCategorieType())
+            ->add('categorie', new TicketCategorieType(),[
+                'label' => null,
+            ])
             ->add('save','submit')
         ;
     }

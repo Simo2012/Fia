@@ -77,6 +77,11 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sceau.notes"/>
         </service>
+
+        <!-- Admin -->
+        <service id="sceau.admin.ticket_mailer" class="SceauBundle\Service\Admin\TicketMailer">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
         
         <!-- Class Encodage -->
         <service id="sceau.api.filter.Encrypt" class="SceauBundle\Model\Api\ApiEncryptFilter">

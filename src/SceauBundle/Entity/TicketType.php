@@ -134,7 +134,7 @@ class TicketType
      */
     public function getLabel()
     {
-        return isset(self::$TYPES[$this->id]) ? self::$TYPES[$this->id] : '';
+        return isset(self::$TYPES_LABEL[$this->id]) ? self::$TYPES_LABEL[$this->id] : '';
     }
 
     public static function getAvailableTypes($actor)

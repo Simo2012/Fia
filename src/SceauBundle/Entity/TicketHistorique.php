@@ -197,7 +197,7 @@ class TicketHistorique
     /**
      * Set historiqueEmail
      *
-     * @param \SceauBundle\Entity\Ticket $historiqueEmail
+     * @param \SceauBundle\Entity\TicketHistoriqueEmail $historiqueEmail
      *
      * @return TicketHistorique
      */

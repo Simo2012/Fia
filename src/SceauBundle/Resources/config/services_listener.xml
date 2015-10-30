@@ -13,15 +13,16 @@
             <argument>%locale%</argument>
             <tag name="kernel.event_subscriber" />
         </service>
-        <service id="sceau.ticket.reponse" class="SceauBundle\Listener\Entity\TicketListener">
+        <service id="sceau.ticket.listener" class="SceauBundle\Listener\Entity\TicketListener">
             <argument type="service" id="doctrine.orm.entity_manager" />
+            <tag name="kernel.event_listener" event="ticket.creation" method="ticketCreation" />
             <tag name="kernel.event_listener" event="ticket.reponse" method="ticketReponse" />
             <tag name="kernel.event_listener" event="ticket.state.change" method="ticketNoteDelete" />
             <tag name="kernel.event_listener" event="ticket.note.create" method="ticketNoteCreate" />
             <tag name="kernel.event_listener" event="ticket.note.update" method="ticketNoteUpdate" />
             <tag name="kernel.event_listener" event="ticket.note.delete" method="ticketNoteDelete" />
             <tag name="kernel.event_listener" event="ticket.reafectation.categorie" method="ticketReafectationCategorie" />
-            <tag name="kernel.event_listener" event="ticket.reafectation.destinataire" method="ticketReafectationDestinataire" />
+            <tag name="kernel.event_listener" event="ticket.reafectation.moderateur" method="ticketReafectationModerateur" />
         </service>
     </services>
 

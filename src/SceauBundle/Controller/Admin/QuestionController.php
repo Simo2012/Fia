@@ -18,10 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Admin\TicketReponseType;
 use SceauBundle\Form\Type\Admin\Filters\TicketFiltersType;
 use Symfony\Component\Validator\Constraints\Date;
-
 use SceauBundle\Listener\Entity\TicketEvents;
 use SceauBundle\Listener\Entity\TicketEvent;
-
 
 /**
  * QuestionController controller.
@@ -67,7 +65,7 @@ class QuestionController extends Controller
      */
     public function showAction(Ticket $ticket)
     {
-        $historiques = $this->get('sceau.repository.ticket.historique')->findByTicket($ticket);
+        $historiques = $this->get('sceau.repository.ticket.historique')->findByTicket($ticket, array('date' => 'ASC'));
 
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket, array(
             'action' => $this->generateUrl('question_update',array('id'=>$ticket->getId())),
@@ -115,7 +113,7 @@ class QuestionController extends Controller
                 );
             }
             // todo 
-            // dispatch TicketEvents::TICKET_REAFECTATION_DESTINATAIRE     
+            // dispatch TicketEvents::TICKET_REAFECTATION_MODERATEUR     
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -152,6 +150,7 @@ class QuestionController extends Controller
     public function updateNoteAction(Request $request, Ticket $ticket)
     {
         $noteExist = $ticket->getNote() ? true : null ;  
+        dump($noteExist);
 
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket);
 
@@ -167,7 +166,7 @@ class QuestionController extends Controller
 
             $event = new TicketEvent($ticket);
 
-            if ($noteExist) {
+            if ($noteExist != null) {
                 $this->get("event_dispatcher")->dispatch(
                     TicketEvents::TICKET_NOTE_UPDATE, $event
                 );

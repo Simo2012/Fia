@@ -1,4 +1,4 @@
-{% block JAVASCRIPT %}
+{# {% block JAVASCRIPT %}
     {% javascripts
     'bundles/sceau/js/admin/common/pace.min.js'
     'bundles/sceau/js/admin/common/jquery-1.9.1.min.js'
@@ -25,5 +25,12 @@
      %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
-{% endblock %}
+{% endblock %} #}
 
+{% block JAVASCRIPT %}
+    {% javascripts
+    'bundles/sceau/js/admin/common/jquery-1.9.1.min.js'
+     %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+{% endblock %}
