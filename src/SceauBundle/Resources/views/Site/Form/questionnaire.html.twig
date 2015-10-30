@@ -71,6 +71,7 @@
 
 {# question id 3 #}
 {%- block _questionnaire_reponse_3_widget -%}
+    {% set child = form.children|first %}
     <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <div class="blue-block-top" style="margin-top:-5px;font-size:13px;">
@@ -78,10 +79,8 @@
                 <tbody>
                 <tr>
                     <td>
-                    {%- for child in form %}
                         {{- form_label(child, null, {translation_domain: translation_domain}) -}}
                         {{- form_widget(child) -}}
-                    {% endfor -%}
                     </td>
                 </tr>
                 <tr>
@@ -104,11 +103,13 @@
                         </div>
                     </td>
                 </tr>
+                {% if child.vars.attr.tombola %}
                 <tr>
                     <td style="background-image:none;">
                         <span class="rouge">En commentant votre acte d'achat ci-dessus, vous doublez vos chances de gagner jusqu'à 100€ à la Tombola FIA-NET.</span>
                     </td>
                 </tr>
+                {% endif %}
                 </tbody>
             </table>
         </div>
@@ -168,3 +169,48 @@
         </table>
     </div>
 {%- endblock _questionnaire_reponse_6_widget -%}
+
+{# question id 7 #}
+{%- block _questionnaire_reponse_7_widget -%}
+    {{ block('_questionnaire_reponse_6_widget') }}
+{%- endblock _questionnaire_reponse_7_widget -%}
+
+{# question id 8 #}
+{%- block _questionnaire_reponse_8_widget -%}
+    {{ block('_questionnaire_reponse_4_widget') }}
+{%- endblock _questionnaire_reponse_8_widget -%}
+
+{# question id 9 #}
+{%- block _questionnaire_reponse_9_widget -%}
+    {{ block('_questionnaire_reponse_4_widget') }}
+{%- endblock _questionnaire_reponse_9_widget -%}
+
+{# question id 10 #}
+{%- block _questionnaire_reponse_10_widget -%}
+    {{ block('_questionnaire_reponse_4_widget') }}
+{%- endblock _questionnaire_reponse_10_widget -%}
+
+{# question id 11 #}
+{%- block _questionnaire_reponse_11_widget -%}
+    {{ block('_questionnaire_reponse_4_widget') }}
+{%- endblock _questionnaire_reponse_11_widget -%}
+
+{# question id 12 #}
+{%- block _questionnaire_reponse_12_widget -%}
+    {{ block('_questionnaire_reponse_4_widget') }}
+{%- endblock _questionnaire_reponse_12_widget -%}
+
+{# question id 13 #}
+{%- block _questionnaire_reponse_13_widget -%}
+    {{ block('_questionnaire_reponse_1_widget') }}
+{%- endblock _questionnaire_reponse_13_widget -%}
+
+{# question id 14 #}
+{%- block _questionnaire_reponse_14_widget -%}
+    {{ block('_questionnaire_reponse_3_widget') }}
+{%- endblock _questionnaire_reponse_14_widget -%}
+
+{# question livraison #}
+{%- block _questionnaire_reponse_livraison_widget -%}
+    {{ block('_questionnaire_reponse_6_widget') }}
+{%- endblock _questionnaire_reponse_livraison_widget -%}

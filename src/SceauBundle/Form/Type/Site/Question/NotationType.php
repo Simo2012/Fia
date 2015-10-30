@@ -20,7 +20,7 @@ class NotationType extends AbstractType
 
         foreach ($responses as $response) {
             $builder->add($response->getId(), 'choice', [
-                'choices'  => range($min, $max),
+                'choices'  => array_combine(range($min, $max),range($min, $max)),
                 'multiple' => false,
                 'expanded' => true,
                 'label'    => $response->getLibelle(),
@@ -36,7 +36,7 @@ class NotationType extends AbstractType
     {
         $resolver->setDefaults([
             'responses' => [],
-            'min'       => 0,
+            'min'       => 1,
             'max'       => 10,
         ]);
     }

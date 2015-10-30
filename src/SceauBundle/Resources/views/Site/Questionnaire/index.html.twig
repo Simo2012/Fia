@@ -1,0 +1,25 @@
+{% extends "SceauBundle:Site:layout.html.twig" %}
+{% form_theme form "SceauBundle:Site\\Form:questionnaire.html.twig" %}
+
+{% block CONTENT %}
+<div id="contentbis" class="full-picto">
+    <div class="header-end"></div>
+    <div class="main-quest">
+        <div class="quest-title">{{ "Votre avis nous intéresse !"|trans({}) }}</div>
+        {{ form_start(form, {attr:{'id':'form_questionnaire'}}) }}
+            {{ form_widget(form) }}
+            <div class="btn-1 btn-valid-quest">
+                <div class="btn-1-main">
+                    <input src="{{ asset('bundles/sceau/images/site/common/btn_1_input.png') }}" type="image">
+                    <a class="btn-1-link" href="#" onclick="document.forms['form_questionnaire'].submit(); return false">{{ "Validez le questionnaire"|trans({}) }}</a>
+                </div>
+                <div class="btn-1-end"></div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+    <div class="main-block-end"></div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
