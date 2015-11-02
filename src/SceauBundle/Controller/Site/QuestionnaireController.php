@@ -50,13 +50,28 @@ class QuestionnaireController extends Controller
         ]);
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            //$this->persistQuestionnaireReponses($form, $questionnaire);
+        $displayMore = $request->get('display_more', false);
+        if ($form->isValid() && ! $displayMore) {
+            $this->persistQuestionnaireReponses($form, $questionnaire);
+        }
+
+        $linkedQuestions = [];
+        foreach ($questions as $question) {
+            if ($question->getCache()) {
+                $visible = $question->getVisible();
+                if (isset($visible['question_id']) && isset($visible['reponse_id'])) {
+                    if (!isset($linkedQuestions[$visible['question_id']])) {
+                        $linkedQuestions[$visible['question_id']] = [];
+                    }
+                    $linkedQuestions[$visible['question_id']] += $visible['reponse_id'];
+                }
+            }
         }
 
         return $this->render('SceauBundle:Site\Questionnaire:index.html.twig', [
-            'questionnaire' => $questionnaire,
-            'form'          => $form->createView(),
+            'questionnaire'   => $questionnaire,
+            'form'            => $form->createView(),
+            'linkedQuestions' => json_encode($linkedQuestions),
         ]);
     }
 
@@ -67,6 +82,7 @@ class QuestionnaireController extends Controller
     private function persistQuestionnaireReponses(Form $form, Questionnaire $questionnaire)
     {
         foreach ($questionnaire->getQuestionnaireType()->getQuestions() as $question) {
+            /** @var \SceauBundle\Entity\Reponse[] $reponses */
             $reponses = [];
             foreach ($question->getReponses() as $reponse) {
                 $reponses[$reponse->getId()] = $reponse;
@@ -75,34 +91,38 @@ class QuestionnaireController extends Controller
             $commentaire = null;
             $reponsesId = [];
             $notes = [];
-            switch ($question->getQuestionType()->getId()) {
-                case QuestionType::CHOIX_UNIQUE:
-                case QuestionType::CHOIX_UNIQUE_SELECT:
-                    $reponsesId[] = $form->get($question->getId())->getData();
-                    break;
-                case QuestionType::CHOIX_MULTIPLE:
-                    $reponsesId = $form->get($question->getId())->getData();
-                    break;
-                case QuestionType::NOTATION:
-                    foreach ($reponses as $reponse) {
-                        if (($note = $form->get($question->getId())->get($reponse->getId())->getData())) {
-                            $notes[$reponse->getId()] = $form
-                                ->get($question->getId())
-                                ->get($reponse->getId())
-                                ->getData();
-                            $reponsesId[] = $reponse->getId();
+            if ($form->has($question->getId())) {
+                switch ($question->getQuestionType()->getId()) {
+                    case QuestionType::CHOIX_UNIQUE:
+                        $reponsesId[] = $form->get($question->getId())->get('reponse')->getData();
+                        break;
+                    case QuestionType::CHOIX_UNIQUE_SELECT:
+                        $reponsesId[] = $form->get($question->getId())->getData();
+                        break;
+                    case QuestionType::CHOIX_MULTIPLE:
+                        $reponsesId = $form->get($question->getId())->get('reponse')->getData();
+                        break;
+                    case QuestionType::NOTATION:
+                        foreach ($reponses as $reponse) {
+                            if (($note = $form->get($question->getId())->get($reponse->getId())->getData())) {
+                                $notes[$reponse->getId()] = $form
+                                    ->get($question->getId())
+                                    ->get($reponse->getId())
+                                    ->getData();
+                                $reponsesId[] = $reponse->getId();
+                            }
                         }
-                    }
-                    break;
-                case QuestionType::COMMENTAIRE:
-                    $commentaire = $form
-                        ->get($question->getId())
-                        ->get($question->getReponses()->first()->getId())
-                        ->getData();
-                    $reponsesId[] = $question->getReponses()->first()->getId();
-                    break;
-                case QuestionType::ETOILE:
-                case QuestionType::ETOILE_COMMENTAIRE:
+                        break;
+                    case QuestionType::COMMENTAIRE:
+                        $commentaire = $form
+                            ->get($question->getId())
+                            ->get($question->getReponses()->first()->getId())
+                            ->getData();
+                        $reponsesId[] = $question->getReponses()->first()->getId();
+                        break;
+                    case QuestionType::ETOILE:
+                    case QuestionType::ETOILE_COMMENTAIRE:
+                }
             }
 
             foreach ($reponsesId as $reponseId) {
@@ -111,17 +131,21 @@ class QuestionnaireController extends Controller
                     $questionnaireReponse->setQuestion($question);
                     $questionnaireReponse->setQuestionnaire($questionnaire);
                     $questionnaireReponse->setReponse($reponses[$reponseId]);
+                    if ($reponses[$reponseId]->getPrecision()
+                        && ($precision = $form->get($question->getId())->get($reponseId)->getData())) {
+                        $questionnaireReponse->setCommentaire($precision);
+                    }
                     if ($commentaire) {
                         $questionnaireReponse->setCommentaire($commentaire);
                     }
                     if (!empty($notes) && isset($notes[$reponseId])) {
                         $questionnaireReponse->setNote($notes[$reponseId]);
                     }
-                    $this->getDoctrine()->getManager()->persist($questionnaireReponse);
+                    //$this->getDoctrine()->getManager()->persist($questionnaireReponse);
                 }
             }
         }
 
-        $this->getDoctrine()->getManager()->flush();
+        //$this->getDoctrine()->getManager()->flush();
     }
 }

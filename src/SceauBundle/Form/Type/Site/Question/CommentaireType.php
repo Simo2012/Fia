@@ -24,7 +24,7 @@ class CommentaireType extends AbstractType
                     'cols'      => '98%',
                     'tombola'   => $options['tombola']
                 ],
-                'label'    => $response->getLibelle(),
+                'label'    => $response->getLibelle($options['site_name']),
             ]);
         }
     }
@@ -35,8 +35,9 @@ class CommentaireType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'response' => null,
-            'tombola'  => false,
+            'response'  => null,
+            'tombola'   => false,
+            'site_name' => null,
         ]);
     }
 
@@ -45,6 +46,6 @@ class CommentaireType extends AbstractType
      */
     public function getName()
     {
-        return 'commentaire';
+        return 'site_question_commentaire';
     }
 }

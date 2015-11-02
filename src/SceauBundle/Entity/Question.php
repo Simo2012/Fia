@@ -227,10 +227,14 @@ class Question implements Translatable
     /**
      * Get libelle
      *
+     * @param null|string $siteName
      * @return string
      */
-    public function getLibelle()
+    public function getLibelle($siteName = null)
     {
+        if ($siteName) {
+            return str_replace('##NOM_SITE##', $siteName, $this->libelle);
+        }
         return $this->libelle;
     }
 
@@ -748,13 +752,31 @@ class Question implements Translatable
         $this->locale = $locale;
     }
 
+    /**
+     * @return array
+     */
     public function getFormUsableResponse()
     {
-        $reponses = [];
-        /** @var \SceauBundle\Entity\Reponse $reponse */
-        foreach ($this->reponses as $reponse) {
-            $reponses[$reponse->getId()] = $reponse->getLibelle();
+        $responses = [];
+        /** @var \SceauBundle\Entity\Reponse $response */
+        foreach ($this->reponses as $response) {
+            $responses[$response->getId()] = $response->getLibelle();
         }
-        return $reponses;
+        return $responses;
+    }
+
+    /**
+     * @return array
+     */
+    public function responsesNeedPrecision()
+    {
+        $responses = [];
+        /** @var \SceauBundle\Entity\Reponse $response */
+        foreach ($this->reponses as $response) {
+            if ($response->getPrecision()) {
+                $responses[] = $response->getId();
+            }
+        }
+        return $responses;
     }
 }

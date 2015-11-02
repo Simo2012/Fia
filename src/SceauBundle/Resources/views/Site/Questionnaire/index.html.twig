@@ -21,5 +21,42 @@
 </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block JAVASCRIPT %}
+    {{ parent() }}
+    <script>
+        (function(){
+            var linkedQuestions = {{ linkedQuestions|raw }};
+            var form_selector = "#{{ form.vars.id }}";
+
+            var refreshForm = function() {
+                var $form = $(form_selector),
+                    data = $form.serialize() + '&display_more=1';
+
+                $.ajax({
+                    url : $form.attr('action'),
+                    type: $form.attr('method'),
+                    data : data,
+                    success: function(html) {
+                        $form.replaceWith(
+                            $(html).find(form_selector)
+                        );
+                        bindChangeEvent();
+                    }
+                });
+            };
+
+            var bindChangeEvent = function() {
+                $.each(linkedQuestions, function(questionId, responsesId) {
+                    $(form_selector+'_'+questionId+'_reponses').change(function(e){
+                        var val = $(e.target).val();
+                        if (responsesId.indexOf(parseInt(val)) !== -1) {
+                            refreshForm();
+                        }
+                    });
+                });
+            };
+
+            bindChangeEvent();
+        })();
+    </script>
 {% endblock %}
