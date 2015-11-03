@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use SceauBundle\Entity\Coordonnee;
 use SceauBundle\Entity\Email;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
+
 /**
  * Connexion des utilisateurs
  *
@@ -27,22 +28,22 @@ use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 class MembreLogger
 {
     /**
-    * Doctrine entity manager
-    * @var EntityManager
-    */
+     * Doctrine entity manager
+     * @var EntityManager
+     */
     private $manager;
-    
+
     /**
      * Modèle de décodage des mots de passe encodés via l'encodeur
      * utilisant le modèle d'encodage ApiEncryptFilter
      * @var ApiDecryptFilter
      */
     private $apiDecryptFilter;
-    
+
     /**
-    * Gestionnaire d'encodeurs
-    * @var EncoderFactory
-    */
+     * Gestionnaire d'encodeurs
+     * @var EncoderFactory
+     */
     private $factory;
     /**
      * Requête courante
@@ -54,20 +55,20 @@ class MembreLogger
      * @var Translator
      */
     protected $translator;
-    
+
     /**
-    * Constructeur, injection des dépendances
-    */
+     * Constructeur, injection des dépendances
+     */
     public function __construct($poManager, $poFactory, $poRequestStack, $poTranslator, $apiDecryptFilter)
     {
-        $this->manager          = $poManager;
-        $this->factory          = $poFactory;
-        $this->request          = $poRequestStack->getCurrentRequest();
-        $this->translator       = $poTranslator;
+        $this->manager = $poManager;
+        $this->factory = $poFactory;
+        $this->request = $poRequestStack->getCurrentRequest();
+        $this->translator = $poTranslator;
         $this->apiDecryptFilter = $apiDecryptFilter;
     } // __construct
-    
-    
+
+
     /**
      * Récupère un utilisateur par son email et le connect
      *
@@ -93,28 +94,28 @@ class MembreLogger
         $this->setUserInSession($loUser);
         return $loUser;
     } // getUser
-    
+
     /**
-    * Log l'utilisateur
-    *
-    * @param Membre $poMembre Utilisateur
-    */
+     * Log l'utilisateur
+     *
+     * @param Membre $poMembre Utilisateur
+     */
     public function setUserInSession(Membre $poMembre)
     {
         $poMembre->setDateCreation(new \DateTime());
         $this->manager->flush();
     } // setUserInSession
-    
-    
+
+
     /**
-    * Enregistre l'utilisateur et le log
-    *
-    * @param User $poUser Utilisateur
-    * @param Boolean $pbCheckEmail Verification ou non de l'email
-    * @return User
-    * @throws \ErrorException
-    */
-    public function registerUser($poUser,$loMail,$pbCheckEmail = true)
+     * Enregistre l'utilisateur et le log
+     *
+     * @param User $poUser Utilisateur
+     * @param Boolean $pbCheckEmail Verification ou non de l'email
+     * @return User
+     * @throws \ErrorException
+     */
+    public function registerUser($poUser, $loMail, $pbCheckEmail = true)
     {
         // ==== Création de l'utilisateur ====
         //$lsEmail = $poUser->get;
@@ -133,8 +134,8 @@ class MembreLogger
 
         return $poUser;
     } // registerUser
-    
-    
+
+
     /**
      * Création d'un nouvel utilisateur
      *
@@ -146,29 +147,29 @@ class MembreLogger
     {
         $loEncoder = $this->factory->getEncoder($poUser);
         $lsPassword = $loEncoder->encodePassword($poUser->getPassword(), $poUser->getSalt());
-        
+
         $poUser->setPassword($lsPassword);
         $poUser->setDateCreation(new \DateTime());
         try {
             // ---- Mise en session de la 1ere inscription pour la popup de bienvenue ----
             $loSession = $this->request->getSession();
-            $loSession->set('_is_first_registration', true);        
+            $loSession->set('_is_first_registration', true);
             $this->manager->persist($poUser);
             $this->manager->flush();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             var_dump('erreur lors de la creation user');
         }
     } // createUser
-    
+
     /**
      * Participation du membre dans tombola
-     * 
+     *
      * @param $poUser
      * @param $poSourceId
      * @$return Membre
      * @throws DBALException
      */
-    public function particpateTombola($poUser, $poSourceId) 
+    public function particpateTombola($poUser, $poSourceId)
     {
         $loTombolaTicket = new TombolaTicket();
         try {
@@ -181,23 +182,24 @@ class MembreLogger
             $loTombolaTicket->setTombolaSource($loSource);
             $this->manager->persist($loTombolaTicket);
             $this->manager->flush();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             var_dump('erreur lors de creation du nouveau ticket tombolat');
         }
         return $loTombolaTicket->getId();
     }
-    
+
     /**
-    * Sauvgarder Coordonnées
-    * 
-    * @param $poField
-    * @$return Coordonnees
-    * @throws DBALException
-    */
-    public function saveCoordonnées($poField) {
+     * Sauvgarder Coordonnées
+     *
+     * @param $poField
+     * @$return Coordonnees
+     * @throws DBALException
+     */
+    public function saveCoordonnées($poField)
+    {
         $loPays = $this->manager->getRepository('SceauBundle:Pays')->find($poField['pays']);
-        $loCoordonnees =  new Coordonnee();
-         try {
+        $loCoordonnees = new Coordonnee();
+        try {
             $loCoordonnees->setAdresse($poField['adresse']);
             $loCoordonnees->setCodePostal($poField['codePostal']);
             $loCoordonnees->setCompAdresse($poField['compAdresse']);
@@ -205,24 +207,25 @@ class MembreLogger
             $loCoordonnees->setPays($loPays);
             $this->manager->persist($loCoordonnees);
             $this->manager->flush();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             var_dump('erreur lors de creation des Coordonnées');
         }
-        
+
         return $loCoordonnees;
     }
-    
+
     /**
-    * Sauvgarder Coordonnées
-    * 
-    * @param $poField
-    * @$return Coordonnees
-    * @throws DBALException
-    */
-    public function updateCoordonnées($poField) {
+     * Sauvgarder Coordonnées
+     *
+     * @param $poField
+     * @$return Coordonnees
+     * @throws DBALException
+     */
+    public function updateCoordonnées($poField)
+    {
         $loPays = $this->manager->getRepository('SceauBundle:Pays')->find($poField['coordonnee']['pays']);
-        $loCoordonnees =  new Coordonnee();
-         try {
+        $loCoordonnees = new Coordonnee();
+        try {
             $loCoordonnees->setAdresse($poField['coordonnee']['adresse']);
             $loCoordonnees->setCodePostal($poField['coordonnee']['codePostal']);
             $loCoordonnees->setCompAdresse($poField['coordonnee']['compAdresse']);
@@ -230,23 +233,24 @@ class MembreLogger
             $loCoordonnees->setPays($loPays);
             $this->manager->persist($loCoordonnees);
             $this->manager->flush();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             var_dump('erreur lors de creation des Coordonnées');
         }
-        
+
         return $loCoordonnees;
     }
-    
+
     /**
-    * Sauvgarder Coordonnées
-    * 
-    * @param $poField
-    * @$return Email
-    * @throws DBALException
-    */
-    public function saveEmail($poField) {
+     * Sauvgarder Coordonnées
+     *
+     * @param $poField
+     * @$return Email
+     * @throws DBALException
+     */
+    public function saveEmail($poField)
+    {
         $loEmail = new Email();
-        
+
         try {
             $loEmail->setEmail($poField['email']['first']);
             $loEmail->setPrincipal(true);
@@ -254,62 +258,62 @@ class MembreLogger
             dump($loEmail);
             $this->manager->persist($loEmail);
             $this->manager->flush();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             var_dump('erreur lors de creation des Emails');
         }
         return $loEmail;
     }
-    
-    public function getPourcentage($poUser) {
+
+    public function getPourcentage($poUser)
+    {
         // Bar de pourcentage
         $loPercentage = 61;
-        
+
         if ($poUser->getNewsletter() == true) {
             $loPercentage += 3;
         }
         if ($poUser->getCoordonnee() != null) {
-            if (!$poUser->getCoordonnee()->getTelephoneFixe()!=null) {
+            if (!$poUser->getCoordonnee()->getTelephoneFixe() != null) {
                 $loPercentage += 3;
             }
-            if ($poUser->getCoordonnee()->getTelephoneMobile()!=null) {
-                 $loPercentage += 3;
+            if ($poUser->getCoordonnee()->getTelephoneMobile() != null) {
+                $loPercentage += 3;
             }
-            if ($poUser->getCoordonnee()->getAdresse()!=null) {
-                 $loPercentage += 3;
+            if ($poUser->getCoordonnee()->getAdresse() != null) {
+                $loPercentage += 3;
             }
-            if ($poUser->getCoordonnee()->getPays()!=null) 
-            {
-                if ($poUser->getCoordonnee()->getPays()->getLibelle()!= 'France') {
+            if ($poUser->getCoordonnee()->getPays() != null) {
+                if ($poUser->getCoordonnee()->getPays()->getLibelle() != 'France') {
                     $loPercentage += 9;
-                }   
-                 
+                }
+
             }
         }
-        if ($poUser->getPseudo()!=null) {
-             $loPercentage += 3;
+        if ($poUser->getPseudo() != null) {
+            $loPercentage += 3;
         }
-        if ($poUser->getAvatar()!=null) {
-             $loPercentage += 3;
+        if ($poUser->getAvatar() != null) {
+            $loPercentage += 3;
         }
-        if ($poUser->getPreference()!=null) {
-             $loPercentage += 3;
+        if ($poUser->getPreference() != null) {
+            $loPercentage += 3;
         }
-        if($poUser->getSituationFamiliale()!=null && $poUser->getActiviteProfessionnelle() !=null || $poUser->getTrancheAge()!=null) {
+        if ($poUser->getSituationFamiliale() != null && $poUser->getActiviteProfessionnelle() != null || $poUser->getTrancheAge() != null) {
             $loPercentage += 3;
         }
         return $loPercentage;
-        
+
     }
-    
+
     /**
-     * 
+     *
      * @param type $poEmail
      * @return Email
      * @throws \ErrorException
      */
     public function saveEmailSecondaire($poEmail)
     {
-        $loEmail = $this->manager->getRepository('SceauBundle:Email')->findBy(array('email' => $poEmail ));
+        $loEmail = $this->manager->getRepository('SceauBundle:Email')->findBy(array('email' => $poEmail));
         if (!empty($loEmail)) {
             throw new \ErrorException(
                 'Email Exist déja'
@@ -321,21 +325,21 @@ class MembreLogger
             $loEmail->setPrincipal(false);
             $this->manager->persist($loEmail);
             $this->manager->flush();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             var_dump('erreur lors de creation des Emails');
         }
         return $loEmail;
     }
-    
+
     /**
-     * 
+     *
      * @param type $poEmail
      * @param type $poUser
      * @throws \ErrorException
      */
     public function saveEmailPrincipale($poEmail, $poUser)
     {
-        $loEmail = $this->manager->getRepository('SceauBundle:Email')->findOneBy(array('email' => $poEmail ));
+        $loEmail = $this->manager->getRepository('SceauBundle:Email')->findOneBy(array('email' => $poEmail));
         if (!empty($loEmail)) {
             if ($this->checkEmailExist($poUser, $loEmail) == false) {
                 throw new \ErrorException(
@@ -351,36 +355,38 @@ class MembreLogger
                 $loEmail->setPrincipal(true);
                 $this->manager->persist($loEmail);
                 $poUser->addEmail($loEmail);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 var_dump('erreur lors de creation des Emails');
             }
         }
         $this->manager->flush();
     }
-    
+
     /**
-     * 
+     *
      * @param type $poUser
      * @param type $poEmail
      * @return boolean
      */
-    public function checkEmailExist($poUser, $poEmail) {
-      
-       foreach ($poUser->getEmails() as $loEmail) {
+    public function checkEmailExist($poUser, $poEmail)
+    {
+
+        foreach ($poUser->getEmails() as $loEmail) {
             if ($poEmail->getEmail() == $loEmail->getEmail()) {
                 return true;
             }
-       }
+        }
         return false;
     }
-    
+
     /**
-     * 
+     *
      * @param type $poUser
      * @param type $poPwd
      * @return boolean
      */
-    public function checkpwd($poUser, $poPwd) {
+    public function checkpwd($poUser, $poPwd)
+    {
         $laPassword = $this->apiDecryptFilter->filter($poUser->getPassword());
         $lsPassword = $laPassword[0];
         if ($poPwd !== $lsPassword) {
@@ -388,14 +394,14 @@ class MembreLogger
         }
         return true;
     }
-    
+
     public function updatePwd($poUser, $poField)
     {
         dump($poField);
-        if ($this->checkpwd($poUser, $poField['password_actuel'])== false) {
+        if ($this->checkpwd($poUser, $poField['password_actuel']) == false) {
             throw new \ErrorException(
-                    'Password Actuel Incorrect'
-                );
+                'Password Actuel Incorrect'
+            );
         } else {
             if ($poField['password_nouveau'] != $poField['conf_password_nouveau']) {
                 throw new \ErrorException(
@@ -411,6 +417,4 @@ class MembreLogger
             }
         }
     }
-
-
 }
