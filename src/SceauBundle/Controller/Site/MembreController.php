@@ -345,4 +345,59 @@ class MembreController extends Controller
         );    
     }
     
+    /**
+    * Action update des preferences
+    * @Route("/membre/home/abonement",
+    *     name="site_home_membre_abonement")
+    * @Method("GET")
+    */
+    public function getAbonnement()
+    {
+        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loManager = $this->getDoctrine()->getManager();
+        $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+        $loAbonement =  $loUser->getNewsletter();
+        return $this->render(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
+                'menu' => 'abonement',
+                'user' => $loUser,
+                'abonement'  => $loAbonement
+            )
+        );    
+    }
+    
+     /**
+    * Action update des preferences
+    * @Route("/membre/home/abonement",
+    *     name="site_home_membre_update_abonement")
+    * @Method("POSt")
+    */
+    public function updateAbonnement()
+    {
+        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loManager = $this->getDoctrine()->getManager();
+        $loRequest = $this->get('request_stack')->getCurrentRequest();
+        $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+        if ($loRequest->isMethod('POST')) {
+            if($loRequest->get('abo_partenaires')!=null)
+            {
+                $loUser->setNewsletter(true);
+            } else 
+            {
+                $loUser->setNewsletter(false);
+            }
+            $this->get('session')->set('confirmation', 'OK');
+            $this->get('session')->set('success', 'abonement');
+        }
+        $loAbonement =  $loUser->getNewsletter();
+        return $this->render(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
+                'menu' => 'abonement',
+                'user' => $loUser,
+                'abonement'  => $loAbonement
+            )
+        );       
+    }
 }

@@ -1,0 +1,50 @@
+<div class="contenu-espace-membre-avec-menu">
+	<div class="mon_compte">
+			<p class="mon-compte-titre">Vos paramètres d'abonnement aux communications FIA-NET</p>
+			<div id="mon-compte-texte-abo-conteneur">
+				<div id="mon-compte-texte-abo">
+					<span style="font-weight:bold;">Nouveautés, astuces, infos pratiques, palmarès des meilleurs e-commerçants FIA-NET :</span><br />
+					Ne manquez rien de l'actualité du e-commerce et inscrivez-vous à la newsletter FIA-NET !
+				</div>
+			</div>
+			{% if abonement == true %}
+                                {%set checked = true%}
+				<p>Vous êtes actuellement abonné à la Newsletter FIA-NET.com « Au cœur du e-commerce ».</p>
+			{% else %}
+                            {%set checked = false%}
+				<p>Vous n'êtes pas actuellement abonné à la Newsletter FIA-NET.com « Au cœur du e-commerce ».</p>
+			{% endif %}
+			<form name="form_abo_news" method="POST" action="{{path('site_home_membre_update_abonement')}}">
+				<input type="checkbox" name="abo_partenaires" value="1" checked="{{checked}}" /> 
+                                  Je souhaite recevoir des offres des partenaires de FIA-NET adaptées à mon profil.
+				<div class="btn-espace-membre-inline">
+                                    <div class="btn-1-main">
+                                        <input type="submit" value="Valider" class="btn-home-regiter" /> 
+                                    </div>
+                                    <div class="btn-1-end"></div>
+				</div>
+				<div id="mon-compte-erreur-abonnements" class="mon-compte-erreur" style="display:none; width:485px;"></div>
+			</form>
+	</div>
+
+	<div class="loi-informatique-liberte">
+            Les données renseignées font l'objet d'un traitement automatisé de données dont la finalité est l'utilisation des différents services FIA-NET associés au service Sceau de confiance. Les destinataires des données sont FIA-NET et ses partenaires.
+	<br />
+	<br />
+            Conformément à la loi Informatique et Libertés du 6 janvier 1978 vous disposez, à tout moment, d'un droit d'accès, de rectification, de suppression et d'opposition à l'ensemble de vos données à caractère personnel soit en écrivant par courrier postal et en justifiant de votre identité, à FIA-NET, Service Informatique et Libertés, Traitement 896150 3/5 rue Saint-Georges 75009 Paris soit via votre espace membre sur le site FIA-NET.
+	</div>
+
+</div>
+<div class="contenu-espace-membre-avec-menu-end"></div>
+
+{% if app.session.get('confirmation') is defined and app.session.get('confirmation') is not null %}
+    {% if app.session.get('success') is defined and app.session.get('success') == 'abonement' %}
+        {% set title = 'Modification effectuée avec succès'%}
+        {% set description = 'Vos préférences ont bien été mises à jour.' %}
+        {% set action = path('site_home_membre_preference') %}
+    {%endif%}
+    
+    
+    {% import "SceauBundle:Site/Popup:success.html.twig" as forms %} 
+        {{ forms.input(title, description, action) }}
+{% endif %}
