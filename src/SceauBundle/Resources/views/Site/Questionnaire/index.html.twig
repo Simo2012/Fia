@@ -6,7 +6,7 @@
     <div class="header-end"></div>
     <div class="main-quest">
         <div class="quest-title">{{ "Votre avis nous intéresse !"|trans({}) }}</div>
-        {{ form_start(form, {attr:{'id':'form_questionnaire'}}) }}
+        {{ form_start(form, {attr:{'id':'questionnaire_reponse'}}) }}
             {{ form_widget(form) }}
             <div class="btn-1 btn-valid-quest">
                 <div class="btn-1-main">
@@ -21,5 +21,50 @@
 </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block JAVASCRIPT %}
+    {{ parent() }}
+    <script>
+        (function(){
+            var linkedQuestions = {{ linkedQuestions|raw }};
+            var form_selector = "#{{ form.vars.id }}";
+
+            var refreshForm = function() {
+                var $form = $(form_selector),
+                    formSerialize = $form.serializeArray();
+
+                var data = {
+                    display_more: true
+                };
+                $.each(formSerialize, function(key, obj) {
+                    console.log(obj);
+                    data[obj.name] = obj.value;
+                });
+
+                $.ajax({
+                    url : $form.attr('action'),
+                    type: $form.attr('method'),
+                    data : data,
+                    success: function(html) {
+                        $form.replaceWith(
+                            $(html).find(form_selector)
+                        );
+                        bindChangeEvent();
+                    }
+                });
+            };
+
+            var bindChangeEvent = function() {
+                $.each(linkedQuestions, function(questionId, responsesId) {
+                    $(form_selector+'_'+questionId+'_reponses').change(function(e){
+                        var val = $(e.target).val();
+                        if (responsesId.indexOf(parseInt(val)) !== -1) {
+                            refreshForm();
+                        }
+                    });
+                });
+            };
+
+            bindChangeEvent();
+        })();
+    </script>
 {% endblock %}

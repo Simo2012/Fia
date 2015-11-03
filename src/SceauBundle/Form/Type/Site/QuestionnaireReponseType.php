@@ -13,8 +13,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class QuestionnaireReponseType extends AbstractType
 {
-    private $tombola   = false;
-    private $livraison = false;
+    private $tombola         = false;
+    private $livraison       = false;
+    private $linkedQuestions = [];
+    private $siteName        = null;
 
     /**
      * {@inheritdoc}
@@ -22,7 +24,7 @@ class QuestionnaireReponseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /** @var \Doctrine\Common\Collections\ArrayCollection $questions */
-        $questions     = $options['questions'];
+        $questions = $options['questions'];
 
         /** @var \SceauBundle\Entity\Questionnaire $questionnaire */
         $questionnaire = $options['questionnaire'];
@@ -31,6 +33,7 @@ class QuestionnaireReponseType extends AbstractType
             $params          = $questionnaire->getQuestionnaireType()->getParametrage();
             $this->tombola   = isset($params['tombola']) ? $params['tombola'] : $this->tombola;
             $this->livraison = isset($params['livraison']) ? $params['livraison'] : $this->livraison;
+            $this->siteName  = $questionnaire->getSite() ? $questionnaire->getSite()->getNom() : $this->siteName;
         }
 
         /** @var \SceauBundle\Entity\Question $question */
@@ -41,14 +44,21 @@ class QuestionnaireReponseType extends AbstractType
                     $questionId = $visible['question_id'];
                     $reponsesId = $visible['reponse_id'];
 
+                    $this->linkedQuestions[$questionId][] = $question->getId();
+
                     if ($builder->has($questionId)) {
                         $builder->get($questionId)->addEventListener(
                             FormEvents::POST_SUBMIT,
-                            function (FormEvent $event) use ($question, $reponsesId) {
-                                $data = $event->getForm()->getData();
+                            function (FormEvent $event) use ($question, $reponsesId, $questionId) {
+                                $form = $event->getForm();
+                                if ($form->has('reponse')) {
+                                    $data = $event->getForm()->get('reponse')->getData();
+                                } else {
+                                    $data = $form->getData();
+                                }
 
                                 if (in_array($data, $reponsesId)) {
-                                    $this->addQuestion($event->getForm()->getParent(), $question);
+                                    $this->addQuestion($event->getForm()->getParent(), $question, $questionId);
                                 }
                             }
                         );
@@ -95,62 +105,84 @@ class QuestionnaireReponseType extends AbstractType
     /**
      * @param FormBuilderInterface|FormInterface $builder
      * @param Question $question
+     * @param integer $parentQuestionId Id de la question décidant de l'affichage de la question courante
      */
-    private function addQuestion($builder, Question $question)
+    private function addQuestion($builder, Question $question, $parentQuestionId = null)
     {
+        // Une réponse peut induire l'affichage de plusieurs questions.
+        // Imaginons qu'une réponse à la question 9 entraine l'affichage des questions 10 et 11
+        // Il faut que la question 11 soit affiché après la question 10 (et non pas la 9 qui est pourtant
+        // son parent
+        // On récupére donc l'id de la dernière question affichée après la question 9, ou la question 9 elle
+        // même si aucun ajout n'a encore été fait.
+        $after = $parentQuestionId;
+        if ($parentQuestionId && isset($this->linkedQuestions[$parentQuestionId])) {
+            $pos = array_search($question->getId(), $this->linkedQuestions[$parentQuestionId]);
+
+            if ($pos) {
+                $after = $this->linkedQuestions[$parentQuestionId][$pos - 1];
+            }
+        }
+        $position = $after ? ['position' => ['after' => $after]] : [];
+
+        // Si une réponse nécessite l'affichage d'un textarea pour précision, on récupére cette information ici.
+        $precisions = $question->responsesNeedPrecision();
+
         switch ($question->getQuestionType()->getId()) {
             case QuestionType::CHOIX_UNIQUE:
-                $builder->add($question->getId(), 'choice', [
-                    'choices'  => $question->getFormUsableResponse(),
-                    'multiple' => false,
-                    'expanded' => true,
-                    'label'    => $question->getLibelle(),
-                    'mapped'   => false,
-                    'required' => false,
-                    'empty_value' => false,
-                ]);
+                $builder->add($question->getId(), 'site_question_choice', [
+                    'multiple'   => false,
+                    'expanded'   => true,
+                    'question'   => $question,
+                    'label'      => $question->getLibelle($this->siteName),
+                    'mapped'     => false,
+                    'required'   => false,
+                    'precisions' => $precisions,
+                ] + $position);
                 break;
             case QuestionType::CHOIX_UNIQUE_SELECT:
                 $builder->add($question->getId(), 'choice', [
-                    'choices'  => $question->getFormUsableResponse(),
-                    'multiple' => false,
-                    'expanded' => false,
-                    'label'    => $question->getLibelle(),
-                    'mapped'   => false,
-                    'required' => false,
+                    'choices'     => $question->getFormUsableResponse(),
+                    'multiple'    => false,
+                    'expanded'    => false,
+                    'label'       => $question->getLibelle($this->siteName),
+                    'mapped'      => false,
+                    'required'    => false,
                     'empty_value' => false,
-                ]);
+                ] + $position);
                 break;
             case QuestionType::CHOIX_MULTIPLE:
-                $builder->add($question->getId(), 'choice', [
-                    'choices'  => $question->getFormUsableResponse(),
-                    'multiple' => true,
-                    'expanded' => true,
-                    'label'    => $question->getLibelle(),
-                    'mapped'   => false,
-                    'required' => false,
-                ]);
+                $builder->add($question->getId(), 'site_question_choice', [
+                    'multiple'   => true,
+                    'expanded'   => true,
+                    'question'   => $question,
+                    'label'      => $question->getLibelle($this->siteName),
+                    'mapped'     => false,
+                    'required'   => false,
+                    'precisions' => $precisions,
+                ] + $position);
                 break;
             case QuestionType::NOTATION:
                 if (($min = $question->getValeurMin()) && ($max = $question->getValeurMax())) {
-                    $builder->add($question->getId(), 'notation', [
+                    $builder->add($question->getId(), 'site_question_notation', [
                         'responses' => $question->getReponses(),
                         'min'       => $question->getValeurMin(),
                         'max'       => $question->getValeurMax(),
-                        'label'     => $question->getLibelle(),
+                        'label'     => $question->getLibelle($this->siteName),
                         'mapped'    => false,
-                        'required' => false,
-                    ]);
+                        'required'  => false,
+                    ] + $position);
                 }
                 break;
             case QuestionType::COMMENTAIRE:
-                $builder->add($question->getId(), 'commentaire', [
-                    'required' => false,
-                    'mapped'   => false,
+                $builder->add($question->getId(), 'site_question_commentaire', [
                     'response' => $question->getReponses()->first(),
-                    'label'    => $question->getLibelle(),
+                    'label'    => $question->getLibelle($this->siteName),
+                    'mapped'   => false,
+                    'required' => false,
                     'tombola'  => $this->tombola,
-                ]);
+                    'site_name' => $this->siteName,
+                ] + $position);
                 break;
             case QuestionType::ETOILE:
             case QuestionType::ETOILE_COMMENTAIRE:

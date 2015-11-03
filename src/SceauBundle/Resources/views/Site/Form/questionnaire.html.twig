@@ -7,6 +7,14 @@
     {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
 {%- endblock form_label -%}
 
+{%- block form_widget_compound -%}
+    {%- if form.parent is empty -%}
+        {{ form_errors(form) }}
+    {%- endif -%}
+    {{- block('form_rows') -}}
+    {{- form_rest(form) -}}
+{%- endblock form_widget_compound -%}
+
 {# question id 2 #}
 {%- block _questionnaire_reponse_1_widget -%}
     <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
