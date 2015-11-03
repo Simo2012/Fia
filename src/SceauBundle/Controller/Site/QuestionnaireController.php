@@ -51,7 +51,7 @@ class QuestionnaireController extends Controller
 
         $form->handleRequest($request);
         $displayMore = $request->get('display_more', false);
-        if ($form->isValid() && ! $displayMore) {
+        if ($form->isValid() && !$displayMore) {
             $this->persistQuestionnaireReponses($form, $questionnaire);
         }
 

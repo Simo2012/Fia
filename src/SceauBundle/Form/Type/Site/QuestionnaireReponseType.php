@@ -50,7 +50,12 @@ class QuestionnaireReponseType extends AbstractType
                         $builder->get($questionId)->addEventListener(
                             FormEvents::POST_SUBMIT,
                             function (FormEvent $event) use ($question, $reponsesId, $questionId) {
-                                $data = $event->getForm()->getData();
+                                $form = $event->getForm();
+                                if ($form->has('reponse')) {
+                                    $data = $event->getForm()->get('reponse')->getData();
+                                } else {
+                                    $data = $form->getData();
+                                }
 
                                 if (in_array($data, $reponsesId)) {
                                     $this->addQuestion($event->getForm()->getParent(), $question, $questionId);

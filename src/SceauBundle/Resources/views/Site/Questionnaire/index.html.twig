@@ -6,7 +6,7 @@
     <div class="header-end"></div>
     <div class="main-quest">
         <div class="quest-title">{{ "Votre avis nous intéresse !"|trans({}) }}</div>
-        {{ form_start(form, {attr:{'id':'form_questionnaire'}}) }}
+        {{ form_start(form, {attr:{'id':'questionnaire_reponse'}}) }}
             {{ form_widget(form) }}
             <div class="btn-1 btn-valid-quest">
                 <div class="btn-1-main">
@@ -30,7 +30,15 @@
 
             var refreshForm = function() {
                 var $form = $(form_selector),
-                    data = $form.serialize() + '&display_more=1';
+                    formSerialize = $form.serializeArray();
+
+                var data = {
+                    display_more: true
+                };
+                $.each(formSerialize, function(key, obj) {
+                    console.log(obj);
+                    data[obj.name] = obj.value;
+                });
 
                 $.ajax({
                     url : $form.attr('action'),
