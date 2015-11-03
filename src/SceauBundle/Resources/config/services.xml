@@ -1,4 +1,3 @@
-
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
@@ -119,8 +118,8 @@
         </service>
         
         <!-- Appler la formulaire coordonnes du membre -->
-        <service id="sceau.site.user.form.coordonnees" class="SceauBundle\Form\Type\Site\User\CoordonneeType">
-            <tag name="form.type" alias="sceauSiteUserFormCoordonnees" />
+       <service id="sceauSiteUserFormCoordonnees" class="SceauBundle\Form\Type\Site\User\CoordonneeType">
+            <tag name="form.type" alias="coordonnees" />
         </service>
     </services>
 </container>
