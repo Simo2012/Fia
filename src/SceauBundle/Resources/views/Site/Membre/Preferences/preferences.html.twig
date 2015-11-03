@@ -1,0 +1,48 @@
+<div class="contenu-espace-membre-avec-menu">
+    <div class="contenu-espace-membre-accueil-litige">
+        <form id="form_preference" name="form_preference" method="POST" action="{{path('site_home_membre_add_preference')}}">
+
+
+            <h1 class="titre-espace-questionnaires">Gérer vos préférences</h1>
+            <p>
+                Notre objectif : vous satisfaire. Pour cela nous souhaitons vous envoyer du contenu qui vous intéresse.<br/>
+                Vous pouvez à tout moment changer de formule ou vous désinscrire
+            </p>
+
+            <h2>Vos préférences</h2>
+            
+                {% for categorie in categories %} 
+                    
+                    <div style="float: left;width: 230px">
+                        {% if categorie.id in preference|keys %}
+                            <input type="checkbox" value="{{categorie.id}}" name="preference[]" checked="true" /> {{categorie.libelle}}
+                        {% else %}
+                            <input type="checkbox" value="{{categorie.id}}" name="preference[]" /> {{categorie.libelle}}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            <div class="btn-espace-membre-inline" style="float: left;width: 100%;margin-top: 15px">
+                    <div class="btn-1-main">
+                        <input type="submit" value="Valider" class="btn-home-regiter" /> 
+                    </div>
+                    <div class="btn-1-end"></div>
+            </div>
+            <input name="form_preference" value="1" type="hidden" />
+        </form>
+
+    </div>
+
+</div>
+<div class="contenu-espace-membre-avec-menu-end"></div>
+
+{% if app.session.get('confirmation') is defined and app.session.get('confirmation') is not null %}
+    {% if app.session.get('success') is defined and app.session.get('success') == 'preference' %}
+        {% set title = 'Modification effectuée avec succès'%}
+        {% set description = 'Vos préférences ont bien été mises à jour.' %}
+        {% set action = path('site_home_membre_preference') %}
+    {%endif%}
+    
+    
+    {% import "SceauBundle:Site/Popup:success.html.twig" as forms %} 
+        {{ forms.input(title, description, action) }}
+{% endif %}

@@ -25,6 +25,8 @@
             {% set locations = ['Accueil','F.A.Q.'] %}
         {% elseif menu == 'home-membre'%}
             {% set locations = ['Accueil','Espace Membre'] %}
+        {% elseif menu == 'preference'%}
+            {% set locations = ['Accueil','Espace Membre', 'Mes Préférences'] %}  
         {% endif %}
         {% if locations is defined %}
             {% import "SceauBundle:Site/Common:location.html.twig" as forms %}
@@ -95,6 +97,13 @@
                     {{ include('SceauBundle:Site/Membre:menumembre.html.twig') }}
                 </div>
                 {% include "SceauBundle:Site/Membre:compte.html.twig" %}
+            {% elseif  menu == 'preference'%}
+                <div class="block-menugche">
+                    {{ include('SceauBundle:Site/Membre:menumembre.html.twig') }}
+                </div>
+                {% include "SceauBundle:Site/Membre/Preferences:preferences.html.twig" %}
+                    
+                
             {% else %}
                 {% include "SceauBundle:Site/Footer:politique.html.twig" %}
             {% endif %}

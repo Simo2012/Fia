@@ -34,11 +34,12 @@ class HomeController extends Controller
     {
         $loManager = $this->getDoctrine()->getManager();
         $loUser = null;
-        if ($loPseudoMembre = $this->get('security.context')->getToken()) {
-            $loUser = $loManager->getRepository('SceauBundle:Membre')
-                ->getByPseudo($this->get('security.context')->getToken()->getUser());
+        if ($this->get('security.token_storage')->getToken()!=null) {
+            $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
+            if ($loPseudoMembre != 'anon.') {
+                $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+            }
         }
-
         //Recuperer Site Prenium
         /**$loMembreLogger = $this->container->get('sceau.site.home.home_prenium');**/
         $lsPrenium = $this->container->get('sceau.site.home.home_prenium');

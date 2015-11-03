@@ -394,10 +394,16 @@ class MembreLogger
         }
         return true;
     }
-
+    
+    
+    /**
+     * 
+     * @param type $poUser
+     * @param type $poField
+     * @throws \ErrorException
+     */
     public function updatePwd($poUser, $poField)
     {
-        dump($poField);
         if ($this->checkpwd($poUser, $poField['password_actuel']) == false) {
             throw new \ErrorException(
                 'Password Actuel Incorrect'
@@ -416,5 +422,48 @@ class MembreLogger
                 $this->manager->flush($poUser);
             }
         }
+    }
+    
+    /**
+     * 
+     * @param type $poUser
+     * @return type
+     */
+    public function getPreferences($poUser)
+    {
+        $loPreference = $poUser->getPreference();
+        $laPreference = null;
+        for ($i=0; $i<strlen($loPreference); $i++)
+        {
+            if(
+                $loPreference[$i] != '{' && 
+                $loPreference[$i] != '}' && 
+                $loPreference[$i] != ','
+            ) {
+                $laPreference[] = $loPreference[$i];
+            }
+        }
+        //dump($laPreference);
+        return $laPreference;
+    }
+    
+    public function savePreference($poUser, $paPreference)
+    {
+       
+        $loPreference = '{';
+        $count = count($paPreference);
+        $pos = 1;
+        foreach ($paPreference as $preference) {
+            $loPreference .= $preference;
+            if($pos != $count) {
+                $loPreference .= ',';
+            }
+            $pos++; 
+        }
+        $loPreference .= '}';
+        dump($loPreference);
+        $poUser->setPreference($loPreference);
+        $this->manager->flush($poUser);
+        
     }
 }

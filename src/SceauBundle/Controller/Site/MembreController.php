@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SceauBundle\Form\Type\Site\User\UpdateType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use SceauBundle\Form\Type\Site\User\PreferenceType;
 
 /**
  * Contrôleur Membre : pages relatives aux action de membre
@@ -266,8 +267,6 @@ class MembreController extends Controller
                 'password_nouveau' => $loRequest->get('password_nouveau'),
                 'conf_password_nouveau' => $loRequest->get('conf_password_nouveau')
             );
-            //dump($loRequest->get('site_membre_update_pwd'));
-            //$loField =  $loRequest->get('form_password');
             $loMembreLogger->updatePwd($loUser, $loField);
         }
         $loEmailSecondaire = $loManager->getRepository('SceauBundle:Membre')->getEmailsSecondaires($loUser->getId());
@@ -284,4 +283,66 @@ class MembreController extends Controller
             )
         );
     }
+    //site_home_membre_add_preference
+    
+    /**
+    * Action appeler des preferences
+    * @Route("/membre/home/preference",
+    *     name="site_home_membre_preference")
+    * @Method("GET")
+    */
+    public function callPreference()
+    {
+        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loManager = $this->getDoctrine()->getManager();
+        $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+        //Recuperer les categories disponibles
+        $loCategories = $loManager->getRepository('SceauBundle:Categorie')->getActifCategories();
+        $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
+        $loPreference = $loMembreLogger->getPreferences($loUser);
+        return $this->render(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
+                'menu' => 'preference',
+                'user' => $loUser,
+                'categories' => $loCategories,
+                'preference'  => $loPreference
+            )
+        );    
+    }
+    
+    /**
+    * Action update des preferences
+    * @Route("/membre/home/preference_update",
+    *     name="site_home_membre_add_preference")
+    * @Method("POST")
+    */
+    public function updatePreference()
+    {
+        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loManager = $this->getDoctrine()->getManager();
+        $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+        $loRequest = $this->get('request_stack')->getCurrentRequest();
+        //Recuperer les categories disponibles
+        $loCategories = $loManager->getRepository('SceauBundle:Categorie')->getActifCategories();
+        $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
+        if ($loRequest->isMethod('POST')) {
+            $loPreferences = $loRequest->get('preference');
+            $loMembreLogger->savePreference($loUser, $loPreferences);
+            $this->get('session')->set('confirmation', 'OK');
+            $this->get('session')->set('success', 'preference');
+        }
+       
+        $loPreference = $loMembreLogger->getPreferences($loUser);
+        return $this->render(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
+                'menu' => 'preference',
+                'user' => $loUser,
+                'categories' => $loCategories,
+                'preference'  => $loPreference
+            )
+        );    
+    }
+    
 }
