@@ -141,11 +141,11 @@ class QuestionnaireController extends Controller
                     if (!empty($notes) && isset($notes[$reponseId])) {
                         $questionnaireReponse->setNote($notes[$reponseId]);
                     }
-                    //$this->getDoctrine()->getManager()->persist($questionnaireReponse);
+                    $this->getDoctrine()->getManager()->persist($questionnaireReponse);
                 }
             }
         }
 
-        //$this->getDoctrine()->getManager()->flush();
+        $this->getDoctrine()->getManager()->flush();
     }
 }
