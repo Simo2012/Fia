@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Avatar
  *
  * @ORM\Table(name="Avatar")
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\AvatarRepository")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\AvatarRepository")
  */
 class Avatar
 {

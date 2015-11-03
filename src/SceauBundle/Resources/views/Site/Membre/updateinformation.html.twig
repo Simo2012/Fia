@@ -1,31 +1,31 @@
-<form  action="#" method="post">    
+<form  action="{{path('site_member_update')}}" method="post">    
     <input type="hidden" name="form_coord">
-        
+     <div id="update-formulaire">    
         {{ form_start(form) }}
-        <div class='registre-avatar'>
-            {% include 'SceauBundle:Site/Security:avatar.html.twig' %}
-        </div>
+           
+
+    
         {{ form_row(form.civilite) }}
         {{ form_row(form.nom) }}
         {{ form_row(form.prenom) }}
-        {{ form_row(form.email) }}
+        {{ form_row(form.activiteprofessionnelle) }}
+        {{ form_row(form.situationfamiliale) }}
+        {{ form_row(form.trancheAge) }}
         {{ form_row(form.pseudo) }}
-        {{ form_row(form.pays) }}
-            <div id="coordonnes">
-                {{ form_row(form.adresse) }}
-                {{ form_row(form.compAdresse) }}
-                {{ form_row(form.codePostal) }}
-                {{ form_row(form.ville) }}
-            </div>    
-    </div>
-    <div class='{{classFormulairepartenaires}}'>
-        {{ form_row(form.legal) }}
-    </div>
-    {% if menu == 'tombola' %}
-        <div id="tombola-error">Vous Pouvez Pas participer au tombola puisque vous étes pas en france</div>
-    {% endif %}
+        {{ form_row(form.coordonnee.pays) }}
+        <div id="coordonnes">
+            {{ form_row(form.coordonnee.adresse) }}
+            {{ form_row(form.coordonnee.compAdresse) }}
+            {{ form_row(form.coordonnee.codePostal) }}
+            {{ form_row(form.coordonnee.ville) }}
+            {{ form_row(form.coordonnee.telephoneFixe) }}
+            {{ form_row(form.coordonnee.telephoneMobile) }}
+        </div>
+         {% include 'SceauBundle:Site/Membre:avatar.html.twig' %}
+     </div>
+
     <div class="btn-espace-membre">
-        <div class="btn-1-main" id="btn-tombola">
+        <div class="btn-1-main">
             <input type="submit" value="Valider" class="btn-home-regiter" /> 
         </div>
 	<div class="btn-1-end"></div>
@@ -36,3 +36,4 @@
     
    
 </form>
+    

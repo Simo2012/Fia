@@ -195,9 +195,7 @@ class MembreLogger
     * @throws DBALException
     */
     public function saveCoordonnées($poField) {
-        dump($poField);
         $loPays = $this->manager->getRepository('SceauBundle:Pays')->find($poField['pays']);
-        dump($loPays);
         $loCoordonnees =  new Coordonnee();
          try {
             $loCoordonnees->setAdresse($poField['adresse']);
@@ -218,12 +216,37 @@ class MembreLogger
     * Sauvgarder Coordonnées
     * 
     * @param $poField
+    * @$return Coordonnees
+    * @throws DBALException
+    */
+    public function updateCoordonnées($poField) {
+        $loPays = $this->manager->getRepository('SceauBundle:Pays')->find($poField['coordonnee']['pays']);
+        $loCoordonnees =  new Coordonnee();
+         try {
+            $loCoordonnees->setAdresse($poField['coordonnee']['adresse']);
+            $loCoordonnees->setCodePostal($poField['coordonnee']['codePostal']);
+            $loCoordonnees->setCompAdresse($poField['coordonnee']['compAdresse']);
+            $loCoordonnees->setVille($poField['coordonnee']['ville']);
+            $loCoordonnees->setPays($loPays);
+            $this->manager->persist($loCoordonnees);
+            $this->manager->flush();
+        } catch(\Exception $e) {
+            var_dump('erreur lors de creation des Coordonnées');
+        }
+        
+        return $loCoordonnees;
+    }
+    
+    /**
+    * Sauvgarder Coordonnées
+    * 
+    * @param $poField
     * @$return Email
     * @throws DBALException
     */
     public function saveEmail($poField) {
         $loEmail = new Email();
-        dump($poField);
+        
         try {
             $loEmail->setEmail($poField['email']['first']);
             $loEmail->setPrincipal(true);
@@ -277,5 +300,117 @@ class MembreLogger
         return $loPercentage;
         
     }
+    
+    /**
+     * 
+     * @param type $poEmail
+     * @return Email
+     * @throws \ErrorException
+     */
+    public function saveEmailSecondaire($poEmail)
+    {
+        $loEmail = $this->manager->getRepository('SceauBundle:Email')->findBy(array('email' => $poEmail ));
+        if (!empty($loEmail)) {
+            throw new \ErrorException(
+                'Email Exist déja'
+            );
+        }
+        $loEmail = new Email();
+        try {
+            $loEmail->setEmail($poEmail);
+            $loEmail->setPrincipal(false);
+            $this->manager->persist($loEmail);
+            $this->manager->flush();
+        } catch(\Exception $e) {
+            var_dump('erreur lors de creation des Emails');
+        }
+        return $loEmail;
+    }
+    
+    /**
+     * 
+     * @param type $poEmail
+     * @param type $poUser
+     * @throws \ErrorException
+     */
+    public function saveEmailPrincipale($poEmail, $poUser)
+    {
+        $loEmail = $this->manager->getRepository('SceauBundle:Email')->findOneBy(array('email' => $poEmail ));
+        if (!empty($loEmail)) {
+            if ($this->checkEmailExist($poUser, $loEmail) == false) {
+                throw new \ErrorException(
+                    'Email Exist déja'
+                );
+            } else {
+                $loEmail->setPrincipal(true);
+            }
+        } else {
+            $loEmail = new Email();
+            try {
+                $loEmail->setEmail($poEmail);
+                $loEmail->setPrincipal(true);
+                $this->manager->persist($loEmail);
+                $poUser->addEmail($loEmail);
+            } catch(\Exception $e) {
+                var_dump('erreur lors de creation des Emails');
+            }
+        }
+        $this->manager->flush();
+    }
+    
+    /**
+     * 
+     * @param type $poUser
+     * @param type $poEmail
+     * @return boolean
+     */
+    public function checkEmailExist($poUser, $poEmail) {
+      
+       foreach ($poUser->getEmails() as $loEmail) {
+            if ($poEmail->getEmail() == $loEmail->getEmail()) {
+                return true;
+            }
+       }
+        return false;
+    }
+    
+    /**
+     * 
+     * @param type $poUser
+     * @param type $poPwd
+     * @return boolean
+     */
+    public function checkpwd($poUser, $poPwd) {
+        $laPassword = $this->apiDecryptFilter->filter($poUser->getPassword());
+        $lsPassword = $laPassword[0];
+        if ($poPwd !== $lsPassword) {
+            return false;
+        }
+        return true;
+    }
+    
+    public function updatePwd($poUser, $poField)
+    {
+        dump($poField);
+        if ($this->checkpwd($poUser, $poField['password_actuel'])== false) {
+            throw new \ErrorException(
+                    'Password Actuel Incorrect'
+                );
+        } else {
+            if ($poField['password_nouveau'] != $poField['conf_password_nouveau']) {
+                throw new \ErrorException(
+                    'Les Mots de passes sont différents'
+                );
+            } else {
+                //$poUser->setPassword($poField['myPassword']);
+                dump($poField['password_nouveau']);
+                $loEncoder = $this->factory->getEncoder($poUser);
+                $lsPassword = $loEncoder->encodePassword($poField['password_nouveau'], $poUser->getSalt());
+                $poUser->setPassword($lsPassword);
+                $this->manager->flush($poUser);
+            }
+        }
+    }
+
 
 }

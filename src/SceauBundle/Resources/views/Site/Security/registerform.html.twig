@@ -2,10 +2,12 @@
         {% set classFormulaire = 'inscription-formulaire-tombola' %}
         {% set action = path('site_member_register_tombola') %}
         {% set classFormulairepartenaires = 'div_partenaires-tombola' %}
+        {% set button = 'btn-tombola'%}
     {% else %} 
          {% set classFormulaire = 'inscription-formulaire' %}
          {% set action = path('site_member_register') %}
         {% set classFormulairepartenaires = 'div_partenaires' %}
+        {% set button = '' %}
     {%  endif %}
 <form  action="{{action}}" method="post">    
     <input type="hidden" name="formulaireinscription" valuek="1">

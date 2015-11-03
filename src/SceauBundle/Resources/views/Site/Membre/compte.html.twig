@@ -16,7 +16,7 @@
             Si des informations sont inexactes, manquantes, ou ont changé, il vous suffit de les renseigner puis de valider ce formulaire.<br />
             <span style="color:#FF0000;">Seuls les champs suivis d'un * sont obligatoires.</span><br />
             <br />
-            {% include "SceauBundle:Site/Security:registerform.html.twig" %}
+            {% include "SceauBundle:Site/Membre:updateinformation.html.twig" %}
         </div>
 
         <hr class="mon-compte-separation-petite" />
@@ -32,7 +32,7 @@
         
         
         <div id="div_form_emails_supp" style="display:none;" class="mon-compte-div-hidden">
-            Email
+            {% include "SceauBundle:Site/Membre:addEmail.html.twig" %}
         </div>
         
         
@@ -49,7 +49,7 @@
         
         
         <div id="div_form_login" style="display:none;" class="mon-compte-div-hidden">
-            Identifiant
+             {% include "SceauBundle:Site/Membre:updateEmailPrincipale.html.twig" %}
         </div>
 
         <hr class="mon-compte-separation-petite" />
@@ -65,7 +65,9 @@
         
         
         <div id="div_form_password" style="display:none;" class="mon-compte-div-hidden">
-            password
+                
+            {% include "SceauBundle:Site/Membre:updatePassword.html.twig" %}
+
         </div>
 
 
@@ -81,3 +83,44 @@
 
 </div>
 <div class="contenu-espace-membre-avec-menu-end"></div>
+
+{% if app.session.get('confirmation') is defined and app.session.get('confirmation') is not null %}
+    {% if app.session.get('success') is defined and app.session.get('success') == 'AjoutEmail' %}
+        {% set title = 'Modification effectuée avec succès'%}
+        {% set description = 'Vous allez recevoir un e-mail à l\'adresse indiquée.
+            Pour valider définitivement cette adresse, merci de cliquer sur le lien de confirmation présent dans le contenu de l\'e-mail.' %}
+        {% set action = path('site_home_membre_compte') %}
+    {% elseif app.session.get('success') is defined and app.session.get('success') == 'EmailPrincipale' %}
+        {% set title = 'Modification effectuée avec succès'%}
+        {% set description = 'Votre nouveau login a bien été enregistré. Cependant, il n\'est pas actif pour l\'instant.
+                    Afin de le valider, merci de cliquer sur le lien de confirmation qui vient de vous être envoyé par e-mail.' %}
+        {% set action = path('site_home_membre_compte') %}
+    {% elseif app.session.get('success') is defined and app.session.get('success') == 'Passwrod' %}
+        {% set title = 'Modification effectuée avec succès'%}
+        {% set description = 'Votre mot de passe a bien été modifié.
+Vous allez recevoir un e-mail contenant votre nouveau mot de passe. Merci de le conserver dans vos archives.' %}
+        {% set action = path('site_home_membre_compte') %}
+    {%endif%}
+    
+    
+    {% import "SceauBundle:Site/Popup:success.html.twig" as forms %} 
+        {{ forms.input(title, description, action) }}
+{% endif %}
+
+
+ {% javascripts
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'
+            'bundles/sceau/js/site/user/strength.js'
+ %}
+            <script src="{{ asset_url }}" type="text/javascript"></script>
+            <script>
+$(document).ready(function($) {
+	
+$('#myPassword').strength({
+            strengthClass: 'strength',
+            strengthMeterClass: 'strength_meter',
+            strengthButtonClass: 'button_strength',
+        });
+});
+</script>
+{% endjavascripts %}

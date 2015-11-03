@@ -1,9 +1,10 @@
-<label> Avatar :</label>
-<div class="choose-avatar" onclick="showPopupAvatar()">
+<div class="choose-avatar" id="choose-avatar-update" onclick="showPopupAvatar()">
     <div class="title-avatar">Choisissez votre <br> avatar :</div>
     <div id="img_avatar" class="img_avatar"></div>
 </div>
-<input type="hidden" name="AvatarID" id="AvatarID" value='{$avatarID}' >
+
+    {% set avatarID = form_widget(form.avatar) %}
+<input type="hidden" name="AvatarID" id="AvatarID" value='{{avatarID}}' >
 
 <div id="avatar-popup" title="Selectionner votre avatar">
 	<img src="{{ asset('bundles/sceau/images/site/common/icons-avatar.png') }}" alt="Planets" usemap="#map-avatar" onclick="showPopup()">

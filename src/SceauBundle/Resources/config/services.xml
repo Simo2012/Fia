@@ -116,6 +116,12 @@
         <service id="sceau.site.user.encode.password" class="SceauBundle\Model\Common\Encoder\MembrePasswordEncoder">
             <argument type="service" id="sceau.api.filter.Encrypt"/>
         </service>
+        
+        <!-- Appler la formulaire coordonnes du membre -->
+        
+        <service id="sceau.site.user.form.coordonnees" class="SceauBundle\Form\Type\Site\User\CoordonneeType">
+            <tag name="form.type" alias="sceauSiteUserFormCoordonnees" />
+        </service>
     </services>
 
 </container>

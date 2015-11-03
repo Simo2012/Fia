@@ -41,4 +41,27 @@ class MembreRepository extends EntityRepository
         return $loQuery->getQuery()->getOneOrNullResult();
         
     }
+    
+    public function getEmailsSecondaires($poIdUser) {
+         $loQuery = $this->createQueryBuilder('m')
+                        ->select('m, e')
+                        ->join('m.emails', 'e')
+                        ->Where('m.id = :id')
+                        ->andWhere('e.principal = false')
+                        ->setParameter('id', $poIdUser);
+         
+         return $loQuery->getQuery()->getArrayResult();    
+    }
+    
+    public function getEmailsPrincipale($poIdUser) {
+         $loQuery = $this->createQueryBuilder('m')
+                        ->select('m, e')
+                        ->join('m.emails', 'e')
+                        ->Where('m.id = :id')
+                        ->andWhere('e.principal = true')
+                        ->setParameter('id', $poIdUser);
+         
+         return $loQuery->getQuery()->getOneOrNullResult(); 
+    }
+    
 }

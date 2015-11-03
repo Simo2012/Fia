@@ -1,0 +1,42 @@
+<div class="mon-compte-email-supp-conteneur">
+    {% for email in emails[0].emails %} 
+    
+    <div class="email-supp">
+        <span class="email-supp-libelle">
+            {{email.email}}
+        </span> 
+        {% if email.dateConfirmation is not null %}
+            <span class="email-supp-valide">
+                (Validée)
+            </span>
+        {% else %}
+             <span class="email-supp-non-valide">
+                 (En attente de validation)
+             </span>
+        {% endif %}
+        </div>
+        <div class="btn-espace-membre-inline" id="deleteEmail" data-path="{{path('site_member_delete_email')}}">
+            <div class="btn-1-main">
+                <a onclick="SuprimerEmail({{email.id}})" href="#" class="btn-1-link" >
+                    <img width="6" height="10" src="{{ asset('bundles/sceau/images/site/home/picto_btn_chevron.png') }}" />  SUPPRIMER
+                </a>
+            </div>
+            <div class="btn-1-end"></div>
+        </div>
+         <br>    
+        
+    {% endfor %}
+    <br>
+    
+      <form name="form_emails_supp" method="POST" action="{{path('site_member_add_email')}}">
+            <input type="email" name="email" id="email" maxlength="255" size="50" placeholder="Entrez votre adresse ici"/>
+                <div class="btn-espace-membre-inline">
+                    <div class="btn-1-main">
+                        <input type="submit" value="Ajouter" class="btn-home-regiter" /> 
+                    </div>
+                    <div class="btn-1-end"></div>
+                </div>
+        </form>
+</div>
+
+                

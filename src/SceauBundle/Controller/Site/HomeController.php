@@ -126,8 +126,8 @@ class HomeController extends Controller
                 $loManager->flush();
                 $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(3);
                 /** Envoyer vers la page NewsLetter **/
-                $this->get('session')->set('confirmation',$loNewletters);
-                return $this->render("SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'newsletter', 'user' => $loUser));
+                $this->get('session')->set('confirmation','OK');
+                return $this->render("SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'site_operation_news', 'user' => $loUser));
             }
         }
         return $this->render("SceauBundle:Site/Security:test.html.twig"); 

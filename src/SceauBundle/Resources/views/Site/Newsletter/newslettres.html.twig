@@ -30,7 +30,6 @@
 
     <div class="main-nl-form-bottom">
     </div>
-
     {% include "SceauBundle:Site/Common:dataprotection.html.twig" %}
     {% if app.session.get('confirmation') is defined and app.session.get('confirmation') is not null %}
         {{ include ("SceauBundle:Site/Newsletter:success-subscription.html.twig", {'user' : user}) }}
@@ -40,7 +39,6 @@
 
     <div class="div-vignette-newsletter">
         <h1 class="titre-vignette-newsletter">Archives Newsletter</h1>
-        {% dump(newsletters) %}
         {% for newsletter in newsletters %} 
             {% import "SceauBundle:Site/Newsletter:newslettre.html.twig" as forms %}
             {{ forms.input(newsletter.titre, newsletter.url, newsletter.urlVignette) }}		

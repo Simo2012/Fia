@@ -2846,8 +2846,7 @@ button.go em.type {
 	font-weight: bold;
 }
 .mon-compte-titre {
-	background-image: url('"/img/extranet/puce.png"');
-	background-repeat: no-repeat;
+        background: url(../../../images/site/home-membre/puce.png) no-repeat;
 	color: #DC0032;
 	font-weight: bold;
 	font-size: 13px;
@@ -2882,6 +2881,20 @@ button.go em.type {
 #div_form_coord label {
 	display: inline-block;
 	width: 150px;
+}
+#site_member_register_civilite label {
+        margin-bottom: 15px;
+	width: 200px;
+	margin-top: 15px;
+        width: 50px;
+        float: left;
+}
+#site_member_update_civilite label {
+        margin-bottom: 15px;
+	width: 200px;
+	margin-top: 15px;
+        width: 50px;
+        float: left;
 }
 #div_form_coord #info-pseudo {
 	margin-left: 5px;
@@ -3089,6 +3102,13 @@ button.go em.type {
 	margin-top: 10px;
 }
 
+#update-formulaire {
+	float: left;
+}
+#update-formulaire div {
+	margin-top: 10px;
+}
+
 #inscription-formulaire-tombola {
 	float: left;
 }
@@ -3100,6 +3120,16 @@ button.go em.type {
     float: left;
 }
 #site_member_register_civilite label {
+        margin-bottom: 15px;
+	width: 200px;
+	margin-top: 15px;
+        width: 50px;
+        float: left;
+}
+#site_member_update_civilite {
+    float: left;
+}
+#site_member_update_civilite label {
         margin-bottom: 15px;
 	width: 200px;
 	margin-top: 15px;
@@ -3123,6 +3153,10 @@ button.go em.type {
 	margin-left: 10px;
         float: left;
 }
+#site_member_update_civilite input[type=radio] {
+	margin-left: 10px;
+        float: left;
+}
 .g-recaptcha {
  float : left;   
 }
@@ -3138,6 +3172,36 @@ button.go em.type {
 #inscription-formulaire #captcha {
 	vertical-align: middle;
 }
+
+#update-formulaire label {
+	display: block;
+        width: 150px;
+        float: left;
+        margin-top: 15px;
+}
+#update-formulaire-tombola label {
+	display: block;
+        width: 150px;
+        float: left;
+        margin-top: 15px;
+}
+
+.update-avatar {
+    float: right;
+    margin-top: 250px;
+}
+#update-formulaire input {
+	margin-top: 14px;
+}
+#update-formulaire input[type=radio] {
+	margin-left: 10px;
+}
+#update-formulaire select {
+	margin-top: 14px;
+}
+
+
+
 #inscription-formulaire #captcha-texte {
 	margin-left: 30px;
 }
@@ -7775,7 +7839,17 @@ a.footer_certification_afnor_lien, a.footer_certification_afnor_lien:hover {
 
 
 
-#div_form_coord .choose-avatar {float:right}
+#div_form_coord .choose-avatar {float:right;
+margin-top: -550px;
+margin-right: -80px;
+}
+#div_form_coord .choose-avatar-hide{float:right;
+margin-top: -280px;
+margin-right: -80px;
+background-color: #978b90;
+    border-radius: 10px;
+    padding: 5px;
+}
 
 /********** FIN AVATAR **************/
 
