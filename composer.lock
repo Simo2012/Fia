@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6d0f2b0a820427c6ef710fac4110849a",
-    "content-hash": "6e92ba27266eaf084556d592411e0d64",
+    "hash": "16bd7bd039e4021657b9090c13c9a1b6",
     "packages": [
         {
             "name": "afarkas/html5shiv",
@@ -79,18 +78,18 @@
             "time": "2015-09-28 16:26:35"
         },
         {
-            "name": "cmen/google-charts",
+            "name": "cmen/google-charts-bundle",
             "version": "dev-master",
             "target-dir": "CMEN/GoogleChartsBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cmen/CMENGoogleChartsBundle.git",
-                "reference": "9f7f449b731066e37c7c724acad04b7553d207d1"
+                "reference": "012825c7465628abea3d4bba1c0e2cde26f4db5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cmen/CMENGoogleChartsBundle/zipball/5c3f50a0cf69626c89d29ed42c4b8d462de59225",
-                "reference": "9f7f449b731066e37c7c724acad04b7553d207d1",
+                "url": "https://api.github.com/repos/cmen/CMENGoogleChartsBundle/zipball/012825c7465628abea3d4bba1c0e2cde26f4db5b",
+                "reference": "012825c7465628abea3d4bba1c0e2cde26f4db5b",
                 "shasum": ""
             },
             "require": {
@@ -116,7 +115,7 @@
                 "charts",
                 "google"
             ],
-            "time": "2015-10-11 09:32:20"
+            "time": "2015-11-01 10:49:05"
         },
         {
             "name": "components/jquery",
@@ -315,16 +314,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.4.2",
+            "version": "v1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "8c434000f420ade76a07c64cbe08ca47e5c101ca"
+                "reference": "2b9cec5a5e722010cbebc91713d4c11eaa064d5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/8c434000f420ade76a07c64cbe08ca47e5c101ca",
-                "reference": "8c434000f420ade76a07c64cbe08ca47e5c101ca",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/2b9cec5a5e722010cbebc91713d4c11eaa064d5e",
+                "reference": "2b9cec5a5e722010cbebc91713d4c11eaa064d5e",
                 "shasum": ""
             },
             "require": {
@@ -345,8 +344,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\Cache\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\Cache\\": "lib/Doctrine/Common/Cache"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -381,7 +380,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-08-31 12:36:41"
+            "time": "2015-11-02 18:35:48"
         },
         {
             "name": "doctrine/collections",
@@ -1891,17 +1890,17 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v3.0.31",
+            "version": "v3.0.33",
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "3a900814bd57bf20f9453ae81ff8772bc95d7fff"
+                "reference": "63245e12c948bf50278383e70fd5d6841af17e17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/3a900814bd57bf20f9453ae81ff8772bc95d7fff",
-                "reference": "3a900814bd57bf20f9453ae81ff8772bc95d7fff",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/63245e12c948bf50278383e70fd5d6841af17e17",
+                "reference": "63245e12c948bf50278383e70fd5d6841af17e17",
                 "shasum": ""
             },
             "require": {
@@ -1947,7 +1946,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2015-08-03 10:07:12"
+            "time": "2015-10-27 18:46:42"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -2289,16 +2288,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.7.5",
+            "version": "v2.7.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "619528a274647cffc1792063c3ea04c4fa8266a0"
+                "reference": "66b2e9662c44d478b69e48278aa54079a006eb42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/619528a274647cffc1792063c3ea04c4fa8266a0",
-                "reference": "619528a274647cffc1792063c3ea04c4fa8266a0",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/66b2e9662c44d478b69e48278aa54079a006eb42",
+                "reference": "66b2e9662c44d478b69e48278aa54079a006eb42",
                 "shasum": ""
             },
             "require": {
@@ -2361,8 +2360,7 @@
                 "egulias/email-validator": "~1.2",
                 "ircmaxell/password-compat": "~1.0",
                 "monolog/monolog": "~1.11",
-                "ocramius/proxy-manager": "~0.4|~1.0",
-                "symfony/phpunit-bridge": "self.version"
+                "ocramius/proxy-manager": "~0.4|~1.0"
             },
             "type": "library",
             "extra": {
@@ -2407,7 +2405,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-09-25 11:16:52"
+            "time": "2015-10-27 19:07:24"
         },
         {
             "name": "twig/extensions",
@@ -2463,16 +2461,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.22.3",
+            "version": "v1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "ebfc36b7e77b0c1175afe30459cf943010245540"
+                "reference": "5868cd822fd6cf626d5f805439575f9c323cee2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ebfc36b7e77b0c1175afe30459cf943010245540",
-                "reference": "ebfc36b7e77b0c1175afe30459cf943010245540",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/5868cd822fd6cf626d5f805439575f9c323cee2a",
+                "reference": "5868cd822fd6cf626d5f805439575f9c323cee2a",
                 "shasum": ""
             },
             "require": {
@@ -2485,7 +2483,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.22-dev"
+                    "dev-master": "1.23-dev"
                 }
             },
             "autoload": {
@@ -2520,7 +2518,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-10-13 07:07:02"
+            "time": "2015-10-29 23:29:01"
         },
         {
             "name": "white-october/pagerfanta-bundle",
@@ -2666,58 +2664,6 @@
     ],
     "packages-dev": [
         {
-            "name": "egeloen/json-builder",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/egeloen/ivory-json-builder.git",
-                "reference": "3d3b2d4832b81e4758c1ee7d74247da0b372a6c8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/egeloen/ivory-json-builder/zipball/3d3b2d4832b81e4758c1ee7d74247da0b372a6c8",
-                "reference": "3d3b2d4832b81e4758c1ee7d74247da0b372a6c8",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=5.3.0",
-                "symfony/property-access": "~2.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "~0.6"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Ivory\\JsonBuilder\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Eric GELOEN",
-                    "email": "geloen.eric@gmail.com"
-                }
-            ],
-            "description": "JSON builder with escaping control for PHP 5.3+",
-            "keywords": [
-                "Escape",
-                "builder",
-                "json"
-            ],
-            "time": "2014-12-29 20:25:20"
-        },
-        {
             "name": "sensio/generator-bundle",
             "version": "v2.5.3",
             "target-dir": "Sensio/Bundle/GeneratorBundle",
@@ -2770,7 +2716,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "willdurand/faker-bundle": 0,
-        "cmen/google-charts": 20
+        "cmen/google-charts-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
