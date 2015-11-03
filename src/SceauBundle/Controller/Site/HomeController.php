@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use SceauBundle\Entity\Membre;
 use SceauBundle\Form\Type\Site\User\RegisterType;
-
 use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Site\TicketQuestionType;
 use SceauBundle\Entity\Ticket;
@@ -28,18 +27,18 @@ class HomeController extends Controller
     /**
      * Afficher la page home.
      *
-     *@Route("/", name="site_home")
+     * @Route("/", name="site_home")
      * @Method("GET")
      */
-    public function indexAction() 
+    public function indexAction()
     {
-       $loManager = $this->getDoctrine()->getManager();
-       $loPseudoMembre =  $this->get('security.context')->getToken()->getUser();
-       $loUser = null;
-       if ($loPseudoMembre != 'anon.') {
-           $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
-       }
-       
+        $loManager = $this->getDoctrine()->getManager();
+        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loUser = null;
+        if ($loPseudoMembre != 'anon.') {
+            $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+        }
+
         //Recuperer Site Prenium
         /**$loMembreLogger = $this->container->get('sceau.site.home.home_prenium');**/
         $lsPrenium = $this->container->get('sceau.site.home.home_prenium');
@@ -50,51 +49,54 @@ class HomeController extends Controller
         //Recuperer la dérniére newsletter
         $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
         return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories,
-               'siteprenium' => $lpPreniumSite ,'menu' => 'home', 'newsletters' => $loNewletters,
-                'user' => $loUser));
+            'siteprenium' => $lpPreniumSite, 'menu' => 'home', 'newsletters' => $loNewletters,
+            'user' => $loUser));
     }
-    
+
     /**
-    * Pour switcher entre plusieurs action de la page home.
-    *
-     *@Route("/operation",
+     * Pour switcher entre plusieurs action de la page home.
+     *
+     * @Route("/operation",
      *     name="site_operation_detail")
-     *@Route("/newsletter",
+     * @Route("/newsletter",
      *     name="site_operation_news")
-     *@Route("/mobile",
+     * @Route("/mobile",
      *        name="site_home_mobile")
-     *@Route("/whos",
+     * @Route("/whos",
      *        name="site_whos_fianet")
-     *@Route("/mention_legales",
+     * @Route("/mention_legales",
      *        name="site_fianet_mention")
-     *@Route("/protection_donnees",
+     * @Route("/protection_donnees",
      *        name="site_fianet_protectiondonnes")
-     *@Route("/CGU",
+     * @Route("/CGU",
      *        name="site_fianet_cgu")
-     *@Route("/politique_qualite",
+     * @Route("/politique_qualite",
      *        name="site_fianet_politique")
-     *@Route("/Faq",
+     * @Route("/Faq",
      *        name="site_fianet_faq")
      * @Method("GET")
-     * 
+     *
      */
     public function switchAction()
     {
-       $loManager = $this->getDoctrine()->getManager();
-       $loUser = null;
-       $loNewletters = null;
-       $loPseudoMembre =  $this->get('security.context')->getToken()->getUser();
-       if ($loPseudoMembre != 'anon.') {
-           $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
-       }
-       
-       //Récupération Route Envoyé
-       $loRequest = $this->container->get('request');
-       $loRouteName = $loRequest->get('_route');
-       if ($loRouteName === 'site_operation_news') {
-           $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
-       }
-       return $this->render("SceauBundle:Site/Home:index.html.twig", array('menu' => $loRouteName, 'newsletters' => $loNewletters, 'user' => $loUser ));
+        $loManager = $this->getDoctrine()->getManager();
+        $loUser = null;
+        $loNewletters = null;
+        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        if ($loPseudoMembre != 'anon.') {
+            $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+        }
+
+        //Récupération Route Envoyé
+        $loRequest = $this->container->get('request');
+        $loRouteName = $loRequest->get('_route');
+        if ($loRouteName === 'site_operation_news') {
+            $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
+        }
+        return $this->render(
+            "SceauBundle:Site/Home:index.html.twig",
+            array('menu' => $loRouteName, 'newsletters' => $loNewletters, 'user' => $loUser)
+        );
     }
 
 
@@ -104,33 +106,43 @@ class HomeController extends Controller
      * @Route("/newsletter/subcribe",
      *     name="site_home_subcribe_newsletter")
      * @Method("POST")
+     *
+     * @param Request $poRequest
+     *
+     * @return Response
      */
-    public function registrenewsletterAction(Request $poRequest) {
+    public function registrenewsletterAction(Request $poRequest)
+    {
         $loManager = $this->getDoctrine()->getManager();
         if ($poRequest->isMethod('POST')) {
-            $loEmail = $poRequest->get('email'); 
+            $loEmail = $poRequest->get('email');
             $loUser = $loManager->getRepository('SceauBundle:Membre')->getByMail($loEmail);
             if (empty($loUser)) {
                 $loUser = new Membre();
                 $loForm = $this->createForm(new RegisterType(), $loUser);
                 return $this->render(
-                                        'SceauBundle:Site/Home:index.html.twig',
-                                        array(
-                                                'form' => $loForm->createView(),
-                                                'menu' => 'register',
-                                                'redirect' => 'newsletter'
-                                            )
-                                    );
+                    'SceauBundle:Site/Home:index.html.twig',
+                    array(
+                        'form' => $loForm->createView(),
+                        'menu' => 'register',
+                        'redirect' => 'newsletter'
+                    )
+                );
+
             } else {
                 $loUser->setNewsletter(true);
                 $loManager->flush();
                 $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(3);
+
                 /** Envoyer vers la page NewsLetter **/
-                $this->get('session')->set('confirmation','OK');
-                return $this->render("SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'site_operation_news', 'user' => $loUser));
+                $this->get('session')->set('confirmation', 'OK');
+                return $this->render(
+                    "SceauBundle:Site/Home:index.html.twig",
+                    array('newsletters' => $loNewletters, 'menu' => 'site_operation_news', 'user' => $loUser)
+                );
             }
         }
-        return $this->render("SceauBundle:Site/Security:test.html.twig"); 
+        return $this->render("SceauBundle:Site/Security:test.html.twig");
     }
 
 
@@ -139,6 +151,10 @@ class HomeController extends Controller
      *
      * @Route("/presse", name="site_presse")
      * @Method("GET")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function presseAction(Request $request)
     {
@@ -148,7 +164,7 @@ class HomeController extends Controller
         $articlePressesByMonths = array();
 
         //Group by month
-        foreach ($articlePresses as $articlePresse){
+        foreach ($articlePresses as $articlePresse) {
             $articlePressesDate = $articlePresse->getDate()->format('m-Y');
             if (isset($articlePressesByMonths[$articlePressesDate])) {
                 $articlePressesByMonths[$articlePressesDate]['articles'][] = $articlePresse;
@@ -158,17 +174,21 @@ class HomeController extends Controller
             }
         }
 
-        return $this->render('SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths));
+        return $this->render(
+            'SceauBundle:Site/Presse:index.html.twig',
+            array('articlePressesByMonths' => $articlePressesByMonths)
+        );
     }
-    
+
     /**
-    * Action pour l'appel du Participation a tombola
-    * 
-    * @Route("/tombola",
-    *     name="site_home_tombola")
-    * @Method("GET")
-    */
-    public function callRegisterAction() {
+     * Action pour l'appel du Participation a tombola
+     *
+     * @Route("/tombola",
+     *     name="site_home_tombola")
+     * @Method("GET")
+     */
+    public function callRegisterAction()
+    {
         $loUser = new Membre();
         $loForm = $this->createForm(new RegisterType(), $loUser);
         return $this->render(
@@ -179,20 +199,20 @@ class HomeController extends Controller
             )
         );
     }
-    
-    
+
+
     /**
-    * Action pour telecharger politique
-    * 
-    * @Route("/download_politique",
-    *     name="site_politique_downald")
-    * @Method("GET")
-    */
+     * Action pour telecharger politique
+     *
+     * @Route("/download_politique",
+     *     name="site_politique_downald")
+     * @Method("GET")
+     */
     public function downloadPolitiqueAction()
     {
-        
-        $path = $this->get('kernel')->getRootDir(). "/../web/documents/";
-        $content = file_get_contents($path.'PolitiqueQualite-SCEAU.pdf');
+
+        $path = $this->get('kernel')->getRootDir() . "/../web/documents/";
+        $content = file_get_contents($path . 'PolitiqueQualite-SCEAU.pdf');
 
         $response = new Response();
 
@@ -213,7 +233,7 @@ class HomeController extends Controller
      */
     public function contactAction(Request $request)
     {
-        $ticket   = new Ticket();
+        $ticket = new Ticket();
         $template = null;
 
         $form = $this->createForm(new TicketQuestionType(), $ticket);
@@ -230,10 +250,9 @@ class HomeController extends Controller
         return $this->render(
             'SceauBundle:Site/Contact:index.html.twig',
             [
-                'form'     => $form->createView(),
+                'form' => $form->createView(),
                 'template' => $template,
             ]
         );
     }
-
 }

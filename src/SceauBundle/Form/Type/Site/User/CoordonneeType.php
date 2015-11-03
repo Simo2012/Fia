@@ -7,11 +7,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * 
+ *
  */
 class CoordonneeType extends AbstractType
 {
-    
+
     /**
      * (non-PHPdoc)
      * @see \Symfony\Component\Form\AbstractType::buildForm()
@@ -20,92 +20,92 @@ class CoordonneeType extends AbstractType
     {
         //var_dump($paOptions['attr']['locationId']);
         $laParams = array(
-                    'label'    => 'Pays :*',
-                    'class'       => 'SceauBundle:Pays',
-                    'property'    => 'libelle',
-            );
+            'label' => 'Pays :*',
+            'class' => 'SceauBundle:Pays',
+            'property' => 'libelle',
+        );
         $poBuilder->add('pays', 'entity', $laParams);
-    
+
         $laParams = array(
-            'label'    => 'Adresse :',
+            'label' => 'Adresse :',
             'required' => false,
-            'attr'     => array(
-                'size'         => '30',
-                'caption'      => 'adresse',
+            'attr' => array(
+                'size' => '30',
+                'caption' => 'adresse',
                 'autocomplete' => false,
             )
         );
         $poBuilder->add('adresse', 'text', $laParams);
-        
+
         $laParams = array(
-            'label'    => 'Complément d\'adresse :',
+            'label' => 'Complément d\'adresse :',
             'required' => false,
-            'attr'     => array(
-                'size'         => '30',
-                'caption'      => 'adresse',
+            'attr' => array(
+                'size' => '30',
+                'caption' => 'adresse',
                 'autocomplete' => false,
             )
         );
         $poBuilder->add('compAdresse', 'text', $laParams);
-        
+
         $laParams = array(
-            'label'    => 'Code postal :',
+            'label' => 'Code postal :',
             'required' => false,
-            'attr'     => array(
-                'size'         => '15',
-                'caption'      => 'codePostal',
+            'attr' => array(
+                'size' => '15',
+                'caption' => 'codePostal',
                 'autocomplete' => false,
             )
         );
         $poBuilder->add('codePostal', 'text', $laParams);
-        
+
         $laParams = array(
-            'label'    => 'Ville :',
+            'label' => 'Ville :',
             'required' => false,
-            'attr'     => array(
-                'size'         => '30',
-                'caption'      => 'codePostal',
+            'attr' => array(
+                'size' => '30',
+                'caption' => 'codePostal',
                 'autocomplete' => false,
             )
         );
         $poBuilder->add('ville', 'text', $laParams);
-        
+
         $laParams = array(
-            'label'    => 'Téléphone fixe :',
+            'label' => 'Téléphone fixe :',
             'required' => false,
-            'attr'     => array(
-                'size'         => '30',
-                'caption'      => 'telephoneFixe',
+            'attr' => array(
+                'size' => '30',
+                'caption' => 'telephoneFixe',
                 'autocomplete' => false,
             )
         );
         $poBuilder->add('telephoneFixe', 'text', $laParams);
-        
+
         $laParams = array(
-            'label'    => 'Téléphone mobile :',
+            'label' => 'Téléphone mobile :',
             'required' => false,
-            'attr'     => array(
-                'size'         => '30',
-                'caption'      => 'telephoneMobile',
+            'attr' => array(
+                'size' => '30',
+                'caption' => 'telephoneMobile',
                 'autocomplete' => false,
             )
         );
         $poBuilder->add('telephoneMobile', 'text', $laParams);
-        
+
         //codePostal
-      
-         
+
+
     } // buildForm
-    
+
     /**
-     * 
+     *
      * @param OptionsResolver $poResolver
      */
     public function configureOptions(OptionsResolver $poResolver)
     {
         $poResolver->setDefaults(
             array(
-                'data_class'        => 'SceauBundle\Entity\Coordonnee',
+                'data_class' => 'SceauBundle\Entity\Coordonnee',
             )
         );
     }
@@ -119,4 +119,3 @@ class CoordonneeType extends AbstractType
         return 'sceauSiteUserFormCoordonnees';
     } // getName
 }
-

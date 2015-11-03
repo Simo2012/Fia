@@ -4,7 +4,6 @@ namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-
 /**
  * AvatarRepository
  *

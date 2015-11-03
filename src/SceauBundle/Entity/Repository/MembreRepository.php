@@ -3,6 +3,7 @@
 namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use SceauBundle\Entity\Membre;
 
 /**
  * MembreRepository
@@ -14,54 +15,61 @@ class MembreRepository extends EntityRepository
 {
     /**
      * Function pour retourner l'utilisateur par rapport a son pseudo
-     * @param type $poEmail
-     * @return type
+     *
+     * @param string $poEmail
+     *
+     * @return Membre
      */
-    public function getByMail($poEmail) {
+    public function getByMail($poEmail)
+    {
         $loQuery = $this->createQueryBuilder('m')
-                        ->select('m')
-                        ->Join('m.emails', 'e')
-                        ->Where('e.email = :email')
-                        ->andWhere('e.principal = true')
-                        ->setParameter('email', $poEmail);
+            ->select('m')
+            ->join('m.emails', 'e')
+            ->where('e.email = :email')
+            ->andWhere('e.principal = true')
+            ->setParameter('email', $poEmail);
         return $loQuery->getQuery()->getOneOrNullResult();
     }
-    
+
     /**
      * Function pour retourner l'utilisateur par rapport a son pseudo
-     * @param type $poPseudo
-     * @return type
+     *
+     * @param string $poPseudo
+     *
+     * @return Membre
      */
-    public function getByPseudo($poPseudo) {
+    public function getByPseudo($poPseudo)
+    {
         $loQuery = $this->createQueryBuilder('m')
-                        ->select('m')
-                        ->Where('m.pseudo = :pseudo')
-                        ->setParameter('pseudo', $poPseudo)
-                        ->setMaxResults(1);
+            ->select('m')
+            ->where('m.pseudo = :pseudo')
+            ->setParameter('pseudo', $poPseudo)
+            ->setMaxResults(1);
         return $loQuery->getQuery()->getOneOrNullResult();
-        
+
     }
-    
-    public function getEmailsSecondaires($poIdUser) {
-         $loQuery = $this->createQueryBuilder('m')
-                        ->select('m, e')
-                        ->join('m.emails', 'e')
-                        ->Where('m.id = :id')
-                        ->andWhere('e.principal = false')
-                        ->setParameter('id', $poIdUser);
-         
-         return $loQuery->getQuery()->getArrayResult();    
+
+    public function getEmailsSecondaires($poIdUser)
+    {
+        $loQuery = $this->createQueryBuilder('m')
+            ->select('m, e')
+            ->join('m.emails', 'e')
+            ->where('m.id = :id')
+            ->andWhere('e.principal = false')
+            ->setParameter('id', $poIdUser);
+
+        return $loQuery->getQuery()->getArrayResult();
     }
-    
-    public function getEmailsPrincipale($poIdUser) {
-         $loQuery = $this->createQueryBuilder('m')
-                        ->select('m, e')
-                        ->join('m.emails', 'e')
-                        ->Where('m.id = :id')
-                        ->andWhere('e.principal = true')
-                        ->setParameter('id', $poIdUser);
-         
-         return $loQuery->getQuery()->getOneOrNullResult(); 
+
+    public function getEmailsPrincipale($poIdUser)
+    {
+        $loQuery = $this->createQueryBuilder('m')
+            ->select('m, e')
+            ->join('m.emails', 'e')
+            ->where('m.id = :id')
+            ->andWhere('e.principal = true')
+            ->setParameter('id', $poIdUser);
+
+        return $loQuery->getQuery()->getOneOrNullResult();
     }
-    
 }
