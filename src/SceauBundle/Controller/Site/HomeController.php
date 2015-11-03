@@ -33,10 +33,10 @@ class HomeController extends Controller
     public function indexAction()
     {
         $loManager = $this->getDoctrine()->getManager();
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
         $loUser = null;
-        if ($loPseudoMembre != 'anon.') {
-            $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
+        if ($loPseudoMembre = $this->get('security.context')->getToken()) {
+            $loUser = $loManager->getRepository('SceauBundle:Membre')
+                ->getByPseudo($this->get('security.context')->getToken()->getUser());
         }
 
         //Recuperer Site Prenium
