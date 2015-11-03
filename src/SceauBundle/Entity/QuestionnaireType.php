@@ -72,6 +72,13 @@ class QuestionnaireType implements Translatable
      */
     private $delaiReception;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="SceauBundle\Entity\Indice", mappedBy="questionnaireType")
+     */
+    private $indices;
+
 
     /**
      * Post locale
@@ -85,6 +92,7 @@ class QuestionnaireType implements Translatable
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->indices = new ArrayCollection();
     }
 
 
@@ -259,5 +267,39 @@ class QuestionnaireType implements Translatable
     public function setTranslatableLocale($locale)
     {
         $this->locale = $locale;
+    }
+
+    /**
+     * Add indice
+     *
+     * @param Indice $indice
+     *
+     * @return QuestionnaireType
+     */
+    public function addIndice(Indice $indice)
+    {
+        $this->indices[] = $indice;
+
+        return $this;
+    }
+
+    /**
+     * Remove indice
+     *
+     * @param Indice $indice
+     */
+    public function removeIndice(Indice $indice)
+    {
+        $this->indices->removeElement($indice);
+    }
+
+    /**
+     * Get indices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIndices()
+    {
+        return $this->indices;
     }
 }
