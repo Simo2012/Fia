@@ -1,21 +1,22 @@
      <div class="login">
-     {% if app.security.getToken() is defined %}
-        <img src="{{ asset('bundles/sceau/images/site/home/login_titre.png') }}" width="121" height="19" alt="Espace Membre" style="margin-left:5px" />
-        
-            <form action="{{ path('site_member_login')}}" method="post" class="login-home-form">
-                <input type="hidden" name="formulaireloginhome" value="1" />
-                <div class="login-input-div">
-                    <input class="login-input-back" type="text" id="username" name="_email" placeholder="E-mail" autocomplete="off" />
-                </div>
-                <div class="login-input-div">
-                    <input class="login-input-back" id="password" type="password" name="_password"  placeholder="Mot de passe" autocomplete="off" />
-                    <div class="login-btn-ok">
-                        <input type='submit' value='' alt="Bouton Valider" class="btn_site_login"/>
+    {% if app.security.getToken() is defined %}
+        {% if  app.security.getToken().getUser() == 'anon.' or app.security.getToken().getUser() is not defined  %}
+            <img src="{{ asset('bundles/sceau/images/site/home/login_titre.png') }}" width="121" height="19" alt="Espace Membre" style="margin-left:5px" />
+
+                <form action="{{ path('site_member_login')}}" method="post" class="login-home-form">
+                    <input type="hidden" name="formulaireloginhome" value="1" />
+                    <div class="login-input-div">
+                        <input class="login-input-back" type="text" id="username" name="_email" placeholder="E-mail" autocomplete="off" />
                     </div>
-                </div>
-                 
-            </form>
-        <div class="inscrip-lost"><a href="{{ path('site_member_call_register')}}">S'inscrire</a> <b>/</b> <a href="#">Mot de passe oublié ?</a></div>
+                    <div class="login-input-div">
+                        <input class="login-input-back" id="password" type="password" name="_password"  placeholder="Mot de passe" autocomplete="off" />
+                        <div class="login-btn-ok">
+                            <input type='submit' value='' alt="Bouton Valider" class="btn_site_login"/>
+                        </div>
+                    </div>
+
+                </form>
+            <div class="inscrip-lost"><a href="{{ path('site_member_call_register')}}">S'inscrire</a> <b>/</b> <a href="#">Mot de passe oublié ?</a></div>
         
      {% else %}
          <span class="login-bonjour">
@@ -28,6 +29,7 @@
             <a href="{{ path('site_home_membre')}}"> > Votre espace personnel</a><br/>
 	    <a href="{{ path('site_member_logout')}}"> > Déconnexion</a>
 	</div>
-     {% endif %}
+     {%endif%}
+   {% endif %}
     </div>
       
