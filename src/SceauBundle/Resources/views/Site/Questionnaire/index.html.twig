@@ -1,4 +1,4 @@
-{% extends "SceauBundle:Site:layout.html.twig" %}
+{% extends app.request.isxmlhttprequest ? "SceauBundle:Site:layout-ajax.html.twig" : "SceauBundle:Site:layout.html.twig" %}
 {% form_theme form "SceauBundle:Site\\Form:questionnaire.html.twig" %}
 
 {% block CONTENT %}
@@ -36,7 +36,6 @@
                     display_more: true
                 };
                 $.each(formSerialize, function(key, obj) {
-                    console.log(obj);
                     data[obj.name] = obj.value;
                 });
 
@@ -61,6 +60,10 @@
                             refreshForm();
                         }
                     });
+                });
+
+                $('#questionnaire_reponse_optin_optin').change(function() {
+                    refreshForm();
                 });
             };
 

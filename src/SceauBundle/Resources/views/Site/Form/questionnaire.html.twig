@@ -15,6 +15,69 @@
     {{- form_rest(form) -}}
 {%- endblock form_widget_compound -%}
 
+{%- block _questionnaire_reponse_cgu_widget -%}
+    <div class="blue-block-top">
+        Vos notations et commentaires seront incorporés dans l'appréciation générale de ce site.<br>
+        Ils nous aideront à faire d'Internet un lieu toujours plus sûr où les internautes peuvent acheter en toute confiance.<br>
+        Ils pourront aussi apparaître sur le site FIA-NET sans aucune information nominative vous concernant. Vos commentaires pourront également être utilisés par Crucial dans le cadre de témoignages clients sous réserve du respect de votre anonymat.<br>
+        <br>
+        <span class="rouge">
+			Merci de nous indiquer votre e-mail afin que nous puissions vous recontacter pour savoir si la livraison s'est bien déroulée (obligatoire) :
+		</span>
+        {{- form_widget(form.email) -}}
+        <br>
+        {{- form_widget(form.cgu) -}}
+        J'accepte les <a href="/annuaire/cgu.php" class="lien" target="_blank">Conditions Générales d'Utilisation</a> du service Sceau de Confiance FIA-NET.
+    </div>
+    <div class="blue-block-bottom"></div>
+{%- endblock _questionnaire_reponse_cgu_widget -%}
+
+{%- block _questionnaire_reponse_optin_widget -%}
+    <div id="bloc_optins">
+        <p class="optin_partenaires_titre">{{ "Pour rester informé, cochez la case ci-dessous :"|trans({}, translation_domain) }}</p>
+        <table cellspacing="0" cellpadding="0">
+            <tbody>
+            <tr>
+                <td></td>
+                <td>{{- form_widget(form.optin) -}}</td>
+                <td>{{- form_label(form.optin) -}}</td>
+            </tr>
+            </tbody>
+        </table>
+        {% if form.civility is defined and form.lastName is defined and form.firstName is defined %}
+        <div id="optin_partenaires_supplement" style="display:block;">
+            <p class="optin_partenaires_titre">{{ "Apprenons à mieux nous connaître, nous vous enverrons des offres partenaires pertinentes !"|trans({}, translation_domain) }}</p>
+            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                <tr>
+                    <td style="width:30%;">
+                        {%- for child in form.civility %}
+                            {{- form_label(child) -}}
+                            {{- form_widget(child) -}}
+                        {% endfor -%}
+                    </td>
+                    <td style="padding-left:45px;">
+                        <strong>{{ "(Tous les champs sont obligatoires)"|trans({}, translation_domain) }}</strong>
+                    </td>
+                </tr>
+                <tr><td height="10"></td></tr>
+                <tr>
+                    <td style="width:30%;">
+                        {{- form_label(form.lastName) -}}
+                        {{- form_widget(form.lastName) -}}
+                    </td>
+                    <td>
+                        {{- form_label(form.firstName) -}}
+                        {{- form_widget(form.firstName) -}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+{%- endblock _questionnaire_reponse_optin_widget -%}
+
 {# question id 2 #}
 {%- block _questionnaire_reponse_1_widget -%}
     <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
