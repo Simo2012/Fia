@@ -99,21 +99,24 @@ class QuestionController extends Controller
      */
     public function ticketReafectationAction(Request $request, Ticket $ticket)
     {
-        $ticketReafectationForm = $this->createForm(new TicketReafectationType());
-
+        $ticketReafectationForm = $this->createForm(new TicketReafectationType(), $ticket);
+        $oldCategorie = $ticket->getCategorie();
+        // $oldModerateur = $ticket->getModerateur();
+        
         $ticketReafectationForm->handleRequest($request);
 
         if ($ticketReafectationForm->isValid()) {
-            $data = $ticketReafectationForm->getData();
-            $event = new TicketEvent($ticket, $data);
-            
-            if ($data['categorie'] != $ticket->getCategorie()) {
-                $this->get("event_dispatcher")->dispatch(
-                    TicketEvents::TICKET_REAFECTATION_CATEGORIE, $event
-                );
+            $ticket = $ticketReafectationForm->getData();
+            $event = new TicketEvent($ticket);
+
+            if ($oldCategorie !== $ticket->getCategorie()) {
+                $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_REAFECTATION_CATEGORIE, $event);
             }
-            // todo 
-            // dispatch TicketEvents::TICKET_REAFECTATION_MODERATEUR     
+
+            // if ($oldModerateur !== $ticket->getModerateur()) {
+            //     $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_REAFECTATION_MODERATEUR, $event);
+            // }
+   
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -149,16 +152,15 @@ class QuestionController extends Controller
      */
     public function updateNoteAction(Request $request, Ticket $ticket)
     {
-        $noteExist = $ticket->getNote();
-
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket);
+        $noteExist = $ticket->getNote();
 
         $ticketNoteForm->handleRequest($request);
 
         if ($ticketNoteForm->isValid()) {
             $note = $ticketNoteForm->get('note')->getData();
             $ticket->setNote($note);
-            /** @var \Doctrine\ORM\EntityManager $em */
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
             $em->flush();
@@ -188,9 +190,7 @@ class QuestionController extends Controller
         $em->flush();
 
         $event = new TicketEvent($ticket);
-        $this->get("event_dispatcher")->dispatch(
-            TicketEvents::TICKET_NOTE_DELETE, $event
-        );
+        $this->get("event_dispatcher")->dispatch(TicketEvents::TICKET_NOTE_DELETE, $event);
 
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
 

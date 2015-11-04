@@ -72,7 +72,7 @@
                                             {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}
                                         {% endif %}
                                     </td>
-                                    <td>{{ ticket.categorie }}</td>
+                                    <td>{{ ticket.getCategorieLabel() }}</td>
                                     <td>{{ ticket.type }}</td>
                                     <td>
                                         <a href="{{ path('question_show', { 'id': ticket.id }) }}">

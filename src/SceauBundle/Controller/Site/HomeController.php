@@ -13,7 +13,6 @@ use SceauBundle\Form\Type\Site\User\RegisterType;
 use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Site\TicketQuestionType;
 use SceauBundle\Entity\Ticket;
-use SceauBundle\Entity\TicketCategorie;
 use SceauBundle\Listener\Entity\TicketEvents;
 use SceauBundle\Listener\Entity\TicketEvent;
 
@@ -230,9 +229,7 @@ class HomeController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->has('submit') && $form->get('submit')->isClicked()) {
-                $categorie = new TicketCategorie();
-                $categorie->setId(TicketCategorie::TYPE_CONTACT);
-                $ticket->setCategorie($categorie);
+                $ticket->setCategorie(Ticket::CATEGORIE_CONTACT);
                 $this->getDoctrine()->getManager()->persist($ticket);
                 $this->getDoctrine()->getManager()->flush();
 

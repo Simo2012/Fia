@@ -6,7 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use SceauBundle\Entity\Ticket;
-use SceauBundle\Form\Type\Admin\TicketCategorieType;
 
 class TicketReafectationType extends AbstractType
 {
@@ -17,8 +16,8 @@ class TicketReafectationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('categorie', new TicketCategorieType(),[
-                'label' => null,
+            ->add('categorie', 'choice', [
+                'choices' => TICKET::$CATEGORIES,
             ])
             ->add('save','submit')
         ;
@@ -30,7 +29,7 @@ class TicketReafectationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-
+            'data_class' => 'SceauBundle\Entity\Ticket'
         ));
     }
 

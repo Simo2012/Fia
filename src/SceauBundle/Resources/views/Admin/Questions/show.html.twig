@@ -33,13 +33,13 @@
                 </div>
                 <div class="col-lg-6">
                     <p>Type : {{ ticket.type }}</p>
-                    <p>Catégorie affectée : {{ ticket.categorie }} 
+                    <p>Catégorie affectée : {{ ticket.getCategorieLabel() }} 
                         <a href="#reafectationModal" class="btn btn-sm btn-warning" data-toggle="modal">Modifier</a> </p>
                     <p>Etat : 
                         {% if ticket.etat %}
-                            <span class="label label-success m-r-10 pull-left">Traitée</span>
+                            Traitée
                         {% else %}
-                            <span class="label label-warning m-r-10 pull-left">En attente</span>
+                            En attente
                         {% endif %}
                     </p>
                     {% if ticket.etat != true %}

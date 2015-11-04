@@ -31,7 +31,7 @@ class TicketListener
         $ticketHistoriqueEmail = $this->createTicketEmailHistorique($ticket, $data);
         $this->createTicketHistorique(TicketEvents::TICKET_REPONSE, $ticket, $ticketHistoriqueEmail);
         
-        if ($ticket->getCategorie()->getId() == TicketCategorie::TYPE_CONTACT) {
+        if ($ticket->getCategorie() == Ticket::CATEGORIE_CONTACT) {
             $ticket->setEtat(true);
             $this->em->persist($ticket);
             $this->em->flush();
@@ -77,7 +77,7 @@ class TicketListener
 
         switch ($action) {
         	case TicketEvents::TICKET_CREATION:
-                $ticketHistorique->setDescription("Création : envoi au service ".$ticket->getCategorie()->getlabel());
+                $ticketHistorique->setDescription("Création : envoi au service ".$ticket->getCategorielabel());
                 break;
             case TicketEvents::TICKET_REPONSE:
                 $ticketHistorique->setDescription("Nouvelle réponse au ticket : traité par ")
@@ -101,7 +101,7 @@ class TicketListener
                 break;
             case TicketEvents::TICKET_REAFECTATION_CATEGORIE:
                 $ticketHistorique->setDescription("Réafectation catégorie : traité par ")
-                	->setComment($ticket->getCategorie()->getLabel());
+                	->setComment($ticket->getCategorielabel());
                 break;
             case TicketEvents::TICKET_REAFECTATION_MODERATEUR:
                 $ticketHistorique->setDescription("Réafectation modérateur : traité par ")

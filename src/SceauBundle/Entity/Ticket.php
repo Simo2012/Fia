@@ -12,6 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ticket
 {
+    const CATEGORIE_AVIS      = 1;
+    const CATEGORIE_CONTACT   = 2;
+
+    public static $CATEGORIES = [
+        self::CATEGORIE_AVIS      => 'Avis',
+        self::CATEGORIE_CONTACT   => 'Contact',
+    ];
+
     /**
      * @var integer
      *
@@ -52,7 +60,7 @@ class Ticket
     /**
      * @var integer
      *
-     * @ORM\Embedded(class="TicketCategorie", columnPrefix="categorie_")
+     * @ORM\Column(name="categorie", type="integer", nullable=true)
      */
     private $categorie;
 
@@ -257,14 +265,15 @@ class Ticket
         return $this->auteur;
     }
 
+
     /**
      * Set categorie
      *
-     * @param \SceauBundle\Entity\TicketCategorie $categorie
+     * @param integer $categorie
      *
      * @return Ticket
      */
-    public function setCategorie(\SceauBundle\Entity\TicketCategorie $categorie)
+    public function setCategorie($categorie)
     {
         $this->categorie = $categorie;
 
@@ -274,10 +283,23 @@ class Ticket
     /**
      * Get categorie
      *
-     * @return \SceauBundle\Entity\TicketCategorie
+     * @return integer
      */
     public function getCategorie()
     {
         return $this->categorie;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategorieLabel()
+    {
+        return isset(self::$CATEGORIES[$this->categorie]) ? self::$CATEGORIES[$this->categorie] : '';
+    }
+
+    public static function getAvailableCategories()
+    {
+        return self::$CATEGORIES;
     }
 }
