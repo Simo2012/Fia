@@ -4,6 +4,7 @@ namespace SceauBundle\Controller\Admin;
 
 use SceauBundle\Entity\Ticket;
 use SceauBundle\Entity\TicketHistorique;
+use SceauBundle\Entity\TicketReponse;
 use SceauBundle\Entity\EnvoiEmail;
 use SceauBundle\Entity\TicketHistoriqueEmail;
 use SceauBundle\Form\Type\Admin\TicketHistoriqueEmailType;
@@ -18,8 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Admin\TicketReponseType;
 use SceauBundle\Form\Type\Admin\Filters\TicketFiltersType;
 use Symfony\Component\Validator\Constraints\Date;
-use SceauBundle\Listener\Entity\TicketEvents;
-use SceauBundle\Listener\Entity\TicketEvent;
 
 /**
  * QuestionController controller.
@@ -72,7 +71,8 @@ class QuestionController extends Controller
             'method' => 'POST',
         ));
 
-        $ticketReponseForm = $this->createForm(new TicketReponseType(), null, array(
+        $ticketReponse = new TicketReponse();
+        $ticketReponseForm = $this->createForm(new TicketReponseType(), $ticketReponse, array(
             'action' => $this->generateUrl('question_reponse',array('id'=>$ticket->getId())),
             'method' => 'POST',
         ));
@@ -89,6 +89,34 @@ class QuestionController extends Controller
             'ticketReafectationForm'    => $ticketReafectationForm->createView(),
             'historiques'               => $historiques,
         );
+    }
+
+    /**
+     *  Reponse à un ticket
+     *
+     * @Route("/{id}/reponse", name="question_reponse")
+     * @Method("POST")
+     */
+    public function ticketReponseAction(Request $request, Ticket $ticket)
+    {
+        $ticketReponse = new TicketReponse();
+        $ticketReponseForm = $this->createForm(new TicketReponseType(), $ticketReponse);
+
+        $ticketReponseForm->handleRequest($request);
+
+        if ($ticketReponseForm->isValid()) {
+            $ticketReponse = $ticketReponseForm->getData();
+            $em = $this->getDoctrine()->getManager();
+            $ticketReponse->setMailTo($ticket->getAuteur()->getEmail());
+            $ticketReponse->setTicket($ticket);
+            $em->persist($ticketReponse);
+            $em->flush();
+
+            $ticket->addReponse($ticketReponse);
+            $em->persist($ticket);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
 
     /**
@@ -109,25 +137,6 @@ class QuestionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
             $em->flush();
-        }
-        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
-    }
-
-    /**
-     *  Reponse à un ticket
-     *
-     * @Route("/{id}/reponse", name="question_reponse")
-     * @Method("POST")
-     */
-    public function ticketReponseAction(Request $request, Ticket $ticket)
-    {
-        $ticketReponseForm = $this->createForm(new TicketReponseType());
-
-        $ticketReponseForm->handleRequest($request);
-
-        if ($ticketReponseForm->isValid()) {
-            $data = $ticketReponseForm->getData();
-            // Create Reponse and flush it
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -211,14 +220,16 @@ class QuestionController extends Controller
     public function getHistoriqueEmailAction($id)
     {
         /** @var \SceauBundle\Entity\Repository\TicketHistoriqueRepository $historiqueRepository */
-        $historiqueRepository = $this->get('sceau.repository.ticket.historique');
+        $TicketReponseRepository = $this->get('sceau.repository.ticket.reponse');
 
-        $historique = $historiqueRepository->find($id);
-        $historiqueEmailForm = $this->createForm(new TicketHistoriqueEmailType, $historique->getHistoriqueEmail());
+        $ticketReponse  = $TicketReponseRepository->find($id);
+
+
+        $historiqueEmailForm = $this->createForm(new TicketHistoriqueEmailType, $ticketReponse);
 
         return $this->render('SceauBundle:Admin/Questions:historique_email_content.html.twig', array(
             'historiqueEmailForm' => $historiqueEmailForm->createView(),
-            'ticket'              => $historique->getTicket(),
+            'ticket'              => $ticketReponse->getTicket(),
         ));
     }
 }

@@ -5,12 +5,13 @@ namespace SceauBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TicketHistoriqueEmail
+ * TicketReponse
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\TicketHistoriqueEmailRepository")
+ * @ORM\Table(name="TicketReponse")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\TicketReponseRepository")
+ * @ORM\EntityListeners({"SceauBundle\Listener\Entity\TicketReponseListener"})
  */
-class TicketHistoriqueEmail
+class TicketReponse
 {
     /**
      * @var integer
@@ -20,6 +21,22 @@ class TicketHistoriqueEmail
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var Ticket
+     *
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\Ticket", inversedBy="reponses")
+     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", nullable=true)
+     */
+    private $ticket;
+
+    /**
+     * @var TicketReponseModele
+     *
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketReponseModele")
+     * @ORM\JoinColumn(name="ticket_reponse_modele_id", referencedColumnName="id", nullable=true)
+     */
+    private $reponseModele;
 
     /**
      * @var string
@@ -49,7 +66,6 @@ class TicketHistoriqueEmail
      */
     private $mailBody;
 
-
     /**
      * @var \DateTime
      *
@@ -57,14 +73,6 @@ class TicketHistoriqueEmail
      */
     private $date;
     
-    /**
-     * @var TicketReponseModele
-     *
-     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketReponseModele")
-     * @ORM\JoinColumn(name="ticket_reponse_modele_id", referencedColumnName="id", nullable=true)
-     */
-    private $reponseModele;
-
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -85,7 +93,7 @@ class TicketHistoriqueEmail
      *
      * @param string $mailFrom
      *
-     * @return TicketHistoriqueEmail
+     * @return TicketReponse
      */
     public function setMailFrom($mailFrom)
     {
@@ -109,7 +117,7 @@ class TicketHistoriqueEmail
      *
      * @param string $mailTo
      *
-     * @return TicketHistoriqueEmail
+     * @return TicketReponse
      */
     public function setMailTo($mailTo)
     {
@@ -133,7 +141,7 @@ class TicketHistoriqueEmail
      *
      * @param string $mailSubject
      *
-     * @return TicketHistoriqueEmail
+     * @return TicketReponse
      */
     public function setMailSubject($mailSubject)
     {
@@ -155,13 +163,14 @@ class TicketHistoriqueEmail
     /**
      * Set mailBody
      *
-     * @param string
+     * @param string $mailBody
      *
-     * @return TicketHistoriqueEmail
+     * @return TicketReponse
      */
     public function setMailBody($mailBody)
     {
         $this->mailBody = $mailBody;
+
         return $this;
     }
 
@@ -180,7 +189,7 @@ class TicketHistoriqueEmail
      *
      * @param \DateTime $date
      *
-     * @return TicketHistoriqueEmail
+     * @return TicketReponse
      */
     public function setDate($date)
     {
@@ -204,7 +213,7 @@ class TicketHistoriqueEmail
      *
      * @param \SceauBundle\Entity\TicketReponseModele $reponseModele
      *
-     * @return TicketHistoriqueEmail
+     * @return TicketReponse
      */
     public function setReponseModele(\SceauBundle\Entity\TicketReponseModele $reponseModele = null)
     {
@@ -221,5 +230,29 @@ class TicketHistoriqueEmail
     public function getReponseModele()
     {
         return $this->reponseModele;
+    }
+
+    /**
+     * Set ticket
+     *
+     * @param \SceauBundle\Entity\Ticket $ticket
+     *
+     * @return TicketReponse
+     */
+    public function setTicket(\SceauBundle\Entity\Ticket $ticket = null)
+    {
+        $this->ticket = $ticket;
+
+        return $this;
+    }
+
+    /**
+     * Get ticket
+     *
+     * @return \SceauBundle\Entity\Ticket
+     */
+    public function getTicket()
+    {
+        return $this->ticket;
     }
 }

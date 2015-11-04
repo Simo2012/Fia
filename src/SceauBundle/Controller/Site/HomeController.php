@@ -13,9 +13,6 @@ use SceauBundle\Form\Type\Site\User\RegisterType;
 use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Site\TicketQuestionType;
 use SceauBundle\Entity\Ticket;
-use SceauBundle\Listener\Entity\TicketEvents;
-use SceauBundle\Listener\Entity\TicketEvent;
-
 
 /**
  * Contrôleur Home : pages relatives aux home de site web
@@ -232,11 +229,6 @@ class HomeController extends Controller
                 $ticket->setCategorie(Ticket::CATEGORIE_CONTACT);
                 $this->getDoctrine()->getManager()->persist($ticket);
                 $this->getDoctrine()->getManager()->flush();
-
-                $event = new TicketEvent($ticket);
-                $this->get("event_dispatcher")->dispatch(
-                    TicketEvents::TICKET_CREATION, $event
-                );
             }
 
             $template = $ticket->getType()->getTemplate();

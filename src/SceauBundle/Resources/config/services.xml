@@ -79,7 +79,7 @@
         </service>
 
         <!-- Admin -->
-        <service id="sceau.admin.ticket_mailer" class="SceauBundle\Service\Admin\TicketMailer">
+        <service id="sceau.admin.ticket_historique_service" class="SceauBundle\Service\Admin\TicketHistoriqueService">
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         

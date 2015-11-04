@@ -3,6 +3,7 @@
 namespace SceauBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Ticket
@@ -70,6 +71,7 @@ class Ticket
         $this->date = new \DateTime();
         $this->etat = false;
         $this->type = new TicketType();
+        $this->reponses = new ArrayCollection();
     }
 
     /**
@@ -92,6 +94,13 @@ class Ticket
      * @ORM\JoinColumn(name="auteur_id",referencedColumnName="id")
      */
     private $auteur;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="SceauBundle\Entity\TicketReponse", mappedBy="ticket")
+     */
+    private $reponses;
 
     /**
      * Get id
@@ -302,5 +311,39 @@ class Ticket
     public static function getAvailableCategories()
     {
         return self::$CATEGORIES;
+    }
+
+    /**
+     * Add reponse
+     *
+     * @param \SceauBundle\Entity\TicketReponse $reponse
+     *
+     * @return Ticket
+     */
+    public function addReponse(\SceauBundle\Entity\TicketReponse $reponse)
+    {
+        $this->reponses[] = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponse
+     *
+     * @param \SceauBundle\Entity\TicketReponse $reponse
+     */
+    public function removeReponse(\SceauBundle\Entity\TicketReponse $reponse)
+    {
+        $this->reponses->removeElement($reponse);
+    }
+
+    /**
+     * Get reponses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReponses()
+    {
+        return $this->reponses;
     }
 }

@@ -39,7 +39,6 @@ class TicketHistoriqueEmailType extends AbstractType
                 'disabled' => true,
                 'label'    => 'Message',
             ))
-
         ;
     }
 
@@ -49,7 +48,7 @@ class TicketHistoriqueEmailType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SceauBundle\Entity\TicketHistoriqueEmail'
+            'data_class' => 'SceauBundle\Entity\TicketReponse'
         ));
     }
 

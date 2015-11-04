@@ -106,9 +106,9 @@
                                 <td>{{ historique.description }}</td>
                                 <td>
                                     {{ historique.comment }}
-                                    {% if historique.historiqueEmail %}
+                                    {% if historique.reponseId %}
                                         <a class="btn btn-default"
-                                           href="{{ path('question_historique_email', {'id': historique.id}) }}"
+                                           href="{{ path('question_historique_email', {'id': historique.reponseId}) }}"
                                            data-toggle="modal" data-target="#emailHistomodal"><i class="fa fa-search">Voir</i></a>
                                     {% endif %}
                                 </td>

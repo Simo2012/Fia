@@ -12,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TicketHistorique
 {
+    // constantes historiqueee
+    const TICKET_CREATION                   = 1;
+    const TICKET_REPONSE                    = 2;
+    const TICKET_STATE_CHANGE               = 3;
+    const TICKET_NOTE_CREATE                = 4; 
+    const TICKET_NOTE_UPDATE                = 5; 
+    const TICKET_NOTE_DELETE                = 6; 
+    const TICKET_REAFECTATION_CATEGORIE     = 7;
+    const TICKET_REAFECTATION_MODERATEUR    = 8;
+
     /**
      * @var integer
      *
@@ -49,9 +59,11 @@ class TicketHistorique
     private $ticket;
 
     /**
-     * @ORM\OneToOne(targetEntity="SceauBundle\Entity\TicketHistoriqueEmail", cascade={"persist", "remove"})
+     * @var integer
+     *
+     * @ORM\Column(name="reponse_id", type="integer", nullable=true)
      */
-    private $historiqueEmail;
+    private $reponseId;
 
     /**
      * @var integer
@@ -195,25 +207,26 @@ class TicketHistorique
     }
 
     /**
-     * Set historiqueEmail
+     * Set reponseId
      *
-     * @param \SceauBundle\Entity\TicketHistoriqueEmail $historiqueEmail
+     * @param integer $reponseId
      *
      * @return TicketHistorique
      */
-    public function setHistoriqueEmail($historiqueEmail)
+    public function setReponseId($reponseId)
     {
-        $this->historiqueEmail = $historiqueEmail;
+        $this->reponseId = $reponseId;
+
+        return $this;
     }
 
     /**
-     * Get historiqueEmail
+     * Get reponseId
      *
-     * @return \SceauBundle\Entity\Ticket $historiqueEmail
+     * @return integer
      */
-    public function getHistoriqueEmail()
+    public function getReponseId()
     {
-        return $this->historiqueEmail;
+        return $this->reponseId;
     }
 }
-

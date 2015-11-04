@@ -20,13 +20,6 @@
             <argument type="service" id="sceau.outils.string" />
             <tag name="form.type" alias="sceaubundle_questionnaires_liste" />
         </service>
-
-        <!-- Admin -->
-        <service id="sceau.form.type.admin.ticket_categorie" class="SceauBundle\Form\Type\Admin\TicketCategorieType">
-            <tag name="form.type" alias="sceaubundle_ticket_categorie" />
-        </service>
-
-
     </services>
 
 </container>
