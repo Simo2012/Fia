@@ -149,8 +149,7 @@ class QuestionController extends Controller
      */
     public function updateNoteAction(Request $request, Ticket $ticket)
     {
-        $noteExist = $ticket->getNote() ? true : null ;  
-        dump($noteExist);
+        $noteExist = $ticket->getNote();
 
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket);
 
@@ -166,16 +165,10 @@ class QuestionController extends Controller
 
             $event = new TicketEvent($ticket);
 
-            if ($noteExist != null) {
-                $this->get("event_dispatcher")->dispatch(
-                    TicketEvents::TICKET_NOTE_UPDATE, $event
-                );
-            } else {
-                $this->get("event_dispatcher")->dispatch(
-                    TicketEvents::TICKET_NOTE_CREATE, $event
-                );
-            }
-
+            $this->get("event_dispatcher")->dispatch(
+                $noteExist ? TicketEvents::TICKET_NOTE_UPDATE: TicketEvents::TICKET_NOTE_CREATE,
+                $event
+            );
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
