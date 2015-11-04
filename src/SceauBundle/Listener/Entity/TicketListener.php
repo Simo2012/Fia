@@ -2,81 +2,71 @@
 namespace SceauBundle\Listener\Entity;
 
 use Doctrine\ORM\EntityManager;
-use SceauBundle\Listener\Entity\TicketEvent;
-use SceauBundle\Listener\Entity\TicketEvents;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use SceauBundle\Entity\Ticket;
 use SceauBundle\Entity\TicketHistorique;
-use SceauBundle\Entity\TicketCategorie;
 use SceauBundle\Entity\TicketHistoriqueEmail;
 
+/**
+ * Event listener to update entity Ticket when a entity Ticket is update
+ *
+ */
 class TicketListener
 {
-	private $em;
+    const TICKET_CREATION                   = 1;
+    const TICKET_REPONSE                    = 2;
+    const TICKET_STATE_CHANGE               = 3;
+    const TICKET_NOTE_CREATE                = 4; //note creation action;
+    const TICKET_NOTE_UPDATE                = 5; //note update action;
+    const TICKET_NOTE_DELETE                = 6; //note delete action;
+    const TICKET_REAFECTATION_CATEGORIE     = 7;
+    const TICKET_REAFECTATION_MODERATEUR    = 8;
 
-	public function __construct(EntityManager $em)
-	{
-		$this->em = $em;
-	}
 
-    public function ticketCreation(TicketEvent $event)
+    public function postUpdate(Ticket $ticket, LifecycleEventArgs $eventArgs)
     {
-        $this->createTicketHistorique(TicketEvents::TICKET_CREATION, $event->getTicket());
-    }
+        $em = $eventArgs->getEntityManager();
+        $uow = $em->getUnitOfWork();
 
-    public function ticketReponse(TicketEvent $event)
-    {
-        $ticket = $event->getTicket();
-        $data   = $event->getData();
+        $changes = $uow->getEntityChangeSet($ticket);
 
-        $ticketHistoriqueEmail = $this->createTicketEmailHistorique($ticket, $data);
-        $this->createTicketHistorique(TicketEvents::TICKET_REPONSE, $ticket, $ticketHistoriqueEmail);
-        
-        if ($ticket->getCategorie() == Ticket::CATEGORIE_CONTACT) {
-            $ticket->setEtat(true);
-            $this->em->persist($ticket);
-            $this->em->flush();
-            $this->createTicketHistorique(TicketEvents::TICKET_STATE_CHANGE, $ticket);
+        if (isset($changes['note'])) //if note has changed
+        {
+            if (isset($changes['note'][1]) && $changes['note'][1]) // if the new value of field note is not empty
+            {
+                if (empty($changes['note'][0])) //if the actual note value before update is empty
+                {
+                    $this->createTicketHistorique(self::TICKET_NOTE_CREATE, $ticket, $em);
+                }
+                else
+                {
+                    $this->createTicketHistorique(self::TICKET_NOTE_UPDATE, $ticket, $em);
+                }
+            }
+            else
+            {
+                $this->createTicketHistorique(self::TICKET_NOTE_DELETE, $ticket, $em);
+            }
+
+        }elseif (isset($changes['etat'])) // if etat has changed
+        {
+            $this->createTicketHistorique(self::TICKET_STATE_CHANGE, $ticket, $em);
         }
     }
 
-    public function ticketStateChange(TicketEvent $event)
+    /**
+     * Create a TicketHistorique linked to a Ticket
+     *
+     * @param $action
+     * @param $ticket
+     * @param ticketHistoriqueEmail
+     */
+    private function createTicketHistorique($action, Ticket $ticket, $em, TicketHistoriqueEmail $ticketHistoriqueEmail = null)
     {
-        $this->createTicketHistorique(TicketEvents::TICKET_STATE_CHANGE, $event->getTicket());
-    }
-
-    public function ticketNoteCreate(TicketEvent $event)
-    {
-    	$this->createTicketHistorique(TicketEvents::TICKET_NOTE_CREATE, $event->getTicket());
-    }
-
-    public function ticketNoteUpdate(TicketEvent $event)
-    {
-    	$this->createTicketHistorique(TicketEvents::TICKET_NOTE_UPDATE, $event->getTicket());
-    }
-
-    public function ticketNoteDelete(TicketEvent $event)
-    {
-    	$this->createTicketHistorique(TicketEvents::TICKET_NOTE_DELETE, $event->getTicket());
-    }
-
-    public function ticketReafectationCategorie(TicketEvent $event)
-    {
-        $this->createTicketHistorique(TicketEvents::TICKET_REAFECTATION_CATEGORIE, $event->getTicket());
-    }
-
-    public function ticketReafectationModerateur(TicketEvent $event)
-    {
-        $this->createTicketHistorique(TicketEvents::TICKET_REAFECTATION_MODERATEUR, $event->getTicket());
-    }
-
-
-    public function createTicketHistorique($action, Ticket $ticket, $ticketHistoriqueEmail = null)
-    {
-    	$ticketHistorique = new TicketHistorique();
-    	$em = $this->em;
-
+        $ticketHistorique = new TicketHistorique();
+        
         switch ($action) {
-        	case TicketEvents::TICKET_CREATION:
+            case TicketEvents::TICKET_CREATION:
                 $ticketHistorique->setDescription("Création : envoi au service ".$ticket->getCategorielabel());
                 break;
             case TicketEvents::TICKET_REPONSE:
@@ -101,11 +91,11 @@ class TicketListener
                 break;
             case TicketEvents::TICKET_REAFECTATION_CATEGORIE:
                 $ticketHistorique->setDescription("Réafectation catégorie : traité par ")
-                	->setComment($ticket->getCategorielabel());
+                    ->setComment($ticket->getCategorielabel());
                 break;
             case TicketEvents::TICKET_REAFECTATION_MODERATEUR:
                 $ticketHistorique->setDescription("Réafectation modérateur : traité par ")
-                	->setComment('nouveau modérateur');
+                    ->setComment('nouveau modérateur');
                 break;
         }
 
@@ -118,7 +108,7 @@ class TicketListener
         $em->flush();
     }
 
-    public function createTicketEmailHistorique(Ticket $ticket, $formEmailData)
+    private function createTicketEmailHistorique(Ticket $ticket, $formEmailData)
     {
         $em = $this->em;
         $ticketHistoriqueEmail = new TicketHistoriqueEmail();
@@ -136,6 +126,4 @@ class TicketListener
 
         return $ticketHistoriqueEmail;
     }
-
-
 }
