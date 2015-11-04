@@ -78,9 +78,14 @@ class QuestionnaireReponseType extends AbstractType
                 'multiple'     => false,
                 'label'        => 'Quand pensez-vous recevoir votre produit ? (Obligatoire)'
             ]);
+
+            $builder->add('cgu', 'site_question_cgu');
         }
 
-
+        $builder->add('optin', 'site_question_optin', [
+            'label'    => 'J\'accepte de recevoir les offres des partenaires de FIA-NET adaptées à mon profil.',
+            'required' => false,
+        ]);
     }
 
     /**
