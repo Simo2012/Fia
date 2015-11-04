@@ -70,7 +70,7 @@ class TicketListener
     }
 
 
-    public function createTicketHistorique($action, $ticket, $ticketHistoriqueEmail = null)
+    public function createTicketHistorique($action, Ticket $ticket, $ticketHistoriqueEmail = null)
     {
     	$ticketHistorique = new TicketHistorique();
     	$em = $this->em;
