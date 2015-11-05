@@ -106,13 +106,12 @@ class QuestionController extends Controller
 
         if ($ticketReponseForm->isValid()) {
             $ticketReponse = $ticketReponseForm->getData();
+            
             $em = $this->getDoctrine()->getManager();
             $ticketReponse->setMailTo($ticket->getAuteur()->getEmail());
             $ticketReponse->setTicket($ticket);
-            $em->persist($ticketReponse);
-            $em->flush();
-
             $ticket->addReponse($ticketReponse);
+            $em->persist($ticketReponse);
             $em->persist($ticket);
             $em->flush();
         }
@@ -223,8 +222,6 @@ class QuestionController extends Controller
         $TicketReponseRepository = $this->get('sceau.repository.ticket.reponse');
 
         $ticketReponse  = $TicketReponseRepository->find($id);
-
-
         $historiqueEmailForm = $this->createForm(new TicketHistoriqueEmailType, $ticketReponse);
 
         return $this->render('SceauBundle:Admin/Questions:historique_email_content.html.twig', array(

@@ -251,6 +251,8 @@
 
 {% block JAVASCRIPT %}
     <script type="text/javascript">
+        var $ticketReponseSujet = $('input#sceaubundle_ticket_reponse_mailSubject'),
+            $ticketReponseMessage = $('textarea#sceaubundle_ticket_reponse_mailBody');
         
         $('select').change(function() { 
             modeleType = $(this).val();
@@ -261,13 +263,13 @@
                     url:  '{{path('question_reponse_modele', { 'id': 1 }) }}',      
                     success: function(response) {
                         var objectReponse = JSON.parse(response);
-                        $('input#sujet').val(objectReponse.sujet);
-                        $('textarea#message').val(objectReponse.message);  
+                        $ticketReponseSujet.val(objectReponse.sujet);
+                        $ticketReponseMessage.val(objectReponse.message);  
                     }
                 });
             } else {
-                $('input#sujet').val('');
-                $('textarea#message').val(''); 
+                $ticketReponseSujet.val('');
+                $ticketReponseMessage.val(''); 
             }
         });
 

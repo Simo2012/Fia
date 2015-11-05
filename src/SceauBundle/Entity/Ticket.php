@@ -68,10 +68,10 @@ class Ticket
 
     public function __construct()
     {
-        $this->date = new \DateTime();
-        $this->etat = false;
-        $this->type = new TicketType();
+        $this->date     = new \DateTime();
+        $this->type     = new TicketType();
         $this->reponses = new ArrayCollection();
+        $this->etat     = false;
     }
 
     /**
