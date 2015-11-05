@@ -168,29 +168,36 @@ class QuestionnaireReponseType extends AbstractType
                 ] + $position);
                 break;
             case QuestionType::NOTATION:
-                if (($min = $question->getValeurMin()) && ($max = $question->getValeurMax())) {
-                    $builder->add($question->getId(), 'site_question_notation', [
-                        'responses' => $question->getReponses(),
-                        'min'       => $question->getValeurMin(),
-                        'max'       => $question->getValeurMax(),
-                        'label'     => $question->getLibelle($this->siteName),
-                        'mapped'    => false,
-                        'required'  => false,
-                    ] + $position);
-                }
+                $builder->add($question->getId(), 'site_question_notation', [
+                    'responses' => $question->getReponses(),
+                    'min'       => $question->getValeurMin(),
+                    'max'       => $question->getValeurMax(),
+                    'label'     => $question->getLibelle($this->siteName),
+                    'mapped'    => false,
+                    'required'  => false,
+                ] + $position);
                 break;
             case QuestionType::COMMENTAIRE:
                 $builder->add($question->getId(), 'site_question_commentaire', [
-                    'response' => $question->getReponses()->first(),
-                    'label'    => $question->getLibelle($this->siteName),
-                    'mapped'   => false,
-                    'required' => false,
-                    'tombola'  => $this->tombola,
+                    'response'  => $question->getReponses()->first(),
+                    'label'     => $question->getLibelle($this->siteName),
+                    'mapped'    => false,
+                    'required'  => false,
+                    'tombola'   => $this->tombola,
                     'site_name' => $this->siteName,
                 ] + $position);
                 break;
             case QuestionType::ETOILE:
             case QuestionType::ETOILE_COMMENTAIRE:
+                $builder->add($question->getId(), 'site_question_etoile_commentaire', [
+                    'responses' => $question->getReponses(),
+                    'min'       => $question->getValeurMin(),
+                    'max'       => $question->getValeurMax(),
+                    'label'     => $question->getLibelle($this->siteName),
+                    'mapped'    => false,
+                    'required'  => false,
+                ] + $position);
+                break;
         }
     }
 }

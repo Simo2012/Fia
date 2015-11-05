@@ -15,6 +15,20 @@
     {{- form_rest(form) -}}
 {%- endblock form_widget_compound -%}
 
+{%- block form_errors -%}
+    {%- if errors|length > 1 -%}
+        <ul>
+            {%- for error in errors -%}
+                <li>
+                    <strong class="message-erreur" style="margin-left:10px;">{{ error.message }}</strong>
+                </li>
+            {%- endfor -%}
+        </ul>
+    {%- elseif errors|length -%}
+        <strong class="message-erreur" style="margin-left:10px;">{{ (errors|first).message }}</strong>
+    {% endif %}
+{%- endblock form_errors -%}
+
 {%- block _questionnaire_reponse_cgu_widget -%}
     <div class="blue-block-top">
         Vos notations et commentaires seront incorporés dans l'appréciation générale de ce site.<br>
@@ -25,9 +39,12 @@
 			Merci de nous indiquer votre e-mail afin que nous puissions vous recontacter pour savoir si la livraison s'est bien déroulée (obligatoire) :
 		</span>
         {{- form_widget(form.email) -}}
+        {{- form_errors(form.email) -}}
+        <strong class="message-erreur" style="margin-left:10px;"></strong>
         <br>
         {{- form_widget(form.cgu) -}}
         J'accepte les <a href="/annuaire/cgu.php" class="lien" target="_blank">Conditions Générales d'Utilisation</a> du service Sceau de Confiance FIA-NET.
+        {{- form_errors(form.cgu) -}}
     </div>
     <div class="blue-block-bottom"></div>
 {%- endblock _questionnaire_reponse_cgu_widget -%}
@@ -73,6 +90,12 @@
                 </tr>
                 </tbody>
             </table>
+            <br>
+            {% if form.civility.vars.errors or form.firstName.vars.errors or form.lastName.vars.errors %}
+                <p class="message-erreur" style="padding-top:5px;">
+                    {{ "Les données ci-dessus sont obligatoires si vous souhaitez recevoir des offres de la part des partenaires de FIA-NET."|trans({}, translation_domain) }}
+                </p>
+            {% endif %}
         </div>
         {% endif %}
     </div>
@@ -303,3 +326,29 @@
 {%- block _questionnaire_reponse_livraison_widget -%}
     {{ block('_questionnaire_reponse_6_widget') }}
 {%- endblock _questionnaire_reponse_livraison_widget -%}
+
+{%- block site_question_etoile_commentaire_widget -%}
+    {% set form_note = form.children|first %}
+    <div id="{{ form.vars.id }}">
+        <div class="quest-sub-title">{{- form_label(form) -}}</div>
+        <div class="quest-detail-full">
+            <div class="questionnaire-l-notation">
+                <div class="libelle-note">
+                    <div class="libelle">
+                        {{- form_label(form_note) -}}
+                    </div>
+                    <div class="form_note" data-input-id="{{ form_note.vars.id }}"></div>
+                </div>
+                {{- form_widget(form_note) -}}
+            </div>
+            <div class="questionnaire-l-commentaire">
+                <strong>{{- form_label(form.commentaire) -}}</strong>
+                <br>
+                {{- form_widget(form.commentaire) -}}
+                <br>
+                {{ "Maximum %d caractères. Nombre de caractères restants :"|trans({}, translation_domain)|format(form.commentaire.vars.attr.maxlength) }}
+                <span id="nbcaracteres" class="message-ok">{{ form.commentaire.vars.attr.maxlength }}</span>
+            </div>
+        </div>
+    </div>
+{%- endblock site_question_etoile_commentaire_widget -%}

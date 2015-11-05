@@ -31,6 +31,9 @@
         <service id="sceau.form_type_site_question.choice_type" class="SceauBundle\Form\Type\Site\Question\ChoiceType">
             <tag name="form.type" alias="site_question_choice" />
         </service>
+        <service id="sceau.form_type_site_question.etoile_commentaire_type" class="SceauBundle\Form\Type\Site\Question\EtoileCommentaireType">
+            <tag name="form.type" alias="site_question_etoile_commentaire" />
+        </service>
         <service id="sceau.form_type_site_question.optin_type" class="SceauBundle\Form\Type\Site\Question\OptinType">
             <tag name="form.type" alias="site_question_optin" />
         </service>

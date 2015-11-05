@@ -2,6 +2,7 @@
 
 namespace SceauBundle\Controller\Site;
 
+use Doctrine\ORM\EntityNotFoundException;
 use SceauBundle\Entity\Questionnaire;
 use SceauBundle\Entity\QuestionnaireReponse;
 use SceauBundle\Entity\QuestionType;
@@ -53,6 +54,23 @@ class QuestionnaireController extends Controller
         $displayMore = $request->get('display_more', false);
         if ($form->isValid() && !$displayMore) {
             $this->persistQuestionnaireReponses($form, $questionnaire);
+
+            if ($form->has('livraison')) {
+                $delai = $form->get('livraison')->getData();
+            }
+            if ($form->has('cgu')) {
+                $email = $form->get('cgu')->get('email')->getData();
+                $cgu   = $form->get('cgu')->get('cgu')->getData();
+            }
+            if ($form->has('optin')) {
+                $optin = $form->get('optin')->get('optin')->getData();
+
+                if ($optin) {
+                    $civility  = $form->get('optin')->get('civility')->getData();
+                    $lastName  = $form->get('optin')->get('lastName')->getData();
+                    $firstName = $form->get('optin')->get('firstName')->getData();
+                }
+            }
         }
 
         $linkedQuestions = [];
@@ -72,6 +90,7 @@ class QuestionnaireController extends Controller
             'questionnaire'   => $questionnaire,
             'form'            => $form->createView(),
             'linkedQuestions' => json_encode($linkedQuestions),
+            'error'           => !$form->isValid() && $request->getMethod() === 'POST' && !$displayMore,
         ]);
     }
 
