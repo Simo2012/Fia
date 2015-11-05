@@ -4,19 +4,18 @@ namespace SceauBundle\Controller\Admin;
 
 use SceauBundle\Entity\Ticket;
 use SceauBundle\Entity\TicketHistorique;
-use SceauBundle\Entity\TicketReponse;
 use SceauBundle\Entity\EnvoiEmail;
 use SceauBundle\Entity\TicketHistoriqueEmail;
 use SceauBundle\Form\Type\Admin\TicketHistoriqueEmailType;
 use SceauBundle\Form\Type\Admin\TicketNoteType;
 use SceauBundle\Form\Type\Admin\TicketReafectationType;
+use SceauBundle\Form\Type\Admin\TicketHistoriqueEmailDisabledType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
-use SceauBundle\Form\Type\Admin\TicketReponseType;
 use SceauBundle\Form\Type\Admin\Filters\TicketFiltersType;
 use Symfony\Component\Validator\Constraints\Date;
 
@@ -71,8 +70,8 @@ class QuestionController extends Controller
             'method' => 'POST',
         ));
 
-        $ticketReponse = new TicketReponse();
-        $ticketReponseForm = $this->createForm(new TicketReponseType(), $ticketReponse, array(
+        $ticketHistoriqueEmail = new TicketHistoriqueEmail();
+        $ticketHistoriqueEmailForm = $this->createForm(new TicketHistoriqueEmailType(), $ticketHistoriqueEmail, array(
             'action' => $this->generateUrl('question_reponse',array('id'=>$ticket->getId())),
             'method' => 'POST',
         ));
@@ -84,7 +83,7 @@ class QuestionController extends Controller
 
         return array(
             'ticket'                    => $ticket,
-            'ticketReponseForm'         => $ticketReponseForm->createView(),
+            'ticketHistoriqueEmailForm' => $ticketHistoriqueEmailForm->createView(),
             'ticketNoteForm'            => $ticketNoteForm->createView(),
             'ticketReafectationForm'    => $ticketReafectationForm->createView(),
             'historiques'               => $historiques,
@@ -99,21 +98,20 @@ class QuestionController extends Controller
      */
     public function ticketReponseAction(Request $request, Ticket $ticket)
     {
-        $ticketReponse = new TicketReponse();
-        $ticketReponseForm = $this->createForm(new TicketReponseType(), $ticketReponse);
+        $ticketHistoriqueEmail = new TicketHistoriqueEmail();
+        $ticketHistoriqueEmailForm = $this->createForm(new TicketHistoriqueEmailType(), $ticketHistoriqueEmail);
 
-        $ticketReponseForm->handleRequest($request);
+        $ticketHistoriqueEmailForm->handleRequest($request);
 
-        if ($ticketReponseForm->isValid()) {
-            $ticketReponse = $ticketReponseForm->getData();
-            
+        if ($ticketHistoriqueEmailForm->isValid()) {
+            $ticketHistoriqueEmail = $ticketHistoriqueEmailForm->getData();
             $em = $this->getDoctrine()->getManager();
-            $ticketReponse->setMailTo($ticket->getAuteur()->getEmail());
-            $ticketReponse->setTicket($ticket);
-            $ticket->addReponse($ticketReponse);
-            $em->persist($ticketReponse);
-            $em->persist($ticket);
+            $ticketHistoriqueEmail->setMailTo($ticket->getAuteur()->getEmail());
+            $em->persist($ticketHistoriqueEmail);
             $em->flush();
+
+            // new historique for email reponse
+            $this->get('sceau.admin.ticket_historique_service')->createTicketEmailHistorique($ticket, $ticketHistoriqueEmail);
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -219,14 +217,16 @@ class QuestionController extends Controller
     public function getHistoriqueEmailAction($id)
     {
         /** @var \SceauBundle\Entity\Repository\TicketHistoriqueRepository $historiqueRepository */
-        $TicketReponseRepository = $this->get('sceau.repository.ticket.reponse');
+        $ticketHistoriqueRepository = $this->get('sceau.repository.ticket.historique');
+        $ticketHistorique = $ticketHistoriqueRepository->find($id);
+        $ticketHistoriqueEmail = $ticketHistorique->getTicketHistoriqueEmail();
 
-        $ticketReponse  = $TicketReponseRepository->find($id);
-        $historiqueEmailForm = $this->createForm(new TicketHistoriqueEmailType, $ticketReponse);
+        $ticketHistoriqueEmailDisabledForm = $this->createForm(new TicketHistoriqueEmailDisabledType(), $ticketHistoriqueEmail);
 
         return $this->render('SceauBundle:Admin/Questions:historique_email_content.html.twig', array(
-            'historiqueEmailForm' => $historiqueEmailForm->createView(),
-            'ticket'              => $ticketReponse->getTicket(),
+            'ticket'                            => $ticketHistorique->getTicket(),
+            'ticketHistoriqueEmailDisabledForm' => $ticketHistoriqueEmailDisabledForm->createView(),
+           
         ));
     }
 }

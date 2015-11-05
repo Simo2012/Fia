@@ -106,9 +106,9 @@
                                 <td>{{ historique.description }}</td>
                                 <td>
                                     {{ historique.comment }}
-                                    {% if historique.reponseId %}
+                                    {% if historique.ticketHistoriqueEmail %}
                                         <a class="btn btn-default"
-                                           href="{{ path('question_historique_email', {'id': historique.reponseId}) }}"
+                                           href="{{ path('question_historique_email', {'id': historique.id}) }}"
                                            data-toggle="modal" data-target="#emailHistomodal"><i class="fa fa-search">Voir</i></a>
                                     {% endif %}
                                 </td>
@@ -148,7 +148,7 @@
         </div>
     </div>
 
-    <div class="modal fade in" id="reponseModal">
+{#     <div class="modal fade in" id="reponseModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -161,7 +161,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> #}
 
          <!-- Reponse Modal -->
         <div class="modal fade in" id="reponseModal">
@@ -172,8 +172,8 @@
                         <h4 class="modal-title">Réponse à la question n°{{ ticket.id }}</h4>
                     </div>
                     <div class="modal-body">
-                        {% form_theme ticketReponseForm 'bootstrap_3_horizontal_layout.html.twig' %}
-                        {{ form(ticketReponseForm) }}
+                        {% form_theme ticketHistoriqueEmailForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                        {{ form(ticketHistoriqueEmailForm) }}
                     </div>
                 </div>
             </div>
@@ -251,8 +251,8 @@
 
 {% block JAVASCRIPT %}
     <script type="text/javascript">
-        var $ticketReponseSujet = $('input#sceaubundle_ticket_reponse_mailSubject'),
-            $ticketReponseMessage = $('textarea#sceaubundle_ticket_reponse_mailBody');
+        var $ticketReponseSujet = $('input#sceaubundle_ticket_historique_email_mailSubject'),
+            $ticketReponseMessage = $('textarea#sceaubundle_ticket_historique_email_mailBody');
         
         $('select').change(function() { 
             modeleType = $(this).val();

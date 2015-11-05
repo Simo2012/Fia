@@ -18,27 +18,22 @@ class TicketHistoriqueEmailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date','date', array(
-                'widget'    => 'single_text',
-                'disabled'  => true,
-                'label'     => 'Date',
-            ))
-            ->add('mailFrom','text',array(
-                'disabled' => true,
-                'label'    => 'Expéditeur',
-            ))
-            ->add('mailTo','text',array(
-                'disabled' => true,
-                'label'    => 'Destinataire',
-            ))
-            ->add('mailSubject','text',array(
-                'disabled' => true,
-                'label'    => 'Sujet',
-            ))
-            ->add('mailBody','textarea',array(
-                'disabled' => true,
-                'label'    => 'Message',
-            ))
+            ->add('reponseModele','entity', [
+                'class'         => 'SceauBundle:TicketReponseModele',
+                'empty_value'   => '-- Choisissez une réponse type --',
+                'choice_label'  => 'type',
+                'required'      => false,
+            ])
+            ->add('mailFrom' , 'text', [
+                'data' => 'sceau-de-confiance@fia-net.fr'
+            ])
+            ->add('mailSubject', 'text')
+            ->add('mailBody', 'textarea')
+            ->add('save', 'submit', [
+                'attr' => ['class' => 'submit'],
+                'label' => "Valider",
+                'attr' => ['class' => 'btn btn-green']
+            ])
         ;
     }
 
@@ -48,7 +43,7 @@ class TicketHistoriqueEmailType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SceauBundle\Entity\TicketReponse'
+            'data_class' => 'SceauBundle\Entity\TicketHistoriqueEmail'
         ));
     }
 
@@ -57,6 +52,6 @@ class TicketHistoriqueEmailType extends AbstractType
      */
     public function getName()
     {
-        return null;
+        return 'sceaubundle_ticket_historique_email';
     }
 }

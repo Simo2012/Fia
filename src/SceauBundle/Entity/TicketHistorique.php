@@ -59,11 +59,9 @@ class TicketHistorique
     private $ticket;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="reponse_id", type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="SceauBundle\Entity\TicketHistoriqueEmail")
      */
-    private $reponseId;
+    private $ticketHistoriqueEmail;
 
     /**
      * @var integer
@@ -207,26 +205,26 @@ class TicketHistorique
     }
 
     /**
-     * Set reponseId
+     * Set ticketHistoriqueEmail
      *
-     * @param integer $reponseId
+     * @param \SceauBundle\Entity\TicketHistoriqueEmail $ticketHistoriqueEmail
      *
      * @return TicketHistorique
      */
-    public function setReponseId($reponseId)
+    public function setTicketHistoriqueEmail(\SceauBundle\Entity\TicketHistoriqueEmail $ticketHistoriqueEmail = null)
     {
-        $this->reponseId = $reponseId;
+        $this->ticketHistoriqueEmail = $ticketHistoriqueEmail;
 
         return $this;
     }
 
     /**
-     * Get reponseId
+     * Get ticketHistoriqueEmail
      *
-     * @return integer
+     * @return \SceauBundle\Entity\TicketHistoriqueEmail
      */
-    public function getReponseId()
+    public function getTicketHistoriqueEmail()
     {
-        return $this->reponseId;
+        return $this->ticketHistoriqueEmail;
     }
 }

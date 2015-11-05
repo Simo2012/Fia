@@ -5,7 +5,7 @@ namespace SceauBundle\Service\Admin;
 use Doctrine\ORM\EntityManager;
 use SceauBundle\Entity\Ticket;
 use SceauBundle\Entity\TicketHistorique;
-use SceauBundle\Entity\TicketReponse;
+use SceauBundle\Entity\TicketHistoriqueEmail;
 
 class TicketHistoriqueService
 {
@@ -67,14 +67,14 @@ class TicketHistoriqueService
         $em->flush();
     }
 
-    public function createTicketEmailHistorique($action, TicketReponse $ticketReponse)
+    public function createTicketEmailHistorique(Ticket $ticket, TicketHistoriqueEmail $ticketHistoriqueEmail)
     {
         $em = $this->em;
         $ticketHistorique = new TicketHistorique();
 
         $ticketHistorique->setDescription("Nouvelle réponse au ticket : traité par ")
-            ->setReponseId($ticketReponse->getId())
-            ->setTicket($ticketReponse->getTicket())
+            ->setTicketHistoriqueEmail($ticketHistoriqueEmail)
+            ->setTicket($ticket)
             ->setUser(1);
 
         $em->persist($ticketHistorique);
