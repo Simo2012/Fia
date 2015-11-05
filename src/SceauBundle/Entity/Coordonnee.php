@@ -24,7 +24,7 @@ class Coordonnee
     /**
      * @var string
      *
-     * @ORM\Column(name="adresse", type="string", length=255)
+     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
      */
     private $adresse;
 
@@ -38,14 +38,14 @@ class Coordonnee
     /**
      * @var string
      *
-     * @ORM\Column(name="codePostal", type="string", length=20)
+     * @ORM\Column(name="codePostal", type="string", length=20, nullable=true)
      */
     private $codePostal;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ville", type="string", length=50)
+     * @ORM\Column(name="ville", type="string", length=50, nullable=true)
      */
     private $ville;
 

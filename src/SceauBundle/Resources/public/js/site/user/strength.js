@@ -5,7 +5,6 @@
  * Licensed under the MIT license
  */
 (function ( $, window, document, undefined ) {
-
     var pluginName = "strength",
         defaults = {
             strengthClass: 'strength',
@@ -62,6 +61,10 @@
 
                   var thismeter = $('div[data-meter="'+thisid+'"]');
                   var pwd = $('#myPassword');
+                  if (pwd === null)
+                  {
+                      pwd = $('#site_member_register_password');
+                  }
                 if(total == 0){
                       thismeter.removeClass().html('');
                       pwd.removeClass();

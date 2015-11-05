@@ -17,7 +17,6 @@ class UpdateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $poBuilder, array $paOptions)
     {
-        //var_dump($paOptions['attr']['locationId']);
         $laParams = array(
             'class' => 'SceauBundle:Avatar',
             'property' => 'number',

@@ -3,6 +3,8 @@
         {% include "SceauBundle:Site/Common:menu.html.twig" %}    
         {% if menu == 'register' %}
             {% set locations = ['Accueil','Espace membre', 'Inscription'] %}
+        {% elseif menu == 'successRegister' %} 
+            {% set locations = ['Accueil','Espace membre', 'Connexion / Inscription'] %}
         {% elseif menu == 'site_operation_detail' %} 
             {% set locations = ['Accueil','Fonctionnement'] %}
         {% elseif menu == 'site_operation_news' %} 
@@ -57,7 +59,7 @@
                 </div>
             {% elseif menu == 'register' %}
                 <div class="login-left">
-                    {% include "SceauBundle:Site/Security:register.html.twig" %}  
+                    {% include "SceauBundle:Site/Security:register.html.twig" %}
                 </div>
             {% elseif menu == 'site_operation_detail' %} 
                 <div class="bloc_faq">
@@ -83,6 +85,10 @@
                  {% include "SceauBundle:Site/Footer:politique.html.twig" %}
             {% elseif  menu == 'site_fianet_faq' %}
                  {% include "SceauBundle:Site/Footer:faq.html.twig" %}
+            {% elseif  menu == 'successRegister' %}
+                 <div class="login-left">
+                    {% include "SceauBundle:Site/Security:successRegister.html.twig" %}
+                 </div>
             {% elseif  menu == 'home-membre'%}
                 <div class="block-menugche">
                     {{ include('SceauBundle:Site/Membre:menumembre.html.twig') }}

@@ -83,11 +83,10 @@ class HomeController extends Controller
         $loManager = $this->getDoctrine()->getManager();
         $loUser = null;
         $loNewletters = null;
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         if ($loPseudoMembre != 'anon.') {
             $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
         }
-
         //Récupération Route Envoyé
         $loRequest = $this->container->get('request');
         $loRouteName = $loRequest->get('_route');
@@ -157,7 +156,7 @@ class HomeController extends Controller
      *
      * @return Response
      */
-    public function presseAction(Request $request)
+    public function presseAction()
     {
         $articlePresseRepo = $this->get('sceau.repository.article.presse');
         $articlePresses = $articlePresseRepo->getAllArticlePresse();

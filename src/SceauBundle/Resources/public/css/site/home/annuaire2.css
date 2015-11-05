@@ -1025,8 +1025,9 @@ ul.popup_AFNOR_list li {
 	margin-right: -120px;
 	margin-top: -94px;
 	width: 140px;
-	background-image: url('../../images/site/homeerror_home_back.png');
-	background-repeat: no-repeat;
+	//background-image: url('../../images/site/error_home_back.png');
+	//background-repeat: no-repeat;
+        background: url(../../../images/site/common/error_home_back.png) no-repeat;
 	background-position: top;
 	height: 95px;
 	font-size: 11px;/* display:none; */
@@ -1759,7 +1760,7 @@ td.border {
 .resultat_tombola {
 	width: 220px;
 	background-color: #7b6b6f;
-	background-image: url('../../images/site/hometombola_back_top.png');
+	/*background-image: url('../../images/site/hometombola_back_top.png');*/
 	background-repeat: no-repeat;
 	/* background-position: top; */
 	background-position: 0px -5px;
@@ -1784,7 +1785,7 @@ td.border {
 	width: 220px;
 	height: 10px;
 	display: block;
-	background-image: url('../../images/site/hometombola_back_bottom.png');
+	/*background-image: url('../../images/site/hometombola_back_bottom.png');*/
 	background-repeat: no-repeat;
 	color: #FFFFFF;
 }
@@ -3072,7 +3073,7 @@ button.go em.type {
 .login-right {
 	float: right;
 	background-color: #7B6B6F;
-	background-image: url('"../../images/site/hometombola_back_top.png"');
+	/*background-image: url('"../../images/site/hometombola_back_top.png"');*/
 	background-position: 0 -5px;
 	background-repeat: no-repeat;
 	color: #DCDCDC;
@@ -3089,8 +3090,8 @@ button.go em.type {
 	padding: 10px;
 	height: 10px;
 	display: block;
-	background-image: url('../../images/site/hometombola_back_bottom.png');
-	background-repeat: ndo-repeat;
+	/*background-image: url('../../images/site/hometombola_back_bottom.png');*/
+	background-repeat: no-repeat;
 }
 .input-erreur {
 	background-color: #FFB6B8;
@@ -3098,6 +3099,13 @@ button.go em.type {
 #inscription-formulaire {
 	float: left;
 }
+#inscription-formulaire li{
+	float: right;
+        color: red;
+        list-style: none;
+        margin-right: 100px;
+}
+
 #inscription-formulaire div {
 	margin-top: 10px;
 }
@@ -3136,10 +3144,14 @@ button.go em.type {
         width: 50px;
         float: left;
 }
+.infobulle_inscription {
+    float: right;
+    margin-right: 300px;
+}
 
 #inscription-formulaire label {
 	display: block;
-        width: 200px;
+        width: 150px;
         float: left;
         margin-top: 15px;
 }
@@ -3892,7 +3904,7 @@ button.go em.type {
 	height: 92px;
 	margin-top: 25px;
 	padding: 15px;
-	background-image: url('../../images/site/homenew_member_back.png');
+	/*background-image: url('../../images/site/homenew_member_back.png');*/
 	background-repeat: no-repeat;
 }
 .new-member span {
@@ -3915,7 +3927,7 @@ button.go em.type {
 .div-vignette-newsletter {
 	float: right;
 	background-color: #7B6B6F;
-	background-image: url('"../../images/site/hometombola_back_top.png"');
+	/*background-image: url('"../../images/site/hometombola_back_top.png"');*/
 	background-position: 0 -5px;
 	background-repeat: no-repeat;
 	color: #DCDCDC;
@@ -3928,7 +3940,7 @@ button.go em.type {
 	padding: 10px;
 	height: 10px;
 	display: block;
-	background-image: url('../../images/site/hometombola_back_bottom.png');
+	/*background-image: url('../../images/site/hometombola_back_bottom.png');*/
 	background-repeat: no-repeat;
 }
 .titre-vignette-newsletter {
@@ -3949,7 +3961,7 @@ button.go em.type {
 	float: left;
 	width: 1000px;
 	height: 17px;
-	background-image: url('../../images/site/homebottom_main_block.png');
+	/*background-image: url('../../images/site/homebottom_main_block.png');*/
 	background-repeat: no-repeat;
 }
 .fiche_site_main {

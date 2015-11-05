@@ -10,16 +10,32 @@
         {% set button = '' %}
     {%  endif %}
 <form  action="{{action}}" method="post">    
-    <input type="hidden" name="formulaireinscription" valuek="1">
+    <input type="hidden" name="formulaireinscription" valuek="1" {{ form_enctype(form) }}>
     
     <div id="{{classFormulaire}}">
         
         {{ form_start(form) }}
+        <div>
+            {{ form_errors(form) }}
+        </div>
         {{ form_row(form.civilite) }}
         {{ form_row(form.nom) }}
         {{ form_row(form.prenom) }}
         {{ form_row(form.email) }}
+        <div class="infobulle_inscription">
+            <a class="bloc_infobulle" href="#">
+                <img src="{{ asset('bundles/sceau/images/site/home-membre/question-info-bulle.png') }}" alt="infobulle" />
+                <span>
+                    Pourquoi un pseudonyme ? Il sera votre nom d'utilisateur unique sur FIA-NET.com. 
+                    Par défaut votre pseudonyme sera constitué de votre prénom et de la premiére lettre de votre nom 
+                    (par exemple : (Alexandre Dupont = Alexandre D). Il s'affichera en face de vos avis..
+                </span>
+            </a>
+        </div>
         {{ form_row(form.pseudo) }}
+        {{ form_label(form.password)}}
+        {{ form_widget(form.password) }}
+
         {% if menu == 'tombola' %}
             {{ form_row(form.pays) }}
             <div id="coordonnes">
@@ -29,7 +45,7 @@
                 {{ form_row(form.ville) }}
             </div>
         {% endif %}
-        {{ form_row(form.password) }}
+        
         <div class='registre-avatar'>
             {% include 'SceauBundle:Site/Security:avatar.html.twig' %}
         </div>
@@ -56,3 +72,4 @@
     
    
 </form>
+

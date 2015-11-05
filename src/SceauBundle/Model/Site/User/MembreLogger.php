@@ -9,11 +9,10 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use SceauBundle\Entity\Coordonnee;
 use SceauBundle\Entity\Email;
-use Symfony\Component\Security\Http\Firewall\ListenerInterface;
+use SceauBundle\Entity\Avatar;
 
 /**
  * Connexion des utilisateurs
@@ -83,6 +82,14 @@ class MembreLogger
                 'Incorrect Login'
             );
         }
+        
+        $loEmail = $this->manager->getRepository('SceauBundle:Email')->getDateConfirmation($poLogin);
+        if ($loEmail->getDateConfirmation()==null) {
+            throw new \ErrorException(
+                    'Email non Confirmé'
+                );
+        }
+         
         $laPassword = $this->apiDecryptFilter->filter($loUser->getPassword());
         $lsPassword = $laPassword[0];
         if ($poPassword !== $lsPassword) {
@@ -94,6 +101,17 @@ class MembreLogger
         $this->setUserInSession($loUser);
         return $loUser;
     } // getUser
+    
+    /**
+     * Fonction pour afficher le mot de passe en clair
+     * @param type $poUser
+     * @return type
+     */
+    public function displayPassword($poUser)
+    {
+        $laPassword = $this->apiDecryptFilter->filter($poUser->getPassword());
+        return $laPassword[0];
+    }
 
     /**
      * Log l'utilisateur
@@ -127,6 +145,14 @@ class MembreLogger
                 );
             }
         }
+        $loUser = $this->manager->getRepository('SceauBundle:Membre')->getByPseudo($poUser->getPseudo());
+        if (!empty($loUser)) {
+            throw new \ErrorException(
+                    'Pseudo Exist déja'
+                );
+        }
+        
+        
         $this->createUser($poUser);
 
         // ==== Mise en session de l'utilisateur ====
@@ -157,7 +183,9 @@ class MembreLogger
             $this->manager->persist($poUser);
             $this->manager->flush();
         } catch (\Exception $e) {
-            var_dump('erreur lors de la creation user');
+            throw new \ErrorException(
+                'erreur lors de la creation user'
+            );
         }
     } // createUser
 
@@ -183,7 +211,9 @@ class MembreLogger
             $this->manager->persist($loTombolaTicket);
             $this->manager->flush();
         } catch (\Exception $e) {
-            var_dump('erreur lors de creation du nouveau ticket tombolat');
+            throw new \ErrorException(
+                'erreur lors de creation du nouveau ticket tombolat'
+            );
         }
         return $loTombolaTicket->getId();
     }
@@ -208,40 +238,15 @@ class MembreLogger
             $this->manager->persist($loCoordonnees);
             $this->manager->flush();
         } catch (\Exception $e) {
-            var_dump('erreur lors de creation des Coordonnées');
+            throw new \ErrorException(
+                'erreur lors de creation des Coordonnées'
+            );
         }
 
         return $loCoordonnees;
     }
-
     /**
-     * Sauvgarder Coordonnées
-     *
-     * @param $poField
-     * @$return Coordonnees
-     * @throws DBALException
-     */
-    public function updateCoordonnées($poField)
-    {
-        $loPays = $this->manager->getRepository('SceauBundle:Pays')->find($poField['coordonnee']['pays']);
-        $loCoordonnees = new Coordonnee();
-        try {
-            $loCoordonnees->setAdresse($poField['coordonnee']['adresse']);
-            $loCoordonnees->setCodePostal($poField['coordonnee']['codePostal']);
-            $loCoordonnees->setCompAdresse($poField['coordonnee']['compAdresse']);
-            $loCoordonnees->setVille($poField['coordonnee']['ville']);
-            $loCoordonnees->setPays($loPays);
-            $this->manager->persist($loCoordonnees);
-            $this->manager->flush();
-        } catch (\Exception $e) {
-            var_dump('erreur lors de creation des Coordonnées');
-        }
-
-        return $loCoordonnees;
-    }
-
-    /**
-     * Sauvgarder Coordonnées
+     * Sauvgarder Email
      *
      * @param $poField
      * @$return Email
@@ -250,20 +255,50 @@ class MembreLogger
     public function saveEmail($poField)
     {
         $loEmail = new Email();
-
+        $loUser = $this->manager->getRepository('SceauBundle:Membre')->getByMail($poField['email']['first']);
+        if (!empty($loUser)) {
+            throw new \ErrorException(
+                'Email Exist déja'
+            );
+        }
         try {
             $loEmail->setEmail($poField['email']['first']);
             $loEmail->setPrincipal(true);
-            $loEmail->setDateConfirmation(new \DateTime());
-            dump($loEmail);
+            //$loEmail->setDateConfirmation(new \DateTime());
             $this->manager->persist($loEmail);
             $this->manager->flush();
         } catch (\Exception $e) {
-            var_dump('erreur lors de creation des Emails');
+            throw new \ErrorException(
+                'erreur lors de creation des Emails'
+            );
         }
         return $loEmail;
     }
+    
+    public function saveAvatar($poIdAvatar)
+    {
+        if (is_numeric($poIdAvatar))
+        {
+            $loAvatar = new Avatar();
+            try {
+                $loAvatar->setNumber($poIdAvatar);
+                $this->manager->persist($loAvatar);
+                $this->manager->flush();
+            } catch (Exception $ex) {
+                throw new \ErrorException(
+                    'erreur lors de creation d\'avatar'
+                );
+            }
+            return $loAvatar;
+        }
+        return null;
+    }
 
+    /**
+     * 
+     * @param type $poUser
+     * @return int
+     */
     public function getPourcentage($poUser)
     {
         // Bar de pourcentage
@@ -326,7 +361,9 @@ class MembreLogger
             $this->manager->persist($loEmail);
             $this->manager->flush();
         } catch (\Exception $e) {
-            var_dump('erreur lors de creation des Emails');
+            throw new \ErrorException(
+                'erreur lors de creation des Emails'
+            );
         }
         return $loEmail;
     }
@@ -356,7 +393,9 @@ class MembreLogger
                 $this->manager->persist($loEmail);
                 $poUser->addEmail($loEmail);
             } catch (\Exception $e) {
-                var_dump('erreur lors de creation des Emails');
+                throw new \ErrorException(
+                    'erreur lors de creation des Emails'
+                );
             }
         }
         $this->manager->flush();
@@ -414,8 +453,6 @@ class MembreLogger
                     'Les Mots de passes sont différents'
                 );
             } else {
-                //$poUser->setPassword($poField['myPassword']);
-                dump($poField['password_nouveau']);
                 $loEncoder = $this->factory->getEncoder($poUser);
                 $lsPassword = $loEncoder->encodePassword($poField['password_nouveau'], $poUser->getSalt());
                 $poUser->setPassword($lsPassword);
@@ -443,7 +480,6 @@ class MembreLogger
                 $laPreference[] = $loPreference[$i];
             }
         }
-        //dump($laPreference);
         return $laPreference;
     }
     
@@ -461,7 +497,6 @@ class MembreLogger
             $pos++; 
         }
         $loPreference .= '}';
-        dump($loPreference);
         $poUser->setPreference($loPreference);
         $this->manager->flush($poUser);
         

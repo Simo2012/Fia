@@ -9,3 +9,32 @@
 </p>
 {% include "SceauBundle:Site/Security:registerform.html.twig" %}
 {% include "SceauBundle:Site/Common:dataprotection.html.twig" %}
+
+{% if error is defined %}
+    {% if errorType == 'register' %}
+        {% set title = 'Le formulaire contient des erreurs'%}
+        {% set action = '#' %}
+        {% import "SceauBundle:Site/Popup:success.html.twig" as forms %} 
+        {{ forms.input(title, error, action) }}
+    {%endif%}
+{%endif%}
+
+
+
+
+{% javascripts
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'
+            'bundles/sceau/js/site/user/strength.js'
+%}
+<script src="{{ asset_url }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function ($) {
+
+        $('#site_member_register_password').strength({
+            strengthClass: 'strength',
+            strengthMeterClass: 'strength_meter',
+            strengthButtonClass: 'button_strength',
+        });
+    });
+</script>
+{% endjavascripts %}

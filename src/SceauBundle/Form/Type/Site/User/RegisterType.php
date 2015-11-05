@@ -5,6 +5,7 @@ namespace SceauBundle\Form\Type\Site\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
 use Symfony\Component\Validator\Constraints\True;
 
 /**
@@ -23,7 +24,6 @@ class RegisterType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $poBuilder, array $paOptions)
     {
-        //var_dump($paOptions['attr']['locationId']);
         $laParams = array(
             'attr'     => array(
                 'caption'   => 'Civilite :*',
@@ -172,8 +172,10 @@ class RegisterType extends AbstractType
                 )
             ),
             'mapped'      => false,
-            'constraints' => array(
-            )
+            'error_bubbling' => true,
+            'constraints'   => array(
+                new RecaptchaTrue()
+            ),
         );
         $poBuilder->add('recaptcha', 'ewz_recaptcha', $laParams);
         

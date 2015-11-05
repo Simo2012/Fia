@@ -43,7 +43,7 @@ function checkPassword() {
             data: { pwd: pwd },
             success: function(data){ // quand la réponse de la requete arrive
               //window.location.
-            if(data.error === true){
+            if(data.error === false){
                  $("#password_actuel").val('Paswword Incorrect');
             }
               //alert(data);

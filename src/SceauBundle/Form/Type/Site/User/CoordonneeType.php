@@ -18,7 +18,6 @@ class CoordonneeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $poBuilder, array $paOptions)
     {
-        //var_dump($paOptions['attr']['locationId']);
         $laParams = array(
             'label' => 'Pays :*',
             'class' => 'SceauBundle:Pays',

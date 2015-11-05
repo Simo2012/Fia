@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SceauBundle\Form\Type\Site\User\UpdateType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use SceauBundle\Form\Type\Site\User\PreferenceType;
 
 /**
  * Contrôleur Membre : pages relatives aux action de membre
@@ -75,9 +74,7 @@ class MembreController extends Controller
      */
     public function updateCompteMembreAction()
     {
-        dump($this->get('session')->get('success'));
-        dump($this->get('session')->get('confirmation'));
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         if ($loPseudoMembre != 'anon.') {
             $loUser = $loManager->getRepository('SceauBundle:Membre')
@@ -87,7 +84,10 @@ class MembreController extends Controller
             $loForm = $this->createForm(new UpdateType(), $loUser);
             $loRequest = $this->get('request_stack')->getCurrentRequest();
             if ($loRequest->isMethod('POST')) {
-                $loForm->bind($loRequest); // TODO : Deprecated !
+                $loForm->handleRequest($loRequest);
+                if ($loUser->getCoordonnee()->getId() == null) {
+                    $loManager->persist($loUser->getCoordonnee());
+                }
                 $loManager->flush($loUser->getCoordonnee());
                 $loManager->flush($loUser);
             }
@@ -117,9 +117,9 @@ class MembreController extends Controller
      *
      * @return Response
      */
-    public function addEmailMembre(Request $poRequest)
+    public function addEmailMembreAction(Request $poRequest)
     {
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
         $loEmailSecondaire = $loManager->getRepository('SceauBundle:Membre')->getEmailsSecondaires($loUser->getId());
@@ -154,10 +154,10 @@ class MembreController extends Controller
      * @Method("POST")
      *
      */
-    public function deleteEmailMembre()
+    public function deleteEmailMembreAction()
     {
 
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loRequest = $this->get('request_stack')->getCurrentRequest();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
@@ -167,7 +167,6 @@ class MembreController extends Controller
             $loEmail = $loManager->getRepository('SceauBundle:Email')->find($loIdEmail);
             $loUser->removeEmail($loEmail);
             $loManager->flush($loUser);
-            var_dump($loUser);
             $loManager->remove($loEmail);
             $loManager->flush();
         }
@@ -193,9 +192,9 @@ class MembreController extends Controller
      * @Method("POST")
      *
      */
-    public function updateEmailPrincipaleMembre()
+    public function updateEmailPrincipaleMembreAction()
     {
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loRequest = $this->get('request_stack')->getCurrentRequest();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
@@ -227,9 +226,9 @@ class MembreController extends Controller
      * @Method("POST")
      *
      */
-    public function checkPwd()
+    public function checkPwdAction()
     {
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loRequest = $this->get('request_stack')->getCurrentRequest();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
@@ -253,9 +252,9 @@ class MembreController extends Controller
      * @Method("POST")
      *
      */
-    public function updatePwd()
+    public function updatePwdAction()
     {
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loRequest = $this->get('request_stack')->getCurrentRequest();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
@@ -291,9 +290,9 @@ class MembreController extends Controller
     *     name="site_home_membre_preference")
     * @Method("GET")
     */
-    public function callPreference()
+    public function callPreferenceAction()
     {
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
         //Recuperer les categories disponibles
@@ -317,9 +316,9 @@ class MembreController extends Controller
     *     name="site_home_membre_add_preference")
     * @Method("POST")
     */
-    public function updatePreference()
+    public function updatePreferenceAction()
     {
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
         $loRequest = $this->get('request_stack')->getCurrentRequest();
@@ -351,9 +350,9 @@ class MembreController extends Controller
     *     name="site_home_membre_abonement")
     * @Method("GET")
     */
-    public function getAbonnement()
+    public function getAbonnementAction()
     {
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
         $loAbonement =  $loUser->getNewsletter();
@@ -373,9 +372,9 @@ class MembreController extends Controller
     *     name="site_home_membre_update_abonement")
     * @Method("POSt")
     */
-    public function updateAbonnement()
+    public function updateAbonnementAction()
     {
-        $loPseudoMembre = $this->get('security.context')->getToken()->getUser();
+        $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loRequest = $this->get('request_stack')->getCurrentRequest();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);

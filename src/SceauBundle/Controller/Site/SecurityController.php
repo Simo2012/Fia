@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use SceauBundle\Entity\Membre;
-use SceauBundle\Entity\Avatar;
+use SceauBundle\Entity\EnvoiEmail;
 use SceauBundle\Entity\Email;
 use Symfony\Component\HttpFoundation\Response;
 use SceauBundle\Form\Type\Site\User\RegisterType;
@@ -34,14 +34,20 @@ class SecurityController extends Controller
      */
     public function loginAction(Request $poRequest) 
     {
+        $loResponse = null;
         if ($poRequest->isMethod('POST')) {
             $loEmail  = $poRequest->get('_email');
             $loPassword = $poRequest->get('_password');
             if (!empty($loPassword) && !empty($loEmail)) {
-                $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
-                $loLoggedUser = $loMembreLogger->logUser($loEmail,$loPassword);
-                $this->saveToken($poRequest, $loLoggedUser);
-                $loResponse = $this->forward('SceauBundle:Site/Membre:homeMembre');
+                try {
+                    $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
+                    $loLoggedUser = $loMembreLogger->logUser($loEmail,$loPassword);
+                    $this->saveToken($poRequest, $loLoggedUser);
+                    $loResponse = $this->forward('SceauBundle:Site/Membre:homeMembre');
+                } catch(\Exception $e) {
+                    dump($e->getMessage());
+                   $loResponse = $this->errorAction($e->getMessage(), 'login');
+                }
             }
         }
         return $loResponse;   
@@ -69,6 +75,25 @@ class SecurityController extends Controller
     }
     
     /**
+     * A l'appele du fonction lors d'erreur Login
+     */
+    public function errorAction($poError, $poAction) {
+        $loUser = new Membre();
+        $loForm = $this->createForm(new RegisterType(), $loUser);
+        return $this->render(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
+                'form' => $loForm->createView(),
+                'menu' => 'register',
+                'redirect' => '',
+                'user' => null,
+                'error' => $poError,
+                'errorType' => $poAction
+            )
+        );
+    }
+    
+    /**
      *Action pour l'inscription 
      *
      *  @Route("/register",
@@ -80,31 +105,41 @@ class SecurityController extends Controller
         $loUser = new Membre();
         $loForm = $this->createForm(new RegisterType(), $loUser);
         $loManager = $this->getDoctrine()->getManager();
-       // $recaptcha = $this->createForm($this->get('security.authentication.listener.form'));
          if ($poRequest->isMethod('POST')) {
             $loForm->handleRequest($poRequest);
             if ($loForm->isValid()) {
-                $loIdAvatar = $poRequest->get('AvatarID');
-                $loEmails = $poRequest->get('site_member_register');
-                if (is_numeric($loIdAvatar)) {
-                    $loAvatar = new Avatar();
-                    $loAvatar->setNumber($loIdAvatar);
-                    $loUser->setAvatar($loAvatar);
-                    $loManager->persist($loAvatar);
+                try {
+                    if($poRequest->get('g-recaptcha-response') == '') {
+                        return $this->errorAction('Le captcha est obligatoire', 'register');
+                    } else {                
+                        $loIdAvatar = $poRequest->get('AvatarID');    
+                        $loFields = $poRequest->get('site_member_register');
+                        $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
+                       
+                         $loEmail = $loMembreLogger->saveEmail($loFields);
+                         $loAvatar = $loMembreLogger->saveAvatar($loIdAvatar);
+                         $loUser->setAvatar($loAvatar);
+                         $loUser->addEmail($loEmail);
+                         $loMembreLogger->registerUser($loUser,$loFields['email']['first'],true);
+                        $this->sendEmail('SceauBundle:Site/Emails:confirmationRegister.html.twig', $loUser, $loFields['email']['first']);
+                        return  $this->render(
+                            'SceauBundle:Site/Home:index.html.twig',
+                            array(
+                                'form' => $loForm->createView(),
+                                'menu' => 'successRegister',
+                                'user' => $loUser
+                            )
+                        );
+                    }
+                } catch (\Exception $e) {
+                      dump($e->getMessage());
+                    return $this->errorAction($e->getMessage(), 'register');
                 }
-                $loEmail = new Email();
-                $loEmail->setEmail($loEmails['email']['first']);
-                $loEmail->setPrincipal(true);
-                $loEmail->setDateConfirmation(new \DateTime());
-                $loUser->addEmail($loEmail);
-                
-                $loManager->persist($loEmail);
-                $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
-                $loMembreLogger->registerUser($loUser,$loEmails['email']['first'],true);
-                return $this->render("SceauBundle:Site/Security:test.html.twig");
+                 
             } else {
-               $laErrors = (string) $loForm->getErrors(true);
-               return new Response(json_encode(array('status' => 'KO', 'error' => $laErrors)));
+              
+                $laErrors = (string) $loForm->getErrors(true);
+               // $this->errorAction($laErrors, 'errorForm');
             }
              
         }
@@ -113,6 +148,7 @@ class SecurityController extends Controller
             array(
                 'form' => $loForm->createView(),
                 'menu' => 'register',
+                'redirect' => ''
             )
         );
     }
@@ -144,5 +180,40 @@ class SecurityController extends Controller
         );
         $this->get('security.token_storage')->setToken($loToken);
         $poRequest->getSession()->set('_security_secured_site_login_membre', serialize($loToken));
+        $poRequest->getSession()->set('user',$poUser);
+      //  $this->getUser() = $poUser;
+    }
+    
+    
+    /**
+     * Fonction pour Envoyer les mails
+     */
+    public function sendEmail($poTemplate, $poUser, $poEmail) {
+        $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
+        $loManager = $this->getDoctrine()->getManager();
+        $loPseudo =   $poUser->getPseudo();
+        $loPwd = $loMembreLogger->displayPassword($poUser);
+        try {
+             $loEnvoiEmail = new EnvoiEmail();
+             $loEnvoiEmail->setSubject($loPseudo . ' confirmer votre inscription sur fia-net');
+             $loEnvoiEmail->setSendFrom('membres@fia-net.fr');
+             $loEnvoiEmail->setSendTo($poEmail);
+             $loContent =   $this->renderView(
+                                $poTemplate,
+                                    array(
+                                        'pseudo' => $loPseudo,
+                                        'email' => $poEmail,
+                                        'pwd'   => $loPwd
+                                    )
+                                );
+            $loEnvoiEmail->setContent($loContent);
+            $loEnvoiEmail->setDateInsert(new \DateTime());
+            $loEnvoiEmail->setDateSend(new \DateTime());
+            $loEnvoiEmail->setStatus(2);
+            $loManager->persist($loEnvoiEmail);
+            $loManager->flush();
+        } catch (Exception $ex) {
+             dump($e->getMessage());
+        }
     }
 }

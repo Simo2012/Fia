@@ -12,5 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class EmailRepository extends EntityRepository
 {
-    
+    public function getDateConfirmation($poEmail)
+    {
+        $loQuery = $this->createQueryBuilder('e')
+            ->select('e')
+            ->where('e.email = :email')
+            ->setParameter('email', $poEmail);
+        return $loQuery->getQuery()->getOneOrNullResult();
+    }
 }
