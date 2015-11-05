@@ -15,95 +15,125 @@
 {% endblock %}
 
 {% block extranet_body %}
-        <div class="block-message">
-        {% for messageSucces in app.session.flashbag.get('droit_de_reponse_succes') %}
-            <p class="succes">{{ messageSucces }}</p>
-        {% endfor %}
-        {% for messageErreur in app.session.flashbag.get('droit_de_reponse_erreur') %}
-            <p class="erreur">{{ messageErreur }}</p>
-        {% endfor %}
-        </div>    
-    
-        {# ToDo : il faudra gérer l'affichage prénom+nom ou adresse e-mail selon le statut du membre - à voir dans le lot lié aux membres #}
-        <h1>{% trans %}commun_avis_de{% endtrans %} {% if questionnaire1.membre.prenom is not empty %}{{ questionnaire1.membre.prenom|capitalize }}{% endif %} {% if questionnaire1.membre.nom is not empty %}{{ questionnaire1.membre.nom |upper }}{% endif %}
-            <span>
-                {% if boutons.precedent %}
-                    <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.precedent.id, 'position': position-1 }) }}"><button><<</button></a>&nbsp;
-                {% endif %}
-
-                <a href="{{ path('extranet_questionnaires_questionnaires') }}"><button>{{ 'commun_questionnaires'|trans }}</button></a>
-
-                {% if boutons.suivant %}
-                    <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.suivant.id, 'position': position+1 }) }}"><button>>></button></a>&nbsp;
-                {% endif %}
-            </span>
-        </h1>
-        
-        {% if questionnaire1.commande is not null %}
-        <div class="block-total">
-            <div class="block-total-part1">
-                <h2>{% trans %}commun_commande_informations{% endtrans %} {% if questionnaire1.commande.reference is not empty %}{{ questionnaire1.commande.reference }}{% endif %} {% trans %}commun_du{% endtrans %} {{ questionnaire1.commande.date|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}</h2>
-                <dt>&nbsp;&nbsp;{% if questionnaire1.commande.prenom is not empty %}{% if questionnaire1.commande.prenom is not empty %}{{ questionnaire1.commande.prenom |capitalize }}{% endif %} {{ questionnaire1.commande.nom |upper }}{% endif %}</dt>
-                <hr />
-                <dt>&nbsp;&nbsp;{{ questionnaire1.commande.email }}</dt>
-                <hr />
-                <dd>{% trans %}commun_commande_date{% endtrans %} :</dd>
-                <dt>{{ questionnaire1.commande.date|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}</dt>
-                <hr />        
-                <dd>{% trans %}commun_questionnaire_envoye_par{% endtrans %} :</dd>
-                <dt>{% if questionnaire1.site.administrationType.id == 1 %}{% trans %}commun_marchand{% endtrans %}{% else %}FIA-NET{% endif %}</dt> {# ToDo : à revoir quand on fera les demandes de questionnaires via Espace Membre + peut être formulation de "Marchand" à revoir #}
-            </div>
-            <div class="block-total-part2">
-                <h2>&nbsp;</h2>
-                {% if questionnaire1.membre.pseudo is not empty %}
-                    <dd>{% trans %}commun_membre_pseudo{% endtrans %} :</dd>
-                    <dt>{{ questionnaire1.membre.pseudo }}</dt>
-                {% endif %}
-                {% if questionnaire1.commande.montant is not empty %}
-                    <hr />
-                    <dd>{% trans %}commun_commande_montant{% endtrans %} :</dd>
-                    <dt>{{ questionnaire1.commande.montant }} &euro; {# ToDo : on devra éventuellement gérer les devises pour les montants #}</dt>
-                {% endif %}
-                <hr />
-                <dd>{% trans %}commun_commande_site{% endtrans %} :</dd>
-                <dt>
-                    {{ questionnaire1.site.nom }}
-                    {% if questionnaire1.sousSite is not null %}
-                        - {% if questionnaire1.sousSite.nom is not empty %}{{ questionnaire1.sousSite.nom }} {% endif %}
-                    {% endif %}
-                </dt>            
-            </div>
-        </div>
-        {% endif %} 
-
-    <h1>{{ questionnaire1.questionnaireType.parametrage.libelleQuestionnaireRepondu|trans({}, 'commun_questionnaires_repondus') }}</h1>
-    <div class="block-total">
-        <div class="block-total-part1-2">
-            {% include 'SceauBundle:Commun:questionnaire_repondu.html.twig' with {'questionnaire': questionnaire1, 'afficherDroitDeReponse': true} only %}
-        </div>
-
-        {% if questionnaire1.questionnaireType.parametrage.droitDeReponse %}
-            <div class="block-total-part3">
-                <div class="block-info-rep">
-                    <div class="btn-droit-reponse"><img src="{{ asset('bundles/sceau/images/extranet/droit-reponse.png') }}" width="59" height="59" />
-                    </div>
-                    {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traduit / ! \ Réfléchir au process #}
-                    <p class="reponse">
-                        {% filter raw %}{% trans from 'extranet_droit_de_reponse' %}detail_questionnaire_bloc_droit_de_reponse{% endtrans %}{% endfilter %}
-                    </p>
-                </div>
-            </div>
-        {% endif %}
+    <div class="block-message">
+    {% for messageSucces in app.session.flashbag.get('droit_de_reponse_succes') %}
+        <p class="succes">{{ messageSucces }}</p>
+    {% endfor %}
+    {% for messageErreur in app.session.flashbag.get('droit_de_reponse_erreur') %}
+        <p class="erreur">{{ messageErreur }}</p>
+    {% endfor %}
     </div>
 
-    {% if questionnaire2 %}
-        <h1>{{ questionnaire2.questionnaireType.parametrage.libelleQuestionnaireRepondu|trans({}, 'commun_questionnaires_repondus') }}</h1>
-        <div class="block-total">
-            <div class="block-total-part1-2">
-                {% include 'SceauBundle:Commun:questionnaire_repondu_second.html.twig' with {'questionnaire': questionnaire2, 'afficherDroitDeReponse': true} only %}
+    {# ToDo : il faudra gérer l'affichage prénom+nom ou adresse e-mail selon le statut du membre - à voir dans le lot lié aux membres #}
+    <h1>{% trans %}commun_avis_de{% endtrans %} {% if questionnaire1.membre.prenom is not empty %}{{ questionnaire1.membre.prenom|capitalize }}{% endif %} {% if questionnaire1.membre.nom is not empty %}{{ questionnaire1.membre.nom |upper }}{% endif %}
+        <span>
+            {% if boutons.precedent %}
+                <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.precedent.id, 'position': position-1 }) }}"><button><<</button></a>&nbsp;
+            {% endif %}
+
+            <a href="{{ path('extranet_questionnaires_questionnaires') }}"><button>{{ 'commun_questionnaires'|trans }}</button></a>
+
+            {% if boutons.suivant %}
+                <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.suivant.id, 'position': position+1 }) }}"><button>>></button></a>&nbsp;
+            {% endif %}
+        </span>
+    </h1>
+
+    {# BLOCK INFORMATION SUR LA COMMANDE #}
+    <div class="row">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Information sur la commande
+                </h4>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+
+                    {% if questionnaire1.commande is not null %}
+                    <div class="row">
+                            <h2>{% trans %}commun_commande_informations{% endtrans %} {% if questionnaire1.commande.reference is not empty %}{{ questionnaire1.commande.reference }}{% endif %} {% trans %}commun_du{% endtrans %} {{ questionnaire1.commande.date|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}</h2>
+                     </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <dt>&nbsp;&nbsp;{% if questionnaire1.commande.prenom is not empty %}{% if questionnaire1.commande.prenom is not empty %}{{ questionnaire1.commande.prenom |capitalize }}{% endif %} {{ questionnaire1.commande.nom |upper }}{% endif %}</dt>
+                            <hr />
+                            <dt>&nbsp;&nbsp;{{ questionnaire1.commande.email }}</dt>
+                            <hr />
+                            <dd>{% trans %}commun_commande_date{% endtrans %} :</dd>
+                            <dt>{{ questionnaire1.commande.date|localizeddate('short', 'none') }} {% trans %}commun_a{% endtrans %} {{ questionnaire1.commande.date|localizeddate('none', 'short') }}</dt>
+                            <hr />
+                            <dd>{% trans %}commun_questionnaire_envoye_par{% endtrans %} :</dd>
+                            <dt>{% if questionnaire1.site.administrationType.id == 1 %}{% trans %}commun_marchand{% endtrans %}{% else %}FIA-NET{% endif %}</dt> {# ToDo : à revoir quand on fera les demandes de questionnaires via Espace Membre + peut être formulation de "Marchand" à revoir #}
+                        </div>
+                        <div class="col-lg-6">
+                            {% if questionnaire1.membre.pseudo is not empty %}
+                                <dd>{% trans %}commun_membre_pseudo{% endtrans %} :</dd>
+                                <dt>{{ questionnaire1.membre.pseudo }}</dt>
+                            {% endif %}
+                            {% if questionnaire1.commande.montant is not empty %}
+                                <hr />
+                                <dd>{% trans %}commun_commande_montant{% endtrans %} :</dd>
+                                <dt>{{ questionnaire1.commande.montant }} &euro; {# ToDo : on devra éventuellement gérer les devises pour les montants #}</dt>
+                            {% endif %}
+                            <hr />
+                            <dd>{% trans %}commun_commande_site{% endtrans %} :</dd>
+                            <dt>
+                                {{ questionnaire1.site.nom }}
+                                {% if questionnaire1.sousSite is not null %}
+                                    - {% if questionnaire1.sousSite.nom is not empty %}{{ questionnaire1.sousSite.nom }} {% endif %}
+                                {% endif %}
+                            </dt>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    {% endif %}
+    </div>
+
+    {# BLOCK INFORMATION SUR LA COMMANDE #}
+    <div class="row">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Réponse questionnaire
+                </h4>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <h1>{{ questionnaire1.questionnaireType.parametrage.libelleQuestionnaireRepondu|trans({}, 'commun_questionnaires_repondus') }}</h1>
+                    <div class="row">
+                        <div class="col-lg-7">
+                            {% include 'SceauBundle:Commun:questionnaire_repondu.html.twig' with {'questionnaire': questionnaire1, 'afficherDroitDeReponse': true} only %}
+                        </div>
+
+                        {% if questionnaire1.questionnaireType.parametrage.droitDeReponse %}
+                            <div class=" col-lg-5 panel-body bg-aqua text-white">
+                                <div class="block-info-rep">
+                                    <div class="btn-droit-reponse"><img src="{{ asset('bundles/sceau/images/extranet/droit-reponse.png') }}" width="59" height="59" />
+                                    </div>
+                                    {# ToDo : cette partie sera à revoir car le contenu devra être géré via le BO + ATTENTION texte devant être traduit / ! \ Réfléchir au process #}
+                                    <p class="reponse">
+                                        {% filter raw %}{% trans from 'extranet_droit_de_reponse' %}detail_questionnaire_bloc_droit_de_reponse{% endtrans %}{% endfilter %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if questionnaire2 %}
+                        <h1>{{ questionnaire2.questionnaireType.parametrage.libelleQuestionnaireRepondu|trans({}, 'commun_questionnaires_repondus') }}</h1>
+                        <div class="block-total">
+                            <div class="block-total-part1-2">
+                                {% include 'SceauBundle:Commun:questionnaire_repondu_second.html.twig' with {'questionnaire': questionnaire2, 'afficherDroitDeReponse': true} only %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extranet_javascripts %}

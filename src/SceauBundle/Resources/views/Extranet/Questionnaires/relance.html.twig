@@ -10,106 +10,139 @@
 
     <h1>{% trans %}titre_page{% endtrans %}</h1>
 
-    <div class="block-total">
-        <div class="block-total-part1-2">
-            <ul>
-                <li>
-                    <h3>{% trans %}jour_commande{% endtrans %}</h3>
-                    <img src="{{ asset('bundles/sceau/images/extranet/relance_commande.png') }}" width="82" height="84" alt=""/><br />
-                    {% trans %}frise_commande{% endtrans %}
-                </li>
-                <li class="arrow-b"><img src="{{ asset('bundles/sceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/></li>
-                <li>
-                    <h3>{% trans %}jour_livraison{% endtrans %}</h3>
-                    <img src="{{ asset('bundles/sceau/images/extranet/relance_livraison.png') }}" width="92" height="84" alt=""/><br />
-                    {% trans %}frise_livraison{% endtrans %}
-                </li>
-                <li class="arrow-b"><img src="{{ asset('bundles/sceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/></li>
-                <li>
-                    <h3>{% trans with {'%nbJours%' : delaiJoursRelance} %}jours_plus_tard{% endtrans %}</h3>
-                    <img src="{{ asset('bundles/sceau/images/extranet/relance_relance.png') }}" width="110" height="84" alt=""/><br />
-                    {% trans %}frise_relance{% endtrans %}
-                </li>
-            </ul>
-        </div>
 
-        <div class="block-total-part3">
-            <div class="block-info-comp">
-                <p><strong>Optimiser votre stratégie de livraison avec le Sceau de Confiance FIA-NET</strong></p>
-                <p class="color11">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <a href="#">Lire la suite</a>
-                </p>
+    {# BLOCK RECHERCHE #}
+    <div class="row">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Recherche
+                </h4>
             </div>
-        </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-inline">
+                                <li>
+                                    <h3>{% trans %}jour_commande{% endtrans %}</h3>
+                                    <img src="{{ asset('bundles/sceau/images/extranet/relance_commande.png') }}" width="82" height="84" alt=""/><br />
+                                    {% trans %}frise_commande{% endtrans %}
+                                </li>
+                                <li class="arrow-b"><img src="{{ asset('bundles/sceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/></li>
+                                <li>
+                                    <h3>{% trans %}jour_livraison{% endtrans %}</h3>
+                                    <img src="{{ asset('bundles/sceau/images/extranet/relance_livraison.png') }}" width="92" height="84" alt=""/><br />
+                                    {% trans %}frise_livraison{% endtrans %}
+                                </li>
+                                <li class="arrow-b"><img src="{{ asset('bundles/sceau/images/extranet/picto-arrow.png') }}" width="17" height="24" alt=""/></li>
+                                <li>
+                                    <h3>{% trans with {'%nbJours%' : delaiJoursRelance} %}jours_plus_tard{% endtrans %}</h3>
+                                    <img src="{{ asset('bundles/sceau/images/extranet/relance_relance.png') }}" width="110" height="84" alt=""/><br />
+                                    {% trans %}frise_relance{% endtrans %}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="panel-body bg-aqua text-white">
+                                <p><strong>Optimiser votre stratégie de livraison avec le Sceau de Confiance FIA-NET</strong></p>
+                                <p class="color11">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                                    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <a href="#">Lire la suite</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-inline">
+                                <div>
+                                    <h2>{% trans %}parametrage_relance{% endtrans %}</h2>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                            {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+                                            {{ form_start(form) }}
+                                            {% trans from 'commun' %}commun_langue{% endtrans %} : <div class="select">{{ form_widget(form.langue) }}</div>
+                                            <button class="btn btn-info btn-sm" type="submit" class="marge0">{% trans from 'commun' %}commun_valider{% endtrans %}</button><br />
+                                            {{ form_end(form) }}
+                                    </div>
+                                    <div class="col-lg-6">
+                                        {% if nbTotalQuestionnaires != 0 %}
+                                            <li class="arrow-b">
+                                                <a href="{{ path('extranet_questionnaires_relance_renvoyer', {'langue_id': langue_id}) }}"><button class="decalage">{% trans %}renvoyer_questionnaire{% endtrans %}</button></a>
 
-        <div class="block-total-part1-3">
-            <div class="block-total-part1-2">
-                <ul>
-                    <h2>{% trans %}parametrage_relance{% endtrans %}</h2>
-                    <li class="arrow-b">
-                        {{ form_start(form) }}
-                        {% trans from 'commun' %}commun_langue{% endtrans %} : <div class="select">{{ form_widget(form.langue) }}</div><br />
-                        <button type="submit" class="marge0">{% trans from 'commun' %}commun_valider{% endtrans %}</button><br />
-                        {{ form_end(form) }}
-                    </li>
+                                                <a id="lien-email-type" class="lien" style="margin-left: 150px;">{% trans %}email_type{% endtrans %}</a>
+                                                <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('SceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}</div>
+                                            </li>
+                                        {% endif %}
 
-                    {% if nbTotalQuestionnaires != 0 %}
-                        <li class="arrow-b">
-                            <a href="{{ path('extranet_questionnaires_relance_renvoyer', {'langue_id': langue_id}) }}"><button class="decalage">{% trans %}renvoyer_questionnaire{% endtrans %}</button></a>
+                                        <li class="arrow-b">
+                                            <a href="{{ path('extranet_questionnaires_relance_perso', {'langue_id': langue_id}) }}"><button class="decalage btn btn-warning btn-md">{% trans %}personnaliser_email{% endtrans %}</button></a>
+                                        </li>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
 
-                            <a id="lien-email-type" class="lien" style="margin-left: 150px;">{% trans %}email_type{% endtrans %}</a>
-                            <div id="email-type" title="{% trans %}titre_email_type{% endtrans %}" class="cache">{{ render(controller('SceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}</div>
-                        </li>
-                    {% endif %}
+                        <div class="col-lg-6">
+                            <h2>{% trans %}relance_auto{% endtrans %}</h2>
+                            <label>
+                                <input id="auto" name="auto" type="checkbox" {% if auto %}checked="checked"{% endif %} onclick="automatiserRelance({{ langue_id }}, this.checked, '{{ 'commun_demande_succes'|trans({}, 'commun')|replace({"'" : "\\'" }) }}', '{{ 'commun_demande_erreur'|trans({}, 'commun')|replace({"'" : "\\'" }) }}');"/>
+                                {% trans %}activee{% endtrans %} <div class="tooltipstered" id="tooltip-checkbox"><img src="{{ asset('bundles/sceau/images/extranet/picto_info_bulle.jpg') }}" width="14" height="14" alt="{% trans from 'commun' %}commun_infobulle{% endtrans %}" /></div>
+                                <p id="auto-message"></p>
+                            </label>
+                        </div>
+                    </div>
 
-                    <li class="arrow-b">
-                        <a href="{{ path('extranet_questionnaires_relance_perso', {'langue_id': langue_id}) }}"><button class="decalage">{% trans %}personnaliser_email{% endtrans %}</button></a>
-                    </li>
-                </ul>
+                    <div class="block-message">
+                        {% for messageSucces in app.session.flashbag.get('renvoyer_succes') %}
+                            <p class="succes">{{ messageSucces }}</p>
+                        {% endfor %}
+                        {% for messageErreur in app.session.flashbag.get('renvoyer_erreur') %}
+                            <p class="erreur">{{ messageErreur }}</p>
+                        {% endfor %}
+                        {% for messageSucces in app.session.flashbag.get('personnaliser_succes') %}
+                            <p class="succes">{{ messageSucces }}</p>
+                        {% endfor %}
+                        {% for messageErreur in app.session.flashbag.get('personnaliser_erreur') %}
+                            <p class="succes">{{ messageErreur }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-
-            <div class="block-total-part3">
-                <h2>{% trans %}relance_auto{% endtrans %}</h2>
-                <label>
-                    <input id="auto" name="auto" type="checkbox" {% if auto %}checked="checked"{% endif %} onclick="automatiserRelance({{ langue_id }}, this.checked, '{{ 'commun_demande_succes'|trans({}, 'commun')|replace({"'" : "\\'" }) }}', '{{ 'commun_demande_erreur'|trans({}, 'commun')|replace({"'" : "\\'" }) }}');"/>
-                    {% trans %}activee{% endtrans %} <div class="tooltipstered" id="tooltip-checkbox"><img src="{{ asset('bundles/sceau/images/extranet/picto_info_bulle.jpg') }}" width="14" height="14" alt="{% trans from 'commun' %}commun_infobulle{% endtrans %}" /></div>
-                    <p id="auto-message"></p>
-                </label>
-            </div>
-        </div>
-
-        <div class="block-message">
-            {% for messageSucces in app.session.flashbag.get('renvoyer_succes') %}
-                <p class="succes">{{ messageSucces }}</p>
-            {% endfor %}
-            {% for messageErreur in app.session.flashbag.get('renvoyer_erreur') %}
-                <p class="erreur">{{ messageErreur }}</p>
-            {% endfor %}
-            {% for messageSucces in app.session.flashbag.get('personnaliser_succes') %}
-                <p class="succes">{{ messageSucces }}</p>
-            {% endfor %}
-            {% for messageErreur in app.session.flashbag.get('personnaliser_erreur') %}
-                <p class="succes">{{ messageErreur }}</p>
-            {% endfor %}
         </div>
     </div>
 
-    <h1>{% transchoice nbTotalQuestionnaires with {'%nbr%': nbTotalQuestionnaires, '%dateDebut%': dateDebut|localizeddate('long', 'none'), '%dateFin%': dateFin|localizeddate('long', 'none')} %}questionnaires_trouves{% endtranschoice %}</h1>
+    {# BLOCK RELANCE QUESTIONNAIRES #}
+    <div class="row">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Résultat
+                </h4>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <h1>{% transchoice nbTotalQuestionnaires with {'%nbr%': nbTotalQuestionnaires, '%dateDebut%': dateDebut|localizeddate('long', 'none'), '%dateFin%': dateFin|localizeddate('long', 'none')} %}questionnaires_trouves{% endtranschoice %}</h1>
 
-    {% if nbTotalQuestionnaires != 0 %}
-        <table id="listeQuestionnaires" width="100%" cellspacing="0" cellpadding="0" border="0" class="gen">
-            <tr>
-                <th>{% trans %}email{% endtrans %}</th>
-                <th>{% trans %}date_envoi{% endtrans %}</th>
-            </tr>
-            {{ include('SceauBundle:Extranet/Questionnaires:relance_lignes.html.twig', {'questionnaires': questionnaires}) }}
-        </table>
+                    {% if nbTotalQuestionnaires != 0 %}
+                        <table id="listeQuestionnaires" width="100%" cellspacing="0" cellpadding="0" border="0" class="gen">
+                            <tr>
+                                <th>{% trans %}email{% endtrans %}</th>
+                                <th>{% trans %}date_envoi{% endtrans %}</th>
+                            </tr>
+                            {{ include('SceauBundle:Extranet/Questionnaires:relance_lignes.html.twig', {'questionnaires': questionnaires}) }}
+                        </table>
 
-        <div id="chargement"><img src="{{ asset('bundles/sceau/images/ajax-loader.gif') }}" alt="{% trans from 'commun' %}commun_chargement{% endtrans %}" /></div>
-    {% endif %}
+                        <div id="chargement"><img src="{{ asset('bundles/sceau/images/ajax-loader.gif') }}" alt="{% trans from 'commun' %}commun_chargement{% endtrans %}" /></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
