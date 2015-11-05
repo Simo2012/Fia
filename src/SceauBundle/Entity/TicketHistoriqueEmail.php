@@ -49,14 +49,26 @@ class TicketHistoriqueEmail
      */
     private $mailBody;
 
-
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetimetz")
      */
     private $date;
+    
+    /**
+     * @var TicketReponseModele
+     *
+     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketReponseModele")
+     * @ORM\JoinColumn(name="ticket_reponse_modele_id", referencedColumnName="id", nullable=true)
+     */
+    private $reponseModele;
 
+
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
 
     /**
      * Get id
@@ -186,5 +198,28 @@ class TicketHistoriqueEmail
     {
         return $this->date;
     }
-}
 
+    /**
+     * Set reponseModele
+     *
+     * @param \SceauBundle\Entity\TicketReponseModele $reponseModele
+     *
+     * @return TicketHistoriqueEmail
+     */
+    public function setReponseModele(\SceauBundle\Entity\TicketReponseModele $reponseModele = null)
+    {
+        $this->reponseModele = $reponseModele;
+
+        return $this;
+    }
+
+    /**
+     * Get reponseModele
+     *
+     * @return \SceauBundle\Entity\TicketReponseModele
+     */
+    public function getReponseModele()
+    {
+        return $this->reponseModele;
+    }
+}

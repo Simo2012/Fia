@@ -21,3 +21,5 @@ parameters:
 
     widget_path:        "var/extranet/widget/"
     fianet_static_site: "https://static.fia-net.com/site_fianet"
+
+    assetic_use_controller: true

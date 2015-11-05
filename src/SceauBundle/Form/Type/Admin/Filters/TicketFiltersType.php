@@ -39,7 +39,7 @@ class TicketFiltersType extends AbstractType
                 'choices'  => [null => '-- Choisissez un type -- ']+TicketType::$TYPES_LABEL,
                 'data'     => $params && $params['type'] != '' ? (int)$params['type']: null     
             ])
-            ->add('destinataire')
+            ->add('moderateur')
         ;
     }
     

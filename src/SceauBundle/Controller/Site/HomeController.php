@@ -226,6 +226,7 @@ class HomeController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->has('submit') && $form->get('submit')->isClicked()) {
+                $ticket->setCategorie(Ticket::CATEGORIE_CONTACT);
                 $this->getDoctrine()->getManager()->persist($ticket);
                 $this->getDoctrine()->getManager()->flush();
             }

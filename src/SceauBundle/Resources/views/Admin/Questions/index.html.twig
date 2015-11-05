@@ -9,113 +9,92 @@
 
     <h1 class="page-header">Gestions des questions</h1>
         
-
-
-
-{# 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="page-title">
-                    <h1>Gestions des questions
-                    </h1>
-                    <ol class="breadcrumb">
-                        <li class="active"><i class="fa fa-dashboard"></i> Liste des questions des internautes</li>
-                        <li class="pull-right">
-                            <div id="reportrange" class="btn btn-green btn-square date-picker">
-                                <i class="fa fa-calendar"></i>
-                                <span class="date-range"></span> <i class="fa fa-caret-down"></i>
-                            </div>
-                        </li>
-                    </ol>
+    <div class="row">
+        <!-- begin panel -->
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    </div>
+                    <h4 class="panel-title">Liste des questions des internautes</h4>
                 </div>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div> #}
-        <div class="row">
-            <!-- begin panel -->
-            <div class="col-md-12">
-                <div class="panel panel-inverse">
-                    <div class="panel-heading">
-                        <div class="panel-heading-btn">
-                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
-                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <div class="panel-body">
+
+                    <form id="filters" class="form-inline" action="{{path('questions')}}">
+                     {#    {% form_theme filtersForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                        {{ form(filtersForm) }} #}
+                        <div class="form-group m-r-10">
+                            {{ form_row(filtersForm.etat) }}
                         </div>
-                        <h4 class="panel-title">Liste des questions des internautes</h4>
-                    </div>
-                    <div class="panel-body">
-
-                        <form id="filters" class="form-inline" action="{{path('questions')}}">
-                            {% form_theme filtersForm 'bootstrap_3_horizontal_layout.html.twig' %}
-                            {{ form(filtersForm) }}
-                      {#       <div class="form-group">
-                                {{ form_row(filtersForm.etat) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_row(filtersForm.type) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_row(filtersForm.destinataire) }}
-                            </div> #}
-                        </form>
-                        
-                        <table id="data-table" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Date</th>
-                                    <th>SiteID</th>
-                                    <th>Site</th>
-                                    <th>Nom</th>
-                                    <th>categorie</th>
-                                    <th>type</th>
-                                    <th>Question</th>
-                                    <th>Etat</th>
+                        <div class="form-group m-r-10">
+                            {{ form_row(filtersForm.type) }}
+                        </div>
+                        <div class="form-group m-r-10">
+                            {{ form_row(filtersForm.moderateur) }}
+                        </div>
+                    </form>
+                    <br/>
+                    
+                    <table id="data-table" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Date</th>
+                                <th>SiteID</th>
+                                <th>Site</th>
+                                <th>Nom</th>
+                                <th>categorie</th>
+                                <th>type</th>
+                                <th>Question</th>
+                                <th>Etat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ticket in entities %}
+                                <tr class="odd gradeX">
+                                    <td>{{ ticket.id }}</td>
+                                    <td>{{ ticket.date|date("m/d/Y") }}</td>
+                                    <td>
+                                        {% if ticket.site %}
+                                            {{ ticket.site.id }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if ticket.site %}
+                                            {{ ticket.site.nom }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if ticket.auteur %}
+                                            {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ ticket.getCategorieLabel() }}</td>
+                                    <td>{{ ticket.type }}</td>
+                                    <td>
+                                        <a href="{{ path('question_show', { 'id': ticket.id }) }}">
+                                            {{ ticket.question|truncate(15) }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% if ticket.etat %}
+                                            <span class="label label-success">Traitée</span>
+                                        {% else %}
+                                            <span class="label label-warning">En attente</span>
+                                        {% endif %}
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {% for ticket in entities %}
-                                    <tr class="odd gradeX">
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ ticket.date|date("m/d/Y") }}</td>
-                                        <td>
-                                            {% if ticket.site %}
-                                                {{ ticket.site.id }}
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if ticket.site %}
-                                                {{ ticket.site.nom }}
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if ticket.auteur %}
-                                                {{ ticket.auteur.firstName }} {{ ticket.auteur.lastName }}
-                                            {% endif %}
-                                        </td>
-                                        <td>ok</td>
-                                        <td>{{ ticket.type }}</td>
-                                        <td>
-                                            <a href="{{ path('question_show', { 'id': loop.index }) }}">
-                                                {{ ticket.question|truncate(15) }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {% if ticket.etat %}
-                                                <span class="label green">Traitée</span>
-                                            {% else %}
-                                                <span class="label orange">En attente</span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <!-- end panel -->
         </div>
+        <!-- end panel -->
+    </div>
 {% endblock %}
 
 

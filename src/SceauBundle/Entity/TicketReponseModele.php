@@ -42,8 +42,6 @@ class TicketReponseModele
      */    
     private $message;
 
-
-
     /**
      * Get id
      *

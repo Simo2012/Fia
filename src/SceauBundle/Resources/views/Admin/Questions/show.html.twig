@@ -32,14 +32,25 @@
                     <p>Téléphone : {{ ticket.auteur.phone }}</p>
                 </div>
                 <div class="col-lg-6">
-                    <p>Type : erreur fiche marchand</p>
-                    <p>Service affecté : Informatique Modifier</p>
-                    <p>Etat :  En attente de traitement </p>
-                    <p>Action : Une réponse doit être apportée à l'auteur du signalement ?</p>
+                    <p>Type : {{ ticket.type }}</p>
+                    <p>Catégorie affectée : {{ ticket.getCategorieLabel() }} 
+                        <a href="#reafectationModal" class="btn btn-sm btn-warning" data-toggle="modal">Modifier</a> </p>
+                    <p>Etat : 
+                        {% if ticket.etat %}
+                            Traitée
+                        {% else %}
+                            En attente
+                        {% endif %}
+                    </p>
+                    {% if ticket.etat != true %}
+                        <p>Action : Une réponse doit être apportée à l'auteur du signalement ?</p>
+                    {% endif %}
                 </div>
             </div>
             <div class="panel-body">
-                <p>Site concerné : #SITENAME#</p>
+                {% if ticket.site %}
+                    <p>Site concerné : #SITENAME#</p>
+                {% endif %}
                 <p>{{ ticket.question }}</p>
             </div>
             <div class="panel-footer text-right">
@@ -95,8 +106,8 @@
                                 <td>{{ historique.description }}</td>
                                 <td>
                                     {{ historique.comment }}
-                                    {% if historique.historiqueEmail %}
-                                        <a class="btn btn-sm btn-default"
+                                    {% if historique.ticketHistoriqueEmail %}
+                                        <a class="btn btn-default"
                                            href="{{ path('question_historique_email', {'id': historique.id}) }}"
                                            data-toggle="modal" data-target="#emailHistomodal"><i class="fa fa-search">Voir</i></a>
                                     {% endif %}
@@ -137,7 +148,7 @@
         </div>
     </div>
 
-    <div class="modal fade in" id="reponseModal">
+{#     <div class="modal fade in" id="reponseModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -150,21 +161,52 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> #}
 
-
-
-    <!-- Note Modal -->
-    <div class="modal fade in" id="noteModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Note</h4>
+         <!-- Reponse Modal -->
+        <div class="modal fade in" id="reponseModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Réponse à la question n°{{ ticket.id }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% form_theme ticketHistoriqueEmailForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                        {{ form(ticketHistoriqueEmailForm) }}
+                    </div>
                 </div>
-                <div class="modal-body">
-                    {% form_theme ticketNoteForm 'bootstrap_3_horizontal_layout.html.twig' %}
-                    {{ form(ticketNoteForm) }}
+            </div>
+        </div>
+
+        <!-- Reafectation Modal -->
+        <div class="modal fade in" id="reafectationModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Reafecter la question n°{{ ticket.id }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% form_theme ticketReafectationForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                        {{ form(ticketReafectationForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Note Modal -->
+        <div class="modal fade in" id="noteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Note</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% form_theme ticketNoteForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                        {{ form(ticketNoteForm) }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -188,7 +230,7 @@
     </div>
 
 
-    <!-- Note Modal to delete -->
+    <!-- Email historique modal -->
     <div class="modal fade in" id="emailHistomodal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -209,6 +251,8 @@
 
 {% block JAVASCRIPT %}
     <script type="text/javascript">
+        var $ticketReponseSujet = $('input#sceaubundle_ticket_historique_email_mailSubject'),
+            $ticketReponseMessage = $('textarea#sceaubundle_ticket_historique_email_mailBody');
         
         $('select').change(function() { 
             modeleType = $(this).val();
@@ -219,13 +263,13 @@
                     url:  '{{path('question_reponse_modele', { 'id': 1 }) }}',      
                     success: function(response) {
                         var objectReponse = JSON.parse(response);
-                        $('input#sujet').val(objectReponse.sujet);
-                        $('textarea#message').val(objectReponse.message);  
+                        $ticketReponseSujet.val(objectReponse.sujet);
+                        $ticketReponseMessage.val(objectReponse.message);  
                     }
                 });
             } else {
-                $('input#sujet').val('');
-                $('textarea#message').val(''); 
+                $ticketReponseSujet.val('');
+                $ticketReponseMessage.val(''); 
             }
         });
 

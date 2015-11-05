@@ -5,8 +5,9 @@ namespace SceauBundle\Form\Type\Admin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use SceauBundle\Entity\Ticket;
 
-class TicketNoteType extends AbstractType
+class TicketReafectationType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,11 +16,10 @@ class TicketNoteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('note', 'textarea', array(
-                'label' => 'Note',
-                'required' => false
-            ))
-            ->add('Enregistrer','submit')
+            ->add('categorie', 'choice', [
+                'choices' => TICKET::$CATEGORIES,
+            ])
+            ->add('save','submit')
         ;
     }
     
@@ -38,6 +38,6 @@ class TicketNoteType extends AbstractType
      */
     public function getName()
     {
-        return 'sceaubundle_ticket_note';
+        return 'sceaubundle_ticket_reafectation';
     }
 }

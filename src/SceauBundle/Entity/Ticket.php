@@ -13,6 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ticket
 {
+    const CATEGORIE_AVIS      = 1;
+    const CATEGORIE_CONTACT   = 2;
+
+    public static $CATEGORIES = [
+        self::CATEGORIE_AVIS      => 'Avis',
+        self::CATEGORIE_CONTACT   => 'Contact',
+    ];
+
     /**
      * @var integer
      *
@@ -50,12 +58,18 @@ class Ticket
      */
     private $type;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="categorie", type="integer", nullable=true)
+     */
+    private $categorie;
 
     public function __construct()
     {
-        $this->date = new \DateTime();
-        $this->etat = false;
-        $this->type = new TicketType();
+        $this->date     = new \DateTime();
+        $this->type     = new TicketType();
+        $this->etat     = false;
     }
 
     /**
@@ -63,12 +77,6 @@ class Ticket
      * @ORM\JoinColumn(name="site_id", referencedColumnName="id", nullable=true)
      */
     private $site;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketCategorie")
-     * @ORM\JoinColumn(name="categorie", referencedColumnName="id")
-     */
-    private $categorie;
 
     /**
      * @var string
@@ -83,7 +91,7 @@ class Ticket
      * @ORM\OneToOne(targetEntity="SceauBundle\Entity\TicketAuteur", mappedBy="ticket", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="auteur_id",referencedColumnName="id")
      */
-    private $auteur;
+    private $auteur; 
 
     /**
      * Get id
@@ -235,29 +243,6 @@ class Ticket
     }
 
     /**
-     * Set category
-     * @param \SceauBundle\Entity\TicketCategorie $categorie
-     *
-     * @return Ticket
-     */
-    private function setCategorie(\SceauBundle\Entity\TicketCategorie $categorie)
-    {
-        $this->categorie = $categorie;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return \SceauBundle\Entity\TicketCategorie
-     */
-    public function getCategorie()
-    {
-        return $this->categorie;
-    }
-
-    /**
      * Set auteur
      *
      * @param \SceauBundle\Entity\TicketAuteur $auteur
@@ -279,5 +264,43 @@ class Ticket
     public function getAuteur()
     {
         return $this->auteur;
+    }
+
+
+    /**
+     * Set categorie
+     *
+     * @param integer $categorie
+     *
+     * @return Ticket
+     */
+    public function setCategorie($categorie)
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get categorie
+     *
+     * @return integer
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategorieLabel()
+    {
+        return isset(self::$CATEGORIES[$this->categorie]) ? self::$CATEGORIES[$this->categorie] : '';
+    }
+
+    public static function getAvailableCategories()
+    {
+        return self::$CATEGORIES;
     }
 }

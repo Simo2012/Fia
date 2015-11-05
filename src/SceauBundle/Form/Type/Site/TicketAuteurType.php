@@ -6,7 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class TicketAuteurType extends AbstractType
 {
@@ -31,7 +33,22 @@ class TicketAuteurType extends AbstractType
             ->add('phone', 'text', [
                 'label'    => 'form.ticket.phone',
             ])
-        ;   
+        ; 
+
+        // A tester avec un utilisateur authentifié, pour le moment ça ne marche pas.
+        // $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+        //     $user = $this->tokenStorage->getToken()->getUser();
+            
+        //     if ($user) {
+        //         $form = $event->getData();
+        //         $form['lastName'] = $user->getLastName();
+        //         $form['firstName'] = $user->getFirstName();
+        //         $form['email'] = $user->getEmail();
+        //         $form['phone'] = $user->getPhone();
+
+        //         $event->setData($form);
+        //     }
+        // })  
     }
 
     /**

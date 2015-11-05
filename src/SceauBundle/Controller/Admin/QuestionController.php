@@ -8,13 +8,14 @@ use SceauBundle\Entity\EnvoiEmail;
 use SceauBundle\Entity\TicketHistoriqueEmail;
 use SceauBundle\Form\Type\Admin\TicketHistoriqueEmailType;
 use SceauBundle\Form\Type\Admin\TicketNoteType;
+use SceauBundle\Form\Type\Admin\TicketReafectationType;
+use SceauBundle\Form\Type\Admin\TicketHistoriqueEmailDisabledType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
-use SceauBundle\Form\Type\Admin\TicketReponseType;
 use SceauBundle\Form\Type\Admin\Filters\TicketFiltersType;
 use Symfony\Component\Validator\Constraints\Date;
 
@@ -62,52 +63,31 @@ class QuestionController extends Controller
      */
     public function showAction(Ticket $ticket)
     {
-        $historiques = $this->get('sceau.repository.ticket.historique')->findByTicket($ticket);
+        $historiques = $this->get('sceau.repository.ticket.historique')->findByTicket($ticket, array('date' => 'ASC'));
 
         $ticketNoteForm = $this->createForm(new TicketNoteType(), $ticket, array(
             'action' => $this->generateUrl('question_update',array('id'=>$ticket->getId())),
             'method' => 'POST',
         ));
 
-        $ticketReponseForm = $this->createForm(new TicketReponseType(), null, array(
+        $ticketHistoriqueEmail = new TicketHistoriqueEmail();
+        $ticketHistoriqueEmailForm = $this->createForm(new TicketHistoriqueEmailType(), $ticketHistoriqueEmail, array(
             'action' => $this->generateUrl('question_reponse',array('id'=>$ticket->getId())),
             'method' => 'POST',
         ));
-        
+
+        $ticketReafectationForm = $this->createForm(new TicketReafectationType(), $ticket, array(
+            'action' => $this->generateUrl('question_reafectation',array('id'=>$ticket->getId())),
+            'method' => 'POST',
+        ));
+
         return array(
-            'ticket'            => $ticket,
-            'ticketReponseForm' => $ticketReponseForm->createView(),
-            'ticketNoteForm'    => $ticketNoteForm->createView(),
-            'historiques'       => $historiques,
+            'ticket'                    => $ticket,
+            'ticketHistoriqueEmailForm' => $ticketHistoriqueEmailForm->createView(),
+            'ticketNoteForm'            => $ticketNoteForm->createView(),
+            'ticketReafectationForm'    => $ticketReafectationForm->createView(),
+            'historiques'               => $historiques,
         );
-    }
-
-    /**
-     * update ticket response with model
-     *
-     * @Route("/{id}/reponse-modele", name="question_reponse_modele")
-     * @Method("POST")
-     */
-    public function updateTicketReponseModele(Request $request)
-    {
-        if($request->isXmlHttpRequest()) {  
-            $modeleId = $request->request->get('modeleType');
-
-            if ($modeleId) {
-                $entityRepo = $this->get('sceau.repository.ticket.reponse.modele');
-                $ticketReponseModele = $entityRepo->find($modeleId);
-
-                if (!$ticketReponseModele) {
-                    return new Response('Unable to find TicketReponseModele entity', 404);
-                }
-
-                $reponse = [
-                    'sujet'     => $ticketReponseModele->getSujet(),
-                    'message'   => $ticketReponseModele->getMessage(),
-                ];
-                return new Response(json_encode($reponse)); 
-            }                  
-        }
     }
 
     /**
@@ -118,16 +98,42 @@ class QuestionController extends Controller
      */
     public function ticketReponseAction(Request $request, Ticket $ticket)
     {
-        var_dump('ticketReponseAction');
-        $ticketReponseForm = $this->createForm(new TicketReponseType());
+        $ticketHistoriqueEmail = new TicketHistoriqueEmail();
+        $ticketHistoriqueEmailForm = $this->createForm(new TicketHistoriqueEmailType(), $ticketHistoriqueEmail);
 
-        $ticketReponseForm->handleRequest($request);
+        $ticketHistoriqueEmailForm->handleRequest($request);
 
-        if ($ticketReponseForm->isValid()) {
-            $data = $ticketReponseForm->getData();
-            // $envoiMail = new EnvoiEmail();
-            // $envoiMail->setSubjet($data['sujet']);
-            // $envoiMail->setSendFrom($data['expediteur']);
+        if ($ticketHistoriqueEmailForm->isValid()) {
+            $ticketHistoriqueEmail = $ticketHistoriqueEmailForm->getData();
+            $em = $this->getDoctrine()->getManager();
+            $ticketHistoriqueEmail->setMailTo($ticket->getAuteur()->getEmail());
+            $em->persist($ticketHistoriqueEmail);
+            $em->flush();
+
+            // new historique for email reponse
+            $this->get('sceau.admin.ticket_historique_service')->createTicketEmailHistorique($ticket, $ticketHistoriqueEmail);
+        }
+        return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
+    }
+
+    /**
+     *  Reafecter un ticket
+     *
+     * @Route("/{id}/reafecter", name="question_reafectation")
+     * @Method("POST")
+     */
+    public function ticketReafectationAction(Request $request, Ticket $ticket)
+    {
+        $ticketReafectationForm = $this->createForm(new TicketReafectationType(), $ticket);
+  
+        $ticketReafectationForm->handleRequest($request);
+
+        if ($ticketReafectationForm->isValid()) {
+            $ticket = $ticketReafectationForm->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ticket);
+            $em->flush();
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -145,13 +151,11 @@ class QuestionController extends Controller
         $ticketNoteForm->handleRequest($request);
 
         if ($ticketNoteForm->isValid()) {
-            $note = $ticketNoteForm->get('note')->getData();
-            $ticket->setNote($note);
-            /** @var \Doctrine\ORM\EntityManager $em */
+            $ticket = $ticketNoteForm->getData();
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
             $em->flush();
-
         }
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
     }
@@ -171,7 +175,35 @@ class QuestionController extends Controller
         $em->flush();
 
         return $this->redirect($this->generateUrl('question_show', array('id' => $ticket->getId())));
+    }
 
+
+    /**
+     * update ticket response with model
+     *
+     * @Route("/{id}/reponse-modele", name="question_reponse_modele")
+     * @Method("POST")
+     */
+    public function updateTicketReponseModele(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $modeleId = $request->request->get('modeleType');
+
+            if ($modeleId) {
+                $entityRepo = $this->get('sceau.repository.ticket.reponse.modele');
+                $ticketReponseModele = $entityRepo->find($modeleId);
+
+                if (!$ticketReponseModele) {
+                    return new Response('Unable to find TicketReponseModele entity', 404);
+                }
+
+                $reponse = [
+                    'sujet' => $ticketReponseModele->getSujet(),
+                    'message' => $ticketReponseModele->getMessage(),
+                ];
+                return new Response(json_encode($reponse));
+            }
+        }
     }
 
     /**
@@ -185,15 +217,16 @@ class QuestionController extends Controller
     public function getHistoriqueEmailAction($id)
     {
         /** @var \SceauBundle\Entity\Repository\TicketHistoriqueRepository $historiqueRepository */
-        $historiqueRepository = $this->get('sceau.repository.ticket.historique');
+        $ticketHistoriqueRepository = $this->get('sceau.repository.ticket.historique');
+        $ticketHistorique = $ticketHistoriqueRepository->find($id);
+        $ticketHistoriqueEmail = $ticketHistorique->getTicketHistoriqueEmail();
 
-        $historique = $historiqueRepository->find($id);
-        $historiqueEmailForm = $this->createForm(new TicketHistoriqueEmailType, $historique->getHistoriqueEmail());
+        $ticketHistoriqueEmailDisabledForm = $this->createForm(new TicketHistoriqueEmailDisabledType(), $ticketHistoriqueEmail);
 
         return $this->render('SceauBundle:Admin/Questions:historique_email_content.html.twig', array(
-            'historiqueEmailForm' => $historiqueEmailForm->createView(),
-            'ticket'              => $historique->getTicket(),
+            'ticket'                            => $ticketHistorique->getTicket(),
+            'ticketHistoriqueEmailDisabledForm' => $ticketHistoriqueEmailDisabledForm->createView(),
+           
         ));
-
     }
 }
