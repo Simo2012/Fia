@@ -2,8 +2,8 @@
     <!DOCTYPE html>
     <html lang="fr">
         <head>
-            
             {% include 'SceauBundle:Site/Common:header.html.twig' %}
+            {% block CSS %}{% endblock %}
         </head>
         <body class="fs">
             <div id="container">
@@ -11,11 +11,10 @@
                     {% include 'SceauBundle:Site/Common:topblock.html.twig' %}
                 </div>
                 {% block CONTENT %}{% endblock %}
-                    <div id="footer">
-                        {% include "SceauBundle:Site/Common:footer.html.twig" %}
-                    </div>
+                <div id="footer">
+                    {% include "SceauBundle:Site/Common:footer.html.twig" %}
+                </div>
            </div>
-            
         </body>
         
         {% javascripts
@@ -38,7 +37,7 @@
 
         {% block JAVASCRIPT %}
                 <script type="text/javascript">
-                    $(function() {
+                    (function() {
                         $("#newsletter-success-popup").overlay({
                             effect: 'default',
                             top: 'center',
@@ -52,7 +51,7 @@
                             load: true,
                             oneInstance: true
                         });
-                    });
+                    })();
                 </script>
         {% endblock %}
     </html>

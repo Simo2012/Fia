@@ -1,17 +1,32 @@
 {% extends app.request.isxmlhttprequest ? "SceauBundle:Site:layout-ajax.html.twig" : "SceauBundle:Site:layout.html.twig" %}
 {% form_theme form "SceauBundle:Site\\Form:questionnaire.html.twig" %}
 
+{% block CSS %}
+    {{ parent() }}
+    {% stylesheets 'bundles/sceau/css/site/questionnaire/*' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block CONTENT %}
 <div id="contentbis" class="full-picto">
     <div class="header-end"></div>
     <div class="main-quest">
         <div class="quest-title">{{ "Votre avis nous intéresse !"|trans({}) }}</div>
         {{ form_start(form, {attr:{'id':'questionnaire_reponse'}}) }}
+            {% if error %}
+                <div class="blue-block-top">
+                    <p class="message-erreur">
+                        {{ "Certains éléments écrits en rouge ci-dessous nous empêchent d'enregistrer votre questionnaire. Veuillez les corriger avant de revalider le questionnaire."|trans({}) }}
+                    </p>
+                </div>
+                <div class="blue-block-bottom"></div>
+            {% endif %}
             {{ form_widget(form) }}
             <div class="btn-1 btn-valid-quest">
                 <div class="btn-1-main">
                     <input src="{{ asset('bundles/sceau/images/site/common/btn_1_input.png') }}" type="image">
-                    <a class="btn-1-link" href="#" onclick="document.forms['form_questionnaire'].submit(); return false">{{ "Validez le questionnaire"|trans({}) }}</a>
+                    <a class="btn-1-link" href="#" onclick="document.forms['questionnaire_reponse'].submit(); return false">{{ "Validez le questionnaire"|trans({}) }}</a>
                 </div>
                 <div class="btn-1-end"></div>
             </div>
@@ -23,8 +38,10 @@
 
 {% block JAVASCRIPT %}
     {{ parent() }}
+    <script src="{{ asset("bundles/sceau/js/jRating.jquery.js") }}"></script>
     <script>
         (function(){
+            // Refresh form when activating linked questions
             var linkedQuestions = {{ linkedQuestions|raw }};
             var form_selector = "#{{ form.vars.id }}";
 
@@ -68,6 +85,20 @@
             };
 
             bindChangeEvent();
+
+            //Note
+            $(".form_note").each(function(){
+                var $input = $("#"+$(this).data('input-id'));
+                $(this).jRating({
+                    length: 5,
+                    rateMax: $input.data('max'),
+                    decimalLength: -1,
+                    inputID: $input.id,
+                    showRateInfo: true,
+                    canRateInfinite: true,
+                    rateMinSelect: $input.data('min')
+                });
+            });
         })();
     </script>
 {% endblock %}

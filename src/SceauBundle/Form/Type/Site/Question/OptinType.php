@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class OptinType extends AbstractType
 {
@@ -17,7 +18,7 @@ class OptinType extends AbstractType
         $builder
             ->add('optin', 'checkbox', [
                 'label'    => 'J\'accepte de recevoir les offres des partenaires de FIA-NET adaptées à mon profil.',
-               'required' => false,
+                'required' => false,
             ])
         ;
 
@@ -36,12 +37,21 @@ class OptinType extends AbstractType
                             ],
                             'expanded' => true,
                             'multiple' => false,
+                            'constraints' => [
+                                new NotBlank(),
+                            ],
                         ])
                         ->add('firstName', 'text', [
                             'label' => 'Nom :',
+                            'constraints' => [
+                                new NotBlank(),
+                            ],
                         ])
                         ->add('lastName', 'text', [
                             'label' => 'Prénom :',
+                            'constraints' => [
+                                new NotBlank(),
+                            ],
                         ])
                     ;
                 }
