@@ -1,6 +1,8 @@
 {% block form_row -%}
+    <div id="{{ form.vars.id }}" class="response">
     {{- form_errors(form) -}}
     {{- form_widget(form) -}}
+    </div>
 {%- endblock form_row %}
 
 {%- block form_label -%}
@@ -103,7 +105,7 @@
 
 {# question id 2 #}
 {%- block _questionnaire_reponse_1_widget -%}
-    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <div class="quest-detail">
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -146,7 +148,7 @@
 
 {# question id 2 #}
 {% block _questionnaire_reponse_2_widget %}
-    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
@@ -166,7 +168,7 @@
 {# question id 3 #}
 {%- block _questionnaire_reponse_3_widget -%}
     {% set child = form.children|first %}
-    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <div class="blue-block-top" style="margin-top:-5px;font-size:13px;">
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -180,8 +182,7 @@
                 <tr>
                     <td style="background-image:none; font-weight:normal;">
                         <div style="float:left; margin-top:2px;">
-                            Nombre de caractères restants : <span id="nbcaracteres5" class="message-ok">500</span>
-                            {#<script language="javascript" type="text/javascript">affNbCaracteres(document.getElementById("tQuestions_5"), '#nbcaracteres5', 'message-ok', 'message-erreur');</script>#}
+                            Nombre de caractères restants : <span class="textarea-counter message-ok" data-textarea-id="{{ child.vars.id }}">500</span>
                         </div>
                         <div style="float:right;">
                             <div style="float:right;">
@@ -214,7 +215,7 @@
 
 {# question id 4 #}
 {%- block _questionnaire_reponse_4_widget -%}
-    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
@@ -231,7 +232,7 @@
 
 {# question id 5 #}
 {%- block _questionnaire_reponse_5_widget -%}
-    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
@@ -252,7 +253,7 @@
 
 {# question id 6 #}
 {%- block _questionnaire_reponse_6_widget -%}
-    <div id="{{ id }}" class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
@@ -311,26 +312,24 @@
 
 {%- block site_question_etoile_commentaire_widget -%}
     {% set form_note = form.children|first %}
-    <div id="{{ form.vars.id }}">
-        <div class="quest-sub-title">{{- form_label(form) -}}</div>
-        <div class="quest-detail-full">
-            <div class="questionnaire-l-notation">
-                <div class="libelle-note">
-                    <div class="libelle">
-                        {{- form_label(form_note) -}}
-                    </div>
-                    <div class="form_note" data-input-id="{{ form_note.vars.id }}"></div>
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div class="quest-detail-full">
+        <div class="questionnaire-l-notation">
+            <div class="libelle-note">
+                <div class="libelle">
+                    {{- form_label(form_note) -}}
                 </div>
-                {{- form_widget(form_note) -}}
+                <div class="form_note" data-input-id="{{ form_note.vars.id }}"></div>
             </div>
-            <div class="questionnaire-l-commentaire">
-                <strong>{{- form_label(form.commentaire) -}}</strong>
-                <br>
-                {{- form_widget(form.commentaire) -}}
-                <br>
-                {{ "Maximum %d caractères. Nombre de caractères restants :"|trans({}, translation_domain)|format(form.commentaire.vars.attr.maxlength) }}
-                <span id="nbcaracteres" class="message-ok">{{ form.commentaire.vars.attr.maxlength }}</span>
-            </div>
+            {{- form_widget(form_note) -}}
+        </div>
+        <div class="questionnaire-l-commentaire">
+            <strong>{{- form_label(form.commentaire) -}}</strong>
+            <br>
+            {{- form_widget(form.commentaire) -}}
+            <br>
+            {{ "Maximum %d caractères. Nombre de caractères restants :"|trans({}, translation_domain)|format(form.commentaire.vars.attr.maxlength) }}
+            <span class="textarea-counter message-ok" data-textarea-id="{{ form.commentaire.vars.id }}">{{ form.commentaire.vars.attr.maxlength }}</span>
         </div>
     </div>
 {%- endblock site_question_etoile_commentaire_widget -%}

@@ -86,9 +86,9 @@
 
             bindChangeEvent();
 
-            //Note
+            // Rating
             $(".form_note").each(function(){
-                var $input = $("#"+$(this).data('input-id'));
+                var $input = $("#"+$(this).data('inputId'));
                 $(this).jRating({
                     length: 5,
                     rateMax: $input.data('max'),
@@ -97,6 +97,20 @@
                     showRateInfo: true,
                     canRateInfinite: true,
                     rateMinSelect: $input.data('min')
+                });
+            });
+
+            // Textarea counter
+            var $counters = $('.textarea-counter[data-textarea-id]');
+
+            $counters.each(function() {
+                var $counter = $(this);
+                $("#"+$(this).data('textarea-id')).on('click change keyup keydown', function(){
+                    var len = $(this).val().length,
+                        max = $(this).attr('maxlength'),
+                        remain = parseInt(max) - parseInt(len);
+
+                    $counter.text(remain);
                 });
             });
         })();
