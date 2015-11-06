@@ -1,0 +1,21 @@
+{% extends 'SceauBundle:Site:layout.html.twig' %}
+{% block CONTENT %}
+    {% include "SceauBundle:Site/Common:menu.html.twig" %}
+<div class="main-404">
+	<div class="page404">
+		<div class="personnage"></div>
+		<div class="cadre">
+			<div class="haut"></div>
+			<div class="centre">
+				<p class="titre">Oups ! Nous sommes désolés, cette page n'existe plus...</p>
+				<p style="padding-left: 60px; margin:0;">> La page n'existe pas ou a été déplacée.
+					<br/>> Votre favori, marque-page ou bookmark est périmé.
+					<br/>> L'adresse est erronée ou contient une faute de frappe.
+					<br/>> Une erreur est survenue pendant l'exécution de votre requête.
+				</p>			
+			</div>
+			<div class="bas"></div>
+		</div>
+	</div>
+</div>
+{% endblock %}
