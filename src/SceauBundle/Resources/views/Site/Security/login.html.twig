@@ -1,4 +1,5 @@
 <div class="login">
+    {# TODO : app.security deprecated #}
     {% if app.security.getToken() is defined %}
         {% if app.security.getToken().getUser() is not defined or app.security.getToken().getUser() == 'anon.' %}
             <img src="{{ asset('bundles/sceau/images/site/home/login_titre.png') }}" width="121" height="19" alt="Espace Membre" style="margin-left:5px" />

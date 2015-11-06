@@ -6,12 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- *
- */
 class UpdateType extends AbstractType
 {
-
     /**
      * @inheritdoc
      */
@@ -98,8 +94,7 @@ class UpdateType extends AbstractType
 
 
         $poBuilder->add('coordonnee', new CoordonneeType());
-
-    } // buildForm
+    }
 
     /**
      * @inheritdoc

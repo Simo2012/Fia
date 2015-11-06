@@ -6,9 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use SceauBundle\Entity\Membre;
-use SceauBundle\Entity\Avatar;
 use SceauBundle\Form\Type\Site\User\RegisterType;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contrôleur Tombola : pages relatives aux Tombola de site web
@@ -22,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TombolaController extends Controller
 {
-
     /**
      * Action pour l'appel du Participation a tombola
      * @Route("/tombola",
@@ -43,7 +40,7 @@ class TombolaController extends Controller
                 'call' => 1,
                 'redirect' => '',
                 'winners' => $loWinner
-                )
+            )
         );
     }
 
@@ -72,7 +69,7 @@ class TombolaController extends Controller
                             'menu' => 'tombola',
                             'call' => 2,
                             'winners' => $loWinner
-                            )
+                        )
                     );
                 } catch (\Exception $e) {
                     return $this->errorAction($e->getMessage(), 'tombola_login', '1');
@@ -87,6 +84,10 @@ class TombolaController extends Controller
      * @Route("/tombola/register",
      *     name="site_member_register_tombola")
      * @Method("POST")
+     *
+     * @param Request $poRequest
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function regitreTombolaAction(Request $poRequest)
     {
@@ -103,7 +104,7 @@ class TombolaController extends Controller
                         return $this->errorAction('Le captcha est obligatoire', 'tombola', '1');
                     }
                     $loIdAvatar = $poRequest->get('AvatarID');
-                    
+
 
                     $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
                     $loAvatar = $loMembreLogger->saveAvatar($loIdAvatar);
@@ -123,7 +124,7 @@ class TombolaController extends Controller
                             'menu' => 'tombola',
                             'call' => 2,
                             'winners' => $loWinner
-                            )
+                        )
                     );
                 } catch (\Exception $e) {
                     dump($e->getMessage());
@@ -156,7 +157,7 @@ class TombolaController extends Controller
                 'errorType' => $poAction,
                 'redirect' => '',
                 'call' => $poCall
-                )
+            )
         );
     }
 }

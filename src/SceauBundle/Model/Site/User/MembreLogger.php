@@ -4,6 +4,7 @@ namespace SceauBundle\Model\Site\User;
 use SceauBundle\Entity\Membre;
 use SceauBundle\Entity\TombolaTicket;
 use Doctrine\ORM\EntityManager;
+use SceauBundle\Model\Api\ApiDecryptFilter;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
@@ -23,7 +24,6 @@ use SceauBundle\Entity\Avatar;
  * @version 1.0
  * @package Sceau
  */
-
 class MembreLogger
 {
 
@@ -250,7 +250,7 @@ class MembreLogger
      * @param $poField
      * @$return Coordonnees
      * @throws DBALException
-    */
+     */
     public function saveCoordonnees($poField)
     {
         $loPays = $this->manager->getRepository('SceauBundle:Pays')->find($poField['pays']);
@@ -360,7 +360,7 @@ class MembreLogger
         if ($poUser->getSituationFamiliale() != null &&
             $poUser->getActiviteProfessionnelle() != null ||
             $poUser->getTrancheAge() != null
-            ) {
+        ) {
             $loPercentage += 3;
         }
         return $loPercentage;
@@ -464,7 +464,7 @@ class MembreLogger
      * @param type $poUser
      * @param type $poField
      * @throws \ErrorException
-    */
+     */
     public function updatePwd($poUser, $poField)
     {
         if ($this->checkpwd($poUser, $poField['password_actuel']) == false) {
@@ -506,7 +506,6 @@ class MembreLogger
 
     public function savePreference($poUser, $paPreference)
     {
-
         $loPreference = '{';
         $count = count($paPreference);
         $pos = 1;

@@ -26,7 +26,7 @@ class SecurityController extends Controller
     /**
      * Fonction pour l'authentification
      *
-     *  @Route("/login",
+     * @Route("/login",
      *     name="site_member_login")
      * @Method("POST")
      */
@@ -54,7 +54,7 @@ class SecurityController extends Controller
     /**
      * Fonction pour l'authentification aprés confirmation email
      *
-     *  @Route("/login",
+     * @Route("/login",
      *     name="site_member_login_confirmation")
      * @Method("GET")
      */
@@ -86,7 +86,7 @@ class SecurityController extends Controller
 
     /**
      *Action pour appel l'inscription
-     *@Route("/register",
+     * @Route("/register",
      *     name="site_member_call_register")
      * @Method("GET")
      */
@@ -101,7 +101,7 @@ class SecurityController extends Controller
                 'menu' => 'register',
                 'redirect' => '',
                 'user' => null
-                )
+            )
         );
     }
 
@@ -121,15 +121,19 @@ class SecurityController extends Controller
                 'user' => null,
                 'error' => $poError,
                 'errorType' => $poAction
-                )
+            )
         );
     }
 
     /**
      * Action pour l'inscription
-     *  @Route("/register",
+     * @Route("/register",
      *     name="site_member_register")
      * @Method("POST")
+     *
+     * @param Request $poRequest
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function registerAction(Request $poRequest)
     {
@@ -164,7 +168,7 @@ class SecurityController extends Controller
                                 'form' => $loForm->createView(),
                                 'menu' => 'successRegister',
                                 'user' => $loUser
-                                )
+                            )
                         );
                     }
                 } catch (\Exception $e) {
@@ -172,7 +176,7 @@ class SecurityController extends Controller
                     return $this->errorAction($e->getMessage(), 'register');
                 }
             } else {
-                (string) $loForm->getErrors(true);
+                (string)$loForm->getErrors(true);
             }
         }
         return $this->render(
@@ -181,7 +185,7 @@ class SecurityController extends Controller
                 'form' => $loForm->createView(),
                 'menu' => 'register',
                 'redirect' => ''
-                )
+            )
         );
     }
 
@@ -192,14 +196,14 @@ class SecurityController extends Controller
      */
     public function logoutAction()
     {
-        
+
     }
 
     /**
      * Fonction Pour enregistrer le token pour recuperer les session connecté
      * @param type $poRequest
      * @param type $poUser
-    */
+     */
     public function saveToken($poRequest, $poUser)
     {
         $loToken = new UsernamePasswordToken(
@@ -238,10 +242,10 @@ class SecurityController extends Controller
             $loContent = $this->renderView(
                 $poTemplate,
                 array(
-                'pseudo' => $loPseudo,
-                'email' => $poEmail,
-                'pwd' => $loPwd,
-                'url' => $loUrl
+                    'pseudo' => $loPseudo,
+                    'email' => $poEmail,
+                    'pwd' => $loPwd,
+                    'url' => $loUrl
                 )
             );
             $loEnvoiEmail->setContent($loContent);

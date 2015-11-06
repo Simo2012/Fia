@@ -50,8 +50,8 @@ class HomeController extends Controller
         //Recuperer la dérniére newsletter
         $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
         return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories,
-                'siteprenium' => $lpPreniumSite, 'menu' => 'home', 'newsletters' => $loNewletters,
-                'user' => $loUser));
+            'siteprenium' => $lpPreniumSite, 'menu' => 'home', 'newsletters' => $loNewletters,
+            'user' => $loUser));
     }
 
     /**
@@ -128,7 +128,7 @@ class HomeController extends Controller
                         'form' => $loForm->createView(),
                         'menu' => 'register',
                         'redirect' => 'newsletter'
-                        )
+                    )
                 );
             } else {
                 $loUser->setNewsletter(true);
@@ -140,8 +140,8 @@ class HomeController extends Controller
                 return $this->render(
                     "SceauBundle:Site/Home:index.html.twig",
                     array('newsletters' => $loNewletters,
-                            'menu' => 'site_operation_news',
-                            'user' => $loUser
+                        'menu' => 'site_operation_news',
+                        'user' => $loUser
                     )
                 );
             }
@@ -154,8 +154,6 @@ class HomeController extends Controller
      *
      * @Route("/presse", name="site_presse")
      * @Method("GET")
-     *
-     * @param Request $request
      *
      * @return Response
      */
@@ -212,6 +210,10 @@ class HomeController extends Controller
      *
      * @Route("/contact", name="site_contact")
      * @Method({"GET","POST"})
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function contactAction(Request $request)
     {

@@ -46,7 +46,7 @@ class MembreController extends Controller
                     'menu' => 'home-membre',
                     'user' => $loUser,
                     'pourcentage' => $loPourcentage
-                    )
+                )
             );
         }
         $loResponse = $this->forward('SceauBundle:Site/Home:index');
@@ -99,7 +99,7 @@ class MembreController extends Controller
                     'redirect' => '',
                     'user' => $loUser,
                     'emails' => $loEmailSecondaire
-                    )
+                )
             );
         }
         $loResponse = $this->forward('SceauBundle:Site/Home:index');
@@ -141,7 +141,7 @@ class MembreController extends Controller
                 'redirect' => '',
                 'user' => $loUser,
                 'emails' => $loEmailSecondaire
-                )
+            )
         );
     }
 
@@ -179,7 +179,7 @@ class MembreController extends Controller
                 'redirect' => '',
                 'user' => $loUser,
                 'emails' => $loEmailSecondaire
-                )
+            )
         );
     }
 
@@ -213,7 +213,7 @@ class MembreController extends Controller
                 'redirect' => '',
                 'user' => $loUser,
                 'emails' => $loEmailSecondaire
-                )
+            )
         );
     }
 
@@ -275,7 +275,7 @@ class MembreController extends Controller
                 'redirect' => '',
                 'user' => $loUser,
                 'emails' => $loEmailSecondaire
-                )
+            )
         );
     }
     //site_home_membre_add_preference
@@ -302,7 +302,7 @@ class MembreController extends Controller
                 'user' => $loUser,
                 'categories' => $loCategories,
                 'preference' => $loPreference
-                )
+            )
         );
     }
 
@@ -336,7 +336,7 @@ class MembreController extends Controller
                 'user' => $loUser,
                 'categories' => $loCategories,
                 'preference' => $loPreference
-                )
+            )
         );
     }
 
@@ -358,7 +358,7 @@ class MembreController extends Controller
                 'menu' => 'abonement',
                 'user' => $loUser,
                 'abonement' => $loAbonement
-                )
+            )
         );
     }
 
@@ -366,7 +366,7 @@ class MembreController extends Controller
      * Action update des preferences
      * @Route("/membre/home/abonement",
      *     name="site_home_membre_update_abonement")
-     * @Method("POSt")
+     * @Method("POST")
      */
     public function updateAbonnementAction()
     {
@@ -390,7 +390,7 @@ class MembreController extends Controller
                 'menu' => 'abonement',
                 'user' => $loUser,
                 'abonement' => $loAbonement
-                )
+            )
         );
     }
 }

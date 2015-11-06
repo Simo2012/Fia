@@ -6,15 +6,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- *
- */
 class CoordonneeType extends AbstractType
 {
-
     /**
-     * (non-PHPdoc)
-     * @see \Symfony\Component\Form\AbstractType::buildForm()
+     * @inheritdoc
      */
     public function buildForm(FormBuilderInterface $poBuilder, array $paOptions)
     {
@@ -90,11 +85,7 @@ class CoordonneeType extends AbstractType
             )
         );
         $poBuilder->add('telephoneMobile', 'text', $laParams);
-
-        //codePostal
-
-
-    } // buildForm
+    }
 
     /**
      *
@@ -110,11 +101,10 @@ class CoordonneeType extends AbstractType
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \Symfony\Component\Form\FormTypeInterface::getName()
+     * @inheritdoc
      */
     public function getName()
     {
         return 'sceauSiteUserFormCoordonnees';
-    } // getName
+    }
 }

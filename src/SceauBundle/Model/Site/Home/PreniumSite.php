@@ -46,7 +46,9 @@ class PreniumSite
     */
     public function getPreniumSite()
     {
+        $lpSitePrenuim = null;
         $loPrenium = $this->manager->getRepository('SceauBundle:Site')->getPreniumSite();
+
         for ($j=0; $j<count($loPrenium); $j++) {
             $loSitePrenium = $loPrenium[$j];
             $lpSitePrenuim['sitePrenium'][$j] = $loPrenium[$j];
@@ -59,7 +61,7 @@ class PreniumSite
                 $loQuestionid = $loParametrage['indicateur']['question_id'];
                 $loCommentairePrincipale = $loParametrage['commentairePrincipal'];
                 $loQuestionRepondu = $loParametrage['libelleQuestionnaireRepondu'];
-                $loIdQuestionnaire = eregi_replace("[^0-9]", "", $loQuestionRepondu);
+                $loIdQuestionnaire = eregi_replace("[^0-9]", "", $loQuestionRepondu); // TODO : deprecated
                 $lsResponseId = $this->manager->getRepository('SceauBundle:QuestionnaireReponse')
                                      ->getComment($loCommentairePrincipale, $loIdQuestionnaire, $loQuestionid, $loVert);
                 $lpSitePrenuim['sitePrenium'][$j]['information'] =  $lsResponseId;
