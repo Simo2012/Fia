@@ -103,6 +103,21 @@ class MembreLogger
     } // getUser
     
     /**
+     * Récupère un utilisateur par son email et le connect
+     *
+     * @return User
+     */
+    public function logConfirmationUser($poLogin)
+    {
+     
+        $loEmail = $this->manager->getRepository('SceauBundle:Email')->getDateConfirmation($poLogin);
+        $loEmail->setDateConfirmation(new \DateTime());
+        $this->manager->flush();
+        return $loEmail;
+    } // getUser
+    
+    
+    /**
      * Fonction pour afficher le mot de passe en clair
      * @param type $poUser
      * @return type

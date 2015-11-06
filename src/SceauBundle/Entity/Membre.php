@@ -158,6 +158,13 @@ class Membre implements AdvancedUserInterface, \Serializable
      * @ORM\JoinColumn(name="situationFamiliale_id", referencedColumnName="id", nullable=true)
      */
     private $situationfamiliale;
+    
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="SceauBundle\Entity\TombolaTicket", mappedBy="membre")
+    */
+    private $tombolaTicket;
 
     public function __construct()
     {
@@ -634,5 +641,28 @@ class Membre implements AdvancedUserInterface, \Serializable
 
         return $this;
     }
+    
+    /**
+     * Get tombolaTicket
+     *
+     * @return TombolaTicket
+    */
+    function getTombolaTicket()
+    {
+        return $this->tombolaTicket;
+    }
+    
+    /**
+     * Set TombolaTicket
+     *
+     * @param TombolaSource $tombolaTicket
+     *
+     * @return TombolaTicket
+    */
+    function setTombolaTicket($tombolaTicket)
+    {
+        $this->tombolaTicket = $tombolaTicket;
+    }
+
 
 }

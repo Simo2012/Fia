@@ -1,6 +1,4 @@
-<?php
-
-namespace SceauBundle\Controller\Site;
+<?php namespace SceauBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -39,15 +37,14 @@ class MembreController extends Controller
             $loPourcentage = $loMembreLogger->getPourcentage($loUser);
             $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
 
-            /** Envoyer vers la page NewsLetter **/
+            /** Envoyer vers la page NewsLetter * */
             return $this->render(
-                "SceauBundle:Site/Home:index.html.twig",
-                array(
+                    "SceauBundle:Site/Home:index.html.twig", array(
                     'newsletters' => $loNewletters,
                     'menu' => 'home-membre',
                     'user' => $loUser,
                     'pourcentage' => $loPourcentage
-                )
+                    )
             );
         }
         $loResponse = $this->forward('SceauBundle:Site/Home:index');
@@ -56,7 +53,7 @@ class MembreController extends Controller
 
     /**
      * @Route("/membre/home/compte",
-     *name="site_home_membre_compte")
+     * name="site_home_membre_compte")
      * @Method("GET")
      */
     public function callUpdateCompteAction()
@@ -93,14 +90,13 @@ class MembreController extends Controller
             }
 
             return $this->render(
-                'SceauBundle:Site/Home:index.html.twig',
-                array(
+                    'SceauBundle:Site/Home:index.html.twig', array(
                     'form' => $loForm->createView(),
                     'menu' => 'update-compte',
                     'redirect' => '',
                     'user' => $loUser,
                     'emails' => $loEmailSecondaire
-                )
+                    )
             );
         }
         $loResponse = $this->forward('SceauBundle:Site/Home:index');
@@ -135,17 +131,15 @@ class MembreController extends Controller
             $this->get('session')->set('success', 'AjoutEmail');
         }
         return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
+                'SceauBundle:Site/Home:index.html.twig', array(
                 'form' => $loForm->createView(),
                 'menu' => 'update-compte',
                 'redirect' => '',
                 'user' => $loUser,
                 'emails' => $loEmailSecondaire
-            )
+                )
         );
     }
-
 
     /**
      * Action pour Suprimer un Email
@@ -174,14 +168,13 @@ class MembreController extends Controller
         $this->get('session')->set('confirmation', 'OK');
         $this->get('session')->set('success', 'AjoutEmail');
         return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
+                'SceauBundle:Site/Home:index.html.twig', array(
                 'form' => $loForm->createView(),
                 'menu' => 'update-compte',
                 'redirect' => '',
                 'user' => $loUser,
                 'emails' => $loEmailSecondaire
-            )
+                )
         );
     }
 
@@ -208,14 +201,13 @@ class MembreController extends Controller
         $this->get('session')->set('confirmation', 'OK');
         $this->get('session')->set('success', 'EmailPrincipale');
         return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
+                'SceauBundle:Site/Home:index.html.twig', array(
                 'form' => $loForm->createView(),
                 'menu' => 'update-compte',
                 'redirect' => '',
                 'user' => $loUser,
                 'emails' => $loEmailSecondaire
-            )
+                )
         );
     }
 
@@ -237,13 +229,11 @@ class MembreController extends Controller
             $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
             $loResponse = $loMembreLogger->checkpwd($loUser, $loRequest->get('pwd'));
             $lsResponse = array('error' => $loResponse);
-
         }
 
         $laResponse = new Response(json_encode($lsResponse));
         return new Response($laResponse, 200, array('Content-Type' => 'application/json'));
     }
-
 
     /**
      * Action modifier Password
@@ -272,24 +262,23 @@ class MembreController extends Controller
         $this->get('session')->set('confirmation', 'OK');
         $this->get('session')->set('success', 'Passwrod');
         return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
+                'SceauBundle:Site/Home:index.html.twig', array(
                 'form' => $loForm->createView(),
                 'menu' => 'update-compte',
                 'redirect' => '',
                 'user' => $loUser,
                 'emails' => $loEmailSecondaire
-            )
+                )
         );
     }
     //site_home_membre_add_preference
-    
+
     /**
-    * Action appeler des preferences
-    * @Route("/membre/home/preference",
-    *     name="site_home_membre_preference")
-    * @Method("GET")
-    */
+     * Action appeler des preferences
+     * @Route("/membre/home/preference",
+     *     name="site_home_membre_preference")
+     * @Method("GET")
+     */
     public function callPreferenceAction()
     {
         $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
@@ -300,22 +289,21 @@ class MembreController extends Controller
         $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
         $loPreference = $loMembreLogger->getPreferences($loUser);
         return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
+                'SceauBundle:Site/Home:index.html.twig', array(
                 'menu' => 'preference',
                 'user' => $loUser,
                 'categories' => $loCategories,
-                'preference'  => $loPreference
-            )
-        );    
+                'preference' => $loPreference
+                )
+        );
     }
-    
+
     /**
-    * Action update des preferences
-    * @Route("/membre/home/preference_update",
-    *     name="site_home_membre_add_preference")
-    * @Method("POST")
-    */
+     * Action update des preferences
+     * @Route("/membre/home/preference_update",
+     *     name="site_home_membre_add_preference")
+     * @Method("POST")
+     */
     public function updatePreferenceAction()
     {
         $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
@@ -331,47 +319,45 @@ class MembreController extends Controller
             $this->get('session')->set('confirmation', 'OK');
             $this->get('session')->set('success', 'preference');
         }
-       
+
         $loPreference = $loMembreLogger->getPreferences($loUser);
         return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
+                'SceauBundle:Site/Home:index.html.twig', array(
                 'menu' => 'preference',
                 'user' => $loUser,
                 'categories' => $loCategories,
-                'preference'  => $loPreference
-            )
-        );    
+                'preference' => $loPreference
+                )
+        );
     }
-    
+
     /**
-    * Action update des preferences
-    * @Route("/membre/home/abonement",
-    *     name="site_home_membre_abonement")
-    * @Method("GET")
-    */
+     * Action update des preferences
+     * @Route("/membre/home/abonement",
+     *     name="site_home_membre_abonement")
+     * @Method("GET")
+     */
     public function getAbonnementAction()
     {
         $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
         $loManager = $this->getDoctrine()->getManager();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
-        $loAbonement =  $loUser->getNewsletter();
+        $loAbonement = $loUser->getNewsletter();
         return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
+                'SceauBundle:Site/Home:index.html.twig', array(
                 'menu' => 'abonement',
                 'user' => $loUser,
-                'abonement'  => $loAbonement
-            )
-        );    
+                'abonement' => $loAbonement
+                )
+        );
     }
-    
-     /**
-    * Action update des preferences
-    * @Route("/membre/home/abonement",
-    *     name="site_home_membre_update_abonement")
-    * @Method("POSt")
-    */
+
+    /**
+     * Action update des preferences
+     * @Route("/membre/home/abonement",
+     *     name="site_home_membre_update_abonement")
+     * @Method("POSt")
+     */
     public function updateAbonnementAction()
     {
         $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
@@ -379,24 +365,21 @@ class MembreController extends Controller
         $loRequest = $this->get('request_stack')->getCurrentRequest();
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
         if ($loRequest->isMethod('POST')) {
-            if($loRequest->get('abo_partenaires')!=null)
-            {
+            if ($loRequest->get('abo_partenaires') != null) {
                 $loUser->setNewsletter(true);
-            } else 
-            {
+            } else {
                 $loUser->setNewsletter(false);
             }
             $this->get('session')->set('confirmation', 'OK');
             $this->get('session')->set('success', 'abonement');
         }
-        $loAbonement =  $loUser->getNewsletter();
+        $loAbonement = $loUser->getNewsletter();
         return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
+                'SceauBundle:Site/Home:index.html.twig', array(
                 'menu' => 'abonement',
                 'user' => $loUser,
-                'abonement'  => $loAbonement
-            )
-        );       
+                'abonement' => $loAbonement
+                )
+        );
     }
 }

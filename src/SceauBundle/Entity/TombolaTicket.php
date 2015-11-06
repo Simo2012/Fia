@@ -50,6 +50,13 @@ class TombolaTicket
      * @ORM\JoinColumn(name="tombolasource_id", referencedColumnName="id", nullable=false)
      */
     private $tombolasource;
+    
+    /**
+    * @var ArrayCollection
+    *
+    * @ORM\OneToMany(targetEntity="SceauBundle\Entity\TombolaTirageGagnant", mappedBy="tombolaticket")
+    */
+    private $tombolaTirageGagnant;
 
 
     /**
@@ -157,5 +164,30 @@ class TombolaTicket
     {
         return $this->tombolasource;
     }
+    
+    /**
+     * Get tombolaTirageGagnant
+     *
+     * @return TombolaTirageGagnant
+    */
+    function getTombolaTirageGagnant()
+    {
+        return $this->tombolaTirageGagnant;
+    }
+    
+    /**
+     * Set TombolaTirageGagnant
+     *
+     * @param TombolaSource $tombolaTirageGagnant
+     *
+     * @return TombolaTirageGagnant
+     */
+    function setTombolaTirageGagnant($tombolaTirageGagnant)
+    {
+        $this->tombolaTirageGagnant = $tombolaTirageGagnant;
+    }
+
+
+    
     
 }

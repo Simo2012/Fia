@@ -1,6 +1,4 @@
-<?php
-
-namespace SceauBundle\Controller\Site;
+<?php namespace SceauBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -24,6 +22,7 @@ use SceauBundle\Entity\Ticket;
  */
 class HomeController extends Controller
 {
+
     /**
      * Afficher la page home.
      *
@@ -34,24 +33,24 @@ class HomeController extends Controller
     {
         $loManager = $this->getDoctrine()->getManager();
         $loUser = null;
-        if ($this->get('security.token_storage')->getToken()!=null) {
+        if ($this->get('security.token_storage')->getToken() != null) {
             $loPseudoMembre = $this->get('security.token_storage')->getToken()->getUser();
             if ($loPseudoMembre != 'anon.') {
                 $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
             }
         }
         //Recuperer Site Prenium
-        /**$loMembreLogger = $this->container->get('sceau.site.home.home_prenium');**/
+        /*         * $loMembreLogger = $this->container->get('sceau.site.home.home_prenium');* */
         $lsPrenium = $this->container->get('sceau.site.home.home_prenium');
         $lpPreniumSite = $lsPrenium->getPreniumSite();
         //Recuperer les categories disponibles
         $loCategories = $loManager->getRepository('SceauBundle:Categorie')->getActifCategories();
-        /** Envoyer vars la page Home **/
+        /** Envoyer vars la page Home * */
         //Recuperer la dérniére newsletter
         $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
         return $this->render("SceauBundle:Site/Home:index.html.twig", array('categories' => $loCategories,
-            'siteprenium' => $lpPreniumSite, 'menu' => 'home', 'newsletters' => $loNewletters,
-            'user' => $loUser));
+                'siteprenium' => $lpPreniumSite, 'menu' => 'home', 'newsletters' => $loNewletters,
+                'user' => $loUser));
     }
 
     /**
@@ -94,11 +93,9 @@ class HomeController extends Controller
             $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
         }
         return $this->render(
-            "SceauBundle:Site/Home:index.html.twig",
-            array('menu' => $loRouteName, 'newsletters' => $loNewletters, 'user' => $loUser)
+                "SceauBundle:Site/Home:index.html.twig", array('menu' => $loRouteName, 'newsletters' => $loNewletters, 'user' => $loUser)
         );
     }
-
 
     /**
      * Enregistrer la newsletter.
@@ -121,30 +118,26 @@ class HomeController extends Controller
                 $loUser = new Membre();
                 $loForm = $this->createForm(new RegisterType(), $loUser);
                 return $this->render(
-                    'SceauBundle:Site/Home:index.html.twig',
-                    array(
+                        'SceauBundle:Site/Home:index.html.twig', array(
                         'form' => $loForm->createView(),
                         'menu' => 'register',
                         'redirect' => 'newsletter'
-                    )
+                        )
                 );
-
             } else {
                 $loUser->setNewsletter(true);
                 $loManager->flush();
                 $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(3);
 
-                /** Envoyer vers la page NewsLetter **/
+                /** Envoyer vers la page NewsLetter * */
                 $this->get('session')->set('confirmation', 'OK');
                 return $this->render(
-                    "SceauBundle:Site/Home:index.html.twig",
-                    array('newsletters' => $loNewletters, 'menu' => 'site_operation_news', 'user' => $loUser)
+                        "SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'site_operation_news', 'user' => $loUser)
                 );
             }
         }
         return $this->render("SceauBundle:Site/Security:test.html.twig");
     }
-
 
     /**
      * List all published Articles.
@@ -175,31 +168,9 @@ class HomeController extends Controller
         }
 
         return $this->render(
-            'SceauBundle:Site/Presse:index.html.twig',
-            array('articlePressesByMonths' => $articlePressesByMonths)
+                'SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths)
         );
     }
-
-    /**
-     * Action pour l'appel du Participation a tombola
-     *
-     * @Route("/tombola",
-     *     name="site_home_tombola")
-     * @Method("GET")
-     */
-    public function callRegisterAction()
-    {
-        $loUser = new Membre();
-        $loForm = $this->createForm(new RegisterType(), $loUser);
-        return $this->render(
-            'SceauBundle:Site/Home:index.html.twig',
-            array(
-                'form' => $loForm->createView(),
-                'menu' => 'tombola',
-            )
-        );
-    }
-
 
     /**
      * Action pour telecharger politique
@@ -248,11 +219,10 @@ class HomeController extends Controller
         }
 
         return $this->render(
-            'SceauBundle:Site/Contact:index.html.twig',
-            [
+                'SceauBundle:Site/Contact:index.html.twig', [
                 'form' => $form->createView(),
                 'template' => $template,
-            ]
+                ]
         );
     }
 }

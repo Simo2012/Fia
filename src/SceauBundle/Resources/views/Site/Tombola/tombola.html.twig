@@ -39,3 +39,17 @@
         {% include "SceauBundle:Site/Tombola:tombolasuccess.html.twig" %} 
 {% endif %}
         {% include "SceauBundle:Site/Tombola:tombolafooter.html.twig" %} 
+        
+{% if error is defined %}
+    {% if errorType == 'tombola_login' %}
+        {% set title = 'Authentification Echoué'%}
+        {% set action = '#' %}
+        {% import "SceauBundle:Site/Popup:success.html.twig" as forms %} 
+        {{ forms.input(title, error, action) }}
+    {% else %}
+        {% set title = 'Le formulaire d\'inscription contient des erreurs'%}
+        {% set action = '#' %}
+        {% import "SceauBundle:Site/Popup:success.html.twig" as forms %} 
+        {{ forms.input(title, error, action) }}
+    {%endif%}
+{%endif%}

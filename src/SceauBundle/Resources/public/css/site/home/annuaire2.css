@@ -6493,7 +6493,7 @@ h2.recherche-result span {
 	width: 700px;
 }
 .page404 .personnage {
-	background-image: url('/img/404/erreur404_1.png');
+        background: url(../../../images/site/error/erreur404_1.png) no-repeat;
 	height: 245px;
 	width: 245px;
 	margin: auto;
@@ -6503,7 +6503,7 @@ h2.recherche-result span {
 	width: 542px;
 }
 .page404 .cadre .haut {
-	background-image: url('/img/404/erreur404_cadre_haut.png');
+        background: url(../../../images/site/error/erreur404_cadre_haut.png) no-repeat;
 	height: 14px;
 	width: 542px;
 	margin: auto;
@@ -6512,7 +6512,7 @@ h2.recherche-result span {
 	background-position: -1px;
 }
 .page404 .cadre .centre {
-	background-image: url('/img/404/erreur404_cadre_centre.png');
+        background: url(../../../images/site/error/erreur404_cadre_centre.png) no-repeat;
 	background-repeat: repeat-y;
 	width: 542px;
 	margin: auto;
@@ -6529,7 +6529,7 @@ h2.recherche-result span {
 	;
 }
 .page404 .cadre .bas {
-	background-image: url('/img/404/erreur404_cadre_bas.png');
+        background: url(../../../images/site/error/erreur404_cadre_bas.png) no-repeat;
 	height: 13px;
 	width: 542px;
 	margin: auto;

@@ -48,6 +48,13 @@ class TombolaGain
      * @ORM\Column(name="gainValue", type="integer")
      */
     private $gainValue;
+    
+    /**
+    * @var ArrayCollection
+    *
+    * @ORM\OneToMany(targetEntity="SceauBundle\Entity\TombolaTirageGagnant", mappedBy="tombolagain")
+    */
+    private $tombolaTirageGagnant;
 
 
     /**
@@ -154,6 +161,28 @@ class TombolaGain
     public function getGainValue()
     {
         return $this->gainValue;
+    }
+    
+    /**
+     * Get tombolaTirageGagnant
+     *
+     * @return TombolaTirageGagnant
+    */
+    function getTombolaTirageGagnant()
+    {
+        return $this->tombolaTirageGagnant;
+    }
+    
+    /**
+     * Set TombolaTirageGagnant
+     *
+     * @param TombolaSource $tombolaTirageGagnant
+     *
+     * @return TombolaTirageGagnant
+     */
+    function setTombolaTirageGagnant($tombolaTirageGagnant)
+    {
+        $this->tombolaTirageGagnant = $tombolaTirageGagnant;
     }
 }
 

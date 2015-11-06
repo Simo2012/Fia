@@ -102,31 +102,33 @@ class RegisterType extends AbstractType
                 $poBuilder->add('pays', 'entity', $laParams);
                 
                 $laParams = array(
-                    'label'    => 'Adresse :*',
+                    'label'    => 'Adresse :',
                     'attr'     => array(
                         'required' => true,
                         'caption'      => 'adresse',
                         'autocomplete' => false,
                         'size' => '40',
                     ),
+                    'required' => false,
                     'mapped'    => false,
                 );
                 $poBuilder->add('adresse', 'text', $laParams);
                 
                 $laParams = array(
-                    'label'    => 'Complément d\'adresse :*',
+                    'label'    => 'Complément d\'adresse :',
                     'required' => true,
                     'attr'     => array(
                         'caption'      => 'compAdresse',
                         'autocomplete' => false,
                         'size' => '40',
                     ),
+                    'required' => false,
                     'mapped'    => false,
                 );
                 $poBuilder->add('compAdresse', 'text', $laParams);
                 
                 $laParams = array(
-                    'label'    => 'Code Postal :*',
+                    'label'    => 'Code Postal :',
                     'required' => true,
                     'attr'     => array(
                         'caption'      => 'codePostal',
@@ -134,11 +136,12 @@ class RegisterType extends AbstractType
                         'size' => '10',
                     ),
                     'mapped'    => false,
+                    'required' => false,
                 );
                 $poBuilder->add('codePostal', 'text', $laParams);
                 
                 $laParams = array(
-                    'label'    => 'Ville :*',
+                    'label'    => 'Ville :',
                     'required' => true,
                     'attr'     => array(
                         'caption'      => 'ville',
@@ -146,6 +149,7 @@ class RegisterType extends AbstractType
                         'size' => '40',
                     ),
                     'mapped'    => false,
+                    'required' => false,
                 );
                 $poBuilder->add('ville', 'text', $laParams);
             }

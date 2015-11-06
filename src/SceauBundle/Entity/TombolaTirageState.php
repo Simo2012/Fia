@@ -38,6 +38,14 @@ class TombolaTirageState
     {
         return $this->id;
     }
+    
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="SceauBundle\Entity\TombolaTirage", mappedBy="tombolatiragestate")
+    */
+    private $tombolaTirage;
+
 
     /**
      * Set stateLib
@@ -62,5 +70,29 @@ class TombolaTirageState
     {
         return $this->stateLib;
     }
+    
+    /**
+     * Get tombolaTirage
+     *
+     * @return TombolaTirage
+     */
+    function getTombolaTirage()
+    {
+        return $this->tombolaTirage;
+    }
+    
+    /**
+     * Set TombolaTirage
+     *
+     * @param TombolaSource $tombolaTirage
+     *
+     * @return TombolaTirage
+     */
+    function setTombolaTirage($tombolaTirage)
+    {
+        $this->tombolaTirage = $tombolaTirage;
+    }
+
+
 }
 
