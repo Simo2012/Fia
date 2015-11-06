@@ -9,7 +9,6 @@ use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
 use Symfony\Component\Validator\Constraints\True;
 
 /**
- * 
  */
 class RegisterType extends AbstractType
 {
@@ -73,7 +72,7 @@ class RegisterType extends AbstractType
             'second_options' => array('label' => 'E-mail de confirmation* :'),
             'mapped'      => false,
         );
-        $poBuilder->add('email','repeated',$laParams);
+        $poBuilder->add('email', 'repeated', $laParams);
         
         $laParams = array(
             'label'    => 'Pseudonyme :*',
@@ -87,7 +86,6 @@ class RegisterType extends AbstractType
         
         $poBuilder->add('pseudo', 'text', $laParams);
         if (isset($paOptions['attr']['tombola'])) {
-        
                 $laParams = array(
                     'label'    => 'Pays :*',
                     'class'       => 'SceauBundle:Pays',
@@ -152,7 +150,7 @@ class RegisterType extends AbstractType
                     'required' => false,
                 );
                 $poBuilder->add('ville', 'text', $laParams);
-            }
+        }
             
         
         $laParams = array(
@@ -189,15 +187,14 @@ class RegisterType extends AbstractType
         'required' => 'required',
         'label' => 'J\'accepte de recevoir les offres des partenaires de FIA-NET adaptées à mon profil.',
         'data'=>false,
-        'constraints' => new True(array('message' => 'J\'accepte de recevoir les offres des partenaires de FIA-NET adaptées à mon profil.', 'groups' => 'registration'))));
-        
-        
-         
-         
+        'constraints' => new True(
+            array(
+                'message' => 'J\'accepte de recevoir les offres des partenaires de FIA-NET adaptées à mon profil.',
+                'groups' => 'registration')
+        )));
     } // buildForm
     
     /**
-     * 
      * @param OptionsResolver $poResolver
      */
     public function configureOptions(OptionsResolver $poResolver)
@@ -219,4 +216,3 @@ class RegisterType extends AbstractType
         return 'site_member_register';
     } // getName
 }
-

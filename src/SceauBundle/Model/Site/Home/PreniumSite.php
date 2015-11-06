@@ -1,7 +1,5 @@
 <?php
-
 namespace SceauBundle\Model\Site\Home;
-
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
@@ -20,7 +18,8 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
  * @version 1.0
  * @package Sceau
  */
-class PreniumSite {
+class PreniumSite
+{
      /**
     * Doctrine entity manager
     * @var EntityManager
@@ -45,7 +44,7 @@ class PreniumSite {
     /**
     * Recuperer Prenium Site
     */
-    public function getPreniumSite() 
+    public function getPreniumSite()
     {
         $loPrenium = $this->manager->getRepository('SceauBundle:Site')->getPreniumSite();
         for ($j=0; $j<count($loPrenium); $j++) {
@@ -60,10 +59,10 @@ class PreniumSite {
                 $loQuestionid = $loParametrage['indicateur']['question_id'];
                 $loCommentairePrincipale = $loParametrage['commentairePrincipal'];
                 $loQuestionRepondu = $loParametrage['libelleQuestionnaireRepondu'];
-                $loIdQuestionnaire = eregi_replace("[^0-9]","",$loQuestionRepondu); 
+                $loIdQuestionnaire = eregi_replace("[^0-9]", "", $loQuestionRepondu);
                 $lsResponseId = $this->manager->getRepository('SceauBundle:QuestionnaireReponse')
                                      ->getComment($loCommentairePrincipale, $loIdQuestionnaire, $loQuestionid, $loVert);
-               $lpSitePrenuim['sitePrenium'][$j]['information'] =  $lsResponseId;
+                $lpSitePrenuim['sitePrenium'][$j]['information'] =  $lsResponseId;
             } else {
                 //traitement en cas de note
             }
@@ -81,7 +80,7 @@ class PreniumSite {
         $laRand = [];
         $i = 0;
         while ($i < 4) {
-          $loRand  = rand(1,$loCount);
+            $loRand  = rand(1, $loCount);
             if (!in_array($loRand, $laRand)) {
                 $laRand[] = $loRand;
                 $i++;
@@ -90,5 +89,4 @@ class PreniumSite {
        
         return $laRand;
     }
- 
 }

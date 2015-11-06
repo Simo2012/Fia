@@ -1,4 +1,5 @@
-<?php namespace SceauBundle\Controller\Site;
+<?php
+namespace SceauBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -93,7 +94,11 @@ class HomeController extends Controller
             $loNewletters = $loManager->getRepository('SceauBundle:Newsletters')->getLastNewsLetters(1);
         }
         return $this->render(
-                "SceauBundle:Site/Home:index.html.twig", array('menu' => $loRouteName, 'newsletters' => $loNewletters, 'user' => $loUser)
+            "SceauBundle:Site/Home:index.html.twig",
+            array('menu' => $loRouteName,
+                'newsletters' => $loNewletters,
+                'user' => $loUser
+            )
         );
     }
 
@@ -118,7 +123,8 @@ class HomeController extends Controller
                 $loUser = new Membre();
                 $loForm = $this->createForm(new RegisterType(), $loUser);
                 return $this->render(
-                        'SceauBundle:Site/Home:index.html.twig', array(
+                    'SceauBundle:Site/Home:index.html.twig',
+                    array(
                         'form' => $loForm->createView(),
                         'menu' => 'register',
                         'redirect' => 'newsletter'
@@ -132,7 +138,11 @@ class HomeController extends Controller
                 /** Envoyer vers la page NewsLetter * */
                 $this->get('session')->set('confirmation', 'OK');
                 return $this->render(
-                        "SceauBundle:Site/Home:index.html.twig", array('newsletters' => $loNewletters, 'menu' => 'site_operation_news', 'user' => $loUser)
+                    "SceauBundle:Site/Home:index.html.twig",
+                    array('newsletters' => $loNewletters,
+                            'menu' => 'site_operation_news',
+                            'user' => $loUser
+                    )
                 );
             }
         }
@@ -168,7 +178,8 @@ class HomeController extends Controller
         }
 
         return $this->render(
-                'SceauBundle:Site/Presse:index.html.twig', array('articlePressesByMonths' => $articlePressesByMonths)
+            'SceauBundle:Site/Presse:index.html.twig',
+            array('articlePressesByMonths' => $articlePressesByMonths)
         );
     }
 
@@ -219,10 +230,11 @@ class HomeController extends Controller
         }
 
         return $this->render(
-                'SceauBundle:Site/Contact:index.html.twig', [
+            'SceauBundle:Site/Contact:index.html.twig',
+            [
                 'form' => $form->createView(),
                 'template' => $template,
-                ]
+            ]
         );
     }
 }

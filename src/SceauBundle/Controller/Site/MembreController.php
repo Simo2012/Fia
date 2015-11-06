@@ -1,4 +1,5 @@
-<?php namespace SceauBundle\Controller\Site;
+<?php
+namespace SceauBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -39,7 +40,8 @@ class MembreController extends Controller
 
             /** Envoyer vers la page NewsLetter * */
             return $this->render(
-                    "SceauBundle:Site/Home:index.html.twig", array(
+                "SceauBundle:Site/Home:index.html.twig",
+                array(
                     'newsletters' => $loNewletters,
                     'menu' => 'home-membre',
                     'user' => $loUser,
@@ -90,7 +92,8 @@ class MembreController extends Controller
             }
 
             return $this->render(
-                    'SceauBundle:Site/Home:index.html.twig', array(
+                'SceauBundle:Site/Home:index.html.twig',
+                array(
                     'form' => $loForm->createView(),
                     'menu' => 'update-compte',
                     'redirect' => '',
@@ -131,7 +134,8 @@ class MembreController extends Controller
             $this->get('session')->set('success', 'AjoutEmail');
         }
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'update-compte',
                 'redirect' => '',
@@ -168,7 +172,8 @@ class MembreController extends Controller
         $this->get('session')->set('confirmation', 'OK');
         $this->get('session')->set('success', 'AjoutEmail');
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'update-compte',
                 'redirect' => '',
@@ -201,7 +206,8 @@ class MembreController extends Controller
         $this->get('session')->set('confirmation', 'OK');
         $this->get('session')->set('success', 'EmailPrincipale');
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'update-compte',
                 'redirect' => '',
@@ -262,7 +268,8 @@ class MembreController extends Controller
         $this->get('session')->set('confirmation', 'OK');
         $this->get('session')->set('success', 'Passwrod');
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'update-compte',
                 'redirect' => '',
@@ -289,7 +296,8 @@ class MembreController extends Controller
         $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
         $loPreference = $loMembreLogger->getPreferences($loUser);
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'menu' => 'preference',
                 'user' => $loUser,
                 'categories' => $loCategories,
@@ -322,7 +330,8 @@ class MembreController extends Controller
 
         $loPreference = $loMembreLogger->getPreferences($loUser);
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'menu' => 'preference',
                 'user' => $loUser,
                 'categories' => $loCategories,
@@ -344,7 +353,8 @@ class MembreController extends Controller
         $loUser = $loManager->getRepository('SceauBundle:Membre')->getByPseudo($loPseudoMembre);
         $loAbonement = $loUser->getNewsletter();
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'menu' => 'abonement',
                 'user' => $loUser,
                 'abonement' => $loAbonement
@@ -375,7 +385,8 @@ class MembreController extends Controller
         }
         $loAbonement = $loUser->getNewsletter();
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'menu' => 'abonement',
                 'user' => $loUser,
                 'abonement' => $loAbonement

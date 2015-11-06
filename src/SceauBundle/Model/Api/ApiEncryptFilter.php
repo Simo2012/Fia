@@ -1,7 +1,6 @@
 <?php
 namespace SceauBundle\Model\Api;
 
-
 /**
  * Encode un tableau dans une chaine cryptée de l'API
  *

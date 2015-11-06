@@ -1,4 +1,5 @@
-<?php namespace SceauBundle\Controller\Site;
+<?php
+namespace SceauBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -24,7 +25,6 @@ class TombolaController extends Controller
 
     /**
      * Action pour l'appel du Participation a tombola
-     * 
      * @Route("/tombola",
      *     name="site_home_tombola")
      * @Method("GET")
@@ -36,7 +36,8 @@ class TombolaController extends Controller
         $loTombola = $this->container->get('sceau.site.user.user_tombola');
         $loWinner = $loTombola->getWinner();
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'tombola',
                 'call' => 1,
@@ -48,7 +49,6 @@ class TombolaController extends Controller
 
     /**
      * Action pour l'appel du Participation a tombola
-     * 
      * @Route("/tombola/login",
      *     name="site_tombola_login")
      * @Method("POST")
@@ -66,7 +66,8 @@ class TombolaController extends Controller
                     $loTombola = $this->container->get('sceau.site.user.user_tombola');
                     $loWinner = $loTombola->getWinner();
                     return $this->render(
-                            'SceauBundle:Site/Home:index.html.twig', array(
+                        'SceauBundle:Site/Home:index.html.twig',
+                        array(
                             'participation' => $loNumberParticipation,
                             'menu' => 'tombola',
                             'call' => 2,
@@ -83,12 +84,11 @@ class TombolaController extends Controller
 
     /**
      * Action pour l'appel du Participation a tombola
-     * 
      * @Route("/tombola/register",
      *     name="site_member_register_tombola")
      * @Method("POST")
      */
-    public function RegitreTombolaAction(Request $poRequest)
+    public function regitreTombolaAction(Request $poRequest)
     {
         $loUser = new Membre();
         $loForm = $this->createForm(new RegisterType(), $loUser);
@@ -97,7 +97,7 @@ class TombolaController extends Controller
         if ($poRequest->isMethod('POST')) {
             $loForm->handleRequest($poRequest);
             $loFields = $poRequest->get('site_member_register');
-            if ($loFields['email']['first']==$loFields['email']['second'] ) {
+            if ($loFields['email']['first'] == $loFields['email']['second']) {
                 try {
                     if ($poRequest->get('g-recaptcha-response') == '') {
                         return $this->errorAction('Le captcha est obligatoire', 'tombola', '1');
@@ -117,7 +117,8 @@ class TombolaController extends Controller
                     $loTombola = $this->container->get('sceau.site.user.user_tombola');
                     $loWinner = $loTombola->getWinner();
                     return $this->render(
-                            'SceauBundle:Site/Home:index.html.twig', array(
+                        'SceauBundle:Site/Home:index.html.twig',
+                        array(
                             'participation' => $loNumberParticipation,
                             'menu' => 'tombola',
                             'call' => 2,
@@ -145,7 +146,8 @@ class TombolaController extends Controller
         $loTombola = $this->container->get('sceau.site.user.user_tombola');
         $loWinner = $loTombola->getWinner();
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'tombola',
                 'winners' => $loWinner,

@@ -3,7 +3,6 @@
 namespace SceauBundle\Model\Site\Tombola;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
@@ -17,7 +16,8 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
  * @version 1.0
  * @package Sceau
  */
-class MembreGagnants {
+class MembreGagnants
+{
     /**
     * Doctrine entity manager
     * @var EntityManager
@@ -49,10 +49,10 @@ class MembreGagnants {
     /***
      * fonction pour recuperer les gangants 
      */
-    public function getWinner() {
+    public function getWinner()
+    {
        // $logain = $this->manager->getRepository('SceauBundle:TombolaGain')->find(1);
         $loGagnants = $this->manager->getRepository('SceauBundle:TombolaTirageGagnant')->getGagnants();
         return $loGagnants;
     }
-    
 }

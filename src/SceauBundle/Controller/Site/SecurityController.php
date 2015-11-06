@@ -1,4 +1,5 @@
-<?php namespace SceauBundle\Controller\Site;
+<?php
+namespace SceauBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -55,7 +56,7 @@ class SecurityController extends Controller
      *
      *  @Route("/login",
      *     name="site_member_login_confirmation")
-     * @Method("POST")
+     * @Method("GET")
      */
     public function confirmationEmailAction(Request $poRequest)
     {
@@ -64,9 +65,17 @@ class SecurityController extends Controller
         if (!empty($loPassword) && !empty($loEmail)) {
             try {
                 $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
+                $loPwd = $loMembreLogger->affPassword($loPassword);
                 $loMembreLogger->logConfirmationUser($loEmail);
-                $loLoggedUser = $loMembreLogger->logUser($loEmail, $loPassword);
+                $loLoggedUser = $loMembreLogger->logUser($loEmail, $loPwd);
                 $this->saveToken($poRequest, $loLoggedUser);
+                $this->sendEmail(
+                    'SceauBundle:Site/Emails:bienvenuuMembre.html.twig',
+                    $loLoggedUser,
+                    $loEmail,
+                    'FIA-NET : Espace Membre - Bienvenue à vous !',
+                    1
+                );
                 $loResponse = $this->forward('SceauBundle:Site/Membre:homeMembre');
             } catch (\Exception $e) {
                 var_dump($e->getMessage());
@@ -76,9 +85,8 @@ class SecurityController extends Controller
     }
 
     /**
-     * Action pour appel l'inscription 
-     *
-     *  @Route("/register",
+     *Action pour appel l'inscription
+     *@Route("/register",
      *     name="site_member_call_register")
      * @Method("GET")
      */
@@ -87,7 +95,8 @@ class SecurityController extends Controller
         $loUser = new Membre();
         $loForm = $this->createForm(new RegisterType(), $loUser);
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'register',
                 'redirect' => '',
@@ -104,7 +113,8 @@ class SecurityController extends Controller
         $loUser = new Membre();
         $loForm = $this->createForm(new RegisterType(), $loUser);
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'register',
                 'redirect' => '',
@@ -116,8 +126,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Action pour l'inscription 
-     *
+     * Action pour l'inscription
      *  @Route("/register",
      *     name="site_member_register")
      * @Method("POST")
@@ -142,9 +151,16 @@ class SecurityController extends Controller
                         $loUser->setAvatar($loAvatar);
                         $loUser->addEmail($loEmail);
                         $loMembreLogger->registerUser($loUser, $loFields['email']['first'], true);
-                        $this->sendEmail('SceauBundle:Site/Emails:confirmationRegister.html.twig', $loUser, $loFields['email']['first']);
+                        $this->sendEmail(
+                            'SceauBundle:Site/Emails:confirmationRegister.html.twig',
+                            $loUser,
+                            $loFields['email']['first'],
+                            'confirmer votre inscription sur fia-net',
+                            0
+                        );
                         return $this->render(
-                                'SceauBundle:Site/Home:index.html.twig', array(
+                            'SceauBundle:Site/Home:index.html.twig',
+                            array(
                                 'form' => $loForm->createView(),
                                 'menu' => 'successRegister',
                                 'user' => $loUser
@@ -156,13 +172,12 @@ class SecurityController extends Controller
                     return $this->errorAction($e->getMessage(), 'register');
                 }
             } else {
-
                 (string) $loForm->getErrors(true);
-                // $this->errorAction($laErrors, 'errorForm');
             }
         }
         return $this->render(
-                'SceauBundle:Site/Home:index.html.twig', array(
+            'SceauBundle:Site/Home:index.html.twig',
+            array(
                 'form' => $loForm->createView(),
                 'menu' => 'register',
                 'redirect' => ''
@@ -181,16 +196,17 @@ class SecurityController extends Controller
     }
 
     /**
-     * 
      * Fonction Pour enregistrer le token pour recuperer les session connecté
-     * 
      * @param type $poRequest
      * @param type $poUser
-     */
+    */
     public function saveToken($poRequest, $poUser)
     {
         $loToken = new UsernamePasswordToken(
-            $poUser->getPseudo(), $poUser->getPassword(), 'secured_site_login_membre', $poUser->getRoles()
+            $poUser->getPseudo(),
+            $poUser->getPassword(),
+            'secured_site_login_membre',
+            $poUser->getRoles()
         );
         $this->get('security.token_storage')->setToken($loToken);
         $poRequest->getSession()->set('_security_secured_site_login_membre', serialize($loToken));
@@ -201,20 +217,27 @@ class SecurityController extends Controller
     /**
      * Fonction pour Envoyer les mails
      */
-    public function sendEmail($poTemplate, $poUser, $poEmail)
+    public function sendEmail($poTemplate, $poUser, $poEmail, $poSubject, $poCall)
     {
         $loMembreLogger = $this->container->get('sceau.site.user.user_logger');
         $loManager = $this->getDoctrine()->getManager();
         $loPseudo = $poUser->getPseudo();
-        $loPwd = $loMembreLogger->displayPassword($poUser);
-        $loUrl = $this->generateUrl('site_member_login_confirmation', array('_email' => $poEmail, '_password' => $loPwd));
+        $loPwd = $poUser->getPassword();
+        if ($poCall == 1) {
+            $loPwd = $loMembreLogger->affPassword($loPwd);
+        }
+        $loUrl = $this->generateUrl(
+            'site_member_login_confirmation',
+            array('_email' => $poEmail, '_password' => $loPwd)
+        );
         try {
             $loEnvoiEmail = new EnvoiEmail();
-            $loEnvoiEmail->setSubject($loPseudo . ' confirmer votre inscription sur fia-net');
+            $loEnvoiEmail->setSubject($poSubject);
             $loEnvoiEmail->setSendFrom('membres@fia-net.fr');
             $loEnvoiEmail->setSendTo($poEmail);
             $loContent = $this->renderView(
-                $poTemplate, array(
+                $poTemplate,
+                array(
                 'pseudo' => $loPseudo,
                 'email' => $poEmail,
                 'pwd' => $loPwd,

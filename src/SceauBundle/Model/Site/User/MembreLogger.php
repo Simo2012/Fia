@@ -1,5 +1,4 @@
 <?php
-
 namespace SceauBundle\Model\Site\User;
 
 use SceauBundle\Entity\Membre;
@@ -24,8 +23,10 @@ use SceauBundle\Entity\Avatar;
  * @version 1.0
  * @package Sceau
  */
+
 class MembreLogger
 {
+
     /**
      * Doctrine entity manager
      * @var EntityManager
@@ -44,11 +45,13 @@ class MembreLogger
      * @var EncoderFactory
      */
     private $factory;
+
     /**
      * Requête courante
      * @var Request
      */
     private $request;
+
     /**
      * Traducteur de phrases
      * @var Translator
@@ -65,8 +68,8 @@ class MembreLogger
         $this->request = $poRequestStack->getCurrentRequest();
         $this->translator = $poTranslator;
         $this->apiDecryptFilter = $apiDecryptFilter;
-    } // __construct
-
+    }
+// __construct
 
     /**
      * Récupère un utilisateur par son email et le connect
@@ -82,14 +85,14 @@ class MembreLogger
                 'Incorrect Login'
             );
         }
-        
+
         $loEmail = $this->manager->getRepository('SceauBundle:Email')->getDateConfirmation($poLogin);
-        if ($loEmail->getDateConfirmation()==null) {
+        if ($loEmail->getDateConfirmation() == null) {
             throw new \ErrorException(
-                    'Email non Confirmé'
-                );
+                'Email non Confirmé'
+            );
         }
-         
+
         $laPassword = $this->apiDecryptFilter->filter($loUser->getPassword());
         $lsPassword = $laPassword[0];
         if ($poPassword !== $lsPassword) {
@@ -100,8 +103,8 @@ class MembreLogger
         // ==== Mise en session de l'utilisateur ====
         $this->setUserInSession($loUser);
         return $loUser;
-    } // getUser
-    
+    }// getUser
+
     /**
      * Récupère un utilisateur par son email et le connect
      *
@@ -109,14 +112,13 @@ class MembreLogger
      */
     public function logConfirmationUser($poLogin)
     {
-     
+
         $loEmail = $this->manager->getRepository('SceauBundle:Email')->getDateConfirmation($poLogin);
         $loEmail->setDateConfirmation(new \DateTime());
         $this->manager->flush();
         return $loEmail;
-    } // getUser
-    
-    
+    }// getUser
+
     /**
      * Fonction pour afficher le mot de passe en clair
      * @param type $poUser
@@ -129,6 +131,17 @@ class MembreLogger
     }
 
     /**
+     * Fonction pour afficher le mot de passe en clair
+     * @param type $poPwd
+     * @return type
+     */
+    public function affPassword($poPwd)
+    {
+        $laPassword = $this->apiDecryptFilter->filter($poPwd);
+        return $laPassword[0];
+    }
+
+    /**
      * Log l'utilisateur
      *
      * @param Membre $poMembre Utilisateur
@@ -137,8 +150,7 @@ class MembreLogger
     {
         $poMembre->setDateCreation(new \DateTime());
         $this->manager->flush();
-    } // setUserInSession
-
+    }// setUserInSession
 
     /**
      * Enregistre l'utilisateur et le log
@@ -163,19 +175,18 @@ class MembreLogger
         $loUser = $this->manager->getRepository('SceauBundle:Membre')->getByPseudo($poUser->getPseudo());
         if (!empty($loUser)) {
             throw new \ErrorException(
-                    'Pseudo Exist déja'
-                );
+                'Pseudo Exist déja'
+            );
         }
-        
-        
+
+
         $this->createUser($poUser);
 
         // ==== Mise en session de l'utilisateur ====
         $this->setUserInSession($poUser);
 
         return $poUser;
-    } // registerUser
-
+    }// registerUser
 
     /**
      * Création d'un nouvel utilisateur
@@ -202,7 +213,7 @@ class MembreLogger
                 'erreur lors de la creation user'
             );
         }
-    } // createUser
+    }// createUser
 
     /**
      * Participation du membre dans tombola
@@ -239,8 +250,8 @@ class MembreLogger
      * @param $poField
      * @$return Coordonnees
      * @throws DBALException
-     */
-    public function saveCoordonnées($poField)
+    */
+    public function saveCoordonnees($poField)
     {
         $loPays = $this->manager->getRepository('SceauBundle:Pays')->find($poField['pays']);
         $loCoordonnees = new Coordonnee();
@@ -260,6 +271,7 @@ class MembreLogger
 
         return $loCoordonnees;
     }
+
     /**
      * Sauvgarder Email
      *
@@ -289,11 +301,10 @@ class MembreLogger
         }
         return $loEmail;
     }
-    
+
     public function saveAvatar($poIdAvatar)
     {
-        if (is_numeric($poIdAvatar))
-        {
+        if (is_numeric($poIdAvatar)) {
             $loAvatar = new Avatar();
             try {
                 $loAvatar->setNumber($poIdAvatar);
@@ -310,7 +321,6 @@ class MembreLogger
     }
 
     /**
-     * 
      * @param type $poUser
      * @return int
      */
@@ -336,7 +346,6 @@ class MembreLogger
                 if ($poUser->getCoordonnee()->getPays()->getLibelle() != 'France') {
                     $loPercentage += 9;
                 }
-
             }
         }
         if ($poUser->getPseudo() != null) {
@@ -348,11 +357,13 @@ class MembreLogger
         if ($poUser->getPreference() != null) {
             $loPercentage += 3;
         }
-        if ($poUser->getSituationFamiliale() != null && $poUser->getActiviteProfessionnelle() != null || $poUser->getTrancheAge() != null) {
+        if ($poUser->getSituationFamiliale() != null &&
+            $poUser->getActiviteProfessionnelle() != null ||
+            $poUser->getTrancheAge() != null
+            ) {
             $loPercentage += 3;
         }
         return $loPercentage;
-
     }
 
     /**
@@ -448,14 +459,12 @@ class MembreLogger
         }
         return true;
     }
-    
-    
+
     /**
-     * 
      * @param type $poUser
      * @param type $poField
      * @throws \ErrorException
-     */
+    */
     public function updatePwd($poUser, $poField)
     {
         if ($this->checkpwd($poUser, $poField['password_actuel']) == false) {
@@ -475,9 +484,8 @@ class MembreLogger
             }
         }
     }
-    
+
     /**
-     * 
      * @param type $poUser
      * @return type
      */
@@ -485,11 +493,9 @@ class MembreLogger
     {
         $loPreference = $poUser->getPreference();
         $laPreference = null;
-        for ($i=0; $i<strlen($loPreference); $i++)
-        {
-            if(
-                $loPreference[$i] != '{' && 
-                $loPreference[$i] != '}' && 
+        for ($i = 0; $i < strlen($loPreference); $i++) {
+            if ($loPreference[$i] != '{' &&
+                $loPreference[$i] != '}' &&
                 $loPreference[$i] != ','
             ) {
                 $laPreference[] = $loPreference[$i];
@@ -497,23 +503,22 @@ class MembreLogger
         }
         return $laPreference;
     }
-    
+
     public function savePreference($poUser, $paPreference)
     {
-       
+
         $loPreference = '{';
         $count = count($paPreference);
         $pos = 1;
         foreach ($paPreference as $preference) {
             $loPreference .= $preference;
-            if($pos != $count) {
+            if ($pos != $count) {
                 $loPreference .= ',';
             }
-            $pos++; 
+            $pos++;
         }
         $loPreference .= '}';
         $poUser->setPreference($loPreference);
         $this->manager->flush($poUser);
-        
     }
 }
