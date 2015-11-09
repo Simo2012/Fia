@@ -8,7 +8,6 @@
 
 {% block extranet_stylesheets %}
     {% stylesheets
-    'bundles/sceau/css/extranet/questionnaires.css'
     filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -29,10 +28,10 @@
             <div class="panel-body">
                 <div class="table-responsive">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-9">
                             {{ render(controller('SceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-3">
                             <div class="block-relance-info">
                                 <p><strong>{% trans %}titre_paragraphe{% endtrans %}</strong></p>
                                 <p class="color11">{% trans %}corps_paragraphe{% endtrans %}</p>

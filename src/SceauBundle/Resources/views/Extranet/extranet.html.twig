@@ -24,6 +24,8 @@
     'bundles/sceau/css/extranet/common/style-responsive.min.css'
     'bundles/sceau/css/extranet/common/default.css'
     'bundles/sceau/css/extranet/common/style.custo.fianet.css'
+    'bundles/sceau/css/extranet/common/dataTables.bootstrap.min.css'
+    'bundles/sceau/css/extranet/common/responsive.bootstrap.min.css'
     filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -45,33 +47,36 @@
 {% block body %}
 
     <div id="page-container" class="fade page-sidebar-fixed page-without-sidebar page-header-fixed page-with-top-menu">
-    {# nav-top #}
-    <div id="header" class="header navbar navbar-default navbar-fixed-top">
-        {% include 'SceauBundle:Extranet/Commun:nav-top.html.twig' %}
+
+        {# nav-top #}
+        <div id="header" class="header navbar navbar-default navbar-fixed-top">
+            {% include 'SceauBundle:Extranet/Commun:nav-top.html.twig' %}
+        </div>
+
+        {# menu-top #}
+
+        <div id="top-menu" class="top-menu">
+            {% include 'SceauBundle:Extranet/Commun:menu-top.html.twig' %}
+        </div>
+
+        {# content #}
+        <div id="content" class="content">
+            {{ render(controller('SceauBundle:Extranet/Commun:getLastNews')) }}
+            {% block extranet_body %}
+
+            {% endblock %}
+        </div>
+
+        {# footer #}
+        <div id="footer" class="footer">
+            {% include 'SceauBundle:Extranet:footer.html.twig' %}
+        </div>
+        <div id="masque"></div>
+
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true"></div>
+
     </div>
 
-    {# menu-top #}
-
-    <div id="top-menu" class="top-menu">
-        {% include 'SceauBundle:Extranet/Commun:menu-top.html.twig' %}
-    </div>
-
-    {# content #}
-    <div id="content" class="content">
-        {% block extranet_body %}
-
-        {% endblock %}
-    </div>
-
-    {# footer #}
-    <div id="footer" class="footer">
-        {% include 'SceauBundle:Extranet:footer.html.twig' %}
-    </div>
-    <div id="masque"></div>
-
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-    </div>
-</div>
 {% endblock %}
 
 {% block javascript %}
@@ -86,7 +91,6 @@
         'bundles/sceau/js/extranet/common/bootstrap.min.js'
         'bundles/sceau/js/extranet/common/jquery.slimscroll.min.js'
         'bundles/sceau/js/extranet/common/jquery.cookie.js'
-        'bundles/sceau/js/extranet/common/jquery.gritter.js'
         'bundles/sceau/js/extranet/common/jquery.flot.min.js'
         'bundles/sceau/js/extranet/common/jquery.flot.time.min.js'
         'bundles/sceau/js/extranet/common/jquery.flot.resize.min.js'
@@ -141,6 +145,7 @@
             $('.datepicker').datepicker({
                 format: 'yyyy-mm-dd'
             });
+            TableManageDefault.init();
         });
     </script>
 

@@ -7,159 +7,167 @@
 {% endblock %}
 
 {% block extranet_stylesheets %}
-    {% stylesheets
-    'bundles/sceau/css/extranet/questionnaires.css'
-    filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
+
 {% endblock %}
 
 {% block extranet_body %}
+
     <h1>{% trans %}titre{% endtrans %}</h1>
 
     {# BLOCK RECHERCHE #}
+    <!-- begin row -->
     <div class="row">
-        <div class="panel panel-inverse">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    Recherche
-                </h4>
-            </div>
-            <div class="panel-body">
-                <div class="table-responsive">
-                    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
-                    {{ form_start(form, {'action' : path('extranet_questionnaires_questionnaires')}) }}
-                        <div class="col-lg-6">
-                            <h2>{% trans %}label_recherche_date{% endtrans %}</h2>
-                            <dd>{% trans %}recherche_date_du{% endtrans %} {{ form_widget(form.dateDebut, {'attr' : {'class': 'datepicker'}}) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span> {% trans %}recherche_date_au{% endtrans %} {{ form_widget(form.dateFin, {'attr' : {'class': 'datepicker'}}) }} <span class="erreur">{{ form_errors(form.dateFin) }}</span></dd>
-                            <dt><button class="btn btn-info btn-sm" type="submit">{% trans %}libelle_bouton{% endtrans %}</button></dt><br />
-                            <br />
-                            <h2>{% trans %}recherche_avancee{% endtrans %}</h2>
-                            <ul class="list-inline">
-                                {% trans %}indicateur{% endtrans %} :<br />
-                                {% for indicateur in form.indicateurs %}
-                                    <li class="indicateurs">
-                                        {% if indicateur.vars.value == 'vert' %}
-                                            <img src="{{ asset('bundles/sceau/images/indicateur-vert.png') }}" width="16" height="19" alt="{% trans from 'notes'%}notes_indicateur_vert{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_vert{% endtrans %}" onclick="selectIndicateur(0, this);" {% if indicateur.vars.checked %}class="indicateur-selectionne"{% else %}class="indicateur-non-selectionne" {% endif %}/>{{ form_widget(indicateur) }}
-                                        {% elseif indicateur.vars.value == 'jaune' %}
-                                            <img src="{{ asset('bundles/sceau/images/indicateur-jaune.png') }}" width="16" height="19" alt="{% trans from 'notes' %}notes_indicateur_jaune{% endtrans %}"  title="{% trans from 'notes' %}notes_indicateur_jaune{% endtrans %}" onclick="selectIndicateur(1, this);" {% if indicateur.vars.checked %}class="indicateur-selectionne"{% else %}class="indicateur-non-selectionne" {% endif %}/>{{ form_widget(indicateur) }}
-                                        {% elseif indicateur.vars.value == 'rouge' %}
-                                            <img src="{{ asset('bundles/sceau/images/indicateur-rouge.png') }}" width="16" height="19" alt="{% trans from 'notes' %}notes_indicateur_rouge{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_rouge{% endtrans %}" onclick="selectIndicateur(2, this);" {% if indicateur.vars.checked %}class="indicateur-selectionne"{% else %}class="indicateur-non-selectionne"  {% endif %}/>{{ form_widget(indicateur) }}
-                                        {% else %}
-                                            <img src="{{ asset('bundles/sceau/images/indicateur-gris.png') }}" width="16" height="19" alt="{% trans from 'notes' %}notes_indicateur_gris{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_gris{% endtrans %}" onclick="selectIndicateur(3, this);" {% if indicateur.vars.checked %}class="indicateur-selectionne"{% else %}class="indicateur-non-selectionne"  {% endif %}/>{{ form_widget(indicateur) }}
-                                        {% endif %}
-                                    </li>
-                                {% endfor %}
-                                <li>
-                                    <button class="btn btn-info btn-sm" type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
-                                </li><br />
-                                <br />
+        <!-- begin col-5 -->
+        <div class="col-md-5">
+            <ul class="nav nav-pills">
+                <li class="active"><a href="#nav-pills-tab-1" data-toggle="tab">Recherche par date</a></li>
+                <li><a href="#nav-pills-tab-2" data-toggle="tab">Recherche par contenu</a></li>
+                <li><a href="#nav-pills-tab-3" data-toggle="tab">Recherche avancée</a></li>
+            </ul>
+            <div class="row">
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="nav-pills-tab-1">
+                        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                        {{ form_start(form, {'action' : path('extranet_questionnaires_questionnaires'), 'class' : 'form-horizontal'}) }}
+                        <h3 class="m-t-10">{% trans %}label_recherche_date{% endtrans %}</h3>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-sm-3 col-lg-6">
+                                    <dd>
+                                        {% trans %}recherche_date_du{% endtrans %} {{ form_widget(form.dateDebut, {'attr' : {'class': 'datepicker'}}) }} <span class="erreur">{{ form_errors(form.dateDebut) }}</span>
+                                    </dd>
+                                </div>
+                                <div class="col-sm-3 col-lg-6">
+                                    <dd>
+                                        {% trans %}recherche_date_au{% endtrans %} {{ form_widget(form.dateFin, {'attr' : {'class': 'datepicker'}}) }} <span class="erreur">{{ form_errors(form.dateFin) }}</span>
+                                    </dd>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <dt><button class="btn btn-info btn-block" type="submit">{% trans %}libelle_bouton{% endtrans %}</button></dt><br />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-pills-tab-2">
+                        <h3 class="m-t-10">Recherche par contenu</h3>
+                        <ul class="list-inline">
+                            {% trans %}indicateur{% endtrans %} :<br />
+                            {% for indicateur in form.indicateurs %}
+                                <li class="indicateurs">
+                                    {% if indicateur.vars.value == 'vert' %}
+                                        <img src="{{ asset('bundles/sceau/images/indicateur-vert.png') }}" width="16" height="19" alt="{% trans from 'notes'%}notes_indicateur_vert{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_vert{% endtrans %}" onclick="selectIndicateur(0, this);" {% if indicateur.vars.checked %}class="indicateur-selectionne"{% else %}class="indicateur-non-selectionne" {% endif %}/>{{ form_widget(indicateur) }}
+                                    {% elseif indicateur.vars.value == 'jaune' %}
+                                        <img src="{{ asset('bundles/sceau/images/indicateur-jaune.png') }}" width="16" height="19" alt="{% trans from 'notes' %}notes_indicateur_jaune{% endtrans %}"  title="{% trans from 'notes' %}notes_indicateur_jaune{% endtrans %}" onclick="selectIndicateur(1, this);" {% if indicateur.vars.checked %}class="indicateur-selectionne"{% else %}class="indicateur-non-selectionne" {% endif %}/>{{ form_widget(indicateur) }}
+                                    {% elseif indicateur.vars.value == 'rouge' %}
+                                        <img src="{{ asset('bundles/sceau/images/indicateur-rouge.png') }}" width="16" height="19" alt="{% trans from 'notes' %}notes_indicateur_rouge{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_rouge{% endtrans %}" onclick="selectIndicateur(2, this);" {% if indicateur.vars.checked %}class="indicateur-selectionne"{% else %}class="indicateur-non-selectionne"  {% endif %}/>{{ form_widget(indicateur) }}
+                                    {% else %}
+                                        <img src="{{ asset('bundles/sceau/images/indicateur-gris.png') }}" width="16" height="19" alt="{% trans from 'notes' %}notes_indicateur_gris{% endtrans %}" title="{% trans from 'notes' %}notes_indicateur_gris{% endtrans %}" onclick="selectIndicateur(3, this);" {% if indicateur.vars.checked %}class="indicateur-selectionne"{% else %}class="indicateur-non-selectionne"  {% endif %}/>{{ form_widget(indicateur) }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="row">
+                            <div class="col-lg-6">
                                 {% if not parametrage.livraison %}
                                     {% do  form.livraison.setRendered %}
                                 {% else %}
-                                    <li>
-                                        {% trans %}mode_de_livraison{% endtrans %} <div class="tooltipstered" id="tooltip"><img src="{{ asset('bundles/sceau/images/extranet/picto_info_bulle.jpg') }}" width="14" height="14" alt="{% trans from 'commun' %}commun_infobulle{% endtrans %}" /></div> :
-                                    </li>
-                                    <li>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        {% trans %}mode_de_livraison{% endtrans %}
+                                        <div class="tooltipstered" id="tooltip">
+                                            <img src="{{ asset('bundles/sceau/images/extranet/picto_info_bulle.jpg') }}" width="14" height="14" alt="{% trans from 'commun' %}commun_infobulle{% endtrans %}" />
+                                        </div> :
+                                    </div>
+                                    <div class="col-lg-6">
                                         <div class="select">{{ form_widget(form.livraison) }}</div>
-                                    </li>
-                                    <li>
-                                        <button class="btn btn-info btn-sm"type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
-                                    </li>
-                                {% endif %}
-                            </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    <div class="col-lg-6">
-
-                        <h2>{% trans %}recherche_contenu{% endtrans %}</h2>
-
-                        {{ form_widget(form.recherche, { 'attr': {'placeholder': 'recherche_placeholder'|trans} }) }}
-                        <button class="btn btn-info btn-sm" type="submit">{% trans %}libelle_bouton{% endtrans %}</button><br>
-
-                        <label for="sceaubundle_questionnaires_liste_litige">{% trans %}litige_en_cours{% endtrans %}</label> : {{ form_widget(form.litige) }}
-                        <button class="btn btn-info btn-sm" type="submit">{% trans %}libelle_bouton{% endtrans %}</button><br>
-
-                        <label for="sceaubundle_questionnaires_liste_retenir">{% trans %}retenir_parametre{% endtrans %}</label> : {{ form_widget(form.retenir) }}
-                        <button class="btn btn-info btn-sm" type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
-
+                        <br />
+                        <div class="row">
+                                {% endif %}
+                            <div class="col-lg-6">
+                                <button class="btn btn-info btn-block"type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
+                            </div>
+                        </div>
                     </div>
-                        {{ form_widget(form.tri) }}
+                    <div class="tab-pane fade" id="nav-pills-tab-3">
+                        <h3 class="m-t-10">Recherche avancée</h3>
+                        {{ form_widget(form.recherche, { 'attr': {'placeholder': 'recherche_placeholder'|trans} }) }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label class="control-label" for="sceaubundle_questionnaires_liste_litige">{% trans %}litige_en_cours{% endtrans %}</label> :
+                            </div>
+                            <div class="col-lg-6">
+                                {{ form_widget(form.litige) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="sceaubundle_questionnaires_liste_retenir">{% trans %}retenir_parametre{% endtrans %}</label> :
+                            </div>
+                            <div class="col-lg-6">
+                                {{ form_widget(form.retenir) }}
+                            </div>
+                            <button class="btn btn-info btn-block" type="submit">{% trans %}libelle_bouton{% endtrans %}</button>
+                         </div>
+
+                    {{ form_widget(form.tri) }}
                     {{ form_end(form) }}
                 </div>
             </div>
         </div>
     </div>
 
+
     {# BLOCK QUESTIONNAIRES TROUVES #}
+    <!-- begin row -->
     <div class="row">
-        <div class="panel panel-inverse">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    Résultats
-                </h4>
-            </div>
-            <div class="panel-body">
-                <div class="table-responsive">
+        <!-- begin col-12 -->
+        <div class="col-md-12">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    </div>
+                    <h4 class="panel-title">Résultat</h4>
+                </div>
+                <div class="panel-body">
                     <h1>{% transchoice nbTotalQuestionnaires with {'%nbr%': nbTotalQuestionnaires} %}questionnaires_trouves{% endtranschoice %}</h1>
                     {% if nbTotalQuestionnaires != 0 %}
-                        <table id="example-table" class="table table-striped table-bordered table-hover table-green">
+                        <table id="data-table" class="table table-striped table-bordered">
+                            <thead>
                             <tr>
                                 <th>{% trans from 'notes' %}notes_indicateur{% endtrans %}</th>
-                                <th>
-                                    {{ parametrage.libelleCommandeDate|trans({}, 'commun') }}
-                                    {% if tri == 1 %}
-                                        <a onclick="selectTriQuestionnaires(0);" class="pointeur">
-                                            <img src="{{ asset('bundles/sceau/images/extranet/picto_trie_asc.png') }}" width="12" height="8" title="{% trans %}tri_croissant{% endtrans %}" alt="{% trans %}tri_croissant{% endtrans %}" />
-                                        </a>
-                                    {% else %}
-                                        <a onclick="selectTriQuestionnaires(1);" class="pointeur">
-                                            <img src="{{ asset('bundles/sceau/images/extranet/picto_trie_desc.png') }}" width="12" height="8" title="{% trans %}tri_decroissant{% endtrans %}" alt="{% trans %}tri_decroissant{% endtrans %}" />
-                                        </a>
-                                    {% endif %}
-                                </th>
-                                <th>
-                                    {% trans from 'commun' %}commun_date_reponse_questionnaire{% endtrans %}
-                                    {% if tri == 3 %}
-                                        <a onclick="selectTriQuestionnaires(2);" class="pointeur">
-                                            <img src="{{ asset('bundles/sceau/images/extranet/picto_trie_asc.png') }}" width="12" height="8" title="{% trans %}tri_croissant{% endtrans %}" alt="{% trans %}tri_croissant{% endtrans %}" />
-                                        </a>
-                                    {% else %}
-                                        <a onclick="selectTriQuestionnaires(3);" class="pointeur">
-                                            <img src="{{ asset('bundles/sceau/images/extranet/picto_trie_desc.png') }}" width="12" height="8" title="{% trans %}tri_decroissant{% endtrans %}" alt="{% trans %}tri_decroissant{% endtrans %}" />
-                                        </a>
-                                    {% endif %}
-                                </th>
-                                <th>
-                                    {% trans from 'commun' %}commun_adresse_email{% endtrans %}
-                                </th>
-                                <th>
-                                    {% trans from 'commun' %}commun_verbatim{% endtrans %}
-                                </th>
+                                <th>{{ parametrage.libelleCommandeDate|trans({}, 'commun') }}</th>
+                                <th>{% trans from 'commun' %}commun_date_reponse_questionnaire{% endtrans %}</th>
+                                <th>{% trans from 'commun' %}commun_adresse_email{% endtrans %}</th>
+                                <th>{% trans from 'commun' %}commun_verbatim{% endtrans %}</th>
                                 {% if parametrage.recommandation is not null %}
-                                    <th>
-                                        {% trans from 'notes' %}notes_indice_recommandation{% endtrans %}
-                                        {% if tri == 5 %}
-                                            <a onclick="selectTriQuestionnaires(4);" class="pointeur">
-                                                <img src="{{ asset('bundles/sceau/images/extranet/picto_trie_asc.png') }}" width="12" height="8" title="{% trans %}tri_croissant{% endtrans %}" alt="{% trans %}tri_croissant{% endtrans %}" />
-                                            </a>
-                                        {% else %}
-                                            <a onclick="selectTriQuestionnaires(5);" class="pointeur">
-                                                <img src="{{ asset('bundles/sceau/images/extranet/picto_trie_desc.png') }}" width="12" height="8" title="{% trans %}tri_decroissant{% endtrans %}" alt="{% trans %}tri_decroissant{% endtrans %}" />
-                                            </a>
-                                        {% endif %}
-                                    </th>
+                                    <th>{% trans from 'notes' %}notes_indice_recommandation{% endtrans %}</th>
                                 {% endif %}
                                 <th>{% trans from 'commun' %}commun_details{% endtrans %}</th>
                             </tr>
-                            {% include 'SceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig' %}
+                            </thead>
+                            <tbody>
+                                {% include 'SceauBundle:Extranet/Questionnaires:questionnaires_lignes.html.twig' %}
+                            </tbody>
                         </table>
-
-                        {#<div id="chargement"><img src="{{ asset('bundles/sceau/images/ajax-loader.gif') }}" alt="{% trans from 'commun' %}commun_chargement{% endtrans %}" /></div>#}
                     {% endif %}
                 </div>
             </div>
+            <!-- end panel -->
         </div>
+        <!-- end col-12 -->
     </div>
+    <!-- end row -->
 {% endblock %}
 
 {% block extranet_javascripts %}

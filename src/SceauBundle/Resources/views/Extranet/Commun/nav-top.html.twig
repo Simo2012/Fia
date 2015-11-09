@@ -15,6 +15,13 @@
         <!-- begin header navigation right -->
         <ul class="nav navbar-nav navbar-right">
             <li>
+                <div id="news">
+                    <p>
+                        {#{{ render(controller('SceauBundle:Extranet/Commun:getLastNews')) }}#}
+                    </p>
+                </div>
+            </li>
+            <li>
                 <div id="select">
                     <button class="inter">avis site</button>
                     <button>avis produits</button>
@@ -30,13 +37,7 @@
                     {{ render(controller('SceauBundle:Extranet/Commun:listeQuestionnaireType', { 'id':  app.session.get('siteSelectionne').id})) }}
                 </div>
             </li>
-            <li>
-                <div id="news">
-                    <p>
-                        {{ render(controller('SceauBundle:Extranet/Commun:getLastNews')) }}
-                    </p>
-                </div>
-            </li>
+
             <li class="dropdown navbar-user">
                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                     {% image '@SceauBundle/Resources/public/images/extranet/img_profil.png' %}

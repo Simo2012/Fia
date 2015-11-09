@@ -1,5 +1,5 @@
 {% for questionnaire in questionnaires %}
-    <tr {% if offset is divisible by(2) %}{% if loop.index0 is even %}class="alt"{% endif %}{% else %}{% if loop.index0 is odd %}class="alt"{% endif %}{% endif %}">
+    <tr>
         <td>
              {% include 'SceauBundle:Extranet/Commun:indicateur.html.twig' with {'parametrage': parametrage, 'indicateurReponseID': questionnaire.indicateurReponseID, 'indicateurNote': questionnaire.indicateurNote} only %}
         </td>
@@ -17,7 +17,7 @@
 
                 {% if parametrage.droitDeReponse %}
                     <a href="{{ path('extranet_questionnaires_droit_de_reponse_ajout', {'qid': questionnaire.id, 'qrid': questionnaire.commentaireID}) }}" class="fleche-droit-reponse">
-                        <img src="{{ asset('bundles/sceau/images/extranet/fleche_grise.png') }}" width="18" height="17" title="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" />
+                        <i class="fa  fa-mail-reply" title="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}droit_reponse{% endtrans %}"></i>
                     </a>
                 {% endif %}
             {% else %}
@@ -35,7 +35,7 @@
         {% endif %}
         <td>
             <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': questionnaire.id, 'position': offset + loop.index0}) }}">
-                <img src="{{ asset('bundles/sceau/images/extranet/picto_detail.png') }}" width="12" height="17" title="{% trans from 'extranet_questionnaires_questionnaires' %}details_questionnaire{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}details_questionnaire{% endtrans %}" />
+                <i class="fa fa-2x fa-eye" title="{% trans from 'extranet_questionnaires_questionnaires' %}details_questionnaire{% endtrans %}" alt="{% trans from 'extranet_questionnaires_questionnaires' %}details_questionnaire{% endtrans %}"></i>
             </a>
         </td>
     </tr>

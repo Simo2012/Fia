@@ -28,13 +28,13 @@
     <h1>{% trans %}commun_avis_de{% endtrans %} {% if questionnaire1.membre.prenom is not empty %}{{ questionnaire1.membre.prenom|capitalize }}{% endif %} {% if questionnaire1.membre.nom is not empty %}{{ questionnaire1.membre.nom |upper }}{% endif %}
         <span>
             {% if boutons.precedent %}
-                <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.precedent.id, 'position': position-1 }) }}"><button><<</button></a>&nbsp;
+                <a class="btn btn-inverse" href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.precedent.id, 'position': position-1 }) }}"><i class="fa fa-fast-backward"></i></a></a>
             {% endif %}
 
-            <a href="{{ path('extranet_questionnaires_questionnaires') }}"><button>{{ 'commun_questionnaires'|trans }}</button></a>
+            <a href="{{ path('extranet_questionnaires_questionnaires') }}">{{ 'commun_questionnaires'|trans }}</a>
 
             {% if boutons.suivant %}
-                <a href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.suivant.id, 'position': position+1 }) }}"><button>>></button></a>&nbsp;
+                <a class="btn btn-inverse" href="{{ path('extranet_questionnaires_detail_questionnaire_pagine', {'questionnaire_id': boutons.suivant.id, 'position': position+1 }) }}"><i class="fa fa-fast-forward"></i></a>
             {% endif %}
         </span>
     </h1>
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    {# BLOCK INFORMATION SUR LA COMMANDE #}
+    {# BLOC QUESTIONNAIRE #}
     <div class="row">
         <div class="panel panel-inverse">
             <div class="panel-heading">
@@ -109,7 +109,7 @@
                         </div>
 
                         {% if questionnaire1.questionnaireType.parametrage.droitDeReponse %}
-                            <div class=" col-lg-5 panel-body bg-aqua text-white">
+                            <div class=" col-lg-5 note note-info">
                                 <div class="block-info-rep">
                                     <div class="btn-droit-reponse"><img src="{{ asset('bundles/sceau/images/extranet/droit-reponse.png') }}" width="59" height="59" />
                                     </div>
