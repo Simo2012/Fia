@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new CMEN\GoogleChartsBundle\CMENGoogleChartsBundle(),
             new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
             // new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            new Ivory\OrderedFormBundle\IvoryOrderedFormBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

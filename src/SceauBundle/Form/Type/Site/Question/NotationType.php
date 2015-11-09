@@ -46,6 +46,6 @@ class NotationType extends AbstractType
      */
     public function getName()
     {
-        return 'notation';
+        return 'site_question_notation';
     }
 }

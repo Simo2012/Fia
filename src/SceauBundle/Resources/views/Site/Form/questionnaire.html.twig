@@ -154,10 +154,12 @@
             <tbody>
                 <tr>
                     {%- for child in form %}
+                        {%- for opt in child %}
                         <td width="17%" align="center">
-                            {{- form_widget(child) -}}
-                            {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+                            {{- form_widget(opt) -}}
+                            {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
                         </td>
+                        {%- endfor %}
                     {% endfor -%}
                 </tr>
             </tbody>
@@ -220,10 +222,17 @@
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
             {%- for child in form %}
+                {%- for opt in child %}
                 <tr>
-                    <td width="35">{{- form_widget(child) -}}</td>
-                    <td>{{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}</td>
+                    <td width="35">{{- form_widget(opt) -}}</td>
+                    <td>
+                        {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
+                        {% if form[opt.vars.value] is defined %}
+                            &nbsp;{{- form_widget(form[opt.vars.value], {'attr': {'rows': 1, 'cols': 60}}) -}}
+                        {% endif %}
+                    </td>
                 </tr>
+                {% endfor %}
             {% endfor -%}
             </tbody>
         </table>
@@ -237,14 +246,23 @@
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
             {%- for child in form %}
-                {% if loop.index0 is even %}
-                <tr>
-                {% endif %}
-                <td valign="top">{{- form_widget(child) -}}</td>
-                <td valign="top" style="padding-top:3px;">{{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}</td>
-                {% if loop.index0 is odd or loop.last %}
-                </tr>
-                {% endif %}
+                {%- for opt in child %}
+                    {% if loop.index0 is even %}
+                    <tr>
+                    {% endif %}
+
+                    <td valign="top">{{- form_widget(opt) -}}</td>
+                    <td valign="top" style="padding-top:3px;">
+                        {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
+                        {% if form[opt.vars.value] is defined %}
+                            <br>
+                            {{- form_widget(form[opt.vars.value], {'attr': {'rows': 3, 'cols': 30}}) -}}
+                        {% endif %}
+                    </td>
+                    {% if loop.index0 is odd or loop.last %}
+                    </tr>
+                    {% endif %}
+                {%- endfor %}
             {% endfor -%}
             </tbody>
         </table>

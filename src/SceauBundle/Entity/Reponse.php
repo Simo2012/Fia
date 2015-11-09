@@ -122,8 +122,11 @@ class Reponse implements Translatable
      *
      * @return string
      */
-    public function getLibelle()
+    public function getLibelle($siteName = null)
     {
+        if ($siteName) {
+            return str_replace('##NOM_SITE##', $siteName, $this->libelle);
+        }
         return $this->libelle;
     }
 
