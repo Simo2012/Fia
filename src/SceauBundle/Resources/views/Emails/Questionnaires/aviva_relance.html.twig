@@ -1,0 +1,15 @@
+{% extends 'SceauBundle:Emails/Questionnaires:aviva.html.twig' %}
+
+{% trans_default_domain 'emails_questionnaires' %}
+
+{% block introduction %}
+    <br />
+    {% trans with {'%site_nom%': variables.site.nom} into locale %}intro1_aviva_relance{% endtrans %}<br />
+    <br />
+    {% trans with {'%site_nom%': variables.site.nom} into locale %}intro2_aviva_relance{% endtrans %}<br />
+    <br />
+    {% trans into locale %}intro3_aviva_relance{% endtrans %}<br />
+    <br />
+    {% trans into locale %}intro4_aviva{% endtrans %}<br />
+    <br />
+{% endblock %}

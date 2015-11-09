@@ -1,6 +1,7 @@
 <?php
 
 namespace SceauBundle\Entity;
+
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,16 +11,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EnvoiEmail
 {
-
     /**
      * CONSTANTS
      */
+    const NOT_SENT = 0;
     const SUCCESS = 1;
     const ERROR = 2;
 
     protected static $STATUS_EMAIL = [
-        self::SUCCESS => "Succès",
-        self::ERROR => "Erreur"
+        self::NOT_SENT => 'Non envoyé',
+        self::SUCCESS => 'Succès',
+        self::ERROR => 'Erreur'
     ];
 
     /**
@@ -55,7 +57,7 @@ class EnvoiEmail
     private $dateInsert;
 
     /**
-     * @ORM\Column(type="datetimetz")
+     * @ORM\Column(type="datetimetz", nullable=true)
      */
     private $dateSend;
 
@@ -63,6 +65,12 @@ class EnvoiEmail
      * @ORM\Column(type="integer")
      */
     private $status;
+
+
+    public function __construct()
+    {
+        $this->dateInsert = new \DateTime();
+    }
 
 
     /**
@@ -222,6 +230,8 @@ class EnvoiEmail
     /**
      * Set status
      *
+     * @param int $int Identifiant du statut
+     *
      * @return EnvoiEmail
      */
     public function setStatus($int)
@@ -229,8 +239,8 @@ class EnvoiEmail
         if (array_key_exists($int, self::$STATUS_EMAIL)) {
             $this->status = $int;
             return $this;
-        }else
-        {
+
+        } else {
             throw new Exception("Not status for this int");
         }
     }
@@ -255,4 +265,3 @@ class EnvoiEmail
         return self::$STATUS_EMAIL[$this->status];
     }
 }
-

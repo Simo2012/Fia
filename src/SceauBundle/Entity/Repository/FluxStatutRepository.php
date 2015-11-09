@@ -4,6 +4,7 @@ namespace SceauBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use SceauBundle\Cache\Cache;
+use SceauBundle\Entity\FluxStatut;
 
 class FluxStatutRepository extends EntityRepository
 {

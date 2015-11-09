@@ -1,0 +1,18 @@
+{% extends 'SceauBundle:Emails/Questionnaires:base.html.twig' %}
+
+{% trans_default_domain 'emails_questionnaires' %}
+
+{% block titre %}{% trans into locale %}header_titre_livraison{% endtrans %}{% endblock %}
+
+{% block introduction %}
+    <br /><strong>{% trans with {'%commande_reference%': variables.commande.reference, '%commande_date%': variables.commande.date|localizeddate('short', 'none'), '%site_nom%': variables.site.nom} into locale %}finalement_etes_vous_satisfait{% endtrans %}</strong><br />
+    <br />
+    {% trans into locale %}intro_livraison_service{% endtrans %}
+{% endblock %}
+
+{% block repondre %}
+    {% block zone_perso1 %}{% endblock %}<br /><br />
+    {% include 'SceauBundle:Emails/Questionnaires/Commun:repondre.html.twig' %}
+    <br />
+    {% block zone_perso2 %}{% endblock %}
+{% endblock %}

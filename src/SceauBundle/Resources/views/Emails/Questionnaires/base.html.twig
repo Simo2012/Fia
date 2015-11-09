@@ -1,0 +1,89 @@
+{% trans_default_domain 'emails_questionnaires' %}
+{% set url = url('extranet_questionnaires_questionnaires') %}
+{% set color = '#52ae35' %}
+{% if html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>{% trans into locale %}titre{% endtrans %}</title>
+</head>
+<body bgcolor="#aea3a7" style="margin:0; padding:0; background-color:#aea3a7;">
+{% endif %}
+    <table width="560" border="0" align="center" cellpadding="0" cellspacing="0" style="line-height:normal">
+        <tr style="line-height:normal">
+            <td bgcolor="#FFFFFF" style="border:#a3939a solid 1px; line-height:normal">
+                <table align="center" width="520" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
+                    <tr style="line-height:normal">
+                        <td height="15" colspan="2" align="left" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/pixel.png" width="1" height="1" alt="vide" /></td>
+                    </tr>
+                    <tr style="line-height:normal">
+                        {% block header %}
+                            {% include 'SceauBundle:Emails/Questionnaires/Commun:header.html.twig' with {'inverse': false} %}
+                        {% endblock %}
+                    </tr>
+                    <tr style="line-height:normal">
+                        <td colspan="2" align="left" style="line-height:normal">
+                            <table border="0" align="right" cellpadding="0" cellspacing="0" width="480" style="line-height:normal">
+                                <tr style="line-height:normal">
+                                    <td align="left" height="98" style="line-height:normal; text-transform:uppercase; font-family:Arial, Helvetica, sans-serif; color:#3e262b; font-size:12px;">{% block titre %}{% trans into locale %}header_titre{% endtrans %}{% endblock %}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="line-height:normal">
+                        <td colspan="2" align="left" style="line-height:normal">
+                            <table width="480" align="center" border="0" cellspacing="0" cellpadding="0"  style="line-height:normal">
+                                <tr style="line-height:normal">
+                                    <td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;"><strong>{% trans with {'%nom%': variables.nom, '%prenom%': variables.prenom} into locale %}bonjour{% endtrans %}</strong><br />
+                                        {% block relance_intro %}{% endblock %}
+                                        {% block introduction %}{% endblock %}
+                                        {% block relance_perso %}{% endblock %}
+                                    </td>
+                                </tr>
+                                <tr style="line-height:normal">
+                                    <td align="center" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b;">
+                                        {% block repondre %}
+                                            <em>{% trans into locale %}2minutes{% endtrans %}</em><br /><br />
+                                            {% include 'SceauBundle:Emails/Questionnaires/Commun:repondre.html.twig' %}
+                                            <br />
+                                            <em>{% trans into locale %}cliquez_lien{% endtrans %}</em>
+                                        {% endblock %}
+                                    </td>
+                                </tr>
+                                <tr style="line-height:normal">
+                                    <td style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e262b; text-align:justify;">
+                                        {% block descriptif %}{% endblock %}
+                                        {% block raisons %}
+                                            {% include 'SceauBundle:Emails/Questionnaires/Commun:raisons.html.twig' %}
+                                        {% endblock %}
+                                        <br />
+                                        {% if livraisonPrevue %}<a target="_blank"  href="http://logi118.xiti.com/go.url?xts=487123&s2=4&xtor=EPR-5-[questionnaire_achat_produits_FR]--[Questionnaire1_produits]&url={{ url }}"><img src="http://www.fia-net.com/img/emails/etape1-a.png" width="518" height="71" border="0" /></a><br /><br />{% endif %}
+                                        {% trans with {'%site_nom%': variables.site.nom} into locale %}merci{% endtrans %}
+                                        {% if livraisonPrevue %}<br />{% trans into locale %}tres_bientot{% endtrans %}{% endif %}
+                                        <br />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {% block fin_corps %}
+                        {% include 'SceauBundle:Emails/Questionnaires/Commun:fin_corps.html.twig' %}
+                    {% endblock %}
+                </table>
+                {% block footer %}
+                    {% include 'SceauBundle:Emails/Questionnaires/Commun:footer.html.twig' %}
+                {% endblock %}
+            </td>
+        </tr>
+        <tr style="line-height:normal">
+            <td align="center" style="font-family:Arial, Helvetica, sans-serif; text-align:center; color:#524249; font-size:10px; line-height:normal;">
+                {% include 'SceauBundle:Emails/Questionnaires/Commun:mentions.html.twig' %}
+            </td>
+        </tr>
+    </table>
+    <img width="1" height="1" src="http://logi118.xiti.com/hit.xiti?s=487123&amp;xto=EPR-5-[questionnaire_achat_produits_FR]--[]&amp;type=email&amp;" alt="">
+{% if html %}
+</body>
+</html>
+{% endif %}

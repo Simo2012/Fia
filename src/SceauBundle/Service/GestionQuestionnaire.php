@@ -9,10 +9,14 @@ use SceauBundle\Entity\CommandeCSVParametrage;
 use SceauBundle\Entity\Flux;
 use SceauBundle\Entity\Questionnaire;
 use SceauBundle\Entity\QuestionnairePersonnalisation;
+use SceauBundle\Entity\QuestionnaireType;
 use SceauBundle\Entity\Site;
 use SceauBundle\Entity\SousSite;
 use SimpleXMLElement;
 
+/**
+ * Service qui permet de générer les questionnaires en fonction de leurs spécificités.
+ */
 class GestionQuestionnaire
 {
     private $em;
@@ -243,6 +247,7 @@ class GestionQuestionnaire
     public function genererQuestionnaireViaFlux(Flux $flux)
     {
         $xml = new SimpleXMLElement($flux->getXml());
+        /** @var QuestionnairePersonnalisation[] $questionnairePersos */
         $questionnairePersos = $flux->getSite()->getQuestionnairePersonnalisations();
 
         if (!$xml->questionnaire) {

@@ -32,6 +32,11 @@
             <argument>%langue_par_defaut%</argument>
             <argument>%delai_envoi_date_utilisation%</argument>
         </service>
+        <service id="sceau.envoie_questionnaire" class="SceauBundle\Service\EnvoieQuestionnaire">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="templating" />
+            <argument type="service" id="translator"/>
+        </service>
         <service id="sceau.notes" class="SceauBundle\Service\Notes">
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
@@ -73,8 +78,6 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="session"/>
         </service>
-        
-        
 
         <service id="sceau.extranet.donnees_request" class="SceauBundle\Service\Extranet\DonneesRequest">
             <argument type="service" id="doctrine.orm.entity_manager"/>

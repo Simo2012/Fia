@@ -21,12 +21,13 @@ class SendMailsCommand extends ContainerAwareCommand
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $envoiEmailRepository = $this->getContainer()->get('sceau.repository.envoi.email');
+        /* TODO : il ne faut pas tout sélectionner : seulement les e-mails qui n'ont pas encore été envoyé
+        et le faire par paquet */
         $mails = $envoiEmailRepository->findAll();
 
         $mailer = $this->getContainer()->get('mailer');
 
-        foreach($mails as $mail)
-        {
+        foreach ($mails as $mail) {
             $message = \Swift_Message::newInstance()
                 ->setFrom($mail->getSendFrom())
                 ->setTo($mail->getSendTo())
@@ -39,8 +40,6 @@ class SendMailsCommand extends ContainerAwareCommand
             $mail->setStatus(EnvoiEmail::SUCCESS);
             $em->persist($mail);
             $em->flush();
-
-
         }
     }
 }

@@ -1,0 +1,25 @@
+{% trans_default_domain 'emails_questionnaires' %}
+
+{% if locale == 'fr' and tombola %}
+    {% set nb_raisons = 3 %}
+{% else %}
+    {% set nb_raisons = 2 %}
+{% endif %}
+
+<br /><strong>{% trans with {'%nb_raisons%': nb_raisons} into locale %}bonnes_raisons{% endtrans %}</strong><br />
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="line-height:normal">
+    <tr style="line-height:normal">
+        <td height="22" valign="middle" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" /></td>
+        <td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">{% trans with {'%site_nom%': variables.site.nom} into locale %}raison1{% endtrans %}</td>
+    </tr>
+    <tr style="line-height:normal">
+        <td height="22" valign="middle" style="line-height:normal"><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" /></td>
+        <td height="22" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">{% trans with {'%color%': color} into locale %}raison2{% endtrans %}</td>
+    </tr>
+    {% if nb_raisons == 3 %}
+        <tr style="line-height:normal">
+            <td height="40" valign="top" style="line-height:normal; "><img src="http://www.fia-net.com/img/emails/chevron.png" width="10" height="11" alt="chevron" style="padding-top: 8px;" /></td>
+            <td height="40" valign="middle" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:12px;">{% trans into locale %}raison3{% endtrans %}</strong></td>
+        </tr>
+    {% endif %}
+</table>

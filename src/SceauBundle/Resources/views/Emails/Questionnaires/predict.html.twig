@@ -1,0 +1,17 @@
+{% extends 'SceauBundle:Emails/Questionnaires:base.html.twig' %}
+
+{% trans_default_domain 'emails_questionnaires' %}
+
+{% block introduction %}
+    <br />
+    {% trans into locale %}intro1_predict{% endtrans %}<br />
+    <br />
+    {% trans into locale %}intro2_predict{% endtrans %}<br />
+    <br />
+{% endblock %}
+
+{% block descriptif %}
+    <br />
+    {% trans into locale %}descriptif_predict{% endtrans %}
+    <br />
+{% endblock %}
