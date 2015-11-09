@@ -4,7 +4,6 @@ namespace SceauBundle\Form\Type\Site;
 
 use SceauBundle\Entity\Question;
 use SceauBundle\Entity\QuestionType;
-use SceauBundle\Form\Type\Site\Question\EtoileCommentaireType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
