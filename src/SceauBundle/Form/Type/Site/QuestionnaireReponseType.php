@@ -4,6 +4,7 @@ namespace SceauBundle\Form\Type\Site;
 
 use SceauBundle\Entity\Question;
 use SceauBundle\Entity\QuestionType;
+use SceauBundle\Form\Type\Site\Question\EtoileCommentaireType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -146,14 +147,13 @@ class QuestionnaireReponseType extends AbstractType
                 ] + $position);
                 break;
             case QuestionType::CHOIX_UNIQUE_SELECT:
-                $builder->add($question->getId(), 'choice', [
-                    'choices'     => $question->getFormUsableResponse(),
+                $builder->add($question->getId(), 'site_question_choice', [
                     'multiple'    => false,
                     'expanded'    => false,
+                    'question'    => $question,
                     'label'       => $question->getLibelle($this->siteName),
                     'mapped'      => false,
                     'required'    => false,
-                    'empty_value' => false,
                 ] + $position);
                 break;
             case QuestionType::CHOIX_MULTIPLE:

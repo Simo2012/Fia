@@ -101,64 +101,64 @@ class QuestionnaireController extends Controller
     private function persistQuestionnaireReponses(Form $form, Questionnaire $questionnaire)
     {
         foreach ($questionnaire->getQuestionnaireType()->getQuestions() as $question) {
-            /** @var \SceauBundle\Entity\Reponse[] $reponses */
-            $reponses = [];
-            foreach ($question->getReponses() as $reponse) {
-                $reponses[$reponse->getId()] = $reponse;
+            /** @var \SceauBundle\Entity\Reponse[] $responses */
+            $responses = [];
+            foreach ($question->getReponses() as $response) {
+                $responses[$response->getId()] = $response;
             }
 
-            $commentaire = null;
-            $reponsesId = [];
-            $notes = [];
+            $responsesId = [];
+            $notes       = [];
+            $comment     = null;
             if ($form->has($question->getId())) {
                 switch ($question->getQuestionType()->getId()) {
                     case QuestionType::CHOIX_UNIQUE:
-                        $reponsesId[] = $form->get($question->getId())->get('reponse')->getData();
+                        $responsesId[] = $form->get($question->getId())->get('reponse')->getData();
                         break;
                     case QuestionType::CHOIX_UNIQUE_SELECT:
-                        $reponsesId[] = $form->get($question->getId())->getData();
+                        $responsesId[] = $form->get($question->getId())->getData();
                         break;
                     case QuestionType::CHOIX_MULTIPLE:
-                        $reponsesId = $form->get($question->getId())->get('reponse')->getData();
+                        $responsesId = $form->get($question->getId())->get('reponse')->getData();
                         break;
                     case QuestionType::NOTATION:
-                        foreach ($reponses as $reponse) {
-                            if (($note = $form->get($question->getId())->get($reponse->getId())->getData())) {
-                                $notes[$reponse->getId()] = $form
+                        foreach ($responses as $response) {
+                            if (($note = $form->get($question->getId())->get($response->getId())->getData())) {
+                                $notes[$response->getId()] = $form
                                     ->get($question->getId())
-                                    ->get($reponse->getId())
+                                    ->get($response->getId())
                                     ->getData();
-                                $reponsesId[] = $reponse->getId();
+                                $reponsesId[] = $response->getId();
                             }
                         }
                         break;
                     case QuestionType::COMMENTAIRE:
-                        $commentaire = $form
+                        $comment = $form
                             ->get($question->getId())
                             ->get($question->getReponses()->first()->getId())
                             ->getData();
-                        $reponsesId[] = $question->getReponses()->first()->getId();
+                        $responsesId[] = $question->getReponses()->first()->getId();
                         break;
                     case QuestionType::ETOILE:
                     case QuestionType::ETOILE_COMMENTAIRE:
                 }
             }
 
-            foreach ($reponsesId as $reponseId) {
-                if (isset($reponses[$reponseId])) {
+            foreach ($responsesId as $responseId) {
+                if (isset($responses[$responseId])) {
                     $questionnaireReponse = new QuestionnaireReponse();
                     $questionnaireReponse->setQuestion($question);
                     $questionnaireReponse->setQuestionnaire($questionnaire);
-                    $questionnaireReponse->setReponse($reponses[$reponseId]);
-                    if ($reponses[$reponseId]->getPrecision()
-                        && ($precision = $form->get($question->getId())->get($reponseId)->getData())) {
+                    $questionnaireReponse->setReponse($responses[$responseId]);
+                    if ($responses[$responseId]->getPrecision()
+                        && ($precision = $form->get($question->getId())->get($responseId)->getData())) {
                         $questionnaireReponse->setCommentaire($precision);
                     }
-                    if ($commentaire) {
-                        $questionnaireReponse->setCommentaire($commentaire);
+                    if ($comment) { // TODO remove this...
+                        $questionnaireReponse->setCommentaire($comment);
                     }
-                    if (!empty($notes) && isset($notes[$reponseId])) {
-                        $questionnaireReponse->setNote($notes[$reponseId]);
+                    if (!empty($notes) && isset($notes[$responseId])) {
+                        $questionnaireReponse->setNote($notes[$responseId]);
                     }
                     $this->getDoctrine()->getManager()->persist($questionnaireReponse);
                 }
