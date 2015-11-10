@@ -17,6 +17,8 @@ class QuestionnaireReponseType extends AbstractType
     private $livraison       = false;
     private $linkedQuestions = [];
     private $siteName        = null;
+    /** @var \SceauBundle\Entity\Questionnaire $questionnaire */
+    private $questionnaire   = null;
 
     /**
      * {@inheritdoc}
@@ -26,14 +28,13 @@ class QuestionnaireReponseType extends AbstractType
         /** @var \Doctrine\Common\Collections\ArrayCollection $questions */
         $questions = $options['questions'];
 
-        /** @var \SceauBundle\Entity\Questionnaire $questionnaire */
-        $questionnaire = $options['questionnaire'];
+        $this->questionnaire = $options['questionnaire'];
 
-        if ($questionnaire) {
-            $params          = $questionnaire->getQuestionnaireType()->getParametrage();
+        if ($this->questionnaire) {
+            $params          = $this->questionnaire->getQuestionnaireType()->getParametrage();
             $this->tombola   = isset($params['tombola']) ? $params['tombola'] : $this->tombola;
             $this->livraison = isset($params['livraison']) ? $params['livraison'] : $this->livraison;
-            $this->siteName  = $questionnaire->getSite() ? $questionnaire->getSite()->getNom() : $this->siteName;
+            $this->siteName  = $this->questionnaire->getSite() ? $this->questionnaire->getSite()->getNom() : $this->siteName;
         }
 
         /** @var \SceauBundle\Entity\Question $question */
@@ -70,7 +71,7 @@ class QuestionnaireReponseType extends AbstractType
             $this->addQuestion($builder, $question);
         }
 
-        if ($questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant() && $this->livraison) {
+        if ($this->questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant() && $this->livraison) {
             $builder->add('livraison', 'entity', [
                 'class'        => 'SceauBundle\Entity\DelaiReception',
                 'choice_label' => 'libelle',
@@ -155,6 +156,16 @@ class QuestionnaireReponseType extends AbstractType
                     'required'    => false,
                 ] + $position);
                 break;
+            case QuestionType::CHOIX_UNIQUE_INLINE:
+                $builder->add($question->getId(), 'site_question_unique_inline', [
+                    'multiple'    => false,
+                    'expanded'    => true,
+                    'question'    => $question,
+                    'label'       => $question->getLibelle($this->siteName),
+                    'mapped'      => false,
+                    'required'    => false,
+                ] + $position);
+                break;
             case QuestionType::CHOIX_MULTIPLE:
                 $builder->add($question->getId(), 'site_question_choice', [
                     'multiple'   => true,
@@ -197,6 +208,11 @@ class QuestionnaireReponseType extends AbstractType
                     'required'  => false,
                 ] + $position);
                 break;
+            case QuestionType::QUESTION_MULTIPLE:
+                $builder->add($question->getId(), 'site_question_multiple', [
+                    'questions'     => $question->getQuestionsSecondaires()->toArray(),
+                    'questionnaire' => $this->questionnaire,
+                ]);
         }
     }
 }

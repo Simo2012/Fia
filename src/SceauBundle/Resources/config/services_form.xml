@@ -31,6 +31,11 @@
         <service id="sceau.form_type_site_question.choice_type" class="SceauBundle\Form\Type\Site\Question\ChoiceType">
             <tag name="form.type" alias="site_question_choice" />
         </service>
+        <service id="sceau.form_type_site_question.unique_inline_type"
+                 class="SceauBundle\Form\Type\Site\Question\UniqueInlineType"
+                 parent="sceau.form_type_site_question.choice_type">
+            <tag name="form.type" alias="site_question_unique_inline" />
+        </service>
         <service id="sceau.form_type_site_question.etoile_commentaire_type" class="SceauBundle\Form\Type\Site\Question\EtoileCommentaireType">
             <tag name="form.type" alias="site_question_etoile_commentaire" />
         </service>
@@ -39,6 +44,10 @@
         </service>
         <service id="sceau.form_type_site_question.cgu_type" class="SceauBundle\Form\Type\Site\Question\CGUType">
             <tag name="form.type" alias="site_question_cgu" />
+        </service>
+        <service id="sceau.form_type_site_question.multiple_type"
+                 class="SceauBundle\Form\Type\Site\Question\QuestionMultipleType">
+            <tag name="form.type" alias="site_question_multiple" />
         </service>
     </services>
 

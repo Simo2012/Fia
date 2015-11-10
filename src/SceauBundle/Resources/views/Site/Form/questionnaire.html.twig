@@ -112,8 +112,7 @@
     </div>
 {%- endblock _questionnaire_reponse_optin_widget -%}
 
-{# question id 2 / too specific #}
-{% block _questionnaire_reponse_2_widget %}
+{% block site_question_unique_inline_widget %}
     <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -134,7 +133,7 @@
             </tbody>
         </table>
     </div>
-{%- endblock _questionnaire_reponse_2_widget -%}
+{%- endblock site_question_unique_inline_widget -%}
 
 {# question livraison #}
 {%- block _questionnaire_reponse_livraison_widget -%}
@@ -334,3 +333,35 @@
         </div>
     </div>
 {%- endblock site_question_etoile_commentaire_widget -%}
+
+{%- block site_question_multiple_widget -%}
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full question-multiple-widget">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            {% set firstQuestion = form.children|first %}
+            <tr class="table-header-responses">
+                <th></th>
+                {% for responses in firstQuestion %}
+                    {% for response in responses %}
+                        <th>{{- form_label(response, null, {translation_domain: translation_domain}) -}}</th>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+            {%- for question in form %}
+                <tr>
+                    <th class="first" scope="row">{{- form_label(question, null, {translation_domain: translation_domain}) -}}</th>
+                    {%- for responses in question %}
+                        {% for response in responses %}
+                        <td>
+                            {{- form_widget(response) -}}
+                            <label for="{{ response.vars.id }}"><span></span></label>
+                        </td>
+                            {% endfor %}
+                    {% endfor -%}
+                </tr>
+            {% endfor -%}
+            </tbody>
+        </table>
+    </div>
+{%- endblock site_question_multiple_widget -%}

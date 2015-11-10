@@ -114,6 +114,7 @@ class QuestionnaireController extends Controller
                 switch ($question->getQuestionType()->getId()) {
                     case QuestionType::CHOIX_UNIQUE:
                     case QuestionType::CHOIX_UNIQUE_SELECT:
+                    case QuestionType::CHOIX_UNIQUE_INLINE:
                         $responsesId[] = $form->get($question->getId())->get('reponse')->getData();
                         break;
                     case QuestionType::CHOIX_MULTIPLE:
