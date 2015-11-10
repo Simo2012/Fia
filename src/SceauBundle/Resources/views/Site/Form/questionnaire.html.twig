@@ -31,6 +31,15 @@
     {% endif %}
 {%- endblock form_errors -%}
 
+{%- block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }}>
+        {%- for child in form %}
+            {{- form_widget(child) -}}
+            {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+        {% endfor -%}
+    </div>
+{%- endblock choice_widget_expanded -%}
+
 {%- block _questionnaire_reponse_cgu_widget -%}
     <div class="blue-block-top">
         Vos notations et commentaires seront incorporés dans l'appréciation générale de ce site.<br>
@@ -114,7 +123,10 @@
                         {%- for opt in child %}
                         <td width="17%" align="center">
                             {{- form_widget(opt) -}}
-                            {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
+                            <label for="{{ opt.vars.id }}">
+                                <span></span>
+                                {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
+                            </label>
                         </td>
                         {%- endfor %}
                     {% endfor -%}
@@ -241,6 +253,7 @@
                         {%- for children in child %}
                             <td class="active{{ loop.index0 }} col{{ loop.index }}">
                                 {{- form_widget(children) -}}
+                                <label for="{{ children.vars.id }}"><span></span></label>
                             </td>
                         {% endfor -%}
                     </tr>
