@@ -113,10 +113,8 @@ class QuestionnaireController extends Controller
             if ($form->has($question->getId())) {
                 switch ($question->getQuestionType()->getId()) {
                     case QuestionType::CHOIX_UNIQUE:
-                        $responsesId[] = $form->get($question->getId())->get('reponse')->getData();
-                        break;
                     case QuestionType::CHOIX_UNIQUE_SELECT:
-                        $responsesId[] = $form->get($question->getId())->getData();
+                        $responsesId[] = $form->get($question->getId())->get('reponse')->getData();
                         break;
                     case QuestionType::CHOIX_MULTIPLE:
                         $responsesId = $form->get($question->getId())->get('reponse')->getData();
@@ -128,7 +126,7 @@ class QuestionnaireController extends Controller
                                     ->get($question->getId())
                                     ->get($response->getId())
                                     ->getData();
-                                $reponsesId[] = $response->getId();
+                                $responsesId[] = $response->getId();
                             }
                         }
                         break;
@@ -141,6 +139,18 @@ class QuestionnaireController extends Controller
                         break;
                     case QuestionType::ETOILE:
                     case QuestionType::ETOILE_COMMENTAIRE:
+                        foreach ($responses as $response) {
+                            if (($note = $form->get($question->getId())->get($response->getId())->getData())) {
+                                $notes[$response->getId()] = $form
+                                    ->get($question->getId())
+                                    ->get($response->getId())
+                                    ->getData();
+                                $responsesId[] = $response->getId();
+                            }
+                        }
+
+                        $comment = $form->get($question->getId())->get('commentaire')->getData();
+                        break;
                 }
             }
 
@@ -154,7 +164,7 @@ class QuestionnaireController extends Controller
                         && ($precision = $form->get($question->getId())->get($responseId)->getData())) {
                         $questionnaireReponse->setCommentaire($precision);
                     }
-                    if ($comment) { // TODO remove this...
+                    if ($comment) {
                         $questionnaireReponse->setCommentaire($comment);
                     }
                     if (!empty($notes) && isset($notes[$responseId])) {

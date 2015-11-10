@@ -21,7 +21,7 @@
 
             </form>
                 
-            {% if error is defined and errorType == 'login' %}
+            {% if error is defined and errorType is defined and errorType == 'login' %}
                 <div class="message-erreur-home">
                     <div>
                         {{error}}

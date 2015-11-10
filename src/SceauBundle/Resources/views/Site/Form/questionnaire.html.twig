@@ -103,8 +103,113 @@
     </div>
 {%- endblock _questionnaire_reponse_optin_widget -%}
 
-{# question id 2 #}
-{%- block _questionnaire_reponse_1_widget -%}
+{# question id 2 / too specific #}
+{% block _questionnaire_reponse_2_widget %}
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                <tr>
+                    {%- for child in form %}
+                        {%- for opt in child %}
+                        <td width="17%" align="center">
+                            {{- form_widget(opt) -}}
+                            {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
+                        </td>
+                        {%- endfor %}
+                    {% endfor -%}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{%- endblock _questionnaire_reponse_2_widget -%}
+
+{# question livraison #}
+{%- block _questionnaire_reponse_livraison_widget -%}
+    {{ block('site_question_choice_widget_collapsed') }}
+{%- endblock _questionnaire_reponse_livraison_widget -%}
+
+{# generated question #}
+
+{# Choice (could be radio / select / checkbox) #}
+{%- block site_question_choice_widget -%}
+    {% if form.reponse.vars.expanded %}
+        {% if form.reponse.vars.multiple %}
+            {{- block('site_question_choice_widget_checkbox') -}}
+        {% else %}
+            {{- block('site_question_choice_widget_radio') -}}
+        {% endif %}
+    {% else %}
+        {{- block('site_question_choice_widget_collapsed') -}}
+    {% endif %}
+{%- endblock site_question_choice_widget -%}
+
+{%- block site_question_choice_widget_checkbox -%}
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            {%- for child in form %}
+                {%- for opt in child %}
+                    {% if loop.index0 is even %}
+                        <tr>
+                    {% endif %}
+
+                    <td valign="top">{{- form_widget(opt) -}}</td>
+                    <td valign="top" style="padding-top:3px;">
+                        {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
+                        {% if form[opt.vars.value] is defined %}
+                            <br>
+                            {{- form_widget(form[opt.vars.value], {'attr': {'rows': 3, 'cols': 30}}) -}}
+                        {% endif %}
+                    </td>
+                    {% if loop.index0 is odd or loop.last %}
+                        </tr>
+                    {% endif %}
+                {%- endfor %}
+            {% endfor -%}
+            </tbody>
+        </table>
+    </div>
+{%- endblock site_question_choice_widget_checkbox -%}
+
+{%- block site_question_choice_widget_radio -%}
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            {%- for child in form %}
+                {%- for opt in child %}
+                    <tr>
+                        <td width="35">{{- form_widget(opt) -}}</td>
+                        <td>
+                            {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
+                            {% if form[opt.vars.value] is defined %}
+                                &nbsp;{{- form_widget(form[opt.vars.value], {'attr': {'rows': 1, 'cols': 60}}) -}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor -%}
+            </tbody>
+        </table>
+    </div>
+{%- endblock site_question_choice_widget_radio -%}
+
+{%- block site_question_choice_widget_collapsed -%}
+    <div class="quest-sub-title">{{- form_label(form) -}}</div>
+    <div id="{{ id }}_reponses" class="quest-detail-full">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            <tr>
+                <td>{{- form_widget(form) -}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{%- endblock site_question_choice_widget_collapsed -%}
+
+{%- block site_question_notation_widget -%}
     <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
         <div class="quest-detail">
@@ -144,31 +249,9 @@
             </table>
         </div>
     </div>
-{%- endblock _questionnaire_reponse_1_widget -%}
+{%- endblock site_question_notation_widget -%}
 
-{# question id 2 #}
-{% block _questionnaire_reponse_2_widget %}
-    <div class="quest-sub-title">{{- form_label(form) -}}</div>
-    <div id="{{ id }}_reponses" class="quest-detail-full">
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
-            <tbody>
-                <tr>
-                    {%- for child in form %}
-                        {%- for opt in child %}
-                        <td width="17%" align="center">
-                            {{- form_widget(opt) -}}
-                            {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
-                        </td>
-                        {%- endfor %}
-                    {% endfor -%}
-                </tr>
-            </tbody>
-        </table>
-    </div>
-{%- endblock _questionnaire_reponse_2_widget -%}
-
-{# question id 3 #}
-{%- block _questionnaire_reponse_3_widget -%}
+{%- block site_question_commentaire_widget -%}
     {% set child = form.children|first %}
     <div class="quest-sub-title">{{- form_label(form) -}}</div>
     <div id="{{ id }}_reponses" class="quest-detail-full">
@@ -201,11 +284,11 @@
                     </td>
                 </tr>
                 {% if child.vars.attr.tombola %}
-                <tr>
-                    <td style="background-image:none;">
-                        <span class="rouge">En commentant votre acte d'achat ci-dessus, vous doublez vos chances de gagner jusqu'à 100€ à la Tombola FIA-NET.</span>
-                    </td>
-                </tr>
+                    <tr>
+                        <td style="background-image:none;">
+                            <span class="rouge">En commentant votre acte d'achat ci-dessus, vous doublez vos chances de gagner jusqu'à 100€ à la Tombola FIA-NET.</span>
+                        </td>
+                    </tr>
                 {% endif %}
                 </tbody>
             </table>
@@ -213,120 +296,7 @@
         <div class="blue-block-bottom"></div>
         <div class="clear:both"></div>
     </div>
-{%- endblock _questionnaire_reponse_3_widget -%}
-
-{# question id 4 #}
-{%- block _questionnaire_reponse_4_widget -%}
-    <div class="quest-sub-title">{{- form_label(form) -}}</div>
-    <div id="{{ id }}_reponses" class="quest-detail-full">
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
-            <tbody>
-            {%- for child in form %}
-                {%- for opt in child %}
-                <tr>
-                    <td width="35">{{- form_widget(opt) -}}</td>
-                    <td>
-                        {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
-                        {% if form[opt.vars.value] is defined %}
-                            &nbsp;{{- form_widget(form[opt.vars.value], {'attr': {'rows': 1, 'cols': 60}}) -}}
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            {% endfor -%}
-            </tbody>
-        </table>
-    </div>
-{%- endblock _questionnaire_reponse_4_widget -%}
-
-{# question id 5 #}
-{%- block _questionnaire_reponse_5_widget -%}
-    <div class="quest-sub-title">{{- form_label(form) -}}</div>
-    <div id="{{ id }}_reponses" class="quest-detail-full">
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
-            <tbody>
-            {%- for child in form %}
-                {%- for opt in child %}
-                    {% if loop.index0 is even %}
-                    <tr>
-                    {% endif %}
-
-                    <td valign="top">{{- form_widget(opt) -}}</td>
-                    <td valign="top" style="padding-top:3px;">
-                        {{- form_label(opt, null, {translation_domain: translation_domain}) -}}
-                        {% if form[opt.vars.value] is defined %}
-                            <br>
-                            {{- form_widget(form[opt.vars.value], {'attr': {'rows': 3, 'cols': 30}}) -}}
-                        {% endif %}
-                    </td>
-                    {% if loop.index0 is odd or loop.last %}
-                    </tr>
-                    {% endif %}
-                {%- endfor %}
-            {% endfor -%}
-            </tbody>
-        </table>
-    </div>
-{%- endblock _questionnaire_reponse_5_widget -%}
-
-{# question id 6 #}
-{%- block _questionnaire_reponse_6_widget -%}
-    <div class="quest-sub-title">{{- form_label(form) -}}</div>
-    <div id="{{ id }}_reponses" class="quest-detail-full">
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
-            <tbody>
-            <tr>
-                <td>{{- form_widget(form) -}}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-{%- endblock _questionnaire_reponse_6_widget -%}
-
-{# question id 7 #}
-{%- block _questionnaire_reponse_7_widget -%}
-    {{ block('_questionnaire_reponse_6_widget') }}
-{%- endblock _questionnaire_reponse_7_widget -%}
-
-{# question id 8 #}
-{%- block _questionnaire_reponse_8_widget -%}
-    {{ block('_questionnaire_reponse_4_widget') }}
-{%- endblock _questionnaire_reponse_8_widget -%}
-
-{# question id 9 #}
-{%- block _questionnaire_reponse_9_widget -%}
-    {{ block('_questionnaire_reponse_4_widget') }}
-{%- endblock _questionnaire_reponse_9_widget -%}
-
-{# question id 10 #}
-{%- block _questionnaire_reponse_10_widget -%}
-    {{ block('_questionnaire_reponse_4_widget') }}
-{%- endblock _questionnaire_reponse_10_widget -%}
-
-{# question id 11 #}
-{%- block _questionnaire_reponse_11_widget -%}
-    {{ block('_questionnaire_reponse_4_widget') }}
-{%- endblock _questionnaire_reponse_11_widget -%}
-
-{# question id 12 #}
-{%- block _questionnaire_reponse_12_widget -%}
-    {{ block('_questionnaire_reponse_4_widget') }}
-{%- endblock _questionnaire_reponse_12_widget -%}
-
-{# question id 13 #}
-{%- block _questionnaire_reponse_13_widget -%}
-    {{ block('_questionnaire_reponse_1_widget') }}
-{%- endblock _questionnaire_reponse_13_widget -%}
-
-{# question id 14 #}
-{%- block _questionnaire_reponse_14_widget -%}
-    {{ block('_questionnaire_reponse_3_widget') }}
-{%- endblock _questionnaire_reponse_14_widget -%}
-
-{# question livraison #}
-{%- block _questionnaire_reponse_livraison_widget -%}
-    {{ block('_questionnaire_reponse_6_widget') }}
-{%- endblock _questionnaire_reponse_livraison_widget -%}
+{%- endblock site_question_commentaire_widget -%}
 
 {%- block site_question_etoile_commentaire_widget -%}
     {% set form_note = form.children|first %}
