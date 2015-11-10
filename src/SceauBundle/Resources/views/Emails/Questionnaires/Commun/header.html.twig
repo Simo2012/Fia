@@ -1,0 +1,25 @@
+{% import _self as macro %}
+
+{% trans_default_domain 'emails_questionnaires' %}
+
+{% macro drawColumn(numColonne, variables, inverse) %}
+    {% if numColonne == 1 %}
+        <td width="354" height="52" style="line-height:normal; {% if not inverse %}text-align: left;{% else %}text-align: right;{% endif %}"><img src="http://www.fia-net.com/img/emails/logo_fianet.png" width="140" height="38" alt="FIA-NET.com" /></td>
+    {% else %}
+        <td height="52" style="line-height:normal; {% if not inverse %}text-align: right;{% else %}text-align: left;{% endif %}">
+            {% if variables.site.logo is not null %}
+                <a style="color:#52AE35;" href="{{ variables.site.url }}" target="_blank"><img border="0" width="150" height="40" alt="{{ variables.site.nom }}" src="http://www.fia-net.com/annuaire/logosmarchands/{{ variables.site.logo }}"/></a>
+            {% else %}
+                <a style="color:#52AE35;" href="{{ variables.site.url }}" target="_blank">{{ variables.site.nom }}</a>
+            {% endif %}
+        </td>
+    {% endif %}
+{% endmacro %}
+
+{% if not inverse %}
+    {{ macro.drawColumn(1, variables, inverse)}}
+    {{ macro.drawColumn(2, variables, inverse)}}
+{% else %}
+    {{ macro.drawColumn(2, variables, inverse)}}
+    {{ macro.drawColumn(1, variables, inverse)}}
+{% endif %}

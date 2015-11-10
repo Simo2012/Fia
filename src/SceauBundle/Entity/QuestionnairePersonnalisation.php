@@ -51,6 +51,13 @@ class QuestionnairePersonnalisation
     private $expediteur;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="expediteurRand", type="boolean", nullable=true)
+     */
+    private $expediteurRand;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=true)
@@ -224,6 +231,30 @@ class QuestionnairePersonnalisation
     public function getExpediteur()
     {
         return $this->expediteur;
+    }
+
+    /**
+     * Set expediteurRand
+     *
+     * @param boolean $expediteurRand
+     *
+     * @return QuestionnairePersonnalisation
+     */
+    public function setExpediteurRand($expediteurRand)
+    {
+        $this->expediteurRand = $expediteurRand;
+
+        return $this;
+    }
+
+    /**
+     * Get expediteurRand
+     *
+     * @return boolean
+     */
+    public function getExpediteurRand()
+    {
+        return $this->expediteurRand;
     }
 
     /**

@@ -1,0 +1,9 @@
+{% extends 'SceauBundle:Emails/Questionnaires:base.html.twig' %}
+
+{% trans_default_domain 'emails_questionnaires' %}
+
+{% block introduction %}
+    <br /><strong>{% trans with {'%site_nom%': variables.site.nom} into locale %}vous_avez_commande{% endtrans %}</strong><br />
+    {% trans into locale %}intro1_service{% endtrans %}{% if variables.commande.reference is not null %} {{ variables.commande.reference }}{% endif %}, {% trans into locale %}intro2{% endtrans %}<br /><br />
+{% endblock %}
+

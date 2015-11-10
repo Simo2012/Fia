@@ -1,0 +1,14 @@
+{% trans_default_domain 'emails_questionnaires' %}
+
+<p style="font-size: 11px;">
+    {% trans into locale %}etre_sur_recevoir{% endtrans %}
+</p>
+<p>
+    {% trans into locale %}vous_recevez_cet_email{% endtrans %}
+</p>
+<p>
+    {% trans into locale %}loi_informatique{% endtrans %}
+</p>
+<p>
+    <a target="_blank" style="color:#524249;" href="http://logi118.xiti.com/go.url?xts=487123&s2=4&xtor=EPR-5-[questionnaire_achat_produits_FR]--[Desabonnement_membre]&url=https://www.fia-net.com/membre/desabonnement_fia-net.php?email={{ variables.email }}">{% trans into locale %}se_desabonner{% endtrans %}</a>
+</p>

@@ -736,8 +736,39 @@ class QuestionnaireRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
     
+
     /**
-     * Recuperer Le membre de chaque questionnaire
+     * Récupère les commentaires principaux d'un site pour un type de questionnaire.
+     *
+     * @param Site $site Instance de Site
+     * @param QuestionnaireType $questionnaireType Instance de QuestionnaireType
+     *
+     * @return array
+     */
+    public function commentairesPrincipaux(Site $site, QuestionnaireType $questionnaireType)
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb = $this->jointureCommentaire($qb, $questionnaireType);
+
+        return $qb->select('q.id, q.dateReponse, qr_com.commentaire')
+            ->where('q.site = :siteId')
+            ->andWhere('q.actif = true')
+            ->andWhere('q.dateReponse IS NOT NULL')
+            ->andWhere('qr_com.commentaire IS NOT NULL')
+            ->setParameter('siteId', $site->getId())
+            ->getQuery()
+            ->useResultCache(true, Cache::LIFETIME_1J)
+            ->getArrayResult()
+            ;
+    }
+
+    /**
+     * Récupère le membre d'un questionnaire.
+     *
+     * @param int $lpQuestionnaireId Identifiant du questionnaire
+     *
+     * @return array
      */
     public function getMembre($lpQuestionnaireId)
     {
@@ -748,5 +779,45 @@ class QuestionnaireRepository extends EntityRepository
                      ->setParameter('questionnaireid', $lpQuestionnaireId);
                  
         return $loQuery->getQuery()->getScalarResult();
+    }
+
+    /**
+     * Récupère les questionnaires à envoyer. Si un type de questionnaire est passé en argument alors la méthode ne
+     * récupère que les questionnaires à envoyer de ce type.
+     *
+     * @param int $nbQuestionnaire Nombre maximum de questionnaire à envoyer
+     * @param QuestionnaireType|null $questionnaireType Instance de QuestionnaireType si on veut filtrer sur le type
+     *
+     * @return Questionnaire[]
+     */
+    public function aEnvoyer($nbQuestionnaire, $questionnaireType = null)
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb->innerJoin('q.questionnaireType', 'qt')
+            ->addSelect('qt')
+            ->leftJoin('qt.questionnaireTypeSuivant', 'qts')
+            ->innerJoin('q.site', 's')
+            ->addSelect('s')
+            ->innerJoin('s.questionnairePersonnalisations', 'qp', 'WITH', 'qp.questionnaireType = qt.id')
+            ->addSelect('qp')
+            ->innerJoin('q.langue', 'l')
+            ->addSelect('l')
+            ->leftJoin('q.commande', 'c')
+            ->addSelect('c')
+            ->leftJoin('q.membre', 'm')
+            ->addSelect('m')
+            ->leftJoin('q.questionnaireLie', 'qlie')
+            ->addSelect('qlie')
+            ->where($qb->expr()->lte('q.datePrevEnvoi', 'CURRENT_DATE()'))
+            ->andWhere($qb->expr()->isNull('q.dateEnvoi'));
+
+        if ($questionnaireType !== null) {
+            $qb->andWhere($qb->expr()->eq('q.questionnaireType', $questionnaireType->getId()));
+        }
+
+        $qb->setMaxResults($nbQuestionnaire);
+
+        return $qb->getQuery()->getResult();
     }
 }

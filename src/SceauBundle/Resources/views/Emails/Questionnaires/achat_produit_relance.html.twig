@@ -1,0 +1,7 @@
+{% extends 'SceauBundle:Emails/Questionnaires:achat_produit.html.twig' %}
+
+{% trans_default_domain 'emails_questionnaires' %}
+
+{% block relance_intro %}<br /><span style="color:#FF0000;">Nous attendons toujours votre avis !</span><br />{% endblock %}
+
+{% block relance_perso %}<br /><span id="js_relance_perso">##RELANCE_PERSO##</span><br /><br />{% endblock %}

@@ -20,7 +20,8 @@
 
     <div class="block-total">
         <div class="block-relance-email">
-            {{ render(controller('SceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}
+            {# TODO : à revoir #}
+            {{ render(controller('SceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site': {'nom': site_nom, 'logo': '', 'url': ''}, 'tombola': false, 'locale': langue, 'nom': '', 'prenom': '', 'email': '', 'commande': {'reference' : '', 'nom': ''}}, 'html': false}))}}
         </div>
         <div class="block-relance-info-form">
             <div class="block-relance-info">

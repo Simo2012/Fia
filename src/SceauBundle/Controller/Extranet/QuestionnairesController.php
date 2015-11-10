@@ -407,7 +407,7 @@ class QuestionnairesController extends Controller
                 'dateDebut' => $datePeriode['dateDebut'],
                 'dateFin' => $datePeriode['dateFin'],
                 'langue_id' => $langue->getId(),
-                'templateEmail' => $questionnaireType->getParametrage()['templateEmail'],
+                'templateEmail' => $questionnaireType->getParametrage()['email']['template'],
                 'auto' => $auto,
                 'site_nom' => $site->getNom(),
                 'urlRedirection' => $this->generateUrl(
@@ -604,14 +604,15 @@ class QuestionnairesController extends Controller
         return $this->render(
             'SceauBundle:Extranet/Questionnaires:relance_perso.html.twig',
             array(
-                'templateEmail' => $questionnaireType->getParametrage()['templateEmail'],
+                'templateEmail' => $questionnaireType->getParametrage()['email']['template'],
                 'objetParDefaut' => sprintf(
                     $this->container->getParameter('relance_objet_par_defaut'),
                     $site->getNom()
                 ),
                 'form' => $form->createView(),
                 'site_nom' => $site->getNom(),
-                'urlRedirection' => $this->generateUrl('extranet_questionnaires_relance_questionnaires')
+                'urlRedirection' => $this->generateUrl('extranet_questionnaires_relance_questionnaires'),
+                'langue' => $langue->getCode()
             )
         );
     }

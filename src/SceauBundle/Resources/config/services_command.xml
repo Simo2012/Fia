@@ -26,6 +26,12 @@
             <argument type="service" id="sceau.import_csv" />
             <tag name="console.command" />
         </service>
+
+        <service id="sceau.command.envoie_questionnaires" class="SceauBundle\Command\Cron\EnvoieQuestionnairesCommand">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="sceau.envoie_questionnaire" />
+            <tag name="console.command" />
+        </service>
     </services>
 
 </container>

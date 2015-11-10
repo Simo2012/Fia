@@ -1,0 +1,58 @@
+{% extends 'SceauBundle:Emails/Questionnaires:base.html.twig' %}
+
+{% trans_default_domain 'emails_questionnaires' %}
+
+{% set color = '#2054a5' %}
+
+ {% block header %}
+     {% include 'SceauBundle:Emails/Questionnaires/Commun:header.html.twig' with {'inverse': true}%}
+ {% endblock %}
+
+{% block introduction %}
+    <br />
+    {% trans with {'%site_nom%': variables.site.nom} into locale %}intro1_aviva{% endtrans %}<br />
+    <br />
+    {% trans into locale %}intro2_aviva{% endtrans %}<br />
+    <br />
+    {% trans into locale %}intro3_aviva{% endtrans %}<br />
+    <br />
+    {% trans into locale %}intro4_aviva{% endtrans %}<br />
+    <br />
+{% endblock %}
+
+{% block repondre %}
+    {% set color = '#2054a5' %}
+
+    {% include 'SceauBundle:Emails/Questionnaires/Commun:repondre.html.twig' %}
+    <br />
+    <em>{% trans into locale %}cliquez_lien{% endtrans %}</em>
+{% endblock %}
+
+{% block raisons %}
+    {% set color = '#2054a5' %}
+    {{ parent() }}
+{% endblock %}
+
+{% block fin_corps %}
+    <tr style="line-height:normal">
+        <td height="50" colspan="2" align="left" style="line-height:normal">
+            <table border="0" align="center" cellpadding="0" cellspacing="0" width="520" style="line-height:normal">
+                <tr style="line-height:normal">
+                    <td height="50" style="line-height:normal; font-family:Arial, Helvetica, sans-serif; color:#3e262b; font-size:12px; padding-left: 20px;">
+                        {% trans with {'%site_nom%': variables.site.nom} into locale %}signature_aviva{% endtrans %}
+                    </td>
+                </tr>
+                <tr style="line-height:normal">
+                    <td style="color:#808080; line-height:normal; font-family:Arial, Helvetica, sans-serif; font-size:10px; text-align:left; padding-bottom:10px;">
+                        {% include 'SceauBundle:Emails/Questionnaires/Commun:certification.html.twig' %}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+{% endblock %}
+
+{% block footer %}
+    {% set color = '#2054a5' %}
+    {{ parent() }}
+{% endblock %}

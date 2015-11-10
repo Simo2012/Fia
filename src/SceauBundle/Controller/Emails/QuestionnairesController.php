@@ -4,6 +4,7 @@ namespace SceauBundle\Controller\Emails;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+/* TODO : à revoir */
 class QuestionnairesController extends Controller
 {
     /**
@@ -20,10 +21,8 @@ class QuestionnairesController extends Controller
     {
         return $this->render(
             'SceauBundle:Emails/Questionnaires:' . $nomTemplate . '.html.twig',
-            array(
-                'html' => $html,
-                'variables' => $variables
-            )
+            ['html' => $html, 'variables' => $variables, 'locale' => $variables['locale'], 'tombola' => false,
+                'livraisonPrevue' => false]
         );
     }
 
@@ -39,7 +38,7 @@ class QuestionnairesController extends Controller
      */
     public function rendreEmailQuestionnaireNormalAction($nomTemplate, $variables, $html = true)
     {
-        return $this->rendreEmailQuestionnaire($nomTemplate. 'Normal', $variables, $html);
+        return $this->rendreEmailQuestionnaire($nomTemplate, $variables, $html);
     }
 
     /**
@@ -54,6 +53,6 @@ class QuestionnairesController extends Controller
      */
     public function rendreEmailQuestionnaireRelanceAction($nomTemplate, $variables, $html = true)
     {
-        return $this->rendreEmailQuestionnaire($nomTemplate. 'Relance', $variables, $html);
+        return $this->rendreEmailQuestionnaire($nomTemplate. '_relance', $variables, $html);
     }
 }

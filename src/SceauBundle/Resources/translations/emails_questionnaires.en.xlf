@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="0">
+                <source>titre</source>
+                <target>Trust Seal</target>
+            </trans-unit>
+            <trans-unit id="1">
+                <source>appli_mobile</source>
+                <target>
+                    <![CDATA[
+                        <span style="color:#C00000; font-weight:bold;">Stay connected :</span> The trust seal is now available on your smartphone &nbsp;!<br />
+                        <b>Always having your shopping companion in the pocket, and forget unpleasant surprises&nbsp;!</b>
+                        <br />
+                        <br /><b>Download it on :</b>
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>signature_charlie</source>
+                <target>
+                    <![CDATA[
+                        Charlie,<br />of <strong>Trust Seal <a target="_blank"  href="http://logi118.xiti.com/go.url?xts=487123&s2=1&xtor=EPR-5-[questionnaire_achat_produits_FR]--[Homepage_pied_page]&url=http://www.fia-net.com/" style="text-decoration:none; font-weight:bold; color:#dd0131;">FIA-NET</a></strong>.
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>certification</source>
+                <target>
+                    <![CDATA[
+                        FIA-NET gets the certification NF Service &laquo; Online product rating &raquo;. <a target="_blank" style="color:#808080; font-weight:bold;"  href="http://logi118.xiti.com/go.url?xts=487123&s2=1&xtor=EPR-5-[questionnaire_achat_produits_FR]--[certification_afnor_avis_en_ligne]&url=http://www.fia-net.com/annuaire/certification-afnor.php" >Learn more</a>.
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>etre_sur_recevoir</source>
+                <target>
+                    <![CDATA[
+                        To ensure you receive our emails, add <a target="_blank"  href="mailto:suivi-livraison@fia-net.fr" style="color:#524249;">suivi-livraison@fia-net.fr</a> to your address book.
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>vous_recevez_cet_email</source>
+                <target>
+                    You are receiving this email because you have made a purchase on a participating site. FIA-NET will solicit you for any other information unrelated to the performance monitoring of this site.
+                </target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>loi_informatique</source>
+                <target>
+                    Under the Data Protection Act of January 6, 1978, you have at any time, a right of access, rectification, and opposition to all your personal data by writing a letter, with proof of your identity, to FIA-NET - Data Protection, Treatment 896 150 - 3/5 rue Saint-Georges, 75009 PARIS.
+                </target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>se_desabonner</source>
+                <target>
+                    Unsubscribe
+                </target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>header_titre</source>
+                <target>
+                    <![CDATA[
+                        <strong style="font-size:17px; line-height:12px;">Survey</strong><br />Give your opinion !
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>bonjour</source>
+                <target>Hello %prenom% %nom%,</target>
+            </trans-unit>
+            <trans-unit id="10">
+               <source>vous_avez_commande</source>
+               <target>Thank you for your order on %site_nom%.</target>
+            </trans-unit>
+            <trans-unit id="11">
+               <source>intro1_produit</source>
+               <target>Before delivery of your order</target>
+            </trans-unit>
+            <trans-unit id="12">
+               <source>intro2</source>
+               <target><![CDATA[we want to have <strong>your feedback</strong> about this website.]]></target>
+            </trans-unit>
+            <trans-unit id="13">
+              <source>2minutes</source>
+              <target>Two minutes to answer our satisfaction survey.</target>
+            </trans-unit>
+            <trans-unit id="14">
+              <source>cliquez_lien</source>
+              <target>Click the above link, a new window should open.</target>
+            </trans-unit>
+            <trans-unit id="15">
+               <source>bonnes_raisons</source>
+               <target>%nb_raisons% good reasons to give its opinion :</target>
+            </trans-unit>
+            <trans-unit id="16">
+               <source>raison1</source>
+               <target>Your opinion counts, and directly influences the rating of %site_nom%.</target>
+            </trans-unit>
+            <trans-unit id="17">
+               <source>raison2</source>
+               <target><![CDATA[Your opinion is visible on <a target="_blank" href="http://logi118.xiti.com/go.url?xts=487123&s2=1&xtor=EPR-5-[questionnaire_achat_produits_FR]--[Homepage]&url=http://www.fia-net.com/" style="color:%color%;">FIA-NET.com</a> and helps millions of other Internet users.]]></target>
+            </trans-unit>
+            <trans-unit id="18">
+               <source>raison3</source>
+               <target></target>
+            </trans-unit>
+            <trans-unit id="19">
+               <source>merci</source>
+               <target>Thank you for participating in the evaluation of %site_nom% !</target>
+            </trans-unit>
+            <trans-unit id="20">
+               <source>tres_bientot</source>
+               <target>See you soon for the second survey !</target>
+            </trans-unit>
+            <trans-unit id="21">
+               <source>repondre_questionnaire</source>
+               <target>Answer survey</target>
+            </trans-unit>
+            <trans-unit id="22">
+               <source>objet_email.1</source>
+               <target>FIA-NET - Give your opinion on %site_nom%</target>
+            </trans-unit>
+            <trans-unit id="23">
+               <source>intro1_service</source>
+               <target>Before using this service</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>nous_souhaitons_connaitre</source>
+                <target><![CDATA[We want to know your opinion on this <strong>website</strong>.]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>finalement_etes_vous_satisfait</source>
+                <target><![CDATA[Finally, are you satisfied with your order %commande_reference% of %commande_date% on %site_nom% ?]]></target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>intro_livraison</source>
+                <target>After your first review recently left on FIA-NET.com this second survey you can give us your overall opinion about your order, delivery included.</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>tres_bientot_site</source>
+                <target>See you soon on our website !</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>header_titre_livraison</source>
+                <target><![CDATA[<strong style="font-size:17px; line-height:12px;">Survey</strong><br />Assessment of satisfaction]]></target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>intro_livraison_service</source>
+                <target>After your first review recently left on FIA-NET.com this second survey you can give us your overall opinion about your order, service included.</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>intro1_exapaq</source>
+                <target><![CDATA[When shopping online, you have opted for a delivery by %site_nom% <strong>in nearby ICI Relais</strong>.]]></target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>intro2_exapaq</source>
+                <target>In a continuing effort to meet your expectations, we would like to know your opinion on your ICI Relais delivery experience. This information will enable us to improve our service and to remain attentive to your needs.</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>descriptif_exapaq</source>
+                <target><![CDATA[<b>ICI relais</b> is the solution delivery point near of <b>company Exapaq, the specialist in small packages</b>.]]></target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>intro1_predict</source>
+                <target><![CDATA[During your last purchase, you have opted for home delivery Predict by Exapaq.]]></target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>intro2_predict</source>
+                <target>In a continuing effort to meet your expectations, we would like to know your opinion on your experience Predict delivery. This information will help us to improve our service and to remain attentive to your needs.</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>descriptif_predict</source>
+                <target><![CDATA[<b>Predict</b> is the home delivery solution of <b>company Exapaq, the specialist in small packages</b>.]]></target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>intro1_aviva</source>
+                <target>You recently purchased insurance at %site_nom% and we thank you for your confidence.</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>intro2_aviva</source>
+                <target>To better understand your needs and offer you permanently quality services, we would like to have your opinion on your new subscription contract.</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>intro3_aviva</source>
+                <target>We have entrusted this satisfaction survey to FIA-NET, independent, trusted third party.</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>intro4_aviva</source>
+                <target>Your opinion is very important and the questionnaire will not take you more than 5 minutes.</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>signature_aviva</source>
+                <target>Service Customer Satisfaction %site_nom%.</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>objet_email.2</source>
+                <target>FIA-NET – Evaluate delivery performance of %site_nom%</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>objet_email.10</source>
+                <target>Note the website %site_nom%</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>intro1_aviva_relance</source>
+                <target>You recently purchased insurance at %site_nom% and you expressed an expectation or dissatisfaction on the FIA-NET website rating.</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>intro2_aviva_relance</source>
+                <target>Your agent %site_nom% contacted you, and hope that has answered your expectations.</target>
+            </trans-unit>
+            <trans-unit id="45">
+                <source>intro3_aviva_relance</source>
+                <target>You can express yourself again on FIA-NET.com.</target>
+            </trans-unit>
+            <trans-unit id="46">
+                <source>intro1_sofinco</source>
+                <target>Your credit demand %site_nom% was recently accepted, and we thank you for your confidence.</target>
+            </trans-unit>
+            <trans-unit id="47">
+                <source>intro2_sofinco</source>
+                <target>In the interest of continuous improvement, we would now collect your opinion on the %site_nom% service; it will only take a few seconds !</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>intro3_sofinco</source>
+                <target>We work in cooperation with FIA-NET, an independent customer ratings, to ensure optimal service.</target>
+            </trans-unit>
+            <trans-unit id="49">
+                <source>intro4_sofinco</source>
+                <target>Please click on the following link to give us your opinion. Your personal information will remain confidential.</target>
+            </trans-unit>
+            <trans-unit id="50">
+                <source>signature_sofinco</source>
+                <target><![CDATA[Regards.<br /><br />Team %site_nom%.]]></target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
