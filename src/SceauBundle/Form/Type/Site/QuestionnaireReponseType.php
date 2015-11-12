@@ -68,9 +68,7 @@ class QuestionnaireReponseType extends AbstractType
                 continue;
             }
 
-            if (!$question->getQuestionPrimaire()) {
-                $this->addQuestion($builder, $question);
-            }
+            $this->addQuestion($builder, $question);
         }
 
         if ($this->questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant() && $this->livraison) {
@@ -212,6 +210,7 @@ class QuestionnaireReponseType extends AbstractType
                 break;
             case QuestionType::QUESTION_MULTIPLE:
                 $builder->add($question->getId(), 'site_question_multiple', [
+                    'label'         => $question->getLibelle($this->siteName),
                     'questions'     => $question->getQuestionsSecondaires()->toArray(),
                     'questionnaire' => $this->questionnaire,
                 ]);
