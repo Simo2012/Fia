@@ -19,6 +19,8 @@ class QuestionType
     const ETOILE = 5;
     const ETOILE_COMMENTAIRE = 6;
     const CHOIX_UNIQUE_SELECT = 7;
+    const QUESTION_MULTIPLE = 8;
+    const CHOIX_UNIQUE_INLINE = 9;
 
     /**
      * @var integer
