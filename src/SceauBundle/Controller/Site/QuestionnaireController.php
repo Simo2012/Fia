@@ -2,7 +2,6 @@
 
 namespace SceauBundle\Controller\Site;
 
-use Doctrine\ORM\EntityNotFoundException;
 use SceauBundle\Entity\Questionnaire;
 use SceauBundle\Entity\QuestionnaireReponse;
 use SceauBundle\Entity\QuestionType;
@@ -100,7 +99,13 @@ class QuestionnaireController extends Controller
      */
     private function persistQuestionnaireReponses(Form $form, Questionnaire $questionnaire)
     {
+        /** @var \SceauBundle\Entity\Question $question */
         foreach ($questionnaire->getQuestionnaireType()->getQuestions() as $question) {
+            // If question have a parent one, we skip it since responses will be handle with parent question
+            if ($question->getQuestionPrimaire()) {
+                continue;
+            }
+
             /** @var \SceauBundle\Entity\Reponse[] $responses */
             $responses = [];
             foreach ($question->getReponses() as $response) {
@@ -151,6 +156,29 @@ class QuestionnaireController extends Controller
                         }
 
                         $comment = $form->get($question->getId())->get('commentaire')->getData();
+                        break;
+                    case QuestionType::QUESTION_MULTIPLE:
+                        foreach ($question->getQuestionsSecondaires() as $questionSecondaire) {
+                            $data = $form
+                                ->get($question->getId())
+                                ->get($questionSecondaire->getId())
+                                ->get('reponse')
+                                ->getData()
+                            ;
+
+                            if ($data) {
+                                $response = $questionSecondaire->getReponses()->filter(function($reponse) use ($data) {
+                                    return $reponse->getId() === $data;
+                                })->first();
+                                if ($response) {
+                                    $questionnaireReponse = new QuestionnaireReponse();
+                                    $questionnaireReponse->setQuestion($question);
+                                    $questionnaireReponse->setQuestionnaire($questionnaire);
+                                    $questionnaireReponse->setReponse($response);
+                                    $this->getDoctrine()->getManager()->persist($questionnaireReponse);
+                                }
+                            }
+                        }
                         break;
                 }
             }
