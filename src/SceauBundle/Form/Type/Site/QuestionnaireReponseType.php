@@ -68,7 +68,9 @@ class QuestionnaireReponseType extends AbstractType
                 continue;
             }
 
-            $this->addQuestion($builder, $question);
+            if (!$question->getQuestionPrimaire()) {
+                $this->addQuestion($builder, $question);
+            }
         }
 
         if ($this->questionnaire->getQuestionnaireType()->getQuestionnaireTypeSuivant() && $this->livraison) {

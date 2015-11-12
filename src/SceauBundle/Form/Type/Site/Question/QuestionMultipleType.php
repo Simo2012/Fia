@@ -2,25 +2,50 @@
 
 namespace SceauBundle\Form\Type\Site\Question;
 
-use SceauBundle\Form\Type\Site\QuestionnaireReponseType;
+use SceauBundle\Entity\QuestionType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class QuestionMultipleType extends QuestionnaireReponseType
+class QuestionMultipleType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
+        /** @var \Doctrine\Common\Collections\ArrayCollection $questions */
+        $questions = $options['questions'];
 
-        if ($builder->has('livraison')) {
-            $builder->remove('livraison');
+        /** @var \SceauBundle\Entity\Questionnaire $questionnaire */
+        $questionnaire = $options['questionnaire'];
+
+        $siteName = ($questionnaire && $questionnaire->getSite()) ? $questionnaire->getSite()->getNom() : null;
+
+        /** @var \SceauBundle\Entity\Question $question */
+        foreach ($questions as $question) {
+            if ($question->getQuestionType()->getId() === QuestionType::CHOIX_UNIQUE) {
+                $builder->add($question->getId(), 'site_question_choice', [
+                    'multiple'   => false,
+                    'expanded'   => true,
+                    'question'   => $question,
+                    'label'      => $question->getLibelle($siteName),
+                    'mapped'     => false,
+                    'required'   => false,
+                ]);
+            }
         }
-        if ($builder->has('cgu')) {
-            $builder->remove('cgu');
-        }
-        $builder->remove('optin');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'questions'     => [],
+            'questionnaire' => null,
+        ]);
     }
 
     /**
