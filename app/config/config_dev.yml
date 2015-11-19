@@ -40,7 +40,7 @@ monolog:
             path: "%kernel.logs_dir%/flux.%kernel.environment%.log"
             level: debug
 assetic:
-    use_controller: true
+    use_controller: "%assetic_use_controller%"
 
 #swiftmailer:
 #    delivery_address: me@example.com

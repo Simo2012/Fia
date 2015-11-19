@@ -7,12 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Ticket
  *
- * @ORM\Table(name="Ticket")
- * @ORM\Entity
+ * @ORM\Table(name="ticket")
+ * @ORM\Entity(repositoryClass="SceauBundle\Entity\Repository\TicketRepository")
  * @ORM\EntityListeners({"SceauBundle\Listener\Entity\TicketListener"})
  */
 class Ticket
 {
+    const CATEGORIE_AVIS      = 1;
+    const CATEGORIE_CONTACT   = 2;
+
+    public static $CATEGORIES = [
+        self::CATEGORIE_AVIS      => 'Avis',
+        self::CATEGORIE_CONTACT   => 'Contact',
+    ];
+
     /**
      * @var integer
      *
@@ -50,11 +58,18 @@ class Ticket
      */
     private $type;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="categorie", type="integer", nullable=true)
+     */
+    private $categorie;
+
     public function __construct()
     {
-        $this->date = new \DateTime();
-        $this->etat = false;
-        $this->type = new TicketType();
+        $this->date     = new \DateTime();
+        $this->type     = new TicketType();
+        $this->etat     = false;
     }
 
     /**
@@ -64,19 +79,19 @@ class Ticket
     private $site;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SceauBundle\Entity\TicketCategorie")
-     * @ORM\JoinColumn(name="categorie", referencedColumnName="id")
-     */
-    private $categorie;
-
-
-    /**
      * @var string
      *
      * @ORM\Column(name="note", type="text", nullable=true)
      */
     private $note;
-    
+
+    /**
+     * @var auteur
+     *
+     * @ORM\OneToOne(targetEntity="SceauBundle\Entity\TicketAuteur", mappedBy="ticket", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="auteur_id",referencedColumnName="id")
+     */
+    private $auteur; 
 
     /**
      * Get id
@@ -228,12 +243,38 @@ class Ticket
     }
 
     /**
-     * Set category
-     * @param \SceauBundle\Entity\TicketCategorie $categorie
+     * Set auteur
+     *
+     * @param \SceauBundle\Entity\TicketAuteur $auteur
      *
      * @return Ticket
      */
-    private function setCategorie(\SceauBundle\Entity\TicketCategorie $categorie)
+    public function setAuteur(\SceauBundle\Entity\TicketAuteur $auteur = null)
+    {
+        $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    /**
+     * Get auteur
+     *
+     * @return \SceauBundle\Entity\TicketAuteur
+     */
+    public function getAuteur()
+    {
+        return $this->auteur;
+    }
+
+
+    /**
+     * Set categorie
+     *
+     * @param integer $categorie
+     *
+     * @return Ticket
+     */
+    public function setCategorie($categorie)
     {
         $this->categorie = $categorie;
 
@@ -241,12 +282,25 @@ class Ticket
     }
 
     /**
-     * Get category
+     * Get categorie
      *
-     * @return \SceauBundle\Entity\TicketCategorie
+     * @return integer
      */
     public function getCategorie()
     {
         return $this->categorie;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategorieLabel()
+    {
+        return isset(self::$CATEGORIES[$this->categorie]) ? self::$CATEGORIES[$this->categorie] : '';
+    }
+
+    public static function getAvailableCategories()
+    {
+        return self::$CATEGORIES;
     }
 }

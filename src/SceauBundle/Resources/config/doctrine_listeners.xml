@@ -10,6 +10,12 @@
         </service>
         <service id="sceau.entity_listener.ticket" class="SceauBundle\Listener\Entity\TicketListener">
             <tag name="doctrine.entity_listener" />
+            <argument type="service" id="sceau.admin.ticket_historique_service" />
+            
+        </service>
+        <service id="sceau.entity_listener.ticket_reponse" class="SceauBundle\Listener\Entity\TicketReponseListener">
+        	<tag name="doctrine.entity_listener" />
+        	<argument type="service" id="sceau.admin.ticket_historique_service" />
         </service>
     </services>
 

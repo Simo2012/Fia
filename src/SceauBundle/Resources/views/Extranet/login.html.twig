@@ -9,9 +9,15 @@
 {% block stylesheets %}
     {{ parent() }}
 
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     {% stylesheets
-    'bundles/sceau/css/extranet/login.css'
-    'bundles/sceau/css/extranet/main.css'
+    'bundles/sceau/css/extranet/common/jquery-ui.min.css'
+    'bundles/sceau/css/extranet/common/bootstrap.min.css'
+    'bundles/sceau/css/extranet/common/font-awesome/css/font-awesome.min.css'
+    'bundles/sceau/css/extranet/common/animate.min.css'
+    'bundles/sceau/css/extranet/common/style.min.css'
+    'bundles/sceau/css/extranet/common/style-responsive.min.css'
+    'bundles/sceau/css/extranet/common/default.css'
     filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -20,20 +26,47 @@
 
 {% block body %}
 
-    <div id="login">
-        <img src="{{ asset('bundles/sceau/images/extranet/fianet-head.png') }}" alt="FIA-NET" title="FIA-NET"
-             width="92" height="24" />
+<div id="page-container" class="fade in">
+    <!-- begin login -->
+    <div class="login bg-black animated fadeInDown">
+        <!-- begin brand -->
+        <div class="login-header">
+            <div class="brand">
+                <span class="logo"></span> Fia-net extranet
+                <small>Extranet marchant</small>
+            </div>
+            <div class="icon">
+                <i class="fa fa-sign-in"></i>
+            </div>
+        </div>
+        <!-- end brand -->
+        <div class="login-content">
+            {% block extranet_login %}
 
-        <h1>Extranet FIA-NET</h1>
-
-        {% block extranet_login %}
-
-        {% endblock %}
+            {% endblock %}
+        </div>
     </div>
-
+</div>
 {% endblock %}
+ {% block javascript %}
+     {% javascripts
 
-{% block javascripts %}
-    {{ parent() }}
+     'bundles/sceau/js/extranet/common/pace.min.js'
+     'bundles/sceau/js/extranet/common/jquery-1.9.1.min.js'
+     'bundles/sceau/js/extranet/common/jquery-migrate-1.1.0.min.js'
+     'bundles/sceau/js/extranet/common/jquery-ui.min.js'
+     'bundles/sceau/js/extranet/common/bootstrap.min.js'
+     'bundles/sceau/js/extranet/common/jquery.slimscroll.min.js'
+     'bundles/sceau/js/extranet/common/jquery.cookie.js'
+     'bundles/sceau/js/extranet/common/apps.min.js'
 
+     %}
+     <script src="{{ asset_url }}" type="text/javascript"></script>
+     {% endjavascripts %}
+
+     <script>
+         $(document).ready(function() {
+             App.init();
+         });
+     </script>
 {% endblock %}

@@ -255,7 +255,7 @@ class ArticlePresseController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('article_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Supprimer', 'attr' => array('class' => 'btn btn-red')))
+            ->add('submit', 'submit', array('label' => 'Supprimer', 'attr' => array('class' => 'btn btn-danger')))
             ->getForm()
         ;
     }

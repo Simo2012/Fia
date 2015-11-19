@@ -3,64 +3,50 @@
 {% block CONTENT -%}
 
 <div class="page-content page-content-ease-in">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li><a href="javascript:;">Home</a></li>
+        <li class="active"><a href="javascript:;">Gestion des actualités</a></li>
+        <li class="active">Actualité n°{{ entity.id }}</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Actualité<small> édition de l'actualité</small></h1>
+    <!-- end page-header
+    <!-- begin row -->
     <div class="row">
-        <div class="col-lg-12">
-            <div class="page-title">
-                <h1>Actualité
-                    <small>Content Overview</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li class="active"><i class="fa fa-dashboard"></i> Actualité</li>
-                    <li class="pull-right">
-                        <div id="reportrange" class="btn btn-green btn-square date-picker">
-                            <i class="fa fa-calendar"></i>
-                            <span class="date-range"></span> <i class="fa fa-caret-down"></i>
-                        </div>
-                    </li>
-                </ol>
-            </div>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <h1>Actualité</h1>
-    <div class="row">
-
-        <div class="col-lg-6">
-            <div class="portlet portlet-default">
-                <div class="portlet-heading">
-                    <div class="portlet-title">
-                        <h4>{{ entity.title }}</h4>
-                    </div>
-                    <div class="portlet-widgets">
+        <!-- begin col-6 -->
+        <div class="col-md-6">
+            <!-- begin panel -->
+            <div class="panel panel-inverse" data-sortable-id="ui-buttons-1"->
+                <div class="panel-heading">
+                    <h4 class="panel-title">{{ entity.title }}
                         {% if entity.active %}
-                            <span class="label green">Actif</span>
+                             <span class="label label-success pull-right">Active</span>
                         {% else %}
-                            <span class="label orange">Innactif</span>
+                            <span class="label label-warning pull-right">Innactive</span>
                         {% endif %}
-                        <span class="divider"></span>
-                        <a data-toggle="collapse" data-parent="#accordion" href="#defaultPortlet"><i class="fa fa-chevron-down"></i></a>
-                    </div>
-                    <div class="clearfix"></div>
+                    </h4>
                 </div>
-                <div id="defaultPortlet" class="panel-collapse collapse in">
-                    <div class="portlet-body">
-                        <p>{{ entity.introduction }}</p><br>
-                        <p>{{ entity.content }}</p>
-                    </div>
+                <div class="panel-body bg-aqua text-white">
+                    <p>{{ entity.introduction }}</p><br>
+                    <p>{{ entity.content }}</p>
                 </div>
-                <div class="portlet-footer">
+                <div class="panel-footer text-left">
                     <p>Date de publication: {{  entity.date|date('d/m/Y') }}</p>
                 </div>
             </div>
+            <!--  end panel-->
         </div>
-
-                <p><a class = "btn btn-green btn-md" href="{{ path('actualites') }}">Retour </a></p>
-                <p><a class = "btn btn-orange btn-md" href="{{ path('actualites_edit', { 'id': entity.id }) }}">Modifier </a></p>
+        <!-- end col-6 -->
+        <div class="btn-group-vertical">
+             <a class="btn btn-success" href="{{ path('actualites') }}">Retour</a>
+             <a class="btn btn-warning active" href="{{ path('actualites_edit', { 'id': entity.id }) }}">Editer</a>
                 {{ form(delete_form) }}
-
+        </div>
     </div>
+    <!-- end row -->
+
 </div>
 
-
-</ul>
 {% endblock %}

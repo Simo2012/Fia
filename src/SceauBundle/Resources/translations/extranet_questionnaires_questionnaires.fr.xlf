@@ -28,7 +28,7 @@
             </trans-unit>
             <trans-unit id="6">
                 <source>libelle_bouton</source>
-                <target>GO</target>
+                <target>Rechercher</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>recherche_avancee</source>

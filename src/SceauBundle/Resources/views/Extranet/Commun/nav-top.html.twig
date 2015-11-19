@@ -1,0 +1,63 @@
+{% spaceless %}
+    <!-- begin container-fluid -->
+    <div class="container-fluid">
+        <!-- begin mobile sidebar expand / collapse button -->
+        <div class="navbar-header">
+            <a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> Color Admin</a>
+            <button type="button" class="navbar-toggle" data-click="top-menu-toggled">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!-- end mobile sidebar expand / collapse button -->
+
+        <!-- begin header navigation right -->
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <div id="news">
+                    <p>
+                        {#{{ render(controller('SceauBundle:Extranet/Commun:getLastNews')) }}#}
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div id="select">
+                    <button class="inter">avis site</button>
+                    <button>avis produits</button>
+
+                    <div class="select">
+                        <select id="siteSelectionne" onchange="changerSite(this.value);">
+                            {% for site in app.user.societe.sites %}
+                                <option value="{{ site.id }}" {% if app.session.get('siteSelectionne').id == site.id %} selected="selected"{% endif %}>{{ site.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {{ render(controller('SceauBundle:Extranet/Commun:listeQuestionnaireType', { 'id':  app.session.get('siteSelectionne').id})) }}
+                </div>
+            </li>
+
+            <li class="dropdown navbar-user">
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                    {% image '@SceauBundle/Resources/public/images/extranet/img_profil.png' %}
+                        <img src="{{ asset_url }}" width="40" height="40" alt="Avatar"/>{{ app.user.prenomNomRaccourci }}<br/>
+                    {% endimage %}
+                </a>
+                <ul class="dropdown-menu animated fadeInLeft">
+                    <li class="arrow"></li>
+                    <li><a href="javascript:;">Edit Profile</a></li>
+                    <li><a href="javascript:;"><span class="badge badge-danger pull-right">2</span> Inbox</a></li>
+                    <li><a href="javascript:;">Calendar</a></li>
+                    <li><a href="javascript:;">Setting</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{{ path('extranet_utilisateur_logout') }}">Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+        <!-- end header navigation right -->
+    </div>
+    <!-- end container-fluid -->
+
+
+{% endspaceless %}

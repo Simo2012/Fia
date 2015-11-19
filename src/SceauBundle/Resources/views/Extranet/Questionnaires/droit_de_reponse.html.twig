@@ -28,81 +28,92 @@
 
     <h1>{{ 'commun_droit_de_reponse'|trans }}</h1>
 
-    {% if questionnaireReponse is not null %} 
-        {% if questionnaireReponse.commentaire is not empty %}
-            {% if infosGeneralesQuestionnaire[0] is not null %}
-            <div class="block-total">
-                
-                {% if infosGeneralesQuestionnaire[0].commande is not null %}
-                <div class="block-total-part1">
-                    <h2>{{ 'commun_commande_informations'|trans }} {% if infosGeneralesQuestionnaire[0].commande.reference is not empty %}{{ infosGeneralesQuestionnaire[0].commande.reference }}{% endif %}</h2>
-                    <dd>{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.prenom |capitalize }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.nom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.nom |upper }}{% endif %}{% endif %}</dd>
-                    <hr />
-                    {% if infosGeneralesQuestionnaire[0].commande.email is not empty %}<dd>{{ infosGeneralesQuestionnaire[0].commande.email }}</dd><hr />{% endif %}
-                    {% if infosGeneralesQuestionnaire[0].commande.montant is not empty %}<dd>{{ 'commun_commande_montant'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].commande.montant }} &euro;</dt><hr />{% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
-                    {% if infosGeneralesQuestionnaire[0].commande.date is not empty %}<dd>{{ 'commun_commande_date'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('none', 'short') }}</dt><hr />{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
-                    <hr />
-                    {% if infosGeneralesQuestionnaire[0].site is not null %}
-                        {% if infosGeneralesQuestionnaire[0].site.nom is not empty %}<dd>{{ 'commun_commande_site'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].site.nom }}</dt>{% endif %}
-                    {% endif %}
-                    {% if infosGeneralesQuestionnaire[0].sousSite is not null %}
-                        {% if infosGeneralesQuestionnaire[0].sousSite.nom is not empty %}<dd>{{ 'commun_commande_site'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].sousSite.nom }}</dt>{% endif %}
-                    {% endif %}
-                </div>
-                {% endif %}
-                
-                <div class="block-total-part1-2b">
-                    <h2>{{ 'commun_questionnaire_commentaire'|trans }}</h2>
-                    <p>{% include 'SceauBundle:Extranet/Commun:indicateur.html.twig' with {'parametrage': parametrage, 'indicateurReponseID': infosGeneralesQuestionnaire[0].questionnaireReponses[0].reponse.id, 'indicateurNote': null} only %}&nbsp;&nbsp;{% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }}</p>
-                    <br />
-                    <br />
-                    <p class="commentaire">{{ questionnaireReponse.commentaire|raw }}</p>
-                </div>
-                
+    {# BLOCK DROIT DE REPONSE #}
+    <div class="row">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Droit de réponse
+                </h4>
             </div>
-            <br />
-            <br />
-            {% endif %}
-            
-            <div class="block-total">
-                <h2>{{ 'commun_droit_de_reponse'|trans }} ({{ nbCaracteresMax }} {{ 'commun_nb_caracteres_max'|trans }})</h2>
-                <dd>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</dd>
-                <br />
-                <div class="Totalook">
-                    <div id="laCharte">{{ 'commun_charte_commercant'|trans|raw}}</div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    {% if questionnaireReponse is not null %}
+                        {% if questionnaireReponse.commentaire is not empty %}
+                            {% if infosGeneralesQuestionnaire[0] is not null %}
+                                <div class="row">
+                                    {% if infosGeneralesQuestionnaire[0].commande is not null %}
+                                        <div class="col-lg-6">
+                                            <h2>{{ 'commun_commande_informations'|trans }} {% if infosGeneralesQuestionnaire[0].commande.reference is not empty %}{{ infosGeneralesQuestionnaire[0].commande.reference }}{% endif %}</h2>
+                                            <dd>{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{% if infosGeneralesQuestionnaire[0].commande.prenom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.prenom |capitalize }}{% endif %} {% if infosGeneralesQuestionnaire[0].commande.nom is not empty %}{{ infosGeneralesQuestionnaire[0].commande.nom |upper }}{% endif %}{% endif %}</dd>
+                                            <hr />
+                                            {% if infosGeneralesQuestionnaire[0].commande.email is not empty %}<dd>{{ infosGeneralesQuestionnaire[0].commande.email }}</dd><hr />{% endif %}
+                                            {% if infosGeneralesQuestionnaire[0].commande.montant is not empty %}<dd>{{ 'commun_commande_montant'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].commande.montant }} &euro;</dt><hr />{% endif %} {# ToDo : on devra éventuellement gérer les devises pour les montants #}
+                                            {% if infosGeneralesQuestionnaire[0].commande.date is not empty %}<dd>{{ 'commun_commande_date'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].commande.date|localizeddate('none', 'short') }}</dt><hr />{% endif %} {# ToDo : il faudra convertir les dates selon la langue de l'extranet #}
+                                            <hr />
+                                            {% if infosGeneralesQuestionnaire[0].site is not null %}
+                                                {% if infosGeneralesQuestionnaire[0].site.nom is not empty %}<dd>{{ 'commun_commande_site'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].site.nom }}</dt>{% endif %}
+                                            {% endif %}
+                                            {% if infosGeneralesQuestionnaire[0].sousSite is not null %}
+                                                {% if infosGeneralesQuestionnaire[0].sousSite.nom is not empty %}<dd>{{ 'commun_commande_site'|trans }} :</dd><dt>{{ infosGeneralesQuestionnaire[0].sousSite.nom }}</dt>{% endif %}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
 
-                {# ToDo : il faudra gérer les divers affichages de formulaire pour lot de modération de contenu abusif #}
-                {# ToDo : on doit gérer le contenu du textarea selon la présence ou pas d'un droit de réponse actif pour une question de type commentaire #}    
-                
-                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                                     <div class="col-lg-6">
+                                        <h2>{{ 'commun_questionnaire_commentaire'|trans }}</h2>
+                                        <p>{% include 'SceauBundle:Extranet/Commun:indicateur.html.twig' with {'parametrage': parametrage, 'indicateurReponseID': infosGeneralesQuestionnaire[0].questionnaireReponses[0].reponse.id, 'indicateurNote': null} only %}&nbsp;&nbsp;{% if infosGeneralesQuestionnaire[0].membre.pseudo is not empty %}{{ infosGeneralesQuestionnaire[0].membre.pseudo }}{% endif %} - {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('short', 'none') }} {{ 'commun_a'|trans }} {{ infosGeneralesQuestionnaire[0].dateReponse|localizeddate('none', 'short') }}</p>
+                                        <br />
+                                        <br />
+                                        <p class="commentaire">{{ questionnaireReponse.commentaire|raw }}</p>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <hr />
+                            {% endif %}
+                            <div class="row">
+                                <h2>{{ 'commun_droit_de_reponse'|trans }} ({{ nbCaracteresMax }} {{ 'commun_nb_caracteres_max'|trans }})</h2>
+                                <dd>{{ 'commun_droit_de_reponse_charte_1'|trans }} <span class="lien" id="lienLaCharte">{{ 'commun_droit_de_reponse_charte_2'|trans }}</span>.</dd>
+                                <br />
+                                <div>
+                                    <div id="laCharte">{{ 'commun_charte_commercant'|trans|raw}}</div>
 
-                {# {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder': 'commun_droit_de_reponse_informations'|trans }}) }} #}
-                {{ form_widget(form.commentaire, {'attr': {'class': 'form-control' }}) }}
-                <br />
-                {{ 'commun_nb_caracteres_restants'|trans }} : <span id="compteurCaracteres">0</span>    
-                <br />
+                                    {# ToDo : il faudra gérer les divers affichages de formulaire pour lot de modération de contenu abusif #}
+                                    {# ToDo : on doit gérer le contenu du textarea selon la présence ou pas d'un droit de réponse actif pour une question de type commentaire #}
 
-                {{ form_errors(form) }}
-                {{ form_errors(form.commentaire) }}
-                <br />
-                {{ form_widget(form.valider, {'attr': {'class': 'btn btn-primary'}}) }}
+                                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
-                {# Génération automatique des champs pas encore écrits.
-                Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
-                et tous les champs cachés (type « hidden »). #}
-                {{ form_rest(form) }}
+                                    {# {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder': 'commun_droit_de_reponse_informations'|trans }}) }} #}
+                                    {{ form_widget(form.commentaire, {'attr': {'class': 'form-control' }}) }}
+                                    <br />
+                                    {{ 'commun_nb_caracteres_restants'|trans }} : <span id="compteurCaracteres">0</span>
+                                    <br />
 
-                {# Fermeture de la balise <form> du formulaire HTML #}
-                {{ form_end(form) }}
+                                    {{ form_errors(form) }}
+                                    {{ form_errors(form.commentaire) }}
+                                    <br />
+                                    {{ form_widget(form.valider, {'attr': {'class': 'btn btn-info'}}) }}
+
+                                    {# Génération automatique des champs pas encore écrits.
+                                    Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
+                                    et tous les champs cachés (type « hidden »). #}
+                                    {{ form_rest(form) }}
+
+                                    {# Fermeture de la balise <form> du formulaire HTML #}
+                                    {{ form_end(form) }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div>Aucun droit de réponse ne peut être exercé pour cette réponse au questionnaire.</div>
+                        {% endif %}
+                    {% else %}
+                        <div>Aucune réponse correspondante trouvée.</div>
+                    {% endif %}
                 </div>
             </div>
-        {% else %}
-            <div class="block-total">Aucun droit de réponse ne peut être exercé pour cette réponse au questionnaire.</div>
-        {% endif %} 
-    {% else %}
-        <div class="block-total">Aucune réponse correspondante trouvée.</div>
-    {% endif %}
-
+        </div>
+    </div>
 {% endblock %}
 
 {% block extranet_javascripts %}

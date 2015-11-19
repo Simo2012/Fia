@@ -14,15 +14,15 @@
 
 {% block extranet_login %}
 
-    <input type="text" id="username" name="_username" title="{{ 'login'|trans }}" disabled="disabled"/>
+    <input type="text" id="username" class="form-control input-lg" name="_username" title="{{ 'login'|trans }}" disabled="disabled"/>
     <br/>
-    <input type="password" id="password" name="_password" title="{{ 'mot_de_passe'|trans }}" disabled="disabled"/>
+    <input type="password" id="password" class="form-control input-lg" name="_password" title="{{ 'mot_de_passe'|trans }}" disabled="disabled"/>
 
     <p>{{ 'description_mdp_oublie'|trans }}</p>
 
     {{ form_start(form) }}
     {{ form_label(form.site_id, null, {'label': 'site_id'|trans}) }}
-    {{ form_widget(form.site_id, {'attr': {'class': classInput}}) }}
+    {{ form_widget(form.site_id, {'attr': {'class': 'form-control input-lg'}}) }}
 
     {% if form.site_id.vars.errors is not empty %}
         <p id="erreur">
@@ -32,11 +32,11 @@
         </p>
     {% endif %}
 
-    {{ form_widget(form.valider, {'label': 'valider'|trans}) }}
+    {{ form_widget(form.valider, {'label': 'valider'|trans, 'attr': {'class' : 'btn btn-success btn-block btn-lg'}}) }}
     {{ form_end(form) }}
 
     <form action="{{ path('extranet_utilisateur_login') }}" method="get">
-        <button type="submit">{{ 'retour'|trans }}</button>
+        <button class="btn btn-default btn-block btn-lg" type="submit">{{ 'retour'|trans }}</button>
     </form>
 
 {% endblock %}

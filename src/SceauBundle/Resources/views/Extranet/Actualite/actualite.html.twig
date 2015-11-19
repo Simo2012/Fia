@@ -1,12 +1,16 @@
-{% if actualite %}
-    <div id="news">
-        <h6>NEWS</h6>
-        <p>
-            <strong>{{ actualite.title }}</strong><br/>
-            {{ actualite.introduction }}
-            <a class="btn btn-red btn-md btn-square"
-               href="{{ path('extranet_commun_news', {'id': actualite.id}) }}"
-               data-toggle="modal" data-target="#modal">En savoir plus</a>
-        </p>
+{% if  actualite %}
+    <div class="row">
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-black">
+                <div class="stats-icon"><i class="fa fa-file-text-o"></i></div>
+                <div class="stats-info">
+                    <h4>{{ actualite.title }}</h4>
+                    <p>{{ actualite.introduction | truncate(40) }}</p>
+                </div>
+                <div class="stats-link">
+                    <a href="{{ path('extranet_commun_news', {'id': actualite.id}) }}" data-toggle="modal" data-target="#modal">Voir la news <i class="fa fa-arrow-circle-o-right"></i></a>
+                </div>
+            </div>
+        </div>
     </div>
 {% endif %}

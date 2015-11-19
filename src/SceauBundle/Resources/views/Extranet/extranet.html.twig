@@ -10,16 +10,22 @@
 
 {% block stylesheets %}
     {{ parent() }}
-
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     {% stylesheets
-    '../vendor/components/jqueryui/themes/dark-hive/jquery-ui.min.css'
-    '../vendor/components/jqueryui/themes/dark-hive/theme.css'
-    'bundles/sceau/css/tooltipster/tooltipster.css'
-    'bundles/sceau/css/commun.css'
-    'bundles/sceau/css/extranet/externe.css'
-    'bundles/sceau/css/extranet/main.css'
-    'bundles/sceau/css/extranet/navigation.css'
-    'bundles/sceau/css/admin/common/bootstrap.min.css'
+    'bundles/sceau/css/extranet/common/animate.min.css'
+    'bundles/sceau/css/extranet/common/jquery-ui.min.css'
+    'bundles/sceau/css/extranet/common/bootstrap.min.css'
+    'bundles/sceau/css/extranet/common/font-awesome/css/font-awesome.min.css'
+    'bundles/sceau/css/extranet/common/jquery-jvectormap-1.2.2.css'
+    'bundles/sceau/css/extranet/common/datepicker.css'
+    'bundles/sceau/css/extranet/common/datepicker3.css'
+    'bundles/sceau/css/extranet/common/jquery.gritter.css'
+    'bundles/sceau/css/extranet/common/style.min.css'
+    'bundles/sceau/css/extranet/common/style-responsive.min.css'
+    'bundles/sceau/css/extranet/common/default.css'
+    'bundles/sceau/css/extranet/common/style.custo.fianet.css'
+    'bundles/sceau/css/extranet/common/dataTables.bootstrap.min.css'
+    'bundles/sceau/css/extranet/common/responsive.bootstrap.min.css'
     filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -40,37 +46,68 @@
 
 {% block body %}
 
-    {% include 'SceauBundle:Extranet:header.html.twig' %}
+    <div id="page-container" class="fade page-sidebar-fixed page-without-sidebar page-header-fixed page-with-top-menu">
 
-    <section>
-        {% include 'SceauBundle:Extranet:navigation.html.twig' %}
+        {# nav-top #}
+        <div id="header" class="header navbar navbar-default navbar-fixed-top">
+            {% include 'SceauBundle:Extranet/Commun:nav-top.html.twig' %}
+        </div>
 
-        <div class="content">
+        {# menu-top #}
+
+        <div id="top-menu" class="top-menu">
+            {% include 'SceauBundle:Extranet/Commun:menu-top.html.twig' %}
+        </div>
+
+        {# content #}
+        <div id="content" class="content">
+            {{ render(controller('SceauBundle:Extranet/Commun:getLastNews')) }}
             {% block extranet_body %}
 
             {% endblock %}
         </div>
-    </section>
 
-    {% include 'SceauBundle:Extranet:footer.html.twig' %}
+        {# footer #}
+        <div id="footer" class="footer">
+            {% include 'SceauBundle:Extranet:footer.html.twig' %}
+        </div>
+        <div id="masque"></div>
 
-    <div id="masque"></div>
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true"></div>
 
-    <div class="modal modal-flex fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="flexModalLabel" aria-hidden="true">
     </div>
+
 {% endblock %}
 
-{% block javascripts %}
+{% block javascript %}
     {{ parent() }}
 
     {% javascripts
-    '../vendor/components/jquery/jquery.min.js'
-    '../vendor/components/jqueryui/jquery-ui.min.js'
-    '../vendor/components/jqueryui/ui/datepicker.js'
-    'bundles/fosjsrouting/js/router.js'
-    'bundles/sceau/js/admin/common/bootstrap.min.js'
-    'bundles/sceau/js/extranet/main.js'
-    'bundles/sceau/js/calendrier.js' %}
+        'bundles/fosjsrouting/js/router.js'
+        'bundles/sceau/js/extranet/common/pace.min.js'
+        'bundles/sceau/js/extranet/common/jquery-1.9.1.min.js'
+        'bundles/sceau/js/extranet/common/jquery-migrate-1.1.0.min.js'
+        'bundles/sceau/js/extranet/common/jquery-ui.min.js'
+        'bundles/sceau/js/extranet/common/bootstrap.min.js'
+        'bundles/sceau/js/extranet/common/jquery.slimscroll.min.js'
+        'bundles/sceau/js/extranet/common/jquery.cookie.js'
+        'bundles/sceau/js/extranet/common/jquery.flot.min.js'
+        'bundles/sceau/js/extranet/common/jquery.flot.time.min.js'
+        'bundles/sceau/js/extranet/common/jquery.flot.resize.min.js'
+        'bundles/sceau/js/extranet/common/jquery.flot.pie.min.js'
+        'bundles/sceau/js/extranet/common/jquery.sparkline.js'
+        'bundles/sceau/js/extranet/common/jquery-jvectormap-1.2.2.min.js'
+        'bundles/sceau/js/extranet/common/jquery-jvectormap-world-mill-en.js'
+        'bundles/sceau/js/extranet/common/bootstrap-datepicker.js'
+        'bundles/sceau/js/extranet/common/dashboard.min.js'
+        'bundles/sceau/js/extranet/common/apps.min.js'
+        'bundles/sceau/js/extranet/common/jquery.dataTables.js'
+        'bundles/sceau/js/extranet/common/dataTables.bootstrap.min.js'
+        'bundles/sceau/js/extranet/common/dataTables.responsive.min.js'
+        'bundles/sceau/js/extranet/common/table-manage-default.demo.min.js'
+        'bundles/sceau/js/extranet/main.js'
+        'bundles/sceau/js/calendrier.js'
+    %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
 
@@ -99,6 +136,29 @@
         function changerQuestionnaireType(id) {
             selectionListeDeroulante('extranet_commun_questionnaire_type_selectionne', id);
         }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            App.init();
+            Dashboard.init();
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+            TableManageDefault.init();
+        });
+    </script>
+
+    <script>
+        (function(){
+            $('body').on('click', 'a[data-toggle=modal]', function(ev) {
+                ev.preventDefault();
+
+                $('#modal').load($(this).attr('href'), function() {
+                    $('#modal').modal('show');
+                });
+            });
+        })();
     </script>
 
     {% block extranet_javascripts %}

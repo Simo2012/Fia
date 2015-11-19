@@ -6,48 +6,54 @@
     {{ parent() }} : {% trans %}titre_page{% endtrans %}
 {% endblock %}
 
-{% block extranet_stylesheets %}
-    {% stylesheets
-    'bundles/sceau/css/extranet/questionnaires.css'
-    filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock %}
-
 {% block extranet_body %}
 
     <h1>{% trans %}titre_page{% endtrans %}</h1>
 
-    <div class="block-total">
-        <div class="block-relance-email">
-            {# TODO : à revoir #}
-            {{ render(controller('SceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site': {'nom': site_nom, 'logo': '', 'url': ''}, 'tombola': false, 'locale': langue, 'nom': '', 'prenom': '', 'email': '', 'commande': {'reference' : '', 'nom': ''}}, 'html': false}))}}
-        </div>
-        <div class="block-relance-info-form">
-            <div class="block-relance-info">
-                <p><strong>{% trans %}titre_paragraphe{% endtrans %}</strong></p>
-                <p class="color11">{% trans %}corps_paragraphe{% endtrans %}</p>
+    {# BLOCK RECHERCHE #}
+    <div class="row">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Personnaliser votre relance
+                </h4>
             </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            {{ render(controller('SceauBundle:Emails/Questionnaires:rendreEmailQuestionnaireRelance', {'nomTemplate': templateEmail, 'variables': {'site_nom': site_nom}, 'html': false}))}}
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="block-relance-info">
+                                <p><strong>{% trans %}titre_paragraphe{% endtrans %}</strong></p>
+                                <p class="color11">{% trans %}corps_paragraphe{% endtrans %}</p>
+                            </div>
 
-            <div class="block-relance-form">
-                {{ form_start(form) }}
-                    {% trans %}label_objet{% endtrans %}<br />
-                    {{ form_widget(form.objet) }}<br />
-                    {% trans %}precision_objet{% endtrans %}"{{ objetParDefaut }}"<br />
-                    <br />
-                    {% trans %}label_corps{% endtrans %} <br />
-                    {{ form_widget(form.corps) }}<br />
+                            <div class="block-relance-form">
+                                {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+                                {{ form_start(form) }}
+                                    {% trans %}label_objet{% endtrans %}<br />
+                                    {{ form_widget(form.objet) }}<br />
+                                    {% trans %}precision_objet{% endtrans %}"{{ objetParDefaut }}"<br />
+                                    <br />
+                                    {% trans %}label_corps{% endtrans %} <br />
+                                    {{ form_widget(form.corps) }}<br />
 
-                    <span class="erreur">
-                        {{ form_errors(form.objet) }}
-                    </span>
+                                    <span class="erreur">
+                                        {{ form_errors(form.objet) }}
+                                    </span>
 
-                    <br />
-                    <div class="droite">
-                        <button onclick="visualiserEmail(document.getElementById('sceaubundle_relance_corps').value); return false;">{% trans %}bouton_visualiser{% endtrans %}</button>
-                        <button type="submit">{% trans %}bouton_valider{% endtrans %}</button>
+                                    <br />
+                                    <div class="droite">
+                                        <button class="btn btn-info btn-md" onclick="visualiserEmail(document.getElementById('sceaubundle_relance_corps').value); return false;">{% trans %}bouton_visualiser{% endtrans %}</button>
+                                        <button class="btn btn-info btn-md" type="submit">{% trans %}bouton_valider{% endtrans %}</button>
+                                    </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
                     </div>
-                {{ form_end(form) }}
+                </div>
             </div>
         </div>
     </div>

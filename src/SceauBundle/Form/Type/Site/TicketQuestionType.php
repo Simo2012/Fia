@@ -13,6 +13,8 @@ use SceauBundle\Entity\TicketActeur;
 use SceauBundle\Entity\TicketType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use SceauBundle\Form\Type\Site\TicketAuteurType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class TicketQuestionType extends AbstractType
 {
@@ -25,25 +27,8 @@ class TicketQuestionType extends AbstractType
 
         $formModifier = function(FormInterface $form) {
             $form
-                ->add('lastName', 'text', [
-                    'label'    => 'form.ticket.lastName',
-                    'mapped'   => false,
-                ])
-                ->add('firstName', 'text', [
-                    'required' => false,
-                    'label'    => 'form.ticket.firstName',
-                    'mapped'   => false,
-                ])
-                ->add('email', 'repeated', [
-                    'type'     => 'email',
-                    'mapped'   => false,
-                    'first_options'  => ['label' => 'form.ticket.email'],
-                    'second_options' => ['label' => 'form.ticket.email_confirmation'],
-                ])
-                ->add('phone', 'text', [
-                    'label'    => 'form.ticket.phone',
-                    'mapped'   => false,
-                ])
+                ->add('auteur', new TicketAuteurType())
+                //->add('categorie', new TicketCategorieType())
                 ->add('question', 'textarea', [
                     'label'    => 'form.ticket.question',
                 ])

@@ -23,7 +23,12 @@
 
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+
+    {% block body %}{% endblock %}
+
+    {% block javascript %}{% endblock %}
     </body>
 </html>
